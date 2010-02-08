@@ -5,6 +5,9 @@ To use the client, the server must be running.
 The server uses port 4000.
 The client is meant to be run as a Java Applet.
 
+Use the official Sun JDK.  There is a bug with Slick and OpenJDK
+where text will not be rendered.
+
 Maps are made by using Tiled
 <www.mapeditor.org>
 
