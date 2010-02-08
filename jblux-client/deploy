@@ -1,0 +1,4 @@
+#!/bin/bash
+sudo cp -rf dist/lib /var/www/html/jblux/lib
+sudo cp dist/jblux.jar /var/www/html/jblux/lib
+

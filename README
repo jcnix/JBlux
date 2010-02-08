@@ -1,0 +1,16 @@
+This is the source code of what will become The Mushroom Universe Online.
+A fan made Mario MMO.
+
+To use the client, the server must be running.
+The server uses port 4000.
+The client is meant to be run as a Java Applet.
+
+Maps are made by using Tiled
+<www.mapeditor.org>
+
+Tiled is picky about how you do things.  Put your tileset .png where
+it needs to be in the JBlux directory structure, and then save it as
+a tsx file in the same directory.  Then save your map where it needs
+to be.  I don't want to have to edit the file paths in every single
+map.
+

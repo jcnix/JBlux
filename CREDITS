@@ -1,0 +1,8 @@
+Thanks to the Slick2D project and the LWJGL project.
+The client is using these libs for rendering.
+<slick.cokeandcode.com>
+<www.lwjgl.org>
+
+The map formats are done by using Tiled.
+<www.mapeditor.org>
+
