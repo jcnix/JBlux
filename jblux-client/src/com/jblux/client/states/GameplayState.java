@@ -29,7 +29,6 @@ import java.applet.Applet;
 import org.newdawn.slick.AppletGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -42,7 +41,6 @@ public class GameplayState extends BasicGameState {
     private Player player;
     private ServerCommunicator server;
 
-    private Image map_walk;
     private Sprite npc;
     private Players players;
     private ChatBox cb;
@@ -77,8 +75,6 @@ public class GameplayState extends BasicGameState {
         npc.setImage(Sprite.FACE_DOWN, 0);
 
         cb = new ChatBox(gc);
-        map_walk = new Image("maps/tilesets/pondarea2bw.png");
-        map_walk.setAlpha(0.75f);
     }
  
     @Override
