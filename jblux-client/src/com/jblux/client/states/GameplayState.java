@@ -81,7 +81,6 @@ public class GameplayState extends BasicGameState {
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         map.render(0,0,0);
         map.render(0,0,1);
-        cb.render(g);
 
         player.draw();
         for(int i = 0; i < players.size(); i++) {
@@ -89,6 +88,8 @@ public class GameplayState extends BasicGameState {
             s.draw();
         }
         map.render(0,0,2);
+
+        cb.render(g);
     }
  
     @Override
