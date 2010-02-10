@@ -42,11 +42,16 @@ public class ChatBox {
             uf.addAsciiGlyphs();
             uf.loadGlyphs();
             chatBox = new TextField(gc, uf, 0, 0, 300, 200);
+            chatBox.setText("Casey: Sup bro!");
+
+            inputBox = new TextField(gc, uf, 0, 200, 300, 25);
+            inputBox.setCursorVisible(true);
         } catch(SlickException ex) {
         }
     }
 
     public void render(Graphics g) {
         chatBox.render(gc, g);
+        inputBox.render(gc, g);
     }
 }
