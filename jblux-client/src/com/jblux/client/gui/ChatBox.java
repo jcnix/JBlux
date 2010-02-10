@@ -37,8 +37,8 @@ public class ChatBox {
     public ChatBox(GUIContext gc) {
         try {
             this.gc = gc;
-            UnicodeFont uf = new UnicodeFont(new Font("Serif", Font.PLAIN, 12));
-            uf.getEffects().add(new ColorEffect(Color.BLACK));
+            UnicodeFont uf = new UnicodeFont(new Font("Serif", Font.BOLD, 16));
+            uf.getEffects().add(new ColorEffect(Color.WHITE));
             uf.addAsciiGlyphs();
             uf.loadGlyphs();
             chatBox = new TextField(gc, uf, 0, 0, 300, 200);
