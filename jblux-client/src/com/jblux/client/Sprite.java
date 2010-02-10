@@ -20,14 +20,12 @@
 
 package com.jblux.client;
 
+import com.jblux.client.gui.PlayerNameFontFactory;
 import com.jblux.util.Coordinates;
-import java.awt.Color;
-import java.awt.Font;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.UnicodeFont;
-import org.newdawn.slick.font.effects.ColorEffect;
 
 public class Sprite {
     public final static int FACE_UP = 1;
@@ -46,6 +44,7 @@ public class Sprite {
     protected SpriteSheet spriteSheet;
     protected Image image;
     protected String name;
+    protected PlayerNameFontFactory pnff;
     protected UnicodeFont nameFont;
 
     public Sprite(String sheet) {
@@ -55,10 +54,8 @@ public class Sprite {
         coords = new Coordinates();
 
         try {
-            nameFont = new UnicodeFont(new Font("Serif", Font.PLAIN, 12));
-            nameFont.getEffects().add(new ColorEffect(Color.BLACK));
-            nameFont.addAsciiGlyphs();
-            nameFont.loadGlyphs();
+            pnff = PlayerNameFontFactory.getInstance();
+            nameFont = pnff.getFont();
             spriteSheet = new SpriteSheet(sheet, width, height);
         } catch (SlickException ex) {
         }

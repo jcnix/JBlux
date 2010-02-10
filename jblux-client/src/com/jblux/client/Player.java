@@ -45,8 +45,6 @@ public class Player extends Sprite {
         this.server = server;
         setName(username);
         move_size = 7;
-
-        //this.server = server;
         image = spriteSheet.getSubImage(FACE_DOWN, 0);
         
         coords.x = 352;
