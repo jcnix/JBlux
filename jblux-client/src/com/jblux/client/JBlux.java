@@ -49,8 +49,9 @@ public class JBlux extends StateBasedGame {
         try
         {
             AppGameContainer app = new AppGameContainer(new JBlux());
+            app.setShowFPS(false);
             app.setDisplayMode(800, 600, false);
-            app.start(); 
+            app.start();
         }
         catch ( SlickException e )
         {
