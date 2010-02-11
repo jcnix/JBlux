@@ -116,6 +116,8 @@ public class ClientThread {
             //Tell other client about the new player
             ct.writeString(command);
         }
+
+        clients.removeClient(this);
     }
 
     public void writeString(String s) {
