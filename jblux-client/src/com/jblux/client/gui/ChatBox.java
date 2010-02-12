@@ -20,9 +20,11 @@
 
 package com.jblux.client.gui;
 
+import com.jblux.client.network.ServerCommunicator;
 import java.awt.Color;
 import java.awt.Font;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
@@ -33,8 +35,11 @@ public class ChatBox {
     private TextField chatBox;
     private TextField inputBox;
     private GUIContext gc;
+    private ServerCommunicator server;
 
-    public ChatBox(GUIContext gc) {
+    public ChatBox(GUIContext gc, ServerCommunicator s) {
+        server = s;
+
         try {
             this.gc = gc;
             UnicodeFont uf = new UnicodeFont(new Font("Serif", Font.BOLD, 16));
@@ -53,5 +58,13 @@ public class ChatBox {
     public void render(Graphics g) {
         chatBox.render(gc, g);
         inputBox.render(gc, g);
+    }
+
+    public void update() {
+        Input in = gc.getInput();
+        if(inputBox.hasFocus() && in.isKeyDown(Input.KEY_ENTER)) {
+            server.sendChat(inputBox.getText());
+            inputBox.setText("");
+        }
     }
 }

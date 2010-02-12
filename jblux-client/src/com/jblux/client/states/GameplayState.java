@@ -74,7 +74,7 @@ public class GameplayState extends BasicGameState {
         npc = new Sprite("img/koopa.png");
         npc.setImage(Sprite.FACE_DOWN, 0);
 
-        cb = new ChatBox(gc);
+        cb = new ChatBox(gc, server);
     }
  
     @Override
@@ -95,5 +95,6 @@ public class GameplayState extends BasicGameState {
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         player.update(gc);
+        cb.update();
     }
 }

@@ -70,6 +70,14 @@ public class ServerCommunicator {
         }
     }
 
+    public void sendChat(String message) {
+        try {
+            String command = String.format("%s %s %s", Commands.CHAT, username, message);
+            netOut.writeObject(command);
+        } catch(IOException ex) {
+        }
+    }
+
     public void close() {
         try {
             socket.close();
