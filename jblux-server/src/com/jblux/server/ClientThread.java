@@ -63,30 +63,40 @@ public class ClientThread {
     }
 
     /*
+     * Actually tells all clients except the client that is
+     * sending the message.
+     */
+    public void tell_all_clients(String command) {
+        LinkedList<ClientThread> c = clients.getClients();
+
+        for(int i = 0; i < c.size(); i++) {
+            ClientThread ct = c.get(i);
+            if(ct == this) {
+                continue;
+            }
+
+            //Tell other client about the new player
+            ct.writeString(command);
+        }
+    }
+
+    /*
      * Send's all players' coordinates back to the client so they can be displayed.
      */
     public void move(String username, Coordinates coords) {
-        //Get list of all clients, and then get objects to each client's thread.
-        LinkedList<ClientThread> c = clients.getClients();
         String command = String.format("%s %s %d %d", Commands.MOVE, username, coords.x, coords.y);
-        
-        for(int i = 0; i < c.size(); i++) {
-            ClientThread ct = c.get(i);
-            if(ct.getUsername().equals(getUsername())) {
-                continue;
-            }
-            
-            ct.writeString(command);
-        }
+        tell_all_clients(command);
     }
 
     //Tell the other clients that a player has connected.
     public void connect(String username, Coordinates coords) {
         String command = String.format("%s %s %s", Commands.CONNECT, username, coords);
         System.out.printf("%s connected\n", username);
-        
-        LinkedList<ClientThread> c = clients.getClients();
 
+        /* This can't use tell_all_clients yet because it sends data
+         * back to the sender.
+         */
+        LinkedList<ClientThread> c = clients.getClients();
         for(int i = 0; i < c.size(); i++) {
             ClientThread ct = c.get(i);
             if(ct == this) {
@@ -105,33 +115,13 @@ public class ClientThread {
 
     public void disconnect(String user) {
         String command = String.format("%s %s", Commands.DISCONNECT, user);
-        LinkedList<ClientThread> c = clients.getClients();
-
-        for(int i = 0; i < c.size(); i++) {
-            ClientThread ct = c.get(i);
-            if(ct == this) {
-                continue;
-            }
-
-            //Tell other client about the new player
-            ct.writeString(command);
-        }
-
+        tell_all_clients(command);
         clients.removeClient(this);
     }
 
     public void sendChatMessage(String username, String message) {
         String command = String.format("%s %s %s", Commands.CHAT, username, message);
-        LinkedList<ClientThread> c = clients.getClients();
-
-        for(int i = 0; i < c.size(); i++) {
-            ClientThread ct = c.get(i);
-            if(ct == this) {
-                continue;
-            }
-
-            ct.writeString(command);
-        }
+        tell_all_clients(command);
     }
 
     public void writeString(String s) {
