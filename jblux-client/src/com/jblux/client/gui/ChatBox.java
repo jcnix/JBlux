@@ -55,6 +55,13 @@ public class ChatBox {
         }
     }
 
+    public void addMessage(String username, String message) {
+        String text = chatBox.getText();
+        text += String.format("%s: %s\n", username, message);
+
+        chatBox.setText(text);
+    }
+
     public void render(Graphics g) {
         chatBox.render(gc, g);
         inputBox.render(gc, g);

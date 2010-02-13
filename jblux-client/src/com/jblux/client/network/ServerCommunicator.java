@@ -143,6 +143,10 @@ class ServerListener extends Thread {
             String name = c0[1];
             players.removePlayer(name);
         }
+        else if(c.startsWith(Commands.CHAT)) {
+            String name = c0[1];
+            String message = c0[2];
+        }
     }
 
     public void endThread() {
