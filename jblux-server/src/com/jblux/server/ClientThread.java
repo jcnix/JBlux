@@ -120,6 +120,20 @@ public class ClientThread {
         clients.removeClient(this);
     }
 
+    public void sendChatMessage(String username, String message) {
+        String command = String.format("%s %s %s", Commands.CHAT, username, message);
+        LinkedList<ClientThread> c = clients.getClients();
+
+        for(int i = 0; i < c.size(); i++) {
+            ClientThread ct = c.get(i);
+            if(ct == this) {
+                continue;
+            }
+
+            ct.writeString(command);
+        }
+    }
+
     public void writeString(String s) {
         try {
             netOut.writeObject(s);
@@ -178,6 +192,12 @@ class ClientListener extends Thread {
             coords.x = Integer.parseInt(c1[2]);
             coords.y = Integer.parseInt(c1[3]);
             client.connect(username, coords);
+        }
+        else if(c.startsWith(Commands.CHAT)) {
+            String[] c1 = c.split("[ ]");
+            username = c1[1];
+            String message = c1[2];
+            client.sendChatMessage(username, message);
         }
 
         clients.addDirtyClient(client);
