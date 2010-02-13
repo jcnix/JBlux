@@ -23,7 +23,7 @@ package com.jblux.client.states;
 import com.jblux.client.Player;
 import com.jblux.client.Players;
 import com.jblux.client.Sprite;
-import com.jblux.client.gui.ChatBox;
+import com.jblux.client.gui.GUI;
 import com.jblux.client.network.ServerCommunicator;
 import java.applet.Applet;
 import org.newdawn.slick.AppletGameContainer;
@@ -43,7 +43,7 @@ public class GameplayState extends BasicGameState {
 
     private Sprite npc;
     private Players players;
-    private ChatBox cb;
+    private GUI gui;
     
     public GameplayState(int stateID) 
     {
@@ -74,7 +74,7 @@ public class GameplayState extends BasicGameState {
         npc = new Sprite("img/koopa.png");
         npc.setImage(Sprite.FACE_DOWN, 0);
 
-        cb = new ChatBox(gc, server);
+        gui = new GUI(gc, server);
     }
  
     @Override
@@ -89,12 +89,12 @@ public class GameplayState extends BasicGameState {
         }
         map.render(0,0,2);
 
-        cb.render(g);
+        gui.render(g);
     }
  
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         player.update(gc);
-        cb.update();
+        gui.update();
     }
 }
