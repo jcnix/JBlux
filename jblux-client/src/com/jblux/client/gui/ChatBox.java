@@ -69,7 +69,7 @@ public class ChatBox implements Observer {
         if(obj instanceof ChatMessage) {
             String text = chatBox.getText();
             ChatMessage cm = (ChatMessage) obj;
-            text += cm.getMessage();
+            text += cm.getChatBoxString();
 
             chatBox.setText(text);
         }
