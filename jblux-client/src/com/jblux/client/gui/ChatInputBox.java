@@ -34,6 +34,7 @@ public class ChatInputBox extends TextField {
         super(gc, font, x, y, width, height);
 
         input.disableKeyRepeat();
+        setMaxLength(140);
         this.server = server;
     }
 
