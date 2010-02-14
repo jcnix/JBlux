@@ -163,9 +163,3 @@ class ServerListener extends Thread {
         this.interrupt();
     }
 }
-
-class ServerObservable {
-    public ServerObservable() {
-        
-    }
-}
