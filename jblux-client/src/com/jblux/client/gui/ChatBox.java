@@ -28,7 +28,6 @@ import java.awt.Font;
 import java.util.Observable;
 import java.util.Observer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
@@ -54,9 +53,8 @@ public class ChatBox implements Observer {
             uf.addAsciiGlyphs();
             uf.loadGlyphs();
             chatBox = new TextField(gc, uf, 0, 0, 300, 200);
-            chatBox.setText("Casey: Sup bro!");
 
-            inputBox = new TextField(gc, uf, 0, 200, 300, 25);
+            inputBox = new ChatInputBox(gc, uf, server, 0, 200, 300, 25);
             inputBox.setCursorVisible(true);
         } catch(SlickException ex) {
         }
@@ -65,14 +63,6 @@ public class ChatBox implements Observer {
     public void render(Graphics g) {
         chatBox.render(gc, g);
         inputBox.render(gc, g);
-    }
-
-    public void update() {
-        Input in = gc.getInput();
-        if(inputBox.hasFocus() && in.isKeyDown(Input.KEY_ENTER)) {
-            server.sendChat(inputBox.getText());
-            inputBox.setText("");
-        }
     }
 
     public void update(Observable o, Object obj) {

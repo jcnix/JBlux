@@ -1,5 +1,5 @@
 /**
- * File: GUI.java
+ * File: InputBox.java
  *
  * @author Casey Jones
  *
@@ -21,20 +21,31 @@
 package com.jblux.client.gui;
 
 import com.jblux.client.network.ServerCommunicator;
-import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Font;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.gui.GUIContext;
+import org.newdawn.slick.gui.TextField;
 
-public class GUI {
-    private ChatBox cb;
+public class ChatInputBox extends TextField {
+    private ServerCommunicator server;
 
-    public GUI(GUIContext gc, ServerCommunicator s) {
-        cb = new ChatBox(gc, s);
+    public ChatInputBox(GUIContext gc, Font font, ServerCommunicator server, 
+            int x, int y, int width, int height) {
+        super(gc, font, x, y, width, height);
+
+        input.disableKeyRepeat();
+        this.server = server;
     }
 
-    public void update() {
-    }
-    
-    public void render(Graphics g) {
-        cb.render(g);
+    @Override
+    public void keyPressed(int key, char c) {
+        if(hasFocus() && key == Input.KEY_ENTER) {
+            System.out.println("Sending message...");
+            server.sendChat(getText());
+            setText("");
+        }
+        else {
+            super.keyPressed(key, c);
+        }
     }
 }
