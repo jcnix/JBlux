@@ -53,6 +53,7 @@ public class ChatBox implements Observer {
             uf.addAsciiGlyphs();
             uf.loadGlyphs();
             chatBox = new TextField(gc, uf, 0, 0, 300, 200);
+            chatBox.setAcceptingInput(false);
 
             inputBox = new ChatInputBox(gc, uf, server, 0, 200, 300, 25);
             inputBox.setCursorVisible(true);
