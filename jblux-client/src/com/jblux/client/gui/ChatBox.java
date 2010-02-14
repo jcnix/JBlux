@@ -20,9 +20,13 @@
 
 package com.jblux.client.gui;
 
+import com.jblux.client.gui.observers.ChatBoxObserver;
 import com.jblux.client.network.ServerCommunicator;
+import com.jblux.util.ChatMessage;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Observable;
+import java.util.Observer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -31,14 +35,17 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.gui.TextField;
 
-public class ChatBox {
+public class ChatBox implements Observer {
     private TextField chatBox;
     private TextField inputBox;
     private GUIContext gc;
     private ServerCommunicator server;
+    private ChatBoxObserver cbObserver;
 
     public ChatBox(GUIContext gc, ServerCommunicator s) {
         server = s;
+        cbObserver = ChatBoxObserver.getInstance();
+        cbObserver.addObserver(this);
 
         try {
             this.gc = gc;
@@ -55,13 +62,6 @@ public class ChatBox {
         }
     }
 
-    public void addMessage(String username, String message) {
-        String text = chatBox.getText();
-        text += String.format("%s: %s\n", username, message);
-
-        chatBox.setText(text);
-    }
-
     public void render(Graphics g) {
         chatBox.render(gc, g);
         inputBox.render(gc, g);
@@ -72,6 +72,16 @@ public class ChatBox {
         if(inputBox.hasFocus() && in.isKeyDown(Input.KEY_ENTER)) {
             server.sendChat(inputBox.getText());
             inputBox.setText("");
+        }
+    }
+
+    public void update(Observable o, Object obj) {
+        if(obj instanceof ChatMessage) {
+            String text = chatBox.getText();
+            ChatMessage cm = (ChatMessage) obj;
+            text += cm.getMessage();
+
+            chatBox.setText(text);
         }
     }
 }

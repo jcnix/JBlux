@@ -22,7 +22,9 @@ package com.jblux.client.network;
 
 import com.jblux.client.Players;
 import com.jblux.client.Sprite;
+import com.jblux.client.gui.observers.ChatBoxObserver;
 import com.jblux.common.ServerInfo;
+import com.jblux.util.ChatMessage;
 import com.jblux.util.Commands;
 import com.jblux.util.Coordinates;
 import java.io.IOException;
@@ -94,10 +96,12 @@ class ServerListener extends Thread {
     private Socket socket;
     private ObjectInputStream netIn;
     private Players players;
+    private ChatBoxObserver cbObserver;
 
     public ServerListener(Socket s) {
         socket = s;
         players = Players.getInstance();
+        cbObserver = ChatBoxObserver.getInstance();
     }
 
     @Override
@@ -146,6 +150,7 @@ class ServerListener extends Thread {
         else if(c.startsWith(Commands.CHAT)) {
             String name = c0[1];
             String message = c0[2];
+            cbObserver.recievedMessage(new ChatMessage(name,message));
         }
     }
 
@@ -156,5 +161,11 @@ class ServerListener extends Thread {
         }
 
         this.interrupt();
+    }
+}
+
+class ServerObservable {
+    public ServerObservable() {
+        
     }
 }
