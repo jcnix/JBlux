@@ -186,7 +186,12 @@ class ClientListener extends Thread {
         else if(c.startsWith(Commands.CHAT)) {
             String[] c1 = c.split("[ ]");
             username = c1[1];
-            String message = c1[2];
+
+            //TODO: Make this less ugly
+            String message = "";
+            for(int i = 2; i < c1.length; i++) {
+                message += c1[i] + " ";
+            }
             client.sendChatMessage(username, message);
         }
 

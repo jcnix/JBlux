@@ -149,7 +149,13 @@ class ServerListener extends Thread {
         }
         else if(c.startsWith(Commands.CHAT)) {
             String name = c0[1];
-            String message = c0[2];
+
+            //TODO: make this less ugly
+            String message = "";
+            for(int i = 2; i < c0.length; i++) {
+                message += c0[i] + " ";
+            }
+
             cbObserver.recievedMessage(new ChatMessage(name,message));
         }
     }
