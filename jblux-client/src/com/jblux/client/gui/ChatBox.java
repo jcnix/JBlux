@@ -21,49 +21,30 @@
 package com.jblux.client.gui;
 
 import com.jblux.client.gui.observers.ChatBoxObserver;
-import com.jblux.client.network.ServerCommunicator;
 import com.jblux.util.ChatMessage;
-import java.awt.Color;
-import java.awt.Font;
 import java.util.Observable;
 import java.util.Observer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
-import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.gui.TextField;
 
 public class ChatBox implements Observer {
     private TextField chatBox;
-    private TextField inputBox;
     private GUIContext gc;
-    private ServerCommunicator server;
     private ChatBoxObserver cbObserver;
 
-    public ChatBox(GUIContext gc, ServerCommunicator s) {
-        server = s;
+    public ChatBox(GUIContext gc, UnicodeFont uf) {
         cbObserver = ChatBoxObserver.getInstance();
         cbObserver.addObserver(this);
 
-        try {
-            this.gc = gc;
-            UnicodeFont uf = new UnicodeFont(new Font("Serif", Font.BOLD, 16));
-            uf.getEffects().add(new ColorEffect(Color.WHITE));
-            uf.addAsciiGlyphs();
-            uf.loadGlyphs();
-            chatBox = new TextField(gc, uf, 0, 0, 300, 200);
-            chatBox.setAcceptingInput(false);
-
-            inputBox = new ChatInputBox(gc, uf, server, 0, 200, 300, 25);
-            inputBox.setCursorVisible(true);
-        } catch(SlickException ex) {
-        }
+        this.gc = gc;
+        chatBox = new TextField(gc, uf, 0, 0, 300, 200);
+        chatBox.setAcceptingInput(false);
     }
 
     public void render(Graphics g) {
         chatBox.render(gc, g);
-        inputBox.render(gc, g);
     }
 
     public void update(Observable o, Object obj) {

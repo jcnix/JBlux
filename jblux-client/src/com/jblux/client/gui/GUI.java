@@ -21,14 +21,30 @@
 package com.jblux.client.gui;
 
 import com.jblux.client.network.ServerCommunicator;
+import java.awt.Color;
+import java.awt.Font;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.gui.GUIContext;
 
 public class GUI {
     private ChatBox cb;
+    private ChatInputBox inputBox;
 
     public GUI(GUIContext gc, ServerCommunicator s) {
-        cb = new ChatBox(gc, s);
+        try {
+            UnicodeFont uf = new UnicodeFont(new Font("Serif", Font.BOLD, 16));
+            uf.getEffects().add(new ColorEffect(Color.WHITE));
+            uf.addAsciiGlyphs();
+            uf.loadGlyphs();
+
+            cb = new ChatBox(gc, uf);
+            inputBox = new ChatInputBox(gc, uf, s);
+            inputBox.setCursorVisible(true);
+        } catch(SlickException ex) {
+        }
     }
 
     public void update() {
@@ -36,5 +52,6 @@ public class GUI {
     
     public void render(Graphics g) {
         cb.render(g);
+        inputBox.render(g);
     }
 }

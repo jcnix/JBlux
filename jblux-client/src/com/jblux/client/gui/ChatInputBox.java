@@ -22,17 +22,19 @@ package com.jblux.client.gui;
 
 import com.jblux.client.network.ServerCommunicator;
 import org.newdawn.slick.Font;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.gui.TextField;
 
 public class ChatInputBox extends TextField {
     private ServerCommunicator server;
+    private GUIContext gc;
 
-    public ChatInputBox(GUIContext gc, Font font, ServerCommunicator server, 
-            int x, int y, int width, int height) {
-        super(gc, font, x, y, width, height);
+    public ChatInputBox(GUIContext gc, Font font, ServerCommunicator server) {
+        super(gc, font, 0, 200, 300, 25);
 
+        this.gc = gc;
         input.disableKeyRepeat();
         setMaxLength(140);
         this.server = server;
@@ -48,5 +50,9 @@ public class ChatInputBox extends TextField {
         else {
             super.keyPressed(key, c);
         }
+    }
+
+    public void render(Graphics g) {
+        super.render(gc, g);
     }
 }
