@@ -29,31 +29,30 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.gui.TextField;
 
-public class ChatBox implements Observer {
-    private TextField chatBox;
+public class ChatBox extends TextField implements Observer {
     private GUIContext gc;
     private ChatBoxObserver cbObserver;
 
     public ChatBox(GUIContext gc, UnicodeFont uf) {
+        super(gc, uf, 0, 0, 300, 200);
+
         cbObserver = ChatBoxObserver.getInstance();
         cbObserver.addObserver(this);
-
         this.gc = gc;
-        chatBox = new TextField(gc, uf, 0, 0, 300, 200);
-        chatBox.setAcceptingInput(false);
+        setAcceptingInput(false);
     }
 
     public void render(Graphics g) {
-        chatBox.render(gc, g);
+        super.render(gc, g);
     }
 
     public void update(Observable o, Object obj) {
         if(obj instanceof ChatMessage) {
-            String text = chatBox.getText();
+            String text = getText();
             ChatMessage cm = (ChatMessage) obj;
             text += cm.getChatBoxString();
 
-            chatBox.setText(text);
+            setText(text);
         }
     }
 }
