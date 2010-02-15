@@ -32,6 +32,7 @@ import org.newdawn.slick.gui.TextField;
 public class ChatBox extends TextField implements Observer {
     private GUIContext gc;
     private ChatBoxObserver cbObserver;
+    private final int MAX_LINES = 10;
 
     public ChatBox(GUIContext gc, UnicodeFont uf) {
         super(gc, uf, 0, 0, 300, 200);
@@ -40,6 +41,13 @@ public class ChatBox extends TextField implements Observer {
         cbObserver.addObserver(this);
         this.gc = gc;
         setAcceptingInput(false);
+
+        String blankLines = "";
+        for(int i = 0; i < MAX_LINES; i++) {
+            //We need this space so something is left after splitting
+            blankLines += " \n";
+        }
+        setText(blankLines);
     }
 
     public void render(Graphics g) {
@@ -49,10 +57,19 @@ public class ChatBox extends TextField implements Observer {
     public void update(Observable o, Object obj) {
         if(obj instanceof ChatMessage) {
             String text = getText();
-            ChatMessage cm = (ChatMessage) obj;
-            text += cm.getChatBoxString();
+            String[] lines = text.split("\\n");
 
-            setText(text);
+            //Get rid of the first line, keep the remaining.
+            //Really basic scrolling.
+            String newText = "";
+            for(int i = 1; i < MAX_LINES; i++) {
+                newText += lines[i] + "\n";
+            }
+
+            ChatMessage cm = (ChatMessage) obj;
+            newText += cm.getChatBoxString();
+
+            setText(newText);
         }
     }
 }
