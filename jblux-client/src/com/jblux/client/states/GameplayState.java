@@ -45,10 +45,11 @@ public class GameplayState extends BasicGameState {
     private Players players;
     private GUI gui;
     
-    public GameplayState(int stateID) 
+    public GameplayState(int stateID, ServerCommunicator server)
     {
         this.stateID = stateID;
-        server = new ServerCommunicator();
+        this.server = server;
+
         players = Players.getInstance();
     }
  

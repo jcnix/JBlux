@@ -20,8 +20,10 @@
 
 package com.jblux.client;
 
+import com.jblux.client.network.ServerCommunicator;
 import com.jblux.client.states.MainMenuState;
 import com.jblux.client.states.GameplayState;
+import com.jblux.client.states.ServerDownState;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.GameContainer;
@@ -30,13 +32,21 @@ import org.newdawn.slick.SlickException;
 public class JBlux extends StateBasedGame {
     public static final int MAINMENUSTATE = 0;
     public static final int GAMEPLAYSTATE = 1;
+    public static final int SERVERDOWNSTATE = 2;
     
     public JBlux() {
         super("JBlux");
-        
-        this.addState(new MainMenuState(MAINMENUSTATE));
-        this.addState(new GameplayState(GAMEPLAYSTATE));
-        this.enterState(MAINMENUSTATE);
+
+        ServerCommunicator server = new ServerCommunicator();
+        if(!server.isConnected()) {
+            this.addState(new ServerDownState(SERVERDOWNSTATE));
+            this.enterState(SERVERDOWNSTATE);
+        }
+        else {
+            this.addState(new MainMenuState(MAINMENUSTATE));
+            this.addState(new GameplayState(GAMEPLAYSTATE, server));
+            this.enterState(MAINMENUSTATE);
+        }
     }
     
     @Override

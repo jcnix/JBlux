@@ -41,17 +41,31 @@ public class ServerCommunicator {
     private ObjectOutputStream netOut;
     private ServerListener sl;
     private String username;
+    private boolean connected;
 
     public ServerCommunicator() {
         try {
             socket = new Socket(ServerInfo.SERVER, ServerInfo.PORT);
-            netOut = new ObjectOutputStream(socket.getOutputStream());
+            if(!socket.isConnected()) {
+                //Server must be down
+                connected = false;
+            }
+            else {
+                connected = true;
+                netOut = new ObjectOutputStream(socket.getOutputStream());
+            }
         } catch (UnknownHostException ex) {
         } catch (IOException ex) {
         }
 
-        sl = new ServerListener(socket);
-        sl.start();
+        if(isConnected()) {
+            sl = new ServerListener(socket);
+            sl.start();
+        }
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 
     public void connect_player(String player, Coordinates coords) {
