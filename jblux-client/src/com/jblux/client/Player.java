@@ -37,7 +37,6 @@ public class Player extends Sprite {
     private Calendar cal;
     private long lastMove;
 
-
     public Player(ServerCommunicator server, String username) {
         //TODO: Replace this when accounts are set up.
         super("img/koopa.png");

@@ -20,6 +20,7 @@
 
 package com.jblux.client.states;
 
+import com.jblux.client.GameMap;
 import com.jblux.client.Player;
 import com.jblux.client.Players;
 import com.jblux.client.Sprite;
@@ -32,12 +33,10 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.tiled.TiledMap;
 
 public class GameplayState extends BasicGameState {
-    private TiledMap map;
-
     private int stateID = -1;
+    private GameMap map;
     private Player player;
     private ServerCommunicator server;
 
@@ -70,7 +69,7 @@ public class GameplayState extends BasicGameState {
             username = "casey";
         }
 
-        map = new TiledMap("maps/residential/residential.tmx", "maps/residential");
+        map = new GameMap("residential");
         player = new Player(server, username);
         npc = new Sprite("img/koopa.png");
         npc.setImage(Sprite.FACE_DOWN, 0);
