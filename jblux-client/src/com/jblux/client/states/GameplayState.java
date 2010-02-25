@@ -22,7 +22,6 @@ package com.jblux.client.states;
 
 import com.jblux.client.GameMap;
 import com.jblux.client.Player;
-import com.jblux.client.Players;
 import com.jblux.client.Sprite;
 import com.jblux.client.gui.GUI;
 import com.jblux.client.network.ServerCommunicator;
@@ -41,15 +40,12 @@ public class GameplayState extends BasicGameState {
     private ServerCommunicator server;
 
     private Sprite npc;
-    private Players players;
     private GUI gui;
     
     public GameplayState(int stateID, ServerCommunicator server)
     {
         this.stateID = stateID;
         this.server = server;
-
-        players = Players.getInstance();
     }
  
     @Override
@@ -69,8 +65,8 @@ public class GameplayState extends BasicGameState {
             username = "casey";
         }
 
-        map = new GameMap("residential");
         player = new Player(server, username);
+        map = new GameMap("residential", player);
         npc = new Sprite("img/koopa.png");
         npc.setImage(Sprite.FACE_DOWN, 0);
 
@@ -79,16 +75,8 @@ public class GameplayState extends BasicGameState {
  
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-        map.render(0,0,0);
-        map.render(0,0,1);
-
-        player.draw();
-        for(int i = 0; i < players.size(); i++) {
-            Sprite s = players.getPlayer(i);
-            s.draw();
-        }
-        map.render(0,0,2);
-
+        //The map renders all players
+        map.render(gc,sbg, g);
         gui.render(g);
     }
  
