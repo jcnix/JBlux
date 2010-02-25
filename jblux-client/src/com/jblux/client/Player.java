@@ -55,7 +55,7 @@ public class Player extends Sprite {
         lastMove = cal.getTimeInMillis();
 
         try {
-            map_walk = new Image("maps/tilesets/pondarea2bw.png");
+            map_walk = new Image("maps/residential/residentialbw.png");
             map_walk.setAlpha(0.5f);
         } catch (SlickException ex) {
         }

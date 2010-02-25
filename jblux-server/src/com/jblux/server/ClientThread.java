@@ -20,7 +20,7 @@
 
 package com.jblux.server;
 
-import com.jblux.util.Commands;
+import com.jblux.common.Commands;
 import com.jblux.util.Coordinates;
 import java.io.IOException;
 import java.io.ObjectInputStream;

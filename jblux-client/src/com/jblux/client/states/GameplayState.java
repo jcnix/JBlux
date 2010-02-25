@@ -70,7 +70,7 @@ public class GameplayState extends BasicGameState {
             username = "casey";
         }
 
-        map = new TiledMap("maps/residential.tmx", "maps/tilesets");
+        map = new TiledMap("maps/residential/residential.tmx", "maps/residential");
         player = new Player(server, username);
         npc = new Sprite("img/koopa.png");
         npc.setImage(Sprite.FACE_DOWN, 0);
