@@ -41,6 +41,7 @@ public class GameCanvas {
     }
     
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+
         map.render(0,0,0); //Ground Layer
         map.render(0,0,1); //Objects Layer
 

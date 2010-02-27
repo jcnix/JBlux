@@ -39,8 +39,14 @@ public class GameMap extends TiledMap {
 
     //TODO: verify map exists
     public void setMap(String name) {
-        System.out.printf("Set Map: %s\n", name);
         this.name = name;
         server.setMap(name);
+    }
+
+    @Override
+    public void render(int x, int y, int layer) {
+        if(layer < getLayerCount()) {
+            super.render(x, y, layer);
+        }
     }
 }

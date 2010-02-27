@@ -141,7 +141,6 @@ public class Player extends Sprite {
         int y = map_walk.getHeight();
         
         if(coords.x <= 0 || coords.x >= x) {
-            System.out.println("New Map");
             try {
                 coords.x = 350;
                 coords.y = 250;
