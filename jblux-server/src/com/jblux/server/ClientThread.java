@@ -202,9 +202,8 @@ class ClientListener extends Thread {
         else if(c.startsWith(Commands.MAP)) {
             username = c1[1];
             map = c1[2];
+            System.out.println(map);
         }
-
-        clients.addDirtyClient(client);
     }
 
     public void endThread() {

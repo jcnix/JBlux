@@ -24,14 +24,10 @@ import java.util.LinkedList;
 
 public class Clients {
     private LinkedList<ClientThread> clients;
-    //List of clients that have changed
-    private LinkedList<ClientThread> dirtyClients;
-
     private static Clients c;
 
     protected Clients() {
         clients = new LinkedList<ClientThread>();
-        dirtyClients = new LinkedList<ClientThread>();
     }
 
     public static Clients getInstance() {
@@ -51,17 +47,5 @@ public class Clients {
 
     public LinkedList<ClientThread> getClients() {
         return clients;
-    }
-
-    public void addDirtyClient(ClientThread client) {
-        dirtyClients.add(client);
-    }
-
-    public void removeDirtyClient(ClientThread client) {
-        dirtyClients.remove(client);
-    }
-
-    public LinkedList<ClientThread> getDirtyClients() {
-        return dirtyClients;
     }
 }
