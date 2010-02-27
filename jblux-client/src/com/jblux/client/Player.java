@@ -144,6 +144,7 @@ public class Player extends Sprite {
             try {
                 coords.x = 350;
                 coords.y = 250;
+                map_walk = new Image("maps/lakeentrance/lakeentrancebw.png");
                 GameMap map = new GameMap("lakeentrance", server);
                 canvas.setMap(map);
             } catch (SlickException ex) {
