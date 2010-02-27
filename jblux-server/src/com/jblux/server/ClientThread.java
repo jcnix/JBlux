@@ -176,21 +176,20 @@ class ClientListener extends Thread {
     }
 
     public void doCommand(String c) {
+        String[] c1 = c.split("\\s");
+
         if(c.startsWith(Commands.MOVE)) {
-            String[] c1 = c.split("[ ]");
             coords.x = Integer.parseInt(c1[2]);
             coords.y = Integer.parseInt(c1[3]);
             client.move(username, coords);
         }
         else if(c.startsWith(Commands.CONNECT)) {
-            String[] c1 = c.split("[ ]");
             username = c1[1];
             coords.x = Integer.parseInt(c1[2]);
             coords.y = Integer.parseInt(c1[3]);
             client.connect(username, coords);
         }
         else if(c.startsWith(Commands.CHAT)) {
-            String[] c1 = c.split("[ ]");
             username = c1[1];
 
             //TODO: Make this less ugly
@@ -201,7 +200,6 @@ class ClientListener extends Thread {
             client.sendChatMessage(username, message);
         }
         else if(c.startsWith(Commands.MAP)) {
-            String[] c1 = c.split("[ ]");
             username = c1[1];
             map = c1[2];
         }

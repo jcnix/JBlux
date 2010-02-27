@@ -55,7 +55,6 @@ public class Player extends Sprite {
 
         try {
             map_walk = new Image("maps/residential/residentialbw.png");
-            map_walk.setAlpha(0.5f);
         } catch (SlickException ex) {
         }
 

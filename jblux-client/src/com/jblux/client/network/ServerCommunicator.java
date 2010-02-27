@@ -145,7 +145,6 @@ class ServerListener extends Thread {
 
     public void doCommand(String c) {
         String[] c0 = c.split("\\s");
-        System.out.println(c);
 
         if(c.startsWith(Commands.MOVE)) {          
             String name = c0[1];
