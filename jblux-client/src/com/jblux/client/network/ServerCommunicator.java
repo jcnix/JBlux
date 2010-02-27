@@ -94,7 +94,6 @@ public class ServerCommunicator {
         }
     }
 
-    //TODO: Verify map exists
     public void setMap(String map) {
         try {
             String command = String.format("%s %s %s", Commands.MAP, username, map);

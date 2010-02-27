@@ -52,4 +52,8 @@ public class GameCanvas {
         map.render(0,0,2);  //Fring Layer
 
     }
+
+    public void setMap(GameMap map) {
+        this.map = map;
+    }
 }

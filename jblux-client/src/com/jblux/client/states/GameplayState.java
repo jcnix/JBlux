@@ -67,9 +67,10 @@ public class GameplayState extends BasicGameState {
             username = "casey";
         }
 
-        player = new Player(server, username);
         map = new GameMap("residential", server);
+        player = new Player(username, server);
         canvas = new GameCanvas(player, map);
+        player.setCanvas(canvas);
 
         npc = new Sprite("img/koopa.png");
         npc.setImage(Sprite.FACE_DOWN, 0);

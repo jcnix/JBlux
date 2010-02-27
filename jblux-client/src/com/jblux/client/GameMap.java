@@ -33,9 +33,14 @@ public class GameMap extends TiledMap {
         super("maps/" + name + "/" + name +".tmx", "maps/" + name);
 
         this.server = server;
-        this.name = name;
-        
-        server.setMap(name);
+        setMap(name);
         players = Players.getInstance();
+    }
+
+    //TODO: verify map exists
+    public void setMap(String name) {
+        System.out.printf("Set Map: %s\n", name);
+        this.name = name;
+        server.setMap(name);
     }
 }
