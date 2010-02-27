@@ -66,12 +66,12 @@ public class ClientThread {
      * Actually tells all clients except the client that is
      * sending the message.
      */
-    public void tell_all_clients(String command, boolean include_self) {
+    public void tell_all_clients(String command) {
         LinkedList<ClientThread> c = clients.getClients();
 
         for(int i = 0; i < c.size(); i++) {
             ClientThread ct = c.get(i);
-            if(!include_self && ct == this) {
+            if(ct == this) {
                 continue;
             }
 
@@ -85,7 +85,7 @@ public class ClientThread {
      */
     public void move(String username, Coordinates coords) {
         String command = String.format("%s %s %d %d", Commands.MOVE, username, coords.x, coords.y);
-        tell_all_clients(command, false);
+        tell_all_clients(command);
     }
 
     //Tell the other clients that a player has connected.
@@ -115,13 +115,14 @@ public class ClientThread {
 
     public void disconnect(String user) {
         String command = String.format("%s %s", Commands.DISCONNECT, user);
-        tell_all_clients(command, false);
+        tell_all_clients(command);
         clients.removeClient(this);
     }
 
     public void sendChatMessage(String username, String message) {
         String command = String.format("%s %s %s", Commands.CHAT, username, message);
-        tell_all_clients(command, true);
+        tell_all_clients(command);
+        writeString(command);
     }
 
     public void writeString(String s) {
