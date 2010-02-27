@@ -21,39 +21,21 @@
 package com.jblux.client;
 
 import com.jblux.client.network.ServerCommunicator;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
 
 public class GameMap extends TiledMap {
     private String name;
-    private Player player;
     private Players players;
     private ServerCommunicator server;
 
-    public GameMap(String name, Player player, ServerCommunicator server) throws SlickException {
+    public GameMap(String name, ServerCommunicator server) throws SlickException {
         super("maps/" + name + "/" + name +".tmx", "maps/" + name);
 
         this.server = server;
-        server.setMap(name);
-
         this.name = name;
-        this.player = player;
+        
+        server.setMap(name);
         players = Players.getInstance();
-    }
-
-    public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-        this.render(0,0,0);
-        this.render(0,0,1);
-
-        player.draw();
-        for(int i = 0; i < players.size(); i++) {
-            Sprite s = players.getPlayer(i);
-            s.draw();
-        }
-        this.render(0,0,2);
-
     }
 }

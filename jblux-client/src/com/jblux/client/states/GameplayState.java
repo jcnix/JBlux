@@ -24,6 +24,7 @@ import com.jblux.client.GameMap;
 import com.jblux.client.Player;
 import com.jblux.client.Sprite;
 import com.jblux.client.gui.GUI;
+import com.jblux.client.gui.GameCanvas;
 import com.jblux.client.network.ServerCommunicator;
 import java.applet.Applet;
 import org.newdawn.slick.AppletGameContainer;
@@ -37,6 +38,7 @@ public class GameplayState extends BasicGameState {
     private int stateID = -1;
     private GameMap map;
     private Player player;
+    private GameCanvas canvas;
     private ServerCommunicator server;
 
     private Sprite npc;
@@ -66,7 +68,9 @@ public class GameplayState extends BasicGameState {
         }
 
         player = new Player(server, username);
-        map = new GameMap("residential", player, server);
+        map = new GameMap("residential", server);
+        canvas = new GameCanvas(player, map);
+
         npc = new Sprite("img/koopa.png");
         npc.setImage(Sprite.FACE_DOWN, 0);
 
@@ -75,8 +79,8 @@ public class GameplayState extends BasicGameState {
  
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-        //The map renders all players
-        map.render(gc,sbg, g);
+        //The canvas renders the map and all players
+        canvas.render(gc,sbg, g);
         gui.render(g);
     }
  
