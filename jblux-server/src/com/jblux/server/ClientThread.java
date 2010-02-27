@@ -140,6 +140,7 @@ class ClientListener extends Thread {
     private Clients clients;
 
     public String username;
+    public String map;
     public Coordinates coords;
 
     public ClientListener(ClientThread client, Socket s) {
@@ -194,6 +195,11 @@ class ClientListener extends Thread {
                 message += c1[i] + " ";
             }
             client.sendChatMessage(username, message);
+        }
+        else if(c.startsWith(Commands.MAP)) {
+            String[] c1 = c.split("[ ]");
+            username = c1[1];
+            map = c1[2];
         }
 
         clients.addDirtyClient(client);

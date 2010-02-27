@@ -94,6 +94,15 @@ public class ServerCommunicator {
         }
     }
 
+    //TODO: Verify map exists
+    public void setMap(String map) {
+        try {
+            String command = String.format("%s %s %s", Commands.MAP, username, map);
+            netOut.writeObject(command);
+        } catch(IOException ex) {
+        }
+    }
+
     public void close() {
         try {
             socket.close();

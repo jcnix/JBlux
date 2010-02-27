@@ -66,7 +66,7 @@ public class GameplayState extends BasicGameState {
         }
 
         player = new Player(server, username);
-        map = new GameMap("residential", player);
+        map = new GameMap("residential", player, server);
         npc = new Sprite("img/koopa.png");
         npc.setImage(Sprite.FACE_DOWN, 0);
 

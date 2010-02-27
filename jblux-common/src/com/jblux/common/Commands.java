@@ -25,4 +25,5 @@ public class Commands {
     public static final String CONNECT = "connect";
     public static final String DISCONNECT = "disconnect";
     public static final String CHAT = "chat";
+    public static final String MAP = "map";
 }

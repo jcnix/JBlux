@@ -20,6 +20,7 @@
 
 package com.jblux.client;
 
+import com.jblux.client.network.ServerCommunicator;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -30,9 +31,13 @@ public class GameMap extends TiledMap {
     private String name;
     private Player player;
     private Players players;
+    private ServerCommunicator server;
 
-    public GameMap(String name, Player player) throws SlickException {
+    public GameMap(String name, Player player, ServerCommunicator server) throws SlickException {
         super("maps/" + name + "/" + name +".tmx", "maps/" + name);
+
+        this.server = server;
+        server.setMap(name);
 
         this.name = name;
         this.player = player;
