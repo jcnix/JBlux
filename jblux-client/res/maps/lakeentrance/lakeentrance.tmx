@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map SYSTEM "http://mapeditor.org/dtd/1.0/map.dtd">
+<map version="1.0" orientation="orthogonal" width="24" height="17" tilewidth="32" tileheight="32" eyeDistance="100.0" viewportWidth="640" viewportHeight="480">
+ <tileset firstgid="1" source="lakeentrance.tsx"/>
+ <layer name="Layer 0" width="24" height="17" viewPlaneDistance="0.0" viewPlaneInfinitelyFarAway="false" tileWidth="32" tileHeight="32">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAAA3DBXAQBAAAwJGju3M0o7tzMLq30d3d3TCa0Y3S3SgdCkqjoHQoKI1Bo6TC3/1HCwgIiG4MYxrL2AYax7jGM74JTGgiE5vEpCYzuSlMaSpTm8a0pjO9GcxoJjMbZBazms3s5jCnucxtsHnMaz7zW8CCFrKwRSxqMYtbwpKWsrRlLGs5y1vBilaysiFWsaqhVrO6NaxpLWtbx7rWs74NbGgjwww3wsY2sanNbG4LW9rK1raxre1sbwc72snOdrGr3exuD3vay972sa/97O8ABzrIwQ5xqMMc7ghHOsrRjnGs4xxvpBOc6CQnO8WpTnO6Uc5wprOc7RznOs/5LnChi1zsEpf6hV+6zOWucKWrXO0a17rO9W5wo5vc7Ba3us3t7nCnX/m1u9ztHve6z/0e8KCHPOw3fusRj/qd33vM457wpKc87RnP+oM/es7z/uTPXvCil7zsFa96zeve8Ka/+Ku3vO1v/u4d73rP+z7woY987B/+6V/+7ROf+sznvvClr3ztP/7rG9/6zvd+8KP/+b+fDIiG0Y1hTGMZ20DjGNd4xjeBCU1kYpOY1GQmN4UpTWVq05jWdKY3gxnNZGaDzGJWs5ndHOY0l7kNNo95zWd+C1jQQha2iEUtZnFLWNJSlraMZS1neStY0UpWNsQqVjXUala3hjWtZW3rWNd61reBDW1kmOFG2NgmNrWZzW1hS1vZ2ja2tZ3t7WBHO9nZLna1m93tYU972ds+9rWf/R3gQAc52CEOdZjDHeFIRznaMY51nOONdIITneRkpzjVaU43yhnOdJazneNc5znfBS50kYv9DAadPH5gBgAA
+  </data>
+ </layer>
+ <layer name="Layer 1" width="24" height="17" viewPlaneDistance="0.0" viewPlaneInfinitelyFarAway="false" tileWidth="32" tileHeight="32">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAAO3Sxw2EQAxAUc+QT9B/Dws0QWgCuiAs+VMDsgAJS+/oLx8s8u75GZHU6PUL2qViv6HdKvY72v2FfsZurnhfRbtW7GvPwO2j4v2xFUmsXv+bZ8+f35owY8GKDfv5c/yFgYUDFx58BAgR3fw7B+ptO01gBgAA
+  </data>
+ </layer>
+</map>
