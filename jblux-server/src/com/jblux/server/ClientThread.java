@@ -71,7 +71,7 @@ public class ClientThread {
 
         for(int i = 0; i < c.size(); i++) {
             ClientThread ct = c.get(i);
-            if(ct == this) {
+            if(ct == this || !is_on_same_map(ct)) {
                 continue;
             }
 
@@ -123,6 +123,10 @@ public class ClientThread {
         String command = String.format("%s %s %s", Commands.CHAT, username, message);
         tell_all_clients(command);
         writeString(command);
+    }
+
+    public boolean is_on_same_map(ClientThread ct) {
+        return ct.cl.map.equals(this.cl.map);
     }
 
     public void writeString(String s) {
