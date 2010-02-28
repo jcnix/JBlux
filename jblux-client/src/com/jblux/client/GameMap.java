@@ -26,7 +26,6 @@ import org.newdawn.slick.tiled.TiledMap;
 
 public class GameMap extends TiledMap {
     private String name;
-    private Players players;
     private ServerCommunicator server;
 
     public GameMap(String name, ServerCommunicator server) throws SlickException {
@@ -34,7 +33,6 @@ public class GameMap extends TiledMap {
 
         this.server = server;
         setMap(name);
-        players = Players.getInstance();
     }
 
     //TODO: verify map exists
