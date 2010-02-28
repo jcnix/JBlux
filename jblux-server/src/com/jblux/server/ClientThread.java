@@ -119,6 +119,16 @@ public class ClientThread {
         clients.removeClient(this);
     }
 
+    public void remove_from_map(String user) {
+        String command = String.format("%s rm %s", Commands.MAP, user);
+        tell_all_clients(command);
+    }
+
+    public void add_to_map(String user, Coordinates coords) {
+        String command = String.format("%s add %s %d %d", Commands.MAP, user, coords.x, coords.y);
+        tell_all_clients(command);
+    }
+
     public void sendChatMessage(String username, String message) {
         String command = String.format("%s %s %s", Commands.CHAT, username, message);
         tell_all_clients(command);
@@ -141,14 +151,12 @@ class ClientListener extends Thread {
     private Socket clientSocket;
     private ObjectInputStream netIn;
     private ClientThread client;
-    private Clients clients;
 
     public String username;
     public String map;
     public Coordinates coords;
 
     public ClientListener(ClientThread client, Socket s) {
-        clients = Clients.getInstance();
         this.client = client;
         clientSocket = s;
         coords = new Coordinates();
@@ -201,8 +209,10 @@ class ClientListener extends Thread {
         }
         else if(c.startsWith(Commands.MAP)) {
             username = c1[1];
+            client.remove_from_map(username);
+            //Map switch here
             map = c1[2];
-            System.out.println(map);
+            client.add_to_map(username, coords);
         }
     }
 

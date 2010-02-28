@@ -179,6 +179,21 @@ class ServerListener extends Thread {
 
             cbObserver.recievedMessage(new ChatMessage(name,message));
         }
+        else if(c.startsWith(Commands.MAP)) {
+            String name = c0[1];
+            
+            if(c0[2].equals("rm")) {
+                players.removePlayer(name);
+            }
+            else if(c0[2].equals("add")) {
+                Sprite npc = new Sprite("img/koopa.png");
+                npc.setName(name);
+                npc.setCoords(x, y);
+                npc.setImage(0, 0);
+                players.addPlayer(npc);
+            }
+            
+        }
     }
 
     public void endThread() {

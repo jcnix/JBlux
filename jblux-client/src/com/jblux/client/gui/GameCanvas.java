@@ -50,8 +50,7 @@ public class GameCanvas {
             Sprite s = players.getPlayer(i);
             s.draw();
         }
-        map.render(0,0,2);  //Fring Layer
-
+        map.render(0,0,2);  //Fringe Layer
     }
 
     public void setMap(GameMap map) {
