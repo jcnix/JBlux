@@ -99,7 +99,7 @@ public class ClientThread {
         LinkedList<ClientThread> c = clients.getClients();
         for(int i = 0; i < c.size(); i++) {
             ClientThread ct = c.get(i);
-            if(ct == this) {
+            if(ct == this || !is_on_same_map(ct)) {
                 continue;
             }
 
