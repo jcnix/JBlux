@@ -27,6 +27,10 @@ import com.jblux.client.gui.GUI;
 import com.jblux.client.gui.GameCanvas;
 import com.jblux.client.network.ServerCommunicator;
 import java.applet.Applet;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import org.newdawn.slick.AppletGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -58,6 +62,8 @@ public class GameplayState extends BasicGameState {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         String username = "";
+        String map_test = "";
+
         if (gc instanceof AppletGameContainer.Container) {
             // get the parameters by casting container and getting the applet instance
             Applet applet = ((AppletGameContainer.Container) gc).getApplet();
@@ -65,9 +71,20 @@ public class GameplayState extends BasicGameState {
         }
         else {
             username = "casey";
+            try {
+                //Put this file in dist/ with the jar
+                BufferedReader r = new BufferedReader(new FileReader("testmap.txt"));
+                map_test = r.readLine();
+                System.out.printf("***Map: %s", map_test);
+            } catch (FileNotFoundException ex) {
+            } catch (IOException ex) {
+            }
         }
 
-        map = new GameMap("residential", server);
+        if(map_test.equals(""))
+            map_test = "residential";
+
+        map = new GameMap(map_test, server);
         player = new Player(username, server);
         canvas = new GameCanvas(player, map);
         player.setCanvas(canvas);
