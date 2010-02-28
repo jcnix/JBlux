@@ -125,7 +125,7 @@ public class ClientThread {
     }
 
     public void add_to_map(String user, Coordinates coords) {
-        String command = String.format("%s add %s %d %d", Commands.MAP, user, coords.x, coords.y);
+        String command = String.format("%s add %s %s", Commands.MAP, user, getCoords());
 
         LinkedList<ClientThread> c = clients.getClients();
         for(int i = 0; i < c.size(); i++) {

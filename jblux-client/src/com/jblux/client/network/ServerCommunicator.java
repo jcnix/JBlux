@@ -179,13 +179,16 @@ class ServerListener extends Thread {
 
             cbObserver.recievedMessage(new ChatMessage(name,message));
         }
-        else if(c.startsWith(Commands.MAP)) {
-            String name = c0[1];
+        else if(c.startsWith(Commands.MAP)) {            
+            String name = c0[2];
             
-            if(c0[2].equals("rm")) {
+            if(c0[1].equals("rm")) {
                 players.removePlayer(name);
             }
-            else if(c0[2].equals("add")) {
+            else if(c0[1].equals("add")) {
+                int x = Integer.parseInt(c0[3]);
+                int y = Integer.parseInt(c0[4]);
+
                 Sprite npc = new Sprite("img/koopa.png");
                 npc.setName(name);
                 npc.setCoords(x, y);
