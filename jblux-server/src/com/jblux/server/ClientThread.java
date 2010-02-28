@@ -127,6 +127,22 @@ public class ClientThread {
     public void add_to_map(String user, Coordinates coords) {
         String command = String.format("%s add %s %d %d", Commands.MAP, user, coords.x, coords.y);
         tell_all_clients(command);
+
+        LinkedList<ClientThread> c = clients.getClients();
+        for(int i = 0; i < c.size(); i++) {
+            ClientThread ct = c.get(i);
+            if(ct == this || !is_on_same_map(ct)) {
+                continue;
+            }
+
+            //The the new player about the other clients
+            String otherPlayer = String.format("%s %s %s", Commands.MAP,
+                    ct.getUsername(), ct.getCoords());
+            writeString(otherPlayer);
+
+            //Tell other client about the new player
+            ct.writeString(command);
+        }
     }
 
     public void sendChatMessage(String username, String message) {
