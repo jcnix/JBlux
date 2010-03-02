@@ -72,34 +72,22 @@ public class ServerCommunicator {
         System.out.println("Connecting...");
         username = player;
         String command = String.format("%s %s %d %d", Commands.CONNECT, username, coords.x, coords.y);
-        try {
-            netOut.writeObject(command);
-        } catch (IOException ex) {
-        }
+        writeString(command);
     }
 
     public void move(int x, int y) {
-        try {
-            String command = String.format("%s %s %d %d", Commands.MOVE, username, x, y);
-            netOut.writeObject(command);
-        } catch (IOException ex) {
-        }
+        String command = String.format("%s %s %d %d", Commands.MOVE, username, x, y);
+        writeString(command);
     }
 
     public void sendChat(String message) {
-        try {
-            String command = String.format("%s %s %s", Commands.CHAT, username, message);
-            netOut.writeObject(command);
-        } catch(IOException ex) {
-        }
+        String command = String.format("%s %s %s", Commands.CHAT, username, message);
+        writeString(command);
     }
 
     public void setMap(String map) {
-        try {
-            String command = String.format("%s %s %s", Commands.MAP, username, map);
-            netOut.writeObject(command);
-        } catch(IOException ex) {
-        }
+        String command = String.format("%s %s %s", Commands.MAP, username, map);
+        writeString(command);
     }
 
     public void close() {
@@ -107,6 +95,13 @@ public class ServerCommunicator {
             socket.close();
             netOut.close();
         } catch(IOException ex) {
+        }
+    }
+
+    public void writeString(String s) {
+        try {
+            netOut.writeObject(s);
+        } catch (IOException ex) {
         }
     }
 }
