@@ -20,25 +20,15 @@
 
 package com.jblux.client;
 
-import com.jblux.client.network.ServerCommunicator;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
 public class GameMap extends TiledMap {
     private String name;
-    private ServerCommunicator server;
 
-    public GameMap(String name, ServerCommunicator server) throws SlickException {
+    public GameMap(String name) throws SlickException {
         super("maps/" + name + "/" + name +".tmx", "maps/" + name);
-
-        this.server = server;
-        setMap(name);
-    }
-
-    //TODO: verify map exists
-    public void setMap(String name) {
         this.name = name;
-        server.setMap(name);
     }
 
     @Override

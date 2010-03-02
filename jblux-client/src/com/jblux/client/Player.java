@@ -35,6 +35,7 @@ public class Player extends Sprite {
     private Image map_walk;
     private GameCanvas canvas;
     private int move_size;
+    private String map;
 
     private Calendar cal;
     private long lastMove;
@@ -52,6 +53,9 @@ public class Player extends Sprite {
         coords.x = 352;
         coords.y = 384;
         switch_walk = false;
+
+        //TODO: get this from the server
+        map = "residential";
 
         cal = Calendar.getInstance();
         lastMove = cal.getTimeInMillis();
@@ -145,7 +149,7 @@ public class Player extends Sprite {
                 coords.x = 350;
                 coords.y = 250;
                 map_walk = new Image("maps/lakeentrance/lakeentrancebw.png");
-                GameMap map = new GameMap("lakeentrance", server);
+                GameMap map = new GameMap("lakeentrance");
                 canvas.setMap(map);
             } catch (SlickException ex) {
             }

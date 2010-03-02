@@ -84,7 +84,7 @@ public class GameplayState extends BasicGameState {
         if(map_test.equals(""))
             map_test = "residential";
 
-        map = new GameMap(map_test, server);
+        map = new GameMap(map_test);
         player = new Player(username, server);
         canvas = new GameCanvas(player, map);
         player.setCanvas(canvas);
