@@ -31,6 +31,10 @@ public class GameMap extends TiledMap {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public void render(int x, int y, int layer) {
         if(layer < getLayerCount()) {
