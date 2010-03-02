@@ -20,19 +20,27 @@
 
 package com.jblux.client;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
 public class GameMap extends TiledMap {
     private String name;
+    private Image walk_area;
 
     public GameMap(String name) throws SlickException {
         super("maps/" + name + "/" + name +".tmx", "maps/" + name);
         this.name = name;
+
+        walk_area = new Image("maps/" + name + "/" + name + "bw.png");
     }
 
     public String getName() {
         return name;
+    }
+
+    public Image getWalkArea() {
+        return walk_area;
     }
 
     @Override

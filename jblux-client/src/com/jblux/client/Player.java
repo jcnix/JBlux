@@ -32,10 +32,10 @@ import org.newdawn.slick.SlickException;
 public class Player extends Sprite {
     private boolean switch_walk;  //Just means switch to other walk sprite
     private ServerCommunicator server;
-    private Image map_walk;
+    private Image walk_area;
     private GameCanvas canvas;
     private int move_size;
-    private String map;
+    private String map_name;
 
     private Calendar cal;
     private long lastMove;
@@ -55,13 +55,13 @@ public class Player extends Sprite {
         switch_walk = false;
 
         //TODO: get this from the server
-        map = "residential";
+        map_name = "residential";
 
         cal = Calendar.getInstance();
         lastMove = cal.getTimeInMillis();
 
         try {
-            map_walk = new Image("maps/residential/residentialbw.png");
+            walk_area = new Image("maps/residential/residentialbw.png");
         } catch (SlickException ex) {
         }
 
@@ -139,17 +139,17 @@ public class Player extends Sprite {
         coords.y += dy;
 
         boolean blocked = false;
-        Color c = map_walk.getColor(coords.x, coords.y);
+        Color c = walk_area.getColor(coords.x, coords.y);
 
-        int x = map_walk.getWidth();
-        int y = map_walk.getHeight();
+        int x = walk_area.getWidth();
+        int y = walk_area.getHeight();
         
         if(coords.x <= 0 || coords.x >= x) {
             try {
                 coords.x = 350;
                 coords.y = 250;
-                map_walk = new Image("maps/lakeentrance/lakeentrancebw.png");
                 GameMap map = new GameMap("lakeentrance");
+                walk_area = map.getWalkArea();
                 canvas.setMap(map);
             } catch (SlickException ex) {
             }
