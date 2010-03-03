@@ -62,7 +62,7 @@ public class ServerCommunicator {
         }
 
         if(isConnected()) {
-            sl = new ServerListener(socket, this);
+            sl = new ServerListener(socket);
             sl.start();
         }
     }
@@ -99,10 +99,16 @@ public class ServerCommunicator {
         String command = String.format("%s get %s %s", Commands.MAP, r, name);
         writeString(command);
 
-        if(c0[1].equals("goto")) {
-            map = c0[2];
+        while(sl.response == null) {
+            try {
+                System.out.println("Waiting for response...");
+                Thread.sleep(20);
+            } catch (InterruptedException ex) {
+            }
         }
 
+        map = sl.response;
+        sl.response = null;
         return map;
     }
 
@@ -130,13 +136,13 @@ class ServerListener extends Thread {
     private ObjectInputStream netIn;
     private Players players;
     private ChatBoxObserver cbObserver;
-    private ServerCommunicator server;
+    public String response;
 
-    public ServerListener(Socket s, ServerCommunicator server) {
-        this.server = server;
+    public ServerListener(Socket s) {
         socket = s;
         players = Players.getInstance();
         cbObserver = ChatBoxObserver.getInstance();
+        response = null;
     }
 
     @Override
@@ -207,6 +213,9 @@ class ServerListener extends Thread {
                 npc.setCoords(x, y);
                 npc.setImage(0, 0);
                 players.addPlayer(npc);
+            }
+            else if(c0[1].equals("goto")) {
+                response = c0[2];
             }
         }
     }
