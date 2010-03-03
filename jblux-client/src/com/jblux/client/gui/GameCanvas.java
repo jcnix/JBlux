@@ -72,4 +72,8 @@ public class GameCanvas {
         } catch (SlickException ex) {
         }
     }
+
+    public GameMap getMap() {
+        return map;
+    }
 }

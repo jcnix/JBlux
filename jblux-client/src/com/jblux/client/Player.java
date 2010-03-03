@@ -149,6 +149,7 @@ public class Player extends Sprite {
             coords.y = 250;
             GameCanvas gc = GameCanvas.getInstance();
             gc.setMap(map_name);
+            walk_area = gc.getMap().getWalkArea();
         }
 
         if(c.getRed() == 0) {
@@ -162,9 +163,5 @@ public class Player extends Sprite {
         else {
             server.move(coords.x, coords.y);
         }
-    }
-
-    public void recievedMap(String name) {
-        
     }
 }
