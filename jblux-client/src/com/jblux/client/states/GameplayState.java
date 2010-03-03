@@ -86,8 +86,9 @@ public class GameplayState extends BasicGameState {
 
         map = new GameMap(map_test);
         player = new Player(username, server);
-        canvas = new GameCanvas(player, map);
-        player.setCanvas(canvas);
+        canvas = GameCanvas.getInstance();
+        canvas.init(player, map_test);
+        //canvas = new GameCanvas(player, map_test);
 
         npc = new Sprite("img/koopa.png");
         npc.setImage(Sprite.FACE_DOWN, 0);
@@ -98,7 +99,7 @@ public class GameplayState extends BasicGameState {
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         //The canvas renders the map and all players
-        canvas.render(gc,sbg, g);
+        canvas.render(gc, g);
         gui.render(g);
     }
  

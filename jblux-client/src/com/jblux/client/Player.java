@@ -22,6 +22,7 @@ package com.jblux.client;
 
 import com.jblux.client.gui.GameCanvas;
 import com.jblux.client.network.ServerCommunicator;
+import com.jblux.common.Relation;
 import java.util.Calendar;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -33,7 +34,6 @@ public class Player extends Sprite {
     private boolean switch_walk;  //Just means switch to other walk sprite
     private ServerCommunicator server;
     private Image walk_area;
-    private GameCanvas canvas;
     private int move_size;
     private String map_name;
 
@@ -45,7 +45,6 @@ public class Player extends Sprite {
         super("img/koopa.png");
 
         this.server = server;
-
         setName(username);
         move_size = 7;
         image = spriteSheet.getSubImage(FACE_DOWN, 0);
@@ -145,14 +144,11 @@ public class Player extends Sprite {
         int y = walk_area.getHeight();
         
         if(coords.x <= 0 || coords.x >= x) {
-            try {
-                coords.x = 350;
-                coords.y = 250;
-                GameMap map = new GameMap("lakeentrance");
-                walk_area = map.getWalkArea();
-                canvas.setMap(map);
-            } catch (SlickException ex) {
-            }
+            map_name = server.ask_for_map(Relation.LEFT_OF, map_name, this);
+            coords.x = 350;
+            coords.y = 250;
+            GameCanvas gc = GameCanvas.getInstance();
+            gc.setMap(map_name);
         }
 
         if(c.getRed() == 0) {
@@ -168,7 +164,7 @@ public class Player extends Sprite {
         }
     }
 
-    public void setCanvas(GameCanvas canvas) {
-        this.canvas = canvas;
+    public void recievedMap(String name) {
+        
     }
 }

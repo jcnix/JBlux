@@ -27,21 +27,34 @@ import com.jblux.client.Sprite;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.StateBasedGame;
 
 public class GameCanvas {
+    private static GameCanvas gc;
     private Player player;
     private Players players;
     private GameMap map;
 
-    public GameCanvas(Player player, GameMap map) {
-        this.player = player;
-        this.map = map;
-        players = Players.getInstance();
+    protected GameCanvas() {
     }
-    
-    public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 
+    public void init(Player player, String map_name) {
+        this.player = player;
+        players = Players.getInstance();
+
+        try {
+            map = new GameMap(map_name);
+        } catch (SlickException ex) {
+        }
+    }
+
+    public static GameCanvas getInstance() {
+        if(gc == null)
+            gc = new GameCanvas();
+
+        return gc;
+    }
+
+    public void render(GameContainer gc, Graphics g) throws SlickException {
         map.render(0,0,0); //Ground Layer
         map.render(0,0,1); //Objects Layer
 
@@ -53,7 +66,10 @@ public class GameCanvas {
         map.render(0,0,2);  //Fringe Layer
     }
 
-    public void setMap(GameMap map) {
-        this.map = map;
+    public void setMap(String name) {
+        try {
+            map = new GameMap(name);
+        } catch (SlickException ex) {
+        }
     }
 }

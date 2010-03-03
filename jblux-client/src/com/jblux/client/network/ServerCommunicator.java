@@ -20,10 +20,12 @@
 
 package com.jblux.client.network;
 
+import com.jblux.client.Player;
 import com.jblux.client.Players;
 import com.jblux.client.Sprite;
 import com.jblux.client.gui.observers.ChatBoxObserver;
 import com.jblux.common.Commands;
+import com.jblux.common.Relation;
 import com.jblux.common.ServerInfo;
 import com.jblux.util.ChatMessage;
 import com.jblux.util.Coordinates;
@@ -42,6 +44,7 @@ public class ServerCommunicator {
     private ServerListener sl;
     private String username;
     private boolean connected;
+    public Player player;
 
     public ServerCommunicator() {
         try {
@@ -59,7 +62,7 @@ public class ServerCommunicator {
         }
 
         if(isConnected()) {
-            sl = new ServerListener(socket);
+            sl = new ServerListener(socket, this);
             sl.start();
         }
     }
@@ -90,6 +93,19 @@ public class ServerCommunicator {
         writeString(command);
     }
 
+    public String ask_for_map(Relation r, String name, Player p) {
+        player = p;
+        String map = "";
+        String command = String.format("%s get %s %s", Commands.MAP, r, name);
+        writeString(command);
+
+        if(c0[1].equals("goto")) {
+            map = c0[2];
+        }
+
+        return map;
+    }
+
     public void close() {
         try {
             socket.close();
@@ -114,8 +130,10 @@ class ServerListener extends Thread {
     private ObjectInputStream netIn;
     private Players players;
     private ChatBoxObserver cbObserver;
+    private ServerCommunicator server;
 
-    public ServerListener(Socket s) {
+    public ServerListener(Socket s, ServerCommunicator server) {
+        this.server = server;
         socket = s;
         players = Players.getInstance();
         cbObserver = ChatBoxObserver.getInstance();
@@ -137,7 +155,7 @@ class ServerListener extends Thread {
         }
     }
 
-    public void doCommand(String c) {
+    public synchronized void doCommand(String c) {
         String[] c0 = c.split("\\s");
 
         if(c.startsWith(Commands.MOVE)) {          
@@ -190,7 +208,6 @@ class ServerListener extends Thread {
                 npc.setImage(0, 0);
                 players.addPlayer(npc);
             }
-            
         }
     }
 

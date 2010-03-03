@@ -27,11 +27,11 @@ import org.newdawn.slick.tiled.TiledMap;
 public class GameMap extends TiledMap {
     private String name;
     private Image walk_area;
+    private TiledMap map;
 
     public GameMap(String name) throws SlickException {
         super("maps/" + name + "/" + name +".tmx", "maps/" + name);
         this.name = name;
-
         walk_area = new Image("maps/" + name + "/" + name + "bw.png");
     }
 

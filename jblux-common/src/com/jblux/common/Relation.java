@@ -21,8 +21,19 @@
 package com.jblux.common;
 
 public enum Relation {
-    LEFT_OF,
-    RIGHT_OF,
-    ABOVE,
-    BELOW
-};
+    LEFT_OF("LEFT_OF"),
+    RIGHT_OF("RIGHT_OF"),
+    ABOVE("ABOVE"),
+    BELOW("BELOW");
+
+    private final String str;
+
+    private Relation(String s) {
+        str = s;
+    }
+
+    @Override
+    public String toString() {
+        return str;
+    }
+}

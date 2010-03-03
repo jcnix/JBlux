@@ -21,6 +21,7 @@
 package com.jblux.server;
 
 import com.jblux.common.Commands;
+import com.jblux.common.Relation;
 import com.jblux.util.Coordinates;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -90,7 +91,7 @@ public class ClientThread {
 
     //Tell the other clients that a player has connected.
     public void connect(String username, Coordinates coords) {
-        String command = String.format("%s %s %s", Commands.CONNECT, username, coords);
+        String command = String.format("%s get %s %s", Commands.CONNECT, username, coords);
         System.out.printf("%s connected\n", username);
 
         /* This can't use tell_all_clients yet because it sends data
@@ -223,11 +224,25 @@ class ClientListener extends Thread {
             client.sendChatMessage(username, message);
         }
         else if(c.startsWith(Commands.MAP)) {
-            username = c1[1];
-            client.remove_from_map(username);
-            //Map switch here
-            map = c1[2];
-            client.add_to_map(username, coords);
+            System.out.println(c);
+            if(c1[1].equals("get")) {
+                System.out.println("Get map");
+                Relation r = Relation.valueOf(c1[2]);
+                String name = c1[3];
+                Maps maps = new Maps();
+                String map_name = maps.getMap(r, name);
+
+                //Respond to client
+                String command = String.format("%s goto %s", Commands.MAP, map_name);
+                client.writeString(command);
+            }
+            else {
+                username = c1[1];
+                client.remove_from_map(username);
+                //Map switch here
+                map = c1[2];
+                client.add_to_map(username, coords);
+            }
         }
     }
 
