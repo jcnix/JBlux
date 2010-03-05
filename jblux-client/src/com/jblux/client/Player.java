@@ -140,17 +140,8 @@ public class Player extends Sprite {
         boolean blocked = false;
         Color c = walk_area.getColor(coords.x, coords.y);
 
-        int x = walk_area.getWidth();
-        int y = walk_area.getHeight();
-        
-        if(coords.x <= 0 || coords.x >= x) {
-            map_name = server.ask_for_map(Relation.LEFT_OF, map_name, this);
-            coords.x = 350;
-            coords.y = 250;
-            GameCanvas gc = GameCanvas.getInstance();
-            gc.setMap(map_name);
-            walk_area = gc.getMap().getWalkArea();
-        }
+        //Check to see if we need to change maps
+        changeMap();
 
         if(c.getRed() == 0) {
             blocked = true;
@@ -162,6 +153,40 @@ public class Player extends Sprite {
         }
         else {
             server.move(coords.x, coords.y);
+        }
+    }
+
+    public void changeMap() {
+        int x = walk_area.getWidth();
+        int y = walk_area.getHeight();
+        boolean change = false;
+        Relation relation = null;
+
+        if(coords.x <= 0) {
+            change = true;
+            relation = Relation.LEFT_OF;
+        }
+        else if(coords.x >= x) {
+            change = true;
+            relation = Relation.RIGHT_OF;
+        }
+        else if(coords.y <=0) {
+            change = true;
+            relation = Relation.ABOVE;
+        }
+        else if(coords.y >= y) {
+            change = true;
+            relation = Relation.BELOW;
+        }
+
+        if(change) {
+            //TODO: Don't hardcode this
+            coords.x = 350;
+            coords.y = 250;
+            map_name = server.ask_for_map(relation, map_name);
+            GameCanvas gc = GameCanvas.getInstance();
+            gc.setMap(map_name);
+            walk_area = gc.getMap().getWalkArea();
         }
     }
 }

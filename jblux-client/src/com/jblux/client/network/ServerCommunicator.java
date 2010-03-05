@@ -93,8 +93,7 @@ public class ServerCommunicator {
         writeString(command);
     }
 
-    public String ask_for_map(Relation r, String name, Player p) {
-        player = p;
+    public String ask_for_map(Relation r, String name) {
         String map = "";
         String command = String.format("%s get %s %s", Commands.MAP, r, name);
         writeString(command);
