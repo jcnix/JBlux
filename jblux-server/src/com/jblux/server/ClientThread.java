@@ -224,9 +224,7 @@ class ClientListener extends Thread {
             client.sendChatMessage(username, message);
         }
         else if(c.startsWith(Commands.MAP)) {
-            System.out.println(c);
             if(c1[1].equals("get")) {
-                System.out.println("Get map");
                 Relation r = Relation.valueOf(c1[2]);
                 String name = c1[3];
                 Maps maps = new Maps();
