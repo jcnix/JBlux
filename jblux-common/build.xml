@@ -1,35 +1,35 @@
 <project name="jblux-common" default="jar" basedir=".">
-	<property name="src" location="src"/>
-	<property name="build" location="build"/>
-	<property name="dist" location="dist"/>
+    <property name="src" location="src"/>
+    <property name="build" location="build"/>
+    <property name="dist" location="dist"/>
     
-	<target name="init">
-		<!-- Create time stamp -->
-		<tstamp/>
-		<mkdir dir="${build}"/>
-		<mkdir dir="${dist}"/>
-	</target>
+    <target name="init">
+        <!-- Create time stamp -->
+        <tstamp/>
+        <mkdir dir="${build}"/>
+        <mkdir dir="${dist}"/>
+    </target>
 
-	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${build}" debug="on">
-      	    <compilerarg value="-Xlint"/>
+    <target name="compile" depends="init">
+        <javac srcdir="${src}" destdir="${build}" debug="on">
+            <compilerarg value="-Xlint"/>
         </javac>
-	</target>
+    </target>
 
-	<target name="jar" depends="compile">
-	    <jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}">
+    <target name="jar" depends="compile">
+        <jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}">
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
             </manifest>
-		</jar>
+        </jar>
         <signjar jar="${dist}/${ant.project.name}.jar"
             alias="jblux" keystore="${dist}/jbluxkey" storepass="jbluxpass"/>
-	</target>
+    </target>
 
-	<target name="clean">
-		<delete dir="${build}"/>
-		<delete file="${dist}/jblux.jar"/>
-	</target>
+    <target name="clean">
+        <delete dir="${build}"/>
+        <delete file="${dist}/jblux.jar"/>
+    </target>
 
     <target name="run">
         <java jar="${dist}/${ant.project.name}.jar" fork="true" dir="${dist}">

@@ -1,12 +1,12 @@
 <project name="jblux-server" default="jar" basedir=".">
-	<description>
-	    Server for JBlux	
-	</description>
+    <description>
+        Server for JBlux	
+    </description>
 
-	<property name="src" location="src"/>
-	<property name="build" location="build"/>
-	<property name="dist" location="dist"/>
-	<property name="lib" location="${dist}/lib"/>
+    <property name="src" location="src"/>
+    <property name="build" location="build"/>
+    <property name="dist" location="dist"/>
+    <property name="lib" location="${dist}/lib"/>
     <property name="main.class" value="com.jblux.server.Server"/>
 
     <path id="jblux.classpath">
@@ -15,37 +15,37 @@
         </fileset>
     </path>
 
-	<target name="init">
+    <target name="init">
         <copy file="../jblux-common/dist/jblux-common.jar"
             toFile="${lib}/jblux-common.jar"/>
 
         <!-- Create time stamp -->
-		<tstamp/>
-		<mkdir dir="${build}"/>
-		<mkdir dir="${dist}"/>
-	</target>
+        <tstamp/>
+        <mkdir dir="${build}"/>
+        <mkdir dir="${dist}"/>
+    </target>
 
-	<target name="compile" depends="init">
+    <target name="compile" depends="init">
         <javac srcdir="${src}" destdir="${build}" debug="on">
       	    <classpath refid="jblux.classpath"/>
             <compilerarg value="-Xlint"/>
         </javac>
-	</target>
+    </target>
 
-	<target name="jar" depends="compile">
+    <target name="jar" depends="compile">
         <jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}">
             <manifest>
                 <attribute name="Built-By" value="${user.name}"/>
                 <attribute name="Main-Class" value="${main.class}"/>
                 <attribute name="Class-Path" value="${lib}/jblux-common.jar"/>
             </manifest>
-		</jar>
-	</target>
+        </jar>
+    </target>
 
-	<target name="clean">
-		<delete dir="${build}"/>
-		<delete file="${dist}/jblux-server.jar"/>
-	</target>
+    <target name="clean">
+        <delete dir="${build}"/>
+        <delete file="${dist}/jblux-server.jar"/>
+    </target>
 
     <target name="run">
         <java jar="${dist}/${ant.project.name}.jar" fork="true" dir="${dist}">

@@ -1,12 +1,12 @@
 <project name="jblux" default="jar" basedir=".">
-	<description>
+    <description>
 		Java 2D game engine for embedding into web browsers
-	</description>
+    </description>
 
-	<property name="src" location="src"/>
-	<property name="build" location="build"/>
+    <property name="src" location="src"/>
+    <property name="build" location="build"/>
     <property name="dist" location="dist"/>
-	<property name="lib" location="${dist}/lib"/>
+    <property name="lib" location="${dist}/lib"/>
     <property name="res" location="res"/>
     <property name="main.class" value="com.jblux.client.JBlux"/>
 
@@ -14,43 +14,43 @@
         <fileset dir="${lib}" includes="**/*.jar"/>
     </path>
 
-	<target name="init">
+    <target name="init">
         <copy file="../jblux-common/dist/jblux-common.jar"
             toFile="${lib}/jblux-common.jar"/>
 
         <!-- Create time stamp -->
-		<tstamp/>
-		<mkdir dir="${build}"/>
-		<mkdir dir="${dist}"/>
-	</target>
+        <tstamp/>
+        <mkdir dir="${build}"/>
+        <mkdir dir="${dist}"/>
+    </target>
 
-	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${build}" debug="on">
-      	    <compilerarg value="-Xlint"/>
+    <target name="compile" depends="init">
+        <javac srcdir="${src}" destdir="${build}" debug="on">
+            <compilerarg value="-Xlint"/>
             <classpath refid="compile.classpath"/>
         </javac>
-	</target>
+    </target>
 
-	<target name="jar" depends="compile">
+    <target name="jar" depends="compile">
         <manifestclasspath property="jar.classpath" jarfile="${dist}/{ant.project.name}.jar">
             <classpath refid="compile.classpath"/>
         </manifestclasspath>
-	    <jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}">
+        <jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}">
             <fileset dir="${res}/"/>
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
                 <attribute name="Main-Class" value="${main.class}" />
                 <attribute name="Class-Path" value="${jar.classpath}" />
             </manifest>
-		</jar>
+        </jar>
         <signjar jar="${dist}/${ant.project.name}.jar"
             alias="jblux" keystore="${dist}/jbluxkey" storepass="jbluxpass"/>
-	</target>
+    </target>
 
-	<target name="clean">
-		<delete dir="${build}"/>
-		<delete file="${dist}/jblux.jar"/>
-	</target>
+    <target name="clean">
+        <delete dir="${build}"/>
+        <delete file="${dist}/jblux.jar"/>
+    </target>
 
     <target name="run">
         <java jar="${dist}/${ant.project.name}.jar" fork="true" dir="${dist}">
