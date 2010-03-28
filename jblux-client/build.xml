@@ -8,6 +8,7 @@
     <property name="dist" location="dist"/>
 	<property name="lib" location="${dist}/lib"/>
     <property name="res" location="res"/>
+    <property name="main.class" value="com.jblux.client.JBlux"/>
 
     <path id="compile.classpath">
         <fileset dir="${lib}" includes="**/*.jar"/>
@@ -38,7 +39,7 @@
             <fileset dir="${res}/"/>
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
-                <attribute name="Main-Class" value="com.jblux.client.JBlux" />
+                <attribute name="Main-Class" value="${main.class}" />
                 <attribute name="Class-Path" value="${jar.classpath}" />
             </manifest>
 		</jar>

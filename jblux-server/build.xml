@@ -7,7 +7,8 @@
 	<property name="build" location="build"/>
 	<property name="dist" location="dist"/>
 	<property name="lib" location="${dist}/lib"/>
-    
+    <property name="main.class" value="com.jblux.server.Server"/>
+
     <path id="jblux.classpath">
         <fileset dir="dist/lib">
             <include name="**/*.jar"/>
@@ -34,9 +35,9 @@
 	<target name="jar" depends="compile">
         <jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}">
             <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <attribute name="Main-Class" value="com.jblux.server.Server" />
-                <attribute name="Class-Path" value="${lib}/jblux-common.jar" />
+                <attribute name="Built-By" value="${user.name}"/>
+                <attribute name="Main-Class" value="${main.class}"/>
+                <attribute name="Class-Path" value="${lib}/jblux-common.jar"/>
             </manifest>
 		</jar>
 	</target>
