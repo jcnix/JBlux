@@ -9,10 +9,8 @@
     <property name="lib" location="${dist}/lib"/>
     <property name="main.class" value="com.jblux.server.Server"/>
 
-    <path id="jblux.classpath">
-        <fileset dir="dist/lib">
-            <include name="**/*.jar"/>
-        </fileset>
+    <path id="compile.classpath">
+        <fileset dir="${lib}" includes="**/*.jar"/>
     </path>
 
     <target name="init">
@@ -27,17 +25,20 @@
 
     <target name="compile" depends="init">
         <javac srcdir="${src}" destdir="${build}" debug="on">
-      	    <classpath refid="jblux.classpath"/>
+      	    <classpath refid="compile.classpath"/>
             <compilerarg value="-Xlint"/>
         </javac>
     </target>
 
     <target name="jar" depends="compile">
+        <manifestclasspath property="jar.classpath" jarfile="${dist}/{ant.project.name}.jar">
+            <classpath refid="compile.classpath"/>
+        </manifestclasspath>
         <jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}">
             <manifest>
                 <attribute name="Built-By" value="${user.name}"/>
                 <attribute name="Main-Class" value="${main.class}"/>
-                <attribute name="Class-Path" value="${lib}/jblux-common.jar"/>
+                <attribute name="Class-Path" value="${jar.classpath}"/>
             </manifest>
         </jar>
     </target>
