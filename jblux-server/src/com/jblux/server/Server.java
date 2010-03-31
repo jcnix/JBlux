@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Server {
     private ServerSocket serv;
@@ -39,6 +42,25 @@ public class Server {
             serv = new ServerSocket(ServerInfo.PORT, 0, InetAddress.getByName(ServerInfo.LOCAL_IP));
         } catch (IOException ex) {
             System.out.printf("Could not bind socket %d.\n", ServerInfo.PORT);
+            System.exit(1);
+        }
+
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch(ClassNotFoundException ex) {
+            System.err.println("Couldn't find PostgreSQL Driver.");
+            System.out.println("Fatal Error: Exiting.");
+            System.exit(1);
+        }
+
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/tmuo",
+                    "postgres", "mypass"); //This isn't my password
+        } catch(SQLException ex) {
+            System.err.println(ex.getMessage());
+            System.err.println("Couldn't connect to Database.");
+            System.out.println("Fatal Error: Exiting");
             System.exit(1);
         }
 

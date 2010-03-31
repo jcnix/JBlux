@@ -3,8 +3,15 @@ A fan made Mario MMO.
 
 To use the client, the server must be running.
 The server uses port 4000.
+
+****
 If you want to run your own server, edit this file to point to your server:
 jblux-common/src/com/jblux/common/ServerInfo.java
+And rebuild the server and the client.
+
+Also edit dist/db.conf to connect to your database.
+The database will need to be PostgreSQL.  Preferably version 8.2 or newer.
+****
 
 The client is meant to be run as a Java Applet, so it should be signed.
 You'll need to create a key to sign with, I'm not giving out mine. ;)

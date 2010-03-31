@@ -20,6 +20,10 @@
 
 package com.jblux.common;
 
+/* This file will not include DB info, since this file is included
+ * in both the client and the server, and we don't want DB
+ * passwords sitting in the client jar.
+ */
 public class ServerInfo {
     public static final String SERVER = "ksee.kicks-ass.org";
     public static final String LOCAL_IP = "192.168.1.186";
