@@ -20,20 +20,20 @@
 
 package org.jblux.client.network;
 
-import org.jblux.client.Player;
-import org.jblux.client.Players;
-import org.jblux.client.Sprite;
-import org.jblux.client.gui.observers.ChatBoxObserver;
-import com.jblux.common.Commands;
-import com.jblux.common.Relation;
-import com.jblux.common.ServerInfo;
-import com.jblux.util.ChatMessage;
-import com.jblux.util.Coordinates;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import org.jblux.client.Player;
+import org.jblux.client.Players;
+import org.jblux.client.Sprite;
+import org.jblux.client.gui.observers.ChatBoxObserver;
+import org.jblux.common.Commands;
+import org.jblux.common.Relation;
+import org.jblux.common.ServerInfo;
+import org.jblux.util.ChatMessage;
+import org.jblux.util.Coordinates;
 
 /*
  * Sends data to the server.

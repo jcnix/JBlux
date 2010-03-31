@@ -20,10 +20,10 @@
 
 package org.jblux.client.gui;
 
-import org.jblux.client.gui.observers.ChatBoxObserver;
-import com.jblux.util.ChatMessage;
 import java.util.Observable;
 import java.util.Observer;
+import org.jblux.client.gui.observers.ChatBoxObserver;
+import org.jblux.util.ChatMessage;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.gui.GUIContext;

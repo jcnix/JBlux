@@ -20,10 +20,10 @@
 
 package org.jblux.server;
 
-import com.jblux.common.Relation;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import org.jblux.common.Relation;
 
 /**
  * This class reads maps/layout.txt to find out the relationship

@@ -20,14 +20,14 @@
 
 package org.jblux.server;
 
-import com.jblux.common.Commands;
-import com.jblux.common.Relation;
-import com.jblux.util.Coordinates;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.LinkedList;
+import org.jblux.common.Commands;
+import org.jblux.common.Relation;
+import org.jblux.util.Coordinates;
 
 /*
  * Manages the client, and sends data back to the client.

@@ -20,8 +20,6 @@
 
 package org.jblux.server;
 
-import com.jblux.common.ServerInfo;
-import com.jblux.common.error.FatalError;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -29,6 +27,8 @@ import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import org.jblux.common.ServerInfo;
+import org.jblux.common.error.FatalError;
 
 public class Server {
     private ServerSocket serv;

@@ -20,8 +20,8 @@
 
 package org.jblux.client.gui.observers;
 
-import com.jblux.util.ChatMessage;
 import java.util.Observable;
+import org.jblux.util.ChatMessage;
 
 public class ChatBoxObserver extends Observable {
     private static ChatBoxObserver cbo;

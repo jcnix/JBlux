@@ -21,7 +21,7 @@
 package org.jblux.client;
 
 import org.jblux.client.gui.PlayerNameFontFactory;
-import com.jblux.util.Coordinates;
+import org.jblux.util.Coordinates;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
