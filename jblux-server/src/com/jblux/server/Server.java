@@ -21,6 +21,7 @@
 package com.jblux.server;
 
 import com.jblux.common.ServerInfo;
+import com.jblux.common.error.FatalError;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -41,27 +42,21 @@ public class Server {
             //This is binding my local IP address.
             serv = new ServerSocket(ServerInfo.PORT, 0, InetAddress.getByName(ServerInfo.LOCAL_IP));
         } catch (IOException ex) {
-            System.out.printf("Could not bind socket %d.\n", ServerInfo.PORT);
-            System.exit(1);
+            FatalError.die(ex);
         }
 
         try {
             Class.forName("org.postgresql.Driver");
         } catch(ClassNotFoundException ex) {
-            System.err.println("Couldn't find PostgreSQL Driver.");
-            System.out.println("Fatal Error: Exiting.");
-            System.exit(1);
+            FatalError.die(ex);
         }
 
         Connection conn = null;
         try {
             conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/tmuo",
-                    "postgres", "mypass"); //This isn't my password
+                    "postgres", "tmuoserver8");
         } catch(SQLException ex) {
-            System.err.println(ex.getMessage());
-            System.err.println("Couldn't connect to Database.");
-            System.out.println("Fatal Error: Exiting");
-            System.exit(1);
+            FatalError.die(ex);
         }
 
         while(true) {
