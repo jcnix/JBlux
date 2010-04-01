@@ -24,12 +24,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import org.jblux.common.ServerInfo;
 import org.jblux.common.error.FatalError;
-import org.jblux.server.conf.Settings;
 
 public class Server {
     private ServerSocket serv;
@@ -43,23 +39,6 @@ public class Server {
             //This is binding my local IP address.
             serv = new ServerSocket(ServerInfo.PORT, 0, InetAddress.getByName(ServerInfo.LOCAL_IP));
         } catch (IOException ex) {
-            FatalError.die(ex);
-        }
-
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch(ClassNotFoundException ex) {
-            FatalError.die(ex);
-        }
-
-        Connection conn = null;
-        try {
-            String server = Settings.getDbServer();
-            String user = Settings.getDbUser();
-            String pass = Settings.getDbPass();
-            String connString = String.format("jdbc:postgresql://%s/tmuo", server);
-            conn = DriverManager.getConnection(connString, user, pass);
-        } catch(SQLException ex) {
             FatalError.die(ex);
         }
 
