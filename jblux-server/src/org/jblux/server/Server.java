@@ -29,6 +29,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import org.jblux.common.ServerInfo;
 import org.jblux.common.error.FatalError;
+import org.jblux.server.conf.Settings;
 
 public class Server {
     private ServerSocket serv;
@@ -53,8 +54,11 @@ public class Server {
 
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/tmuo",
-                    "postgres", "tmuoserver8");
+            String server = Settings.getDbServer();
+            String user = Settings.getDbUser();
+            String pass = Settings.getDbPass();
+            String connString = String.format("jdbc:postgresql://%s/tmuo", server);
+            conn = DriverManager.getConnection(connString, user, pass);
         } catch(SQLException ex) {
             FatalError.die(ex);
         }
