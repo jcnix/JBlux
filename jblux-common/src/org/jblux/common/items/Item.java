@@ -20,6 +20,6 @@
 
 package org.jblux.common.items;
 
-public class Item {
+public interface Item {
 
 }
