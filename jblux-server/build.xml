@@ -7,7 +7,7 @@
     <property name="build" location="build"/>
     <property name="dist" location="dist"/>
     <property name="lib" location="${dist}/lib"/>
-    <property name="main.class" value="com.jblux.server.Server"/>
+    <property name="main.class" value="org.jblux.server.Server"/>
 
     <path id="compile.classpath">
         <fileset dir="${lib}" includes="**/*.jar"/>

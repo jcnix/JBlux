@@ -8,7 +8,7 @@
     <property name="dist" location="dist"/>
     <property name="lib" location="${dist}/lib"/>
     <property name="res" location="res"/>
-    <property name="main.class" value="com.jblux.client.JBlux"/>
+    <property name="main.class" value="org.jblux.client.JBlux"/>
 
     <path id="compile.classpath">
         <fileset dir="${lib}" includes="**/*.jar"/>
