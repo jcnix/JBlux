@@ -22,6 +22,8 @@ package org.jblux.suite.gui;
 
 import org.jblux.suite.gui.menubar.MenuBar;
 import javax.swing.JFrame;
+import org.newdawn.slick.CanvasGameContainer;
+import org.newdawn.slick.SlickException;
 
 public class MainWindow extends JFrame {
     public MainWindow() {
@@ -37,5 +39,12 @@ public class MainWindow extends JFrame {
     private void init() {
         MenuBar menubar = new MenuBar();
         this.setJMenuBar(menubar);
+
+        try {
+            GamePreview preview = new GamePreview(null);
+            CanvasGameContainer cgc = new CanvasGameContainer(preview);
+            this.add(cgc);
+        } catch (SlickException ex) {
+        }
     }
 }
