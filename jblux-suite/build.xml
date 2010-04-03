@@ -46,7 +46,9 @@
     </target>
 
     <target name="run">
-        <java jar="${dist}/${ant.project.name}.jar" fork="true" dir="${dist}"/>
+        <java jar="${dist}/${ant.project.name}.jar" fork="true" dir="${dist}">
+            <jvmarg value="-Djava.library.path=${lib}"/>
+        </java>
     </target>
 </project>
 
