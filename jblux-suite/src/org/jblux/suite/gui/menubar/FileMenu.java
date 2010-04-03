@@ -22,8 +22,11 @@ package org.jblux.suite.gui.menubar;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.filechooser.FileFilter;
 
 public class FileMenu extends JMenu implements ActionListener {
     public JMenuItem openItm;
@@ -52,5 +55,36 @@ public class FileMenu extends JMenu implements ActionListener {
         if(action == exitItm) {
             System.exit(0);
         }
+        if(action == openItm) {
+            JFileChooser jfc = new JFileChooser();
+            jfc.setFileFilter(new JBluxFileFilter());
+            int returnVal = jfc.showOpenDialog(null);
+
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = jfc.getSelectedFile();
+            }
+        }
+    }
+}
+
+class JBluxFileFilter extends FileFilter {
+    public JBluxFileFilter() {
+        super();
+    }
+
+    @Override
+    public boolean accept(File f) {
+        if(f.getName().endsWith(".tmx")) {
+            return true;
+        }
+        //TODO: Add else ifs for other files (Quests, items, etc)
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public String getDescription() {
+        return "JBlux Files (.tmx)";
     }
 }
