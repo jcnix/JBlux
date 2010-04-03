@@ -37,7 +37,9 @@ public class GamePreview extends BasicGame {
 
     public void setMap(String file) {
         try {
-            this.map = new TiledMap(file);
+            if(file != null) {
+                this.map = new TiledMap(file);
+            }
         } catch (SlickException ex) {
         }
     }
@@ -51,8 +53,10 @@ public class GamePreview extends BasicGame {
     }
 
     public void render(GameContainer gc, Graphics grphcs) throws SlickException {
-        map.render(0, 0, 0);
-        map.render(0, 0, 1);
-        map.render(0, 0, 2);
+        if(map != null) {
+            map.render(0, 0, 0);
+            map.render(0, 0, 1);
+            map.render(0, 0, 2);
+        }
     }
 }
