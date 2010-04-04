@@ -74,7 +74,10 @@ class JBluxFileFilter extends FileFilter {
 
     @Override
     public boolean accept(File f) {
-        if(f.getName().endsWith(".tmx")) {
+        if(f.isDirectory()) {
+            return true;
+        }
+        else if(f.getName().endsWith(".tmx")) {
             return true;
         }
         //TODO: Add else ifs for other files (Quests, items, etc)
