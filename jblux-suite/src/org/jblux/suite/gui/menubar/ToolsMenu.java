@@ -1,5 +1,5 @@
 /**
- * File: MenuBar.java
+ * File: FileMenu.java
  *
  * @author Casey Jones
  *
@@ -20,17 +20,21 @@
 
 package org.jblux.suite.gui.menubar;
 
-import javax.swing.JMenuBar;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JMenu;
 
-public class MenuBar extends JMenuBar {
-    public MenuBar() {
+public class ToolsMenu extends JMenu implements ActionListener {
+
+    public ToolsMenu() {
+        super("Tools");
         init();
     }
 
     private void init() {
-        this.add(new FileMenu());
-        this.add(new EditMenu());
-        this.add(new ToolsMenu());
-        this.add(new HelpMenu());
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        Object action = e.getSource();
     }
 }
