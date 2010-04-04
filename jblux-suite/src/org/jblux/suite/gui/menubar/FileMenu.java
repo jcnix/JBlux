@@ -27,13 +27,17 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileFilter;
+import org.jblux.suite.gui.GamePreview;
 
 public class FileMenu extends JMenu implements ActionListener {
     public JMenuItem openItm;
     public JMenuItem exitItm;
+    private GamePreview preview;
 
-    public FileMenu() {
+    public FileMenu(GamePreview preview) {
         super("File");
+
+        this.preview = preview;
         init();
     }
 
@@ -62,6 +66,7 @@ public class FileMenu extends JMenu implements ActionListener {
 
             if(returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = jfc.getSelectedFile();
+                preview.setMap(file.getAbsolutePath());
             }
         }
     }

@@ -26,6 +26,8 @@ import org.newdawn.slick.CanvasGameContainer;
 import org.newdawn.slick.SlickException;
 
 public class MainWindow extends JFrame {
+    private GamePreview preview;
+
     public MainWindow() {
         super("JBlux Editor Suite");
 
@@ -37,14 +39,15 @@ public class MainWindow extends JFrame {
     }
 
     private void init() {
-        MenuBar menubar = new MenuBar();
-        this.setJMenuBar(menubar);
-
         try {
-            GamePreview preview = new GamePreview(null);
+            preview = new GamePreview(null);
             CanvasGameContainer cgc = new CanvasGameContainer(preview);
             this.add(cgc);
+            cgc.start();
         } catch (SlickException ex) {
         }
+
+        MenuBar menubar = new MenuBar(preview);
+        this.setJMenuBar(menubar);
     }
 }

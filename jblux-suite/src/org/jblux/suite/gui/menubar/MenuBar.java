@@ -21,14 +21,19 @@
 package org.jblux.suite.gui.menubar;
 
 import javax.swing.JMenuBar;
+import org.jblux.suite.gui.GamePreview;
 
 public class MenuBar extends JMenuBar {
-    public MenuBar() {
+    private GamePreview preview;
+
+    public MenuBar(GamePreview preview) {
+        this.preview = preview;
+        
         init();
     }
 
     private void init() {
-        this.add(new FileMenu());
+        this.add(new FileMenu(preview));
         this.add(new EditMenu());
         this.add(new ToolsMenu());
         this.add(new HelpMenu());

@@ -28,6 +28,7 @@ import org.newdawn.slick.tiled.TiledMap;
 
 public class GamePreview extends BasicGame {
     private TiledMap map;
+    private String map_file;
 
     public GamePreview(String file) {
         super("JBlux Editor Suite");
@@ -38,7 +39,8 @@ public class GamePreview extends BasicGame {
     public void setMap(String file) {
         try {
             if(file != null) {
-                this.map = new TiledMap(file);
+                map_file = file;
+                map = new TiledMap(file);
             }
         } catch (SlickException ex) {
         }
