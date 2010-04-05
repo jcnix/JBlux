@@ -41,6 +41,7 @@ public class MainWindow extends JFrame {
         try {
             preview = new GamePreview(null);
             CanvasGameContainer cgc = new CanvasGameContainer(preview);
+            cgc.setSize(800, 600);
             this.add(cgc);
             cgc.start();
         } catch (SlickException ex) {
