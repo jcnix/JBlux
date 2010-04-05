@@ -31,11 +31,10 @@ public class MainWindow extends JFrame {
     public MainWindow() {
         super("JBlux Editor Suite");
 
-        init();
-
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.pack();
         this.setVisible(true);
+        init();
+        this.pack();
     }
 
     private void init() {
