@@ -4,7 +4,7 @@
 jbluxkey
 */dist/jblux.jar
 */dist/jblux-common.jar
-*/dist/jblux-server.jar
+jblux-server/dist
 */dist/jblux-suite.jar
 */dist/lib/jblux-common.jar
 jblux-client/lib
