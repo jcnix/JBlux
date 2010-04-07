@@ -36,6 +36,7 @@ public class Player extends Sprite {
     private Image walk_area;
     private int move_size;
     private String map_name;
+    private Inventory inventory;
 
     private Calendar cal;
     private long lastMove;
