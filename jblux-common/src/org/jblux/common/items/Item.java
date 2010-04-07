@@ -21,5 +21,8 @@
 package org.jblux.common.items;
 
 public interface Item {
-
+    public String getName();
+    public ItemType getType();
+    public void use();
+    public void destroy();
 }
