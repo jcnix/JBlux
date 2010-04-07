@@ -59,7 +59,7 @@
         <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/1">
             <compilation-unit>
                 <package-root>src</package-root>
-                <classpath mode="compile">dist/lib/jinput.jar:dist/lib/linux_natives.jar:dist/lib/lwjgl.jar:dist/lib/lwjgl_util_applet.jar:dist/lib/lzma.jar:dist/lib/macosx_natives.jar:dist/lib/res.jar:dist/lib/slick.jar:dist/lib/solaris_natives.jar:dist/lib/windows_natives.jar:dist/lib/jblux-common.jar</classpath>
+                <classpath mode="compile">lib/slick.jar:lib/jblux-common.jar</classpath>
                 <source-level>1.5</source-level>
             </compilation-unit>
         </java-data>

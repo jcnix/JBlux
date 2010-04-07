@@ -6,6 +6,6 @@ jbluxkey
 */dist/jblux-common.jar
 jblux-server/dist
 */dist/jblux-suite.jar
-*/dist/lib/jblux-common.jar
-jblux-client/lib
+*/dist/jblux-server.jar
+*/lib/jblux-common.jar
 
