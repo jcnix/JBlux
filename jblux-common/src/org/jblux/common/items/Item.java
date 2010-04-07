@@ -23,6 +23,7 @@ package org.jblux.common.items;
 public interface Item {
     public String getName();
     public ItemType getType();
+    public String getImage();
     public void use();
     public void destroy();
 }
