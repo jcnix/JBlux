@@ -23,7 +23,7 @@
     <target name="compile" depends="init">
         <javac srcdir="${src}" destdir="${build}" debug="on"
             includeantruntime="false">
-            <compilerarg value="-Xlint"/>
+            <compilerarg value="-Xlint:all,-serial"/>
             <classpath refid="compile.classpath"/>
         </javac>
     </target>
