@@ -1,11 +1,7 @@
 */build/
+*/dist/
 *.class
 */jbluxkey
 jbluxkey
-*/dist/jblux.jar
-*/dist/jblux-common.jar
-jblux-server/dist
-*/dist/jblux-suite.jar
-*/dist/jblux-server.jar
 */lib/jblux-common.jar
 

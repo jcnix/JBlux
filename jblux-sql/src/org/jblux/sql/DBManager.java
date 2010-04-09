@@ -18,19 +18,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.server.sql;
+package org.jblux.sql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import org.jblux.common.error.FatalError;
-import org.jblux.server.conf.Settings;
 
 public class DBManager {
-    private Connection conn;
+    private Connection m_conn;
+    private String m_server;
+    private String m_user;
+    private String m_pass;
 
-    public DBManager() {
-
+    public DBManager(String server, String user, String pass) {
+        m_server = server;
+        m_user = user;
+        m_pass = pass;
     }
 
     public boolean connect() {
@@ -41,11 +44,8 @@ public class DBManager {
         }
 
         try {
-            String server = Settings.getDbServer();
-            String user = Settings.getDbUser();
-            String pass = Settings.getDbPass();
-            String connString = String.format("jdbc:postgresql://%s/tmuo", server);
-            conn = DriverManager.getConnection(connString, user, pass);
+            String connString = String.format("jdbc:postgresql://%s/tmuo", m_server);
+            m_conn = DriverManager.getConnection(connString, m_user, m_pass);
         } catch(SQLException ex) {
             return false;
         }

@@ -1,0 +1,9 @@
+<item>
+<type id="melee">
+<damage>10</damage>
+<durability>70</durability>
+</type>
+<name>Shortsword</name>
+<image>items/shortsword.jpg</image>
+</item>
+
