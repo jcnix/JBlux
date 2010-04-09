@@ -1,5 +1,5 @@
 /**
- * File: MainWindow.java
+ * File: MapPanel.java
  *
  * @author Casey Jones
  *
@@ -18,32 +18,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.suite.gui;
+package org.jblux.suite.tabs;
 
-import org.jblux.suite.gui.menubar.MenuBar;
-import javax.swing.JFrame;
-import javax.swing.JTabbedPane;
-import org.jblux.suite.tabs.MapPanel;
+import javax.swing.JPanel;
+import org.jblux.suite.gui.GamePreview;
+import org.newdawn.slick.CanvasGameContainer;
+import org.newdawn.slick.SlickException;
 
-public class MainWindow extends JFrame {
-    private JTabbedPane tabPane;
+public class MapPanel extends JPanel {
     private GamePreview preview;
 
-    public MainWindow() {
-        super("JBlux Editor Suite");
-
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
+    public MapPanel() {
         init();
-        this.pack();
     }
 
     private void init() {
-        tabPane = new JTabbedPane();
-        tabPane.addTab("Map", new MapPanel());
-
-        this.add(tabPane);
-        MenuBar menubar = new MenuBar(preview);
-        this.setJMenuBar(menubar);
+        try {
+            preview = new GamePreview(null);
+            CanvasGameContainer cgc = new CanvasGameContainer(preview);
+            cgc.setSize(800, 600);
+            this.add(cgc);
+            cgc.start();
+        } catch (SlickException ex) {
+        }
     }
 }
