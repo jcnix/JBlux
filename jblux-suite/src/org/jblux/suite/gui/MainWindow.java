@@ -22,6 +22,7 @@ package org.jblux.suite.gui;
 
 import org.jblux.suite.gui.menubar.MenuBar;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import org.jblux.suite.tabs.MapPanel;
 
@@ -43,7 +44,11 @@ public class MainWindow extends JFrame {
         tabPane.addTab("Map", new MapPanel());
 
         this.add(tabPane);
-        MenuBar menubar = new MenuBar(preview);
+        MenuBar menubar = new MenuBar(this, preview);
         this.setJMenuBar(menubar);
+    }
+
+    public void addTab(String name, JPanel tab) {
+        tabPane.addTab(name, tab);
     }
 }

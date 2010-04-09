@@ -23,18 +23,37 @@ package org.jblux.suite.gui.menubar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import org.jblux.suite.gui.MainWindow;
+import org.jblux.suite.tabs.ItemEditor;
 
 public class ToolsMenu extends JMenu implements ActionListener {
+    private JMenuItem m_itemEditorItm;
+    private MainWindow m_window;
 
-    public ToolsMenu() {
+    public ToolsMenu(MainWindow mw) {
         super("Tools");
+
+        m_window = mw;
         init();
     }
-
+    
     private void init() {
-    }
+        m_itemEditorItm = new JMenuItem("Item Editor");
+        m_itemEditorItm.addActionListener(this);
 
+        this.add(m_itemEditorItm);
+    }
+    
     public void actionPerformed(ActionEvent e) {
         Object action = e.getSource();
+
+        if(action == m_itemEditorItm) {
+            showItemEditor();
+        }
+    }
+
+    private void showItemEditor() {
+        m_window.addTab("Items", new ItemEditor());
     }
 }

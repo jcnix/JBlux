@@ -1,5 +1,5 @@
 /**
- * File: MenuBar.java
+ * File: ItemEditor.java
  *
  * @author Casey Jones
  *
@@ -18,27 +18,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.suite.gui.menubar;
+package org.jblux.suite.tabs;
 
-import javax.swing.JMenuBar;
-import org.jblux.suite.gui.GamePreview;
-import org.jblux.suite.gui.MainWindow;
+import javax.swing.JPanel;
 
-public class MenuBar extends JMenuBar {
-    private MainWindow m_window;
-    private GamePreview m_preview;
-
-    public MenuBar(MainWindow mw, GamePreview preview) {
-        m_window = mw;
-        m_preview = preview;
-        
-        init();
-    }
-
-    private void init() {
-        this.add(new FileMenu(m_preview));
-        this.add(new EditMenu());
-        this.add(new ToolsMenu(m_window));
-        this.add(new HelpMenu());
+public class ItemEditor extends JPanel {
+    public ItemEditor() {
     }
 }
