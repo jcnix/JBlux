@@ -26,7 +26,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 public class HelpMenu extends JMenu implements ActionListener {
-    public JMenuItem aboutItm;
+    private JMenuItem aboutItm;
 
     public HelpMenu() {
         super("Help");

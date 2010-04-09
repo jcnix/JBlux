@@ -30,8 +30,8 @@ import javax.swing.filechooser.FileFilter;
 import org.jblux.suite.gui.GamePreview;
 
 public class FileMenu extends JMenu implements ActionListener {
-    public JMenuItem openItm;
-    public JMenuItem exitItm;
+    private JMenuItem openItm;
+    private JMenuItem exitItm;
     private GamePreview preview;
 
     public FileMenu(GamePreview preview) {
