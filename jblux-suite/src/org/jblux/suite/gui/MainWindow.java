@@ -25,6 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import org.jblux.suite.tabs.MapPanel;
+import org.jblux.suite.tabs.TabComponent;
 
 public class MainWindow extends JFrame {
     private JTabbedPane tabPane;
@@ -49,6 +50,11 @@ public class MainWindow extends JFrame {
     }
 
     public void addTab(String name, JPanel tab) {
-        tabPane.addTab(name, tab);
+        tabPane.add(name, tab);
+
+        int i = tabPane.indexOfTab(name);
+        if(i != -1) {
+            tabPane.setTabComponentAt(i, new TabComponent(tabPane, name));
+        }
     }
 }
