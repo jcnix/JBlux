@@ -40,7 +40,7 @@ public class MainWindow extends JFrame {
 
     private void init() {
         tabPane = new TabPane();
-        tabPane.addMapTab("Map", new MapPanel());
+        tabPane.addTab_noClose("Map", new MapPanel());
 
         this.add(tabPane);
         MenuBar menubar = new MenuBar(tabPane, preview);

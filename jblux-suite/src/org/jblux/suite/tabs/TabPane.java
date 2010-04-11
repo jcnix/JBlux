@@ -53,9 +53,7 @@ public class TabPane extends JTabbedPane {
         }
     }
 
-    //TODO: This is a hack.  LWJGL bug, where it doesn't like
-    //Custom tab panes or something
-    public void addMapTab(String name, JPanel tab) {
+    public void addTab_noClose(String name, JPanel tab) {
         add(name, tab);
     }
 }
