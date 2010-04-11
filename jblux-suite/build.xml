@@ -1,6 +1,6 @@
 <project name="jblux-suite" default="jar" basedir=".">
     <description>
-		Editor suite for JBlux
+        Editor suite for JBlux
     </description>
 
     <property name="src" location="src"/>
@@ -14,6 +14,9 @@
     </path>
 
     <target name="init">
+        <copy file="../jblux-sql/store/jblux-sql.jar"
+            toFile="${lib}/jblux-sql.jar"/>
+
         <!-- Create time stamp -->
         <tstamp/>
         <mkdir dir="${build}"/>

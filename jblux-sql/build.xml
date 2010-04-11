@@ -1,6 +1,6 @@
 <project name="jblux-sql" default="store" basedir=".">
     <description>
-		XML parser for JBlux
+        SQL Accessor for JBlux
     </description>
 
     <property name="src" location="src"/>

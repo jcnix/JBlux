@@ -2,7 +2,7 @@ CREATE TABLE items (
       id serial UNIQUE NOT NULL,
       class smallint NOT NULL default '0',
       subclass smallint NOT NULL default '0',
-      name1 varchar(255) NOT NULL,
+      name varchar(255) NOT NULL,
       displayid varchar(255) NOT NULL default '0',
       quality smallint NOT NULL default '0',
       buyprice integer NOT NULL default '0',
