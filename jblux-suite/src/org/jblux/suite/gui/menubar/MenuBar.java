@@ -22,14 +22,14 @@ package org.jblux.suite.gui.menubar;
 
 import javax.swing.JMenuBar;
 import org.jblux.suite.gui.GamePreview;
-import org.jblux.suite.gui.MainWindow;
+import org.jblux.suite.tabs.TabPane;
 
 public class MenuBar extends JMenuBar {
-    private MainWindow m_window;
+    private TabPane m_pane;
     private GamePreview m_preview;
 
-    public MenuBar(MainWindow mw, GamePreview preview) {
-        m_window = mw;
+    public MenuBar(TabPane pane, GamePreview preview) {
+        m_pane = pane;
         m_preview = preview;
         
         init();
@@ -38,7 +38,7 @@ public class MenuBar extends JMenuBar {
     private void init() {
         this.add(new FileMenu(m_preview));
         this.add(new EditMenu());
-        this.add(new ToolsMenu(m_window));
+        this.add(new ToolsMenu(m_pane));
         this.add(new HelpMenu());
     }
 }

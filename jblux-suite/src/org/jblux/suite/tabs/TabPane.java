@@ -39,7 +39,28 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-public class TabComponent extends JPanel {
+public class TabPane extends JTabbedPane {
+    public TabPane() {
+        super();
+    }
+
+    public void addTab(String name, JPanel tab) {
+        add(name, tab);
+
+        int i = indexOfTab(name);
+        if(i != -1) {
+            setTabComponentAt(i, new TabComponent(this, name));
+        }
+    }
+
+    //TODO: This is a hack.  LWJGL bug, where it doesn't like
+    //Custom tab panes or something
+    public void addMapTab(String name, JPanel tab) {
+        add(name, tab);
+    }
+}
+
+class TabComponent extends JPanel {
     public TabComponent(final JTabbedPane pane, String name) {
         setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         setOpaque(false);

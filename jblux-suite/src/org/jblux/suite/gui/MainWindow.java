@@ -22,13 +22,11 @@ package org.jblux.suite.gui;
 
 import org.jblux.suite.gui.menubar.MenuBar;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import org.jblux.suite.tabs.MapPanel;
-import org.jblux.suite.tabs.TabComponent;
+import org.jblux.suite.tabs.TabPane;
 
 public class MainWindow extends JFrame {
-    private JTabbedPane tabPane;
+    private TabPane tabPane;
     private GamePreview preview;
 
     public MainWindow() {
@@ -41,20 +39,11 @@ public class MainWindow extends JFrame {
     }
 
     private void init() {
-        tabPane = new JTabbedPane();
-        tabPane.addTab("Map", new MapPanel());
+        tabPane = new TabPane();
+        tabPane.addMapTab("Map", new MapPanel());
 
         this.add(tabPane);
-        MenuBar menubar = new MenuBar(this, preview);
+        MenuBar menubar = new MenuBar(tabPane, preview);
         this.setJMenuBar(menubar);
-    }
-
-    public void addTab(String name, JPanel tab) {
-        tabPane.add(name, tab);
-
-        int i = tabPane.indexOfTab(name);
-        if(i != -1) {
-            tabPane.setTabComponentAt(i, new TabComponent(tabPane, name));
-        }
     }
 }

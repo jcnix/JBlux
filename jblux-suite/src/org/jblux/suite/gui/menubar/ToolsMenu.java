@@ -24,17 +24,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import org.jblux.suite.gui.MainWindow;
 import org.jblux.suite.tabs.ItemEditor;
+import org.jblux.suite.tabs.TabPane;
 
 public class ToolsMenu extends JMenu implements ActionListener {
     private JMenuItem m_itemEditorItm;
-    private MainWindow m_window;
+    private TabPane m_pane;
 
-    public ToolsMenu(MainWindow mw) {
+    public ToolsMenu(TabPane pane) {
         super("Tools");
 
-        m_window = mw;
+        m_pane = pane;
         init();
     }
     
@@ -54,6 +54,6 @@ public class ToolsMenu extends JMenu implements ActionListener {
     }
 
     private void showItemEditor() {
-        m_window.addTab("Items", new ItemEditor());
+        m_pane.addTab("Items", new ItemEditor());
     }
 }

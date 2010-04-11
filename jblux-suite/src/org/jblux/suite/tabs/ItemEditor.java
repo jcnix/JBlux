@@ -21,8 +21,16 @@
 package org.jblux.suite.tabs;
 
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 public class ItemEditor extends JPanel {
+    private JTabbedPane pane;
+
     public ItemEditor() {
+        init();
+    }
+
+    private void init() {
+        pane = new JTabbedPane();
     }
 }
