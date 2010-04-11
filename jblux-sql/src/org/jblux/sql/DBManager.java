@@ -22,7 +22,9 @@ package org.jblux.sql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DBManager {
     private Connection m_conn;
@@ -51,5 +53,17 @@ public class DBManager {
         }
 
         return true;
+    }
+
+    public ResultSet query_select(String query) {
+        ResultSet rs = null;
+
+        try {
+            Statement stmt = m_conn.createStatement();
+            rs = stmt.executeQuery(query);
+        } catch (SQLException ex) {
+        }
+
+        return rs;
     }
 }
