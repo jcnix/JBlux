@@ -96,7 +96,7 @@ class ItemManagerTab extends JPanel implements ActionListener {
         Object action = e.getSource();
         
         if(action == m_newItemBtn) {
-            m_pane.addTab("New Item", new ItemTab(m_db));
+            m_pane.addTab("New Item", new ItemTab(m_db, null));
         }
     }
 }
@@ -105,17 +105,24 @@ class ItemTab extends JPanel {
     private DBManager m_db;
     private JButton m_saveBtn;
     private JTable m_propertyTable;
+    private String m_itemName;
 
-    public ItemTab(DBManager db) {
+    public ItemTab(DBManager db, String name) {
         m_db = db;
+        m_itemName = name;
         m_saveBtn = new JButton("Save");
 
         Vector<Vector> rowData = new Vector<Vector>();
         Vector<String> properties;
-        Vector<String> values;
+        Vector<String> values = null;
         Vector<String> columns = new Vector<String>();
         columns.add("Property");
         columns.add("Value");
+
+        ResultSet item_rs = null;
+        if(m_itemName != null) {
+            item_rs = m_db.query_select("SELECT * FROM items WHERE name='" + m_itemName + "';");
+        }
 
         try {
             ResultSet rs = m_db.getColumnNames_items();
@@ -123,7 +130,18 @@ class ItemTab extends JPanel {
                 properties = new Vector<String>();
                 String columnName = rs.getString("COLUMN_NAME");
                 properties.add(columnName);
+
+                if(item_rs != null) {
+                    values = new Vector<String>();
+                    item_rs.next();
+                    String value = item_rs.getString(columnName);
+                    values.add(value);
+                }
+
                 rowData.add(properties);
+                if(item_rs != null) {
+                    rowData.add(values);
+                }
             }
         } catch(SQLException ex) {
         }
