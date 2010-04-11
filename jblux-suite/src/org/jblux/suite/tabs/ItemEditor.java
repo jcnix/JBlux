@@ -41,7 +41,7 @@ public class ItemEditor extends JPanel {
         m_db = new DBManager();
         m_db.connect();
 
-        m_managerTab = new ItemManagerTab(m_db);
+        m_managerTab = new ItemManagerTab(m_db, m_pane);
         m_pane.addTab_noClose("Items", m_managerTab);
 
         add(m_pane);
@@ -52,11 +52,13 @@ class ItemManagerTab extends JPanel implements ActionListener {
     private JButton m_newItemBtn;
     private DBManager m_db;
     private JTable m_itemTable;
+    private TabPane m_pane;
 
-    public ItemManagerTab(DBManager db) {
+    public ItemManagerTab(DBManager db, TabPane pane) {
         m_db = db;
+        m_pane = pane;
         m_newItemBtn = new JButton("New Item");
-
+        m_newItemBtn.addActionListener(this);
 
         ResultSet rs = m_db.query_select("SELECT name FROM items");
         Vector<Vector> rowData = new Vector<Vector>();
@@ -91,6 +93,46 @@ class ItemManagerTab extends JPanel implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        Object obj = e.getSource();
+        Object action = e.getSource();
+        
+        if(action == m_newItemBtn) {
+            m_pane.addTab("New Item", new ItemTab(m_db));
+        }
+    }
+}
+
+class ItemTab extends JPanel {
+    private DBManager m_db;
+    private JButton m_saveBtn;
+    private JTable m_propertyTable;
+
+    public ItemTab(DBManager db) {
+        m_db = db;
+        m_saveBtn = new JButton("Save");
+
+        Vector<Vector> rowData = new Vector<Vector>();
+        Vector<String> properties;
+        Vector<String> values;
+        Vector<String> columns = new Vector<String>();
+        columns.add("Property");
+        columns.add("Value");
+
+        try {
+            ResultSet rs = m_db.getColumnNames_items();
+            while(rs.next()) {
+                properties = new Vector<String>();
+                String columnName = rs.getString("COLUMN_NAME");
+                properties.add(columnName);
+                rowData.add(properties);
+            }
+        } catch(SQLException ex) {
+        }
+
+        m_propertyTable = new JTable(rowData, columns);
+        JScrollPane scrollPane = new JScrollPane(m_propertyTable);
+        m_propertyTable.setFillsViewportHeight(true);
+        
+        add(m_saveBtn);
+        add(scrollPane);
     }
 }

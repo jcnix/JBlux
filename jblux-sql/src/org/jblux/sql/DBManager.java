@@ -21,6 +21,7 @@
 package org.jblux.sql;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -73,6 +74,18 @@ public class DBManager {
         } catch (SQLException ex) {
         }
 
+        return rs;
+    }
+
+    public ResultSet getColumnNames_items() {
+        ResultSet rs = null;
+
+        try {
+            DatabaseMetaData meta = m_conn.getMetaData();
+            rs = meta.getColumns(null, null, "items", null);
+        } catch (SQLException ex) {
+        }
+        
         return rs;
     }
 }
