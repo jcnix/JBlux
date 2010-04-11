@@ -20,17 +20,34 @@
 
 package org.jblux.suite.tabs;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 public class ItemEditor extends JPanel {
-    private JTabbedPane pane;
+    private TabPane pane;
+    private ItemManagerTab managerTab;
 
     public ItemEditor() {
-        init();
+        pane = new TabPane();
+
+        managerTab = new ItemManagerTab();
+        pane.addTab_noClose("Items", managerTab);
+
+        add(pane);
+    }
+}
+
+class ItemManagerTab extends JPanel implements ActionListener {
+    private JButton newItemBtn;
+
+    public ItemManagerTab() {
+        newItemBtn = new JButton("New Item");
+        add(newItemBtn);
     }
 
-    private void init() {
-        pane = new JTabbedPane();
+    public void actionPerformed(ActionEvent e) {
+        Object obj = e.getSource();
     }
 }
