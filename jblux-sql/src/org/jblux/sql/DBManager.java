@@ -55,6 +55,13 @@ public class DBManager {
         return true;
     }
 
+    public void close() {
+        try {
+            m_conn.close();
+        } catch (SQLException ex) {
+        }
+    }
+
     public ResultSet query_select(String query) {
         ResultSet rs = null;
 
