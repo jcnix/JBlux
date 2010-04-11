@@ -26,7 +26,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import org.jblux.common.ServerInfo;
 import org.jblux.common.error.FatalError;
-import org.jblux.server.conf.Settings;
 import org.jblux.sql.DBManager;
 
 public class Server {
@@ -41,7 +40,8 @@ public class Server {
         try {
             //This is binding my local IP address.
             serv = new ServerSocket(ServerInfo.PORT, 0, InetAddress.getByName(ServerInfo.LOCAL_IP));
-            dbm = new DBManager(Settings.getDbServer(), Settings.getDbUser(), Settings.getDbPass());
+            dbm = new DBManager();
+            dbm.connect();
         } catch (IOException ex) {
             FatalError.die(ex);
         }

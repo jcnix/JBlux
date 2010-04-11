@@ -5,4 +5,5 @@
 jbluxkey
 */lib/jblux-common.jar
 jblux-server/lib
+*/jblux-sql.jar
 

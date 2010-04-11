@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.server.conf;
+package org.jblux.sql;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

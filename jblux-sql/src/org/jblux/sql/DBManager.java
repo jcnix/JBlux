@@ -25,6 +25,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DBManager {
     private Connection m_conn;
@@ -32,16 +34,17 @@ public class DBManager {
     private String m_user;
     private String m_pass;
 
-    public DBManager(String server, String user, String pass) {
-        m_server = server;
-        m_user = user;
-        m_pass = pass;
+    public DBManager() {
+        m_server = Settings.getDbServer();
+        m_user = Settings.getDbUser();
+        m_pass = Settings.getDbPass();
     }
 
     public boolean connect() {
         try {
             Class.forName("org.postgresql.Driver");
         } catch(ClassNotFoundException ex) {
+            System.out.println("Could not connect to DB");
             return false;
         }
 
@@ -49,9 +52,10 @@ public class DBManager {
             String connString = String.format("jdbc:postgresql://%s/tmuo", m_server);
             m_conn = DriverManager.getConnection(connString, m_user, m_pass);
         } catch(SQLException ex) {
+            System.out.println("Could not connect to DB");
             return false;
         }
-
+        
         return true;
     }
 

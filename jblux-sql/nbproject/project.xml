@@ -24,14 +24,14 @@
             </folders>
             <ide-actions>
                 <action name="build">
-                    <target>jar</target>
+                    <target>store</target>
                 </action>
                 <action name="clean">
                     <target>clean</target>
                 </action>
                 <action name="rebuild">
                     <target>clean</target>
-                    <target>jar</target>
+                    <target>store</target>
                 </action>
             </ide-actions>
             <view>
