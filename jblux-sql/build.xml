@@ -14,6 +14,9 @@
     </path>
 
     <target name="init">
+        <copy file="../jblux-common/dist/jblux-common.jar"
+            toFile="lib/jblux-common.jar"/>
+
         <!-- Create time stamp -->
         <tstamp/>
         <mkdir dir="${build}"/>
@@ -57,7 +60,7 @@
 
         <jar destfile="${store.dir}/temp_final.jar" filesetmanifest="skip">
             <zipgroupfileset dir="${dist}" includes="*.jar"/>
-            <zipgroupfileset dir="${lib}" includes="*.jar"/>
+            <zipgroupfileset file="${lib}/jdbc-postgresql.jar"/>
 
             <manifest>
                 <attribute name="Main-Class" value="${main.class}"/>
@@ -66,7 +69,7 @@
 
         <zip destfile="${store.jar}">
             <zipfileset src="${store.dir}/temp_final.jar"
-            excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
+                excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
         </zip>
 
         <delete file="${store.dir}/temp_final.jar"/>

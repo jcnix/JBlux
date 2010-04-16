@@ -29,17 +29,17 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import org.jblux.sql.DBManager;
+import org.jblux.sql.ItemSqlTable;
+import org.jblux.suite.gui.widgets.ItemPropertiesTable;
 
 public class ItemEditor extends JPanel {
     private TabPane m_pane;
     private ItemManagerTab m_managerTab;
-    private DBManager m_db;
+    private ItemSqlTable m_db;
 
     public ItemEditor() {
         m_pane = new TabPane();
-        m_db = new DBManager();
-        m_db.connect();
+        m_db = new ItemSqlTable();
 
         m_managerTab = new ItemManagerTab(m_db, m_pane);
         m_pane.addTab_noClose("Items", m_managerTab);
@@ -50,17 +50,17 @@ public class ItemEditor extends JPanel {
 
 class ItemManagerTab extends JPanel implements ActionListener {
     private JButton m_newItemBtn;
-    private DBManager m_db;
+    private ItemSqlTable m_db;
     private JTable m_itemTable;
     private TabPane m_pane;
 
-    public ItemManagerTab(DBManager db, TabPane pane) {
+    public ItemManagerTab(ItemSqlTable db, TabPane pane) {
         m_db = db;
         m_pane = pane;
         m_newItemBtn = new JButton("New Item");
         m_newItemBtn.addActionListener(this);
 
-        ResultSet rs = m_db.query_select("SELECT name FROM items");
+        ResultSet rs = m_db.getAllItemNames();
         Vector<Vector> rowData = new Vector<Vector>();
         Vector<String> items;
         Vector<String> columns = new Vector<String>();
@@ -101,56 +101,31 @@ class ItemManagerTab extends JPanel implements ActionListener {
     }
 }
 
-class ItemTab extends JPanel {
-    private DBManager m_db;
+class ItemTab extends JPanel implements ActionListener {
+    private ItemSqlTable m_db;
     private JButton m_saveBtn;
-    private JTable m_propertyTable;
+    private ItemPropertiesTable m_propertyTable;
     private String m_itemName;
 
-    public ItemTab(DBManager db, String name) {
+    public ItemTab(ItemSqlTable db, String name) {
         m_db = db;
         m_itemName = name;
         m_saveBtn = new JButton("Save");
+        m_saveBtn.addActionListener(this);
 
-        Vector<Vector> rowData = new Vector<Vector>();
-        Vector<String> properties;
-        Vector<String> values = null;
-        Vector<String> columns = new Vector<String>();
-        columns.add("Property");
-        columns.add("Value");
-
-        ResultSet item_rs = null;
-        if(m_itemName != null) {
-            item_rs = m_db.query_select("SELECT * FROM items WHERE name='" + m_itemName + "';");
-        }
-
-        try {
-            ResultSet rs = m_db.getColumnNames_items();
-            while(rs.next()) {
-                properties = new Vector<String>();
-                String columnName = rs.getString("COLUMN_NAME");
-                properties.add(columnName);
-
-                if(item_rs != null) {
-                    values = new Vector<String>();
-                    item_rs.next();
-                    String value = item_rs.getString(columnName);
-                    values.add(value);
-                }
-
-                rowData.add(properties);
-                if(item_rs != null) {
-                    rowData.add(values);
-                }
-            }
-        } catch(SQLException ex) {
-        }
-
-        m_propertyTable = new JTable(rowData, columns);
+        m_propertyTable = new ItemPropertiesTable(m_itemName, m_db);
         JScrollPane scrollPane = new JScrollPane(m_propertyTable);
         m_propertyTable.setFillsViewportHeight(true);
         
         add(m_saveBtn);
         add(scrollPane);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        Object action = e.getSource();
+
+        if(action == m_saveBtn) {
+            m_propertyTable.save();
+        }
     }
 }
