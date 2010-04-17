@@ -20,6 +20,7 @@
 
 package org.jblux.suite.tabs;
 
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
@@ -50,6 +51,7 @@ public class ItemEditor extends JPanel {
 
 class ItemManagerTab extends JPanel implements ActionListener {
     private JButton m_newItemBtn;
+    private JButton m_openItemBtn;
     private ItemSqlTable m_db;
     private JTable m_itemTable;
     private TabPane m_pane;
@@ -58,7 +60,9 @@ class ItemManagerTab extends JPanel implements ActionListener {
         m_db = db;
         m_pane = pane;
         m_newItemBtn = new JButton("New Item");
+        m_openItemBtn = new JButton("Open");
         m_newItemBtn.addActionListener(this);
+        m_openItemBtn.addActionListener(this);
 
         ResultSet rs = m_db.getAllItemNames();
         Vector<Vector> rowData = new Vector<Vector>();
@@ -75,20 +79,18 @@ class ItemManagerTab extends JPanel implements ActionListener {
             }
         } catch(SQLException ex) {
         }
-        //Just some test stuff
-        //TODO: remove soon
-        items = new Vector<String>();
-        items.add("Test");
-        rowData.add(items);
-        items = new Vector<String>();
-        items.add("Test2");
-        rowData.add(items);
 
         m_itemTable = new JTable(rowData, columns);
         JScrollPane scrollPane = new JScrollPane(m_itemTable);
         m_itemTable.setFillsViewportHeight(true);
 
-        add(m_newItemBtn);
+        JPanel btnPanel = new JPanel();
+        GridLayout glayout = new GridLayout(2,1);
+        btnPanel.setLayout(glayout);
+        btnPanel.add(m_newItemBtn);
+        btnPanel.add(m_openItemBtn);
+
+        add(btnPanel);
         add(scrollPane);
     }
 
@@ -97,6 +99,11 @@ class ItemManagerTab extends JPanel implements ActionListener {
         
         if(action == m_newItemBtn) {
             m_pane.addTab("New Item", new ItemTab(m_db, null));
+        }
+        else if(action == m_openItemBtn) {
+            int r = m_itemTable.getSelectedRow();
+            String name = (String) m_itemTable.getValueAt(r, 0);
+            m_pane.addTab(name, new ItemTab(m_db, name));
         }
     }
 }
