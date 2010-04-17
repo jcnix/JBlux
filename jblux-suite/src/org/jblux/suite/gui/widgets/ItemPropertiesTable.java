@@ -42,33 +42,31 @@ public class ItemPropertiesTable extends JTable {
 
     private void fill() {
         Vector<Vector> rowData = new Vector<Vector>();
-        Vector<String> properties;
-        Vector<String> values = null;
+        Vector<String> row;
 
         Vector<String> columns = new Vector<String>();
         columns.add("Properties");
         columns.add("Values");
 
         ResultSet item_rs = m_db.getAllValues(m_itemName);
+        try {
+            item_rs.next();
+        } catch (SQLException ex) {
+        }
 
         try {
             ResultSet rs = m_db.getColumnNames();
             while(rs.next()) {
-                properties = new Vector<String>();
+                row = new Vector<String>();
                 String columnName = rs.getString("COLUMN_NAME");
-                properties.add(columnName);
+                row.add(columnName);
 
                 if(item_rs != null) {
-                    values = new Vector<String>();
-                    item_rs.next();
                     String value = item_rs.getString(columnName);
-                    values.add(value);
+                    row.add(value);
                 }
 
-                rowData.add(properties);
-                if(item_rs != null) {
-                    rowData.add(values);
-                }
+                rowData.add(row);
             }
         } catch(SQLException ex) {
         }
