@@ -50,7 +50,9 @@ public class ItemPropertiesTable extends JTable {
 
         ResultSet item_rs = m_db.getAllValues(m_itemName);
         try {
-            item_rs.next();
+            if(item_rs != null) {
+                item_rs.next();
+            }
         } catch (SQLException ex) {
         }
 
