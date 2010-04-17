@@ -84,7 +84,7 @@ public class ItemPropertiesTable extends JTable {
         Item item = new Item();
         //This is gonna be ugly
         //TODO: Look for possible nicer ways to do this
-        //id = (0,1);
+        item.m_id = getInt(0);
         item.m_class = getShort(1);
         item.m_subclass = getShort(2);
         item.m_name = getString(3);

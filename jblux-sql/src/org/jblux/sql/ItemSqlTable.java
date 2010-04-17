@@ -76,14 +76,24 @@ public class ItemSqlTable {
             String query = "";
             m_conn = m_db.getConnection();
             Statement stmt = m_conn.createStatement();
+
+            boolean exists = false;
             if(doesItemExist(item.m_name)) {
+                exists = true;
                 query = "DELETE FROM items WHERE name='"+item.m_name+"';";
                 System.out.println(query);
                 stmt.execute(query);
             }
 
+            String id_sql = "";
+            if(exists) {
+                id_sql = "'" + item.m_id + "',";
+            } else {
+                id_sql = "nextval('items_id_seq'),";
+            }
+
             query = "INSERT INTO items VALUES(" +
-                    "nextval('items_id_seq')," +
+                    id_sql +
                     "'" + item.m_class + "'," +
                     "'" + item.m_subclass + "'," +
                     "'" + item.m_name + "'," +
