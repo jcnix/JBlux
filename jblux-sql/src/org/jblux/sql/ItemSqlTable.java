@@ -77,7 +77,8 @@ public class ItemSqlTable {
             m_conn = m_db.getConnection();
             Statement stmt = m_conn.createStatement();
             if(doesItemExist(item.m_name)) {
-                query = "DELETE FROM items WHERE id='"+item.m_id+"';";
+                query = "DELETE FROM items WHERE name='"+item.m_name+"';";
+                System.out.println(query);
                 stmt.execute(query);
             }
 
@@ -154,23 +155,17 @@ public class ItemSqlTable {
         m_db.close();
     }
 
-    public boolean doesItemExist(String name) {
-        m_db.connect();
+    private boolean doesItemExist(String name) {
         boolean exists = false;
         
         try {
             String query = "SELECT id FROM items WHERE name='"+name+"';";
-            m_conn = m_db.getConnection();
             Statement stmt = m_conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-
-            if(rs.next()) {
-                exists = true;
-            }
+            exists = stmt.execute(query);
         } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-
-        m_db.close();
+        
         return exists;
     }
 }
