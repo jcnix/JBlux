@@ -165,6 +165,82 @@ public class ItemSqlTable {
         m_db.close();
     }
 
+    public Item getItem(String name) {
+        Item item = new Item();
+        String query = "SELECT * FROM items WHERE name='" + name + "';";
+
+        try {
+            Statement stmt = m_conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            rs.next();
+
+            item.m_id = rs.getShort("id");
+            item.m_class = rs.getShort("class");
+            item.m_subclass = rs.getShort("subclass");
+            item.m_name = rs.getString("name");
+            item.m_description = rs.getString("description");
+            item.m_image = rs.getString("displayimg");
+            item.m_quality = rs.getShort("quality");
+            item.m_buyPrice = rs.getInt("buyprice");
+            item.m_sellPrice = rs.getInt("sellprice");
+            item.m_allowableClass = rs.getShort("allowableclass");
+            item.m_allowableRace = rs.getShort("allowablerace");
+            item.m_itemLevel = rs.getShort("itemlevel");
+            item.m_requiredLevel = rs.getShort("requiredlevel");
+            item.m_requiredFaction = rs.getShort("RequiredFaction");
+            item.m_requiredFactionStanding = rs.getShort("RequiredFactionStanding");
+            item.m_isUnique = rs.getShort("isUnique");
+            item.m_maxStack = rs.getShort("maxstack");
+            item.m_itemStatsCount = rs.getShort("itemstatscount");
+            item.m_stat_type1 = rs.getShort("stat_type1");
+            item.m_stat_value1 = rs.getShort("stat_value1");
+            item.m_stat_type2 = rs.getShort("stat_type2");
+            item.m_stat_value2 = rs.getShort("stat_value2");
+            item.m_stat_type3 = rs.getShort("stat_type3");
+            item.m_stat_value3 = rs.getShort("stat_value3");
+            item.m_stat_type4 = rs.getShort("stat_type4");
+            item.m_stat_value4 = rs.getShort("stat_value4");
+            item.m_stat_type5 = rs.getShort("stat_type5");
+            item.m_stat_value5 = rs.getShort("stat_value5");
+            item.m_stat_type6 = rs.getShort("stat_type6");
+            item.m_stat_value6 = rs.getShort("stat_value6");
+            item.m_stat_type7 = rs.getShort("stat_type7");
+            item.m_stat_value7 = rs.getShort("stat_value7");
+            item.m_stat_type8 = rs.getShort("stat_type8");
+            item.m_stat_value8 = rs.getShort("stat_value8");
+            item.m_stat_type9 = rs.getShort("stat_type9");
+            item.m_stat_value9 = rs.getShort("stat_value9");
+            item.m_stat_type10 = rs.getShort("stat_type10");
+            item.m_stat_value10 = rs.getShort("stat_value10");
+            item.m_dmg_min = rs.getFloat("dmg_min");
+            item.m_dmg_max = rs.getFloat("dmg_max");
+            item.m_dmg_type = rs.getShort("dmg_type");
+            item.m_armor = rs.getShort("armor");
+            item.m_water_resistance = rs.getShort("water_res");
+            item.m_fire_resistance = rs.getShort("fire_res");
+            item.m_nature_resistance = rs.getShort("nature_res");
+            item.m_frost_resistance = rs.getShort("frost_res");
+            item.m_shadow_resistance = rs.getShort("shadow_res");
+            item.m_arcane_resistance = rs.getShort("arcane_res");
+            item.m_delay = rs.getShort("delay");
+            item.m_ammo_type = rs.getShort("ammo_type");
+            item.m_range = rs.getFloat("range");
+            item.m_spellid = rs.getShort("spellid");
+            item.m_spellTrigger = rs.getShort("spelltrigger");
+            item.m_spellCharges = rs.getShort("spellcharges");
+            item.m_quest_item = rs.getShort("quest_item");
+            item.m_quest_id = rs.getShort("quest_id");
+            item.m_block_amount = rs.getShort("block_amount");
+            item.m_itemset = rs.getShort("itemset");
+            item.m_maxDurability = rs.getShort("MaxDurability");
+            item.m_requiredDisenchantSkill = rs.getShort("ReqDisenchantSkill");
+            item.m_armorDamageModifier = rs.getShort("ArmorDamageModifier");
+        } catch (SQLException ex) {
+        }
+
+        return item;
+    }
+
     private boolean doesItemExist(String name) {
         boolean exists = false;
         
