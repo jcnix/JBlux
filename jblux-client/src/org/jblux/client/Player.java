@@ -72,7 +72,7 @@ public class Player extends Sprite {
         Input input = gc.getInput();
 
         if(gc.hasFocus() && can_move()) {
-            if(input.isKeyDown(Input.KEY_LEFT)) {
+            if(input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A)) {
                 if(coords.x > 0) {
                     if(switch_walk)
                         image = spriteSheet.getSprite(Sprite.FACE_LEFT-1, 0);
@@ -83,7 +83,7 @@ public class Player extends Sprite {
                     move(-move_size, 0);
                 }
             }
-            if(input.isKeyDown(Input.KEY_RIGHT)) {
+            if(input.isKeyDown(Input.KEY_RIGHT) || input.isKeyDown(Input.KEY_D)) {
                 if(coords.x < 800 - 32) {
                     if(switch_walk)
                         image = spriteSheet.getSprite(Sprite.FACE_RIGHT-1, 0);
@@ -94,7 +94,7 @@ public class Player extends Sprite {
                     move(move_size, 0);
                 }
             }
-            if(input.isKeyDown(Input.KEY_UP)) {
+            if(input.isKeyDown(Input.KEY_UP) || input.isKeyDown(Input.KEY_W)) {
                 if(coords.y > 0) {
                     if(switch_walk)
                         image = spriteSheet.getSprite(Sprite.FACE_UP-1, 0);
@@ -105,7 +105,7 @@ public class Player extends Sprite {
                     move(0, -move_size);
                 }
             }
-            if(input.isKeyDown(Input.KEY_DOWN)) {
+            if(input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)) {
                 if(coords.y < 600 - 32) {
                     if(switch_walk)
                         image = spriteSheet.getSprite(Sprite.FACE_DOWN-1, 0);
