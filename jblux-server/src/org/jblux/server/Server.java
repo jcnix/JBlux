@@ -40,8 +40,6 @@ public class Server {
         try {
             //This is binding my local IP address.
             serv = new ServerSocket(ServerInfo.PORT, 0, InetAddress.getByName(ServerInfo.LOCAL_IP));
-            dbm = new DBManager();
-            dbm.connect();
         } catch (IOException ex) {
             FatalError.die(ex);
         }

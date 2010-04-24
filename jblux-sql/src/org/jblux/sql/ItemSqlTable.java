@@ -166,12 +166,10 @@ public class ItemSqlTable {
     }
 
     public Item getItem(String name) {
-        Item item = new Item();
-        String query = "SELECT * FROM items WHERE name='" + name + "';";
-
+        Item item = null;
+        
         try {
-            Statement stmt = m_conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+            ResultSet rs = getAllValues(name);
             rs.next();
 
             item.m_id = rs.getShort("id");
