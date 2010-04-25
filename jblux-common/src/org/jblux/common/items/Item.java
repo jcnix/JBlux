@@ -20,7 +20,11 @@
 
 package org.jblux.common.items;
 
-public class Item {
+import java.io.Serializable;
+
+public class Item implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public int m_id;
     public short m_class;
     public short m_subclass;
@@ -85,7 +89,6 @@ public class Item {
     public short m_armorDamageModifier;
 
     public Item() {
-        
     }
 
     public void use() {
