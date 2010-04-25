@@ -20,21 +20,24 @@
 
 package org.jblux.common.items;
 
-import java.util.LinkedList;
-import org.jblux.common.items.Item;
+import java.util.Vector;
+
 
 public class Inventory {
-    private LinkedList<Item> inv;
+    private Vector<Item> m_inv;
 
     public Inventory() {
-        
+    }
+
+    public Inventory(Vector<Item> inv) {
+        m_inv = inv;
     }
 
     public void addItem(Item item) {
-        inv.add(item);
+        m_inv.add(item);
     }
 
     public void rmItem(Item item) {
-        inv.remove(item);
+        m_inv.remove(item);
     }
 }
