@@ -20,6 +20,7 @@
 
 package org.jblux.client;
 
+import org.jblux.common.items.Inventory;
 import java.util.Calendar;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ServerCommunicator;
