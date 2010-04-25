@@ -27,6 +27,7 @@ import java.net.Socket;
 import java.util.LinkedList;
 import org.jblux.common.Commands;
 import org.jblux.common.Relation;
+import org.jblux.sql.DBManager;
 import org.jblux.util.Coordinates;
 
 /*
@@ -35,6 +36,7 @@ import org.jblux.util.Coordinates;
 public class ClientThread {
     private Socket socket;
     private ObjectOutputStream netOut;
+    private DBManager dbm;
 
     private Clients clients;
     private ClientListener cl;
@@ -48,6 +50,7 @@ public class ClientThread {
         } catch (IOException ex) {
         }
 
+        dbm = new DBManager();
 
         cl = new ClientListener(this, socket);
         cl.start();
