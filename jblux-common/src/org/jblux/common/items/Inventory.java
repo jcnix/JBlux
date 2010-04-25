@@ -24,7 +24,24 @@ import java.util.Vector;
 
 
 public class Inventory {
+    //Player's unequiped "Bag" items
     private Vector<Item> m_inv;
+
+    //Equipped Items
+    public Item head;
+    public Item neck;
+    public Item chest;
+    public Item back;
+    public Item waist;
+    public Item hands;
+    public Item finger1;
+    public Item finger2;
+    public Item trinket1;
+    public Item trinket2;
+    public Item feet;
+    public Item main_hand;
+    public Item off_hand;
+    public Item ranged;
 
     public Inventory() {
     }
