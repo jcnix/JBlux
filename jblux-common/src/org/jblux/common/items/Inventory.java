@@ -25,7 +25,7 @@ import java.util.Vector;
 
 public class Inventory {
     //Player's unequiped "Bag" items
-    private Vector<Item> m_inv;
+    private Vector<Item> m_bag;
 
     //Equipped Items
     public Item head;
@@ -47,14 +47,14 @@ public class Inventory {
     }
 
     public Inventory(Vector<Item> inv) {
-        m_inv = inv;
+        m_bag = inv;
     }
 
     public void addItem(Item item) {
-        m_inv.add(item);
+        m_bag.add(item);
     }
 
     public void rmItem(Item item) {
-        m_inv.remove(item);
+        m_bag.remove(item);
     }
 }

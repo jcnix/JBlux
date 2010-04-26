@@ -27,6 +27,7 @@ import java.net.Socket;
 import java.util.LinkedList;
 import org.jblux.common.Commands;
 import org.jblux.common.Relation;
+import org.jblux.common.items.Inventory;
 import org.jblux.sql.DBManager;
 import org.jblux.util.Coordinates;
 
@@ -36,6 +37,7 @@ import org.jblux.util.Coordinates;
 public class ClientThread {
     private Socket socket;
     private ObjectOutputStream netOut;
+    private Inventory inv;
     private DBManager dbm;
 
     private Clients clients;
