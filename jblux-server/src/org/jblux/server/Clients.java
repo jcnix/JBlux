@@ -48,4 +48,11 @@ public class Clients {
     public LinkedList<ClientThread> getClients() {
         return clients;
     }
+
+    public void tell_all_clients(String command) {
+        for(int i = 0; i < clients.size(); i++) {
+            ClientThread ct = clients.get(i);
+            ct.writeString(command);
+        }
+    }
 }
