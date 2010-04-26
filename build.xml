@@ -1,0 +1,14 @@
+<project name="jblux" default="jar" basedir=".">
+    <description>
+		Java 2D game engine for embedding into web browsers
+    </description>
+
+    <target name="jar">
+        <ant dir="jblux-common"/>
+        <ant dir="jblux-sql"/>
+        <ant dir="jblux-suite"/>
+        <ant dir="jblux-server"/>
+        <ant dir="jblux-client"/>
+    </target>
+</project>
+
