@@ -166,7 +166,7 @@ public class ItemSqlTable {
     }
 
     public Item getItem(String name) {
-        Item item = null;
+        Item item = new Item();
         
         try {
             ResultSet rs = getAllValues(name);
