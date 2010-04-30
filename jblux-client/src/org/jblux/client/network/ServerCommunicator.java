@@ -26,6 +26,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jblux.client.Player;
 import org.jblux.client.Players;
 import org.jblux.client.Sprite;
@@ -164,10 +166,16 @@ class ServerListener extends Thread {
     }
 
     public synchronized void doCommand(String c) {
-        String[] c_enc = c.split("\\s");
-        String command = c_enc[0];
-        command = (String) decode(command);
-        String[] c0 = command.split("\\s");
+        String command = "";
+        String[] c0 = null;
+        try {
+            String[] c_enc = c.split("\\s");
+            command = c_enc[0];
+            command = (String) Base64.decodeToObject(command);
+            c0 = command.split("\\s");
+        } catch (IOException ex) {
+        } catch (ClassNotFoundException ex) {
+        }
 
         if(command.startsWith(Commands.MOVE)) {
             String name = c0[1];
@@ -227,21 +235,6 @@ class ServerListener extends Thread {
         else if(command.startsWith("put")) {
             Item item = (Item) decode(c0[2]);
         }
-    }
-
-    private Object decode(String s) {
-        Object o = null;
-
-        try {
-            byte [] data = Base64.decode(s);
-            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
-            o  = ois.readObject();
-            ois.close();
-        } catch(ClassNotFoundException ex) {
-        } catch(IOException ex) {
-        }
-        
-        return o;
     }
 
     public void endThread() {
