@@ -49,10 +49,10 @@ public class Clients {
         return clients;
     }
 
-    public void tell_all_clients(String command) {
+    public void tell_all_clients(Object... o) {
         for(int i = 0; i < clients.size(); i++) {
             ClientThread ct = clients.get(i);
-            ct.writeString(command);
+            ct.writeObjects(o);
         }
     }
 }

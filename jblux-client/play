@@ -1,4 +1,4 @@
 #!/bin/bash
 cd dist
-java -jar -Djava.library.path=lib/ jblux.jar
+java -jar -Djava.library.path=../lib jblux.jar
 

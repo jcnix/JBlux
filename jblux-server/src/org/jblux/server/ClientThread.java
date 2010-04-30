@@ -20,15 +20,20 @@
 
 package org.jblux.server;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jblux.common.Commands;
 import org.jblux.common.Relation;
 import org.jblux.common.items.Inventory;
 import org.jblux.sql.DBManager;
+import org.jblux.util.Base64;
 import org.jblux.util.Coordinates;
 
 /*
@@ -161,8 +166,31 @@ public class ClientThread {
     }
 
     public void writeString(String s) {
+        writeObjects(s);
+    }
+
+    /* First argument should be a string that tells what the payload is
+     * (If one is needed!)
+     * Second argument and beyond are serializable objects.
+     *
+     * We'll just write the whole array
+     */
+    public void writeObjects(Object... o) {
+        String command = "";
+        int i = 1;
+        for(Object obj : o) {
+            i++;
+            try {
+                command += Base64.encodeObject((Serializable) obj);
+            } catch(IOException ex) {
+            }
+
+            if(o.length != i)
+                command += " ";
+        }
+
         try {
-            netOut.writeObject(s);
+            netOut.writeObject(command);
         } catch (IOException ex) {
         }
     }
@@ -205,6 +233,12 @@ class ClientListener extends Thread {
     }
 
     public void doCommand(String c) {
+        try {
+            c = (String) Base64.decodeToObject(c);
+        } catch (IOException ex) {
+        } catch (ClassNotFoundException ex) {
+        }
+        
         String[] c1 = c.split("\\s");
 
         if(c.startsWith(Commands.MOVE)) {
@@ -237,6 +271,7 @@ class ClientListener extends Thread {
 
                 //Respond to client
                 String command = String.format("%s goto %s", Commands.MAP, map_name);
+                System.out.printf("%s\n", command);
                 client.writeString(command);
             }
             else {

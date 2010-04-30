@@ -20,6 +20,7 @@
 
 package org.jblux.client.network;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -32,6 +33,8 @@ import org.jblux.client.gui.observers.ChatBoxObserver;
 import org.jblux.common.Commands;
 import org.jblux.common.Relation;
 import org.jblux.common.ServerInfo;
+import org.jblux.common.items.Item;
+import org.jblux.util.Base64;
 import org.jblux.util.ChatMessage;
 import org.jblux.util.Coordinates;
 
@@ -98,16 +101,15 @@ public class ServerCommunicator {
         String command = String.format("%s get %s %s", Commands.MAP, r, name);
         writeString(command);
 
-        while(sl.response == null) {
+        while(sl.map_response == null) {
             try {
-                System.out.println("Waiting for response...");
                 Thread.sleep(20);
             } catch (InterruptedException ex) {
             }
         }
 
-        map = sl.response;
-        sl.response = null;
+        map = sl.map_response;
+        sl.map_response = null;
         return map;
     }
 
@@ -121,7 +123,8 @@ public class ServerCommunicator {
 
     public void writeString(String s) {
         try {
-            netOut.writeObject(s);
+            String command = Base64.encodeObject((String) s);
+            netOut.writeObject(command);
         } catch (IOException ex) {
         }
     }
@@ -135,13 +138,13 @@ class ServerListener extends Thread {
     private ObjectInputStream netIn;
     private Players players;
     private ChatBoxObserver cbObserver;
-    public String response;
+    public String map_response;
 
     public ServerListener(Socket s) {
         socket = s;
         players = Players.getInstance();
         cbObserver = ChatBoxObserver.getInstance();
-        response = null;
+        map_response = null;
     }
 
     @Override
@@ -161,9 +164,12 @@ class ServerListener extends Thread {
     }
 
     public synchronized void doCommand(String c) {
-        String[] c0 = c.split("\\s");
+        String[] c_enc = c.split("\\s");
+        String command = c_enc[0];
+        command = (String) decode(command);
+        String[] c0 = command.split("\\s");
 
-        if(c.startsWith(Commands.MOVE)) {          
+        if(command.startsWith(Commands.MOVE)) {
             String name = c0[1];
             int x = Integer.parseInt(c0[2]);
             int y = Integer.parseInt(c0[3]);
@@ -171,7 +177,7 @@ class ServerListener extends Thread {
             Sprite npc = players.getPlayer(name);
             npc.setCoords(x, y);
         }
-        else if(c.startsWith(Commands.CONNECT)) {
+        else if(command.startsWith(Commands.CONNECT)) {
             String name = c0[1];
             int x = Integer.parseInt(c0[2]);
             int y = Integer.parseInt(c0[3]);
@@ -182,11 +188,11 @@ class ServerListener extends Thread {
             npc.setImage(0, 0);
             players.addPlayer(npc);
         }
-        else if(c.startsWith(Commands.DISCONNECT)) {
+        else if(command.startsWith(Commands.DISCONNECT)) {
             String name = c0[1];
             players.removePlayer(name);
         }
-        else if(c.startsWith(Commands.CHAT)) {
+        else if(command.startsWith(Commands.CHAT)) {
             String name = c0[1];
 
             //TODO: make this less ugly
@@ -197,7 +203,7 @@ class ServerListener extends Thread {
 
             cbObserver.recievedMessage(new ChatMessage(name,message));
         }
-        else if(c.startsWith(Commands.MAP)) {            
+        else if(command.startsWith(Commands.MAP)) {
             String name = c0[2];
             
             if(c0[1].equals("rm")) {
@@ -214,9 +220,28 @@ class ServerListener extends Thread {
                 players.addPlayer(npc);
             }
             else if(c0[1].equals("goto")) {
-                response = c0[2];
+                map_response = c0[2];
+                System.out.printf("response: %s\n", map_response);
             }
         }
+        else if(command.startsWith("put")) {
+            Item item = (Item) decode(c0[2]);
+        }
+    }
+
+    private Object decode(String s) {
+        Object o = null;
+
+        try {
+            byte [] data = Base64.decode(s);
+            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
+            o  = ois.readObject();
+            ois.close();
+        } catch(ClassNotFoundException ex) {
+        } catch(IOException ex) {
+        }
+        
+        return o;
     }
 
     public void endThread() {
