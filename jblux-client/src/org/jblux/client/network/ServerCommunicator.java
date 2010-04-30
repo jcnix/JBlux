@@ -20,14 +20,11 @@
 
 package org.jblux.client.network;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jblux.client.Player;
 import org.jblux.client.Players;
 import org.jblux.client.Sprite;
@@ -233,7 +230,11 @@ class ServerListener extends Thread {
             }
         }
         else if(command.startsWith("put")) {
-            Item item = (Item) decode(c0[2]);
+            try {
+                Item item = (Item) Base64.decodeToObject(c0[2]);
+            } catch (IOException ex) {
+            } catch (ClassNotFoundException ex) {
+            }
         }
     }
 
