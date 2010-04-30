@@ -20,7 +20,33 @@
 
 package org.jblux.server;
 
+import org.jblux.common.items.Item;
+import org.jblux.sql.ItemSqlTable;
+import org.jblux.util.Coordinates;
+
 public class GameWorld extends Thread {
     public GameWorld() {
+    }
+
+    @Override
+    public void run() {
+        drop_item();
+    }
+
+    /* TODO: this probably isn't something we need
+     * other than to test some stuff */
+    public void drop_item() {
+        ItemSqlTable items = new ItemSqlTable();
+        Item item = items.getItem("test");
+        System.out.printf("item id: %d\n", item.m_id);
+        
+        Coordinates coords = new Coordinates();
+        coords.x = 400;
+        coords.y = 400;
+
+        String command = String.format("put item %s at %s on map %s",
+            item.m_name, coords, "residential");
+        Clients clients = Clients.getInstance();
+        clients.tell_all_clients(command, item);
     }
 }

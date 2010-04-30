@@ -1,5 +1,5 @@
 /**
- * Commands.java
+ * File: Commands.java
  *
  * @author Casey Jones
  *
@@ -18,13 +18,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common;
+package org.jblux.server;
+
+import org.jblux.common.items.Item;
 
 public class Commands {
-    public static final String MOVE = "move";
-    public static final String CONNECT = "connect";
-    public static final String DISCONNECT = "disconnect";
-    public static final String CHAT = "chat";
-    public static final String MAP = "map";
-    public static final String DROP = "drop";
+    //TODO: Get correct coordinates and map name
+    public static String dropItem(Item item) {
+        return String.format("place %s at 250 250", item);
+    }
 }

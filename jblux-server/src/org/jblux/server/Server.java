@@ -26,12 +26,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import org.jblux.common.ServerInfo;
 import org.jblux.common.error.FatalError;
-import org.jblux.sql.DBManager;
 
 public class Server {
     private ServerSocket serv;
     private Clients clients;
-    private DBManager dbm;
+    private GameWorld gameWorld;
 
     public Server() {
         System.out.printf("JBlux Server 0.0.1 -- running\n");
@@ -43,6 +42,9 @@ public class Server {
         } catch (IOException ex) {
             FatalError.die(ex);
         }
+
+        gameWorld = new GameWorld();
+        gameWorld.start();
 
         while(true) {
             try {
