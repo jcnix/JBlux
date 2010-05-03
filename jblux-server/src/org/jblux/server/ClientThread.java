@@ -20,15 +20,12 @@
 
 package org.jblux.server;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jblux.common.Commands;
 import org.jblux.common.Relation;
 import org.jblux.common.items.Inventory;
@@ -71,6 +68,10 @@ public class ClientThread {
 
     public String getUsername() {
         return cl.username;
+    }
+
+    public String getMap() {
+        return cl.map;
     }
 
     /*

@@ -55,4 +55,13 @@ public class Clients {
             ct.writeObjects(o);
         }
     }
+
+    public void tell_all_clients_on_map(String mapName, Object... o) {
+        for(int i = 0; i < clients.size(); i++) {
+            ClientThread ct = clients.get(i);
+            if(ct.getMap().equals(mapName)) {
+                ct.writeObjects(o);
+            }
+        }
+    }
 }

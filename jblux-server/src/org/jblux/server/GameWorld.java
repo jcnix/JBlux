@@ -30,23 +30,23 @@ public class GameWorld extends Thread {
 
     @Override
     public void run() {
-        drop_item();
+        drop_item(null, "residential");
     }
 
     /* TODO: this probably isn't something we need
      * other than to test some stuff */
-    public void drop_item() {
+    public void drop_item(Item item, String map) {
         ItemSqlTable items = new ItemSqlTable();
-        Item item = items.getItem("test");
+        item = items.getItem("test");
         System.out.printf("item id: %d\n", item.m_id);
         
         Coordinates coords = new Coordinates();
         coords.x = 400;
         coords.y = 400;
 
-        String command = String.format("put item %s at %s on map %s",
-            item.m_name, coords, "residential");
+        String command = String.format("put item %s at %s",
+            item.m_name, coords);
         Clients clients = Clients.getInstance();
-        clients.tell_all_clients(command, item);
+        clients.tell_all_clients_on_map(map, command, item);
     }
 }
