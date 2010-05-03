@@ -1,5 +1,5 @@
 /**
- * File: ItemTable.java
+ * File: ItemSqlTable.java
  *
  * @author Casey Jones
  *

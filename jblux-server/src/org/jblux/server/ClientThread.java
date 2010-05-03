@@ -20,6 +20,7 @@
 
 package org.jblux.server;
 
+import org.jblux.server.maps.Maps;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -27,6 +28,7 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.LinkedList;
 import org.jblux.common.Commands;
+import org.jblux.common.Map;
 import org.jblux.common.Relation;
 import org.jblux.common.items.Inventory;
 import org.jblux.sql.DBManager;
@@ -78,7 +80,7 @@ public class ClientThread {
      * Actually tells all clients except the client that is
      * sending the message.
      */
-    public void tell_all_clients(String command) {
+    public void tell_all_clients_on_map(String command) {
         LinkedList<ClientThread> c = clients.getClients();
 
         for(int i = 0; i < c.size(); i++) {
@@ -97,7 +99,7 @@ public class ClientThread {
      */
     public void move(String username, Coordinates coords) {
         String command = String.format("%s %s %d %d", Commands.MOVE, username, coords.x, coords.y);
-        tell_all_clients(command);
+        tell_all_clients_on_map(command);
     }
 
     //Tell the other clients that a player has connected.
@@ -127,16 +129,17 @@ public class ClientThread {
 
     public void disconnect(String user) {
         String command = String.format("%s %s", Commands.DISCONNECT, user);
-        tell_all_clients(command);
+        tell_all_clients_on_map(command);
         clients.removeClient(this);
     }
 
-    public void remove_from_map(String user) {
+    public void leave_map(String user) {
         String command = String.format("%s rm %s", Commands.MAP, user);
-        tell_all_clients(command);
+        tell_all_clients_on_map(command);
     }
 
-    public void add_to_map(String user, Coordinates coords) {
+    /* Put the player on a new map */
+    public void go_to_map(String user, String map, Coordinates coords) {
         String command = String.format("%s add %s %s", Commands.MAP, user, getCoords());
 
         LinkedList<ClientThread> c = clients.getClients();
@@ -146,10 +149,12 @@ public class ClientThread {
                 continue;
             }
 
-            //The the new player about the other clients
+            //Tell the new player about the other clients
             String otherPlayer = String.format("%s %s %s", Commands.MAP,
                     ct.getUsername(), ct.getCoords());
             writeString(otherPlayer);
+
+            //Tell the new player about items on the map
 
             //Tell other client about the new player
             ct.writeString(command);
@@ -158,7 +163,7 @@ public class ClientThread {
 
     public void sendChatMessage(String username, String message) {
         String command = String.format("%s %s %s", Commands.CHAT, username, message);
-        tell_all_clients(command);
+        tell_all_clients_on_map(command);
         writeString(command);
     }
 
@@ -268,7 +273,8 @@ class ClientListener extends Thread {
                 Relation r = Relation.valueOf(c1[2]);
                 String name = c1[3];
                 Maps maps = new Maps();
-                String map_name = maps.getMap(r, name);
+                Map map = maps.getMap(r, name);
+                String map_name = map.getName();
 
                 //Respond to client
                 String command = String.format("%s goto %s", Commands.MAP, map_name);
@@ -277,10 +283,10 @@ class ClientListener extends Thread {
             }
             else {
                 username = c1[1];
-                client.remove_from_map(username);
+                client.leave_map(username);
                 //Map switch here
                 map = c1[2];
-                client.add_to_map(username, coords);
+                client.go_to_map(username, map, coords);
             }
         }
     }

@@ -1,5 +1,5 @@
 /**
- * File: Relations.java
+ * File: Maps.java
  *
  * @author Casey Jones
  *
@@ -18,22 +18,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common;
+package org.jblux.server.maps;
 
-public enum Relation {
-    LEFT_OF("left_of"),
-    RIGHT_OF("right_of"),
-    ABOVE("above"),
-    BELOW("below");
+import org.jblux.common.Map;
+import org.jblux.common.Relation;
+import org.jblux.sql.MapSqlTable;
 
-    private final String str;
+/**
+ * This class reads maps/layout.txt to find out the relationship
+ * between maps.  So if the player moves off the left side of a \
+ * map, they proceed to the correct map.
+ */
 
-    private Relation(String s) {
-        str = s;
+public class Maps {
+    public MapSqlTable m_mapsTable;
+
+    public Maps() { 
+        m_mapsTable = new MapSqlTable();
     }
 
-    @Override
-    public String toString() {
-        return str;
+    public Map getMap(Relation rel, String current_map) {
+        String mapName = m_mapsTable.getMap(rel, current_map);
+        return Map(mapName);
     }
 }

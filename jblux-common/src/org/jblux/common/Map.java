@@ -1,5 +1,5 @@
 /**
- * File: Relations.java
+ * File: Map.java
  *
  * @author Casey Jones
  *
@@ -17,23 +17,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.jblux.common;
 
-public enum Relation {
-    LEFT_OF("left_of"),
-    RIGHT_OF("right_of"),
-    ABOVE("above"),
-    BELOW("below");
+import java.util.Vector;
+import org.jblux.common.items.Item;
 
-    private final String str;
+public class Map {
+    private String m_name;
+    //Items that are required to be on the map
+    private Vector<Item> map_items;
 
-    private Relation(String s) {
-        str = s;
+    //Items that have been dropped, and aren't that important
+    private Vector<Item> dropped_items;
+
+    public Map(String name) {
+        m_name = name;
     }
 
-    @Override
-    public String toString() {
-        return str;
+    public String getName() {
+        return m_name;
     }
 }
