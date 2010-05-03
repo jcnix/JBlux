@@ -273,8 +273,8 @@ class ClientListener extends Thread {
                 Relation r = Relation.valueOf(c1[2]);
                 String name = c1[3];
                 Maps maps = new Maps();
-                Map map = maps.getMap(r, name);
-                String map_name = map.getName();
+                Map m = maps.getMap(r, name);
+                String map_name = m.getName();
 
                 //Respond to client
                 String command = String.format("%s goto %s", Commands.MAP, map_name);
