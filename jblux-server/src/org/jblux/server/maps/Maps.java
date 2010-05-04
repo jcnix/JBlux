@@ -34,8 +34,18 @@ public class Maps {
         m_maps = new HashMap<String, Map>();
     }
 
+    /**
+     * Gets the map object based on the String name
+     * 
+     * @param   mapName - the Name of the map to get an object for
+     * @return  The object of the Map based on the supplied name.
+     */
+    public static Map getMap(String mapName) {
+        return m_maps.get(mapName);
+    }
+
     public static Map getMap(Relation rel, String current_map) {
         String mapName = m_mapsTable.getMap(rel, current_map);
-        return m_maps.get(mapName);
+        return getMap(mapName);
     }
 }

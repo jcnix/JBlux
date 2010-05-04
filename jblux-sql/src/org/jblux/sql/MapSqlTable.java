@@ -37,6 +37,7 @@ public class MapSqlTable {
      * Find out which map is next to the current map
      * @param   rel - also the name of the SQL column
      * @param   mapName - the name of the map the player is currently on
+     * @return  Returns the name of the new map, adjacent to the old map.
      */
     public String getMap(Relation rel, String mapName) {
         String newMap = "";
