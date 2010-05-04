@@ -24,6 +24,7 @@ import java.util.Vector;
 import org.jblux.common.Map;
 import org.jblux.common.items.Item;
 import org.jblux.sql.ItemSqlTable;
+import org.jblux.sql.MapSqlTable;
 import org.jblux.util.Coordinates;
 
 public class GameWorld extends Thread {
@@ -49,6 +50,8 @@ public class GameWorld extends Thread {
         Coordinates coords = new Coordinates();
         coords.x = 400;
         coords.y = 400;
+
+        MapSqlTable table = new MapSqlTable();
 
         String command = String.format("put item %s at %s",
             item.m_name, coords);

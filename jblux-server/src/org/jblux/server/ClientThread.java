@@ -272,8 +272,7 @@ class ClientListener extends Thread {
             if(c1[1].equals("get")) {
                 Relation r = Relation.valueOf(c1[2]);
                 String name = c1[3];
-                Maps maps = new Maps();
-                Map m = maps.getMap(r, name);
+                Map m = Maps.getMap(r, name);
                 String map_name = m.getName();
 
                 //Respond to client

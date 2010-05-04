@@ -20,25 +20,22 @@
 
 package org.jblux.server.maps;
 
+import java.util.HashMap;
 import org.jblux.common.Map;
 import org.jblux.common.Relation;
 import org.jblux.sql.MapSqlTable;
 
-/**
- * This class reads maps/layout.txt to find out the relationship
- * between maps.  So if the player moves off the left side of a \
- * map, they proceed to the correct map.
- */
-
 public class Maps {
-    public MapSqlTable m_mapsTable;
+    private static MapSqlTable m_mapsTable;
+    private static HashMap<String, Map> m_maps;
 
-    public Maps() { 
+    protected Maps() {
         m_mapsTable = new MapSqlTable();
+        m_maps = new HashMap<String, Map>();
     }
 
-    public Map getMap(Relation rel, String current_map) {
+    public static Map getMap(Relation rel, String current_map) {
         String mapName = m_mapsTable.getMap(rel, current_map);
-        return Map(mapName);
+        return m_maps.get(mapName);
     }
 }
