@@ -50,13 +50,21 @@ public class ItemSqlTable {
         return rs;
     }
 
+    public ResultSet getAllValues(short id) {
+        m_db.connect();
+
+        String q = String.format("SELECT * FROM items WHERE id='%d';", id);
+        ResultSet item_rs = m_db.query_select(q);
+
+        m_db.close();
+        return item_rs;
+    }
+
     public ResultSet getAllValues(String name) {
         m_db.connect();
 
-        ResultSet item_rs = null;
-        if(name != null) {
-            item_rs = m_db.query_select("SELECT * FROM items WHERE name='" + name + "';");
-        }
+        String q = String.format("SELECT * FROM items WHERE name='%s';", name);
+        ResultSet item_rs = m_db.query_select(q);
 
         m_db.close();
         return item_rs;
@@ -166,10 +174,26 @@ public class ItemSqlTable {
     }
 
     public Item getItem(String name) {
+        short id = -1;
+        m_db.connect();
+        
+        try {
+            String q = String.format("SELECT id FROM items WHERE name='%s';", name);
+            ResultSet rs = m_db.query_select(q);
+            rs.next();
+            id = rs.getShort("id");
+        } catch(SQLException ex) {
+        }
+
+        m_db.close();
+        return getItem(id);
+    }
+
+    public Item getItem(short id) {
         Item item = new Item();
         
         try {
-            ResultSet rs = getAllValues(name);
+            ResultSet rs = getAllValues(id);
             rs.next();
 
             item.m_id = rs.getShort("id");

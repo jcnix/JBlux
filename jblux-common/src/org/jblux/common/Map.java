@@ -24,6 +24,7 @@ import java.util.Vector;
 import org.jblux.common.items.Item;
 
 public class Map {
+    private short m_id;
     private String m_name;
     //Items that are required to be on the map
     private Vector<Item> map_items;
@@ -31,8 +32,14 @@ public class Map {
     //Items that have been dropped, and aren't that important
     private Vector<Item> dropped_items;
 
-    public Map(String name) {
+    public Map(short id, String name, Vector<Item> items) {
+        m_id = id;
         m_name = name;
+        map_items = items;
+    }
+
+    public short getID() {
+        return m_id;
     }
 
     public String getName() {

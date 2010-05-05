@@ -23,7 +23,9 @@ package org.jblux.sql;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Vector;
 import org.jblux.common.Relation;
+import org.jblux.common.items.Item;
 
 public class MapSqlTable {
     private DBManager m_db;
@@ -39,13 +41,19 @@ public class MapSqlTable {
      * @param   mapName - the name of the map the player is currently on
      * @return  Returns the name of the new map, adjacent to the old map.
      */
-    public String getMap(Relation rel, String mapName) {
+    public String getAdjacentMap(Relation rel, String mapName) {
         String newMap = "";
         m_db.connect();
 
         try {
+            String column = "";
+            if(rel != null)
+                column = rel.toString();
+            else
+                column = "name";
+
             String q = String.format("SELECT %s FROM maps WHERE name='%s';",
-                    rel, mapName);
+                    column, mapName);
             ResultSet rs = m_db.query_select(q);
             rs.next();
             newMap = rs.getString(rel.toString());
@@ -54,5 +62,31 @@ public class MapSqlTable {
 
         m_db.close();
         return newMap;
+    }
+
+    public Vector<Item> getItemsOnMap(String name) {
+        Vector<Item> items = new Vector<Item>();
+        m_db.connect();
+
+        try {
+            String q = String.format("SELECT id FROM maps WHERE NAME='%s'", name);
+            ResultSet rs = m_db.query_select(q);
+            rs.next();
+            short map_id = rs.getShort("id");
+
+            q = String.format("SELECT item_id FROM map_items WHERE map_id='%d';",
+                    map_id);
+            rs = m_db.query_select(q);
+
+            ItemSqlTable ist = new ItemSqlTable();
+            while(rs.next()) {
+                short item_id = rs.getShort("item_id");
+                Item item = ist.getItem(rs.getShort(item_id));
+                items.add(item);
+            }
+        } catch(SQLException ex) {
+        }
+
+        return items;
     }
 }
