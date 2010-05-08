@@ -166,11 +166,11 @@ public class Player extends Sprite {
 
         if(coords.x <= 0) {
             change = true;
-            relation = Relation.LEFT_OF;
+            relation = Relation.LEFT;
         }
         else if(coords.x >= x) {
             change = true;
-            relation = Relation.RIGHT_OF;
+            relation = Relation.RIGHT;
         }
         else if(coords.y <=0) {
             change = true;

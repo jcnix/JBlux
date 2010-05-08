@@ -28,6 +28,12 @@ public class Map {
     private String m_name;
     private Vector<Item> m_items;
 
+    /* Ids of adjacent maps for convenience */
+    private short map_left;
+    private short map_right;
+    private short map_above;
+    private short map_below;
+
     public Map(short id, String name, Vector<Item> items) {
         m_id = id;
         m_name = name;
@@ -44,5 +50,29 @@ public class Map {
 
     public Vector<Item> getItems() {
         return m_items;
+    }
+
+    public void set_adjacent_maps(short left, short right, short above,
+            short below) {
+        map_left = left;
+        map_right = right;
+        map_above = above;
+        map_below = below;
+    }
+
+    public short get_map_left() {
+        return map_left;
+    }
+
+    public short get_map_right() {
+        return map_right;
+    }
+
+    public short get_map_above() {
+        return map_above;
+    }
+
+    public short get_map_below() {
+        return map_below;
     }
 }

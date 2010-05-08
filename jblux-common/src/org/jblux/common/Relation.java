@@ -21,8 +21,8 @@
 package org.jblux.common;
 
 public enum Relation {
-    LEFT_OF("map_left"),
-    RIGHT_OF("map_right"),
+    LEFT("map_left"),
+    RIGHT("map_right"),
     ABOVE("map_above"),
     BELOW("map_below");
 
