@@ -26,12 +26,26 @@ import org.jblux.common.Relation;
 import org.jblux.sql.MapSqlTable;
 
 public class Maps {
-    private static MapSqlTable m_mapsTable;
-    private static HashMap<String, Map> m_maps;
+    private static Maps m_self;
+    private MapSqlTable m_mapsTable;
+    private HashMap<String, Map> m_maps;
 
     protected Maps() {
         m_mapsTable = new MapSqlTable();
         m_maps = new HashMap<String, Map>();
+
+        init_maps();
+    }
+
+    public static Maps getInstance() {
+        if(m_self == null) {
+            m_self = new Maps();
+        }
+        return m_self;
+    }
+
+    private void init_maps() {
+        m_mapsTable.getAllMaps();
     }
 
     /**
@@ -40,12 +54,12 @@ public class Maps {
      * @param   mapName - the Name of the map to get an object for
      * @return  The object of the Map based on the supplied name.
      */
-    public static Map getMap(String mapName) {
+    public Map getMap(String mapName) {
         return m_maps.get(mapName);
     }
 
-    public static Map getMap(Relation rel, String current_map) {
-        String mapName = m_mapsTable.getMap(rel, current_map);
+    public Map getAdjacentMap(Relation rel, String current_map) {
+        String mapName = m_mapsTable.getAdjacentMap(rel, current_map);
         return getMap(mapName);
     }
 }

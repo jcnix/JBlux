@@ -206,6 +206,7 @@ class ClientListener extends Thread {
     private Socket clientSocket;
     private ObjectInputStream netIn;
     private ClientThread client;
+    private Maps maps;
 
     public String username;
     public String map;
@@ -216,6 +217,7 @@ class ClientListener extends Thread {
         clientSocket = s;
         coords = new Coordinates();
         username = "";
+        maps = Maps.getInstance();
     }
 
     @Override
@@ -272,7 +274,7 @@ class ClientListener extends Thread {
             if(c1[1].equals("get")) {
                 Relation r = Relation.valueOf(c1[2]);
                 String name = c1[3];
-                Map m = Maps.getMap(r, name);
+                Map m = maps.getAdjacentMap(r, name);
                 String map_name = m.getName();
 
                 //Respond to client

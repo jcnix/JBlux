@@ -24,6 +24,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
+import org.jblux.common.Map;
 import org.jblux.common.Relation;
 import org.jblux.common.items.Item;
 
@@ -33,6 +34,37 @@ public class MapSqlTable {
 
     public MapSqlTable() {
         m_db = new DBManager();
+    }
+
+    public Vector<Map> getAllMaps() {
+        Vector<Map> map_list = new Vector<Map>();
+        ItemSqlTable item_table = new ItemSqlTable();
+        m_db.connect();
+
+        try {
+            String q = String.format("SELECT * FROM maps;");
+            ResultSet map_rs = m_db.query_select(q);
+            
+            while(map_rs.next()) {
+                short id = map_rs.getShort("id");
+                String name = map_rs.getString("name");
+                Vector<Item> items = new Vector<Item>();
+
+                q = String.format("SELECT * FROM map_items;");
+                ResultSet items_rs = m_db.query_select(q);
+                while(items_rs.next()) {
+                    short item_id = items_rs.getShort("item_id");
+                    Item item = item_table.getItem(item_id);
+                    items.add(item);
+                }
+
+                Map m = new Map(id, name, items);
+                map_list.add(m);
+            }
+        } catch(SQLException ex) {
+        }
+
+        return map_list;
     }
 
     /**
