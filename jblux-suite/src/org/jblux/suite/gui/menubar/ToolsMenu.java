@@ -25,10 +25,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import org.jblux.suite.tabs.ItemEditor;
+import org.jblux.suite.tabs.MapRelations;
 import org.jblux.suite.tabs.TabPane;
 
 public class ToolsMenu extends JMenu implements ActionListener {
     private JMenuItem m_itemEditorItm;
+    private JMenuItem m_mapRelationsItm;
     private TabPane m_pane;
 
     public ToolsMenu(TabPane pane) {
@@ -40,9 +42,13 @@ public class ToolsMenu extends JMenu implements ActionListener {
     
     private void init() {
         m_itemEditorItm = new JMenuItem("Item Editor");
+        m_mapRelationsItm = new JMenuItem("Map Relations");
+
         m_itemEditorItm.addActionListener(this);
+        m_mapRelationsItm.addActionListener(this);
 
         this.add(m_itemEditorItm);
+        this.add(m_mapRelationsItm);
     }
     
     public void actionPerformed(ActionEvent e) {
@@ -51,9 +57,16 @@ public class ToolsMenu extends JMenu implements ActionListener {
         if(action == m_itemEditorItm) {
             showItemEditor();
         }
+        else if(action == m_mapRelationsItm) {
+            showMapRelations();
+        }
     }
 
     private void showItemEditor() {
         m_pane.addTab("Items", new ItemEditor());
+    }
+
+    private void showMapRelations() {
+        m_pane.addTab("Map Relations", new MapRelations());
     }
 }
