@@ -21,6 +21,7 @@
 package org.jblux.server.maps;
 
 import java.util.HashMap;
+import java.util.Vector;
 import org.jblux.common.Map;
 import org.jblux.common.Relation;
 import org.jblux.sql.MapSqlTable;
@@ -45,7 +46,11 @@ public class Maps {
     }
 
     private void init_maps() {
-        m_mapsTable.getAllMaps();
+        Vector<Map> vmaps = m_mapsTable.getAllMaps();
+        for(int i = 0; i < vmaps.size(); i++) {
+            Map m = vmaps.get(i);
+            m_maps.put(m.getName(), m);
+        }
     }
 
     /**

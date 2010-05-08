@@ -36,6 +36,18 @@ public class MapSqlTable {
         m_db = new DBManager();
     }
 
+    /**
+     * Intializes all maps and returns them.
+     *
+     * Make sure this is only called once.
+     * Calling it twice would return the Maps as they appear in the database,
+     * and not in the state they're really in.
+     *
+     * The dropped items, and players on the map would not be in the
+     * returned data.
+     *
+     * @return List of all maps in the database.
+     */
     public Vector<Map> getAllMaps() {
         Vector<Map> map_list = new Vector<Map>();
         ItemSqlTable item_table = new ItemSqlTable();
