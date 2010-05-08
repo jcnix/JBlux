@@ -59,7 +59,8 @@ public class Maps {
     }
 
     public Map getAdjacentMap(Relation rel, String current_map) {
-        String mapName = m_mapsTable.getAdjacentMap(rel, current_map);
+        short id = m_mapsTable.getAdjacentMap(rel, current_map);
+        String mapName = m_mapsTable.getNameForId(id);
         return getMap(mapName);
     }
 }

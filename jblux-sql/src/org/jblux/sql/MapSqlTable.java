@@ -71,29 +71,44 @@ public class MapSqlTable {
      * Find out which map is next to the current map
      * @param   rel - also the name of the SQL column
      * @param   mapName - the name of the map the player is currently on
-     * @return  Returns the name of the new map, adjacent to the old map.
+     * @return  Returns the id of the new map, adjacent to the old map.
      */
-    public String getAdjacentMap(Relation rel, String mapName) {
-        String newMap = "";
+    public short getAdjacentMap(Relation rel, String mapName) {
+        short newMap = 0;
         m_db.connect();
 
         try {
-            String column = "";
+            String col = "";
             if(rel != null)
-                column = rel.toString();
+                col = rel.toString();
             else
-                column = "name";
+                col = "id";
 
             String q = String.format("SELECT %s FROM maps WHERE name='%s';",
-                    column, mapName);
+                    col, mapName);
             ResultSet rs = m_db.query_select(q);
             rs.next();
-            newMap = rs.getString(rel.toString());
+            newMap = rs.getShort(rel.toString());
         } catch(SQLException ex) {
         }
 
         m_db.close();
         return newMap;
+    }
+
+    public String getNameForId(short id) {
+        String name = "";
+        m_db.connect();
+
+        try {
+            String q = String.format("SELECT name FROM maps WHERE id=", id);
+            ResultSet rs = m_db.query_select(q);
+            rs.next();
+            name = rs.getString("name");
+        } catch(SQLException ex) {
+        }
+
+        return name;
     }
 
     public Vector<Item> getItemsOnMap(String name) {
