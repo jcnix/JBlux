@@ -60,19 +60,18 @@ public class Map {
         map_below = below;
     }
 
-    public short get_map_left() {
-        return map_left;
-    }
+    public short get_adjacent_map(Relation r) {
+        short id = 0;
 
-    public short get_map_right() {
-        return map_right;
-    }
+        if(r == Relation.LEFT)
+            id = map_left;
+        else if(r == Relation.RIGHT)
+            id = map_right;
+        else if(r == Relation.ABOVE)
+            id = map_above;
+        else if(r == Relation.BELOW)
+            id = map_below;
 
-    public short get_map_above() {
-        return map_above;
-    }
-
-    public short get_map_below() {
-        return map_below;
+        return id;
     }
 }
