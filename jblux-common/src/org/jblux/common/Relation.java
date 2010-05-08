@@ -21,10 +21,10 @@
 package org.jblux.common;
 
 public enum Relation {
-    LEFT_OF("left_of"),
-    RIGHT_OF("right_of"),
-    ABOVE("above"),
-    BELOW("below");
+    LEFT_OF("map_left"),
+    RIGHT_OF("map_right"),
+    ABOVE("map_above"),
+    BELOW("map_below");
 
     private final String str;
 

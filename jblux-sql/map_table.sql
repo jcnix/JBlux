@@ -1,8 +1,8 @@
 CREATE TABLE maps (
     id serial UNIQUE,
     name smallint,
-    left_of smallint,
-    right_of smallint,
-    above smallint,
-    below smallint
+    map_left smallint,
+    map_right smallint,
+    map_above smallint,
+    map_below smallint
 );
