@@ -152,6 +152,7 @@ public class MapSqlTable {
         } catch(SQLException ex) {
         }
 
+        m_db.close();
         return items;
     }
 
