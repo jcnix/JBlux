@@ -79,4 +79,22 @@ public class DBManager {
 
         return rs;
     }
+
+    public boolean doesRecordExist(String identifier, String column, String table) {
+        boolean exists = false;
+
+        try {
+            String query = String.format("SELECT %s FROM %s WHERE %s='%s';",
+                    column, table, column, identifier);
+            Statement stmt = m_conn.createStatement();
+            
+            //returns false if there are no results
+            //true if it returns a ResultSet
+            exists = stmt.execute(query);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return exists;
+    }
 }

@@ -23,6 +23,7 @@ package org.jblux.sql;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Vector;
 import org.jblux.common.Map;
 import org.jblux.common.Relation;
@@ -158,6 +159,38 @@ public class MapSqlTable {
 
     public void  saveMap(short id, String name, short left, short right,
                          short above, short below) {
-        
+        m_db.connect();
+        boolean exists = false;
+        String query = "";
+
+        Statement stmt = null;
+        try {
+            stmt = m_conn.createStatement();
+
+            if(m_db.doesRecordExist(name, "name", "maps")) {
+                exists = true;
+                query = "DELETE FROM items WHERE name='"+name+"';";
+                System.out.println(query);
+                stmt.execute(query);
+            }
+            
+            if(id < 1)
+                return;
+
+            String id_sql = "";
+            if(exists) {
+                id_sql = "'" + id + "'";
+            } else {
+                id_sql = "nextval('items_id_seq')";
+            }
+
+            query = String.format("INSERT INTO maps VALUES(%s, '%s', '%d', " +
+                    "'%d', '%d', '%d');",
+                    id_sql, name, left, right, above, below);
+            stmt.execute(query);
+        } catch (SQLException ex) {
+        }
+
+        m_db.close();
     }
 }

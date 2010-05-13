@@ -86,7 +86,7 @@ public class ItemSqlTable {
             Statement stmt = m_conn.createStatement();
 
             boolean exists = false;
-            if(doesItemExist(item.m_name)) {
+            if(m_db.doesRecordExist(item.m_name, "name", "items")) {
                 exists = true;
                 query = "DELETE FROM items WHERE name='"+item.m_name+"';";
                 System.out.println(query);
@@ -95,13 +95,13 @@ public class ItemSqlTable {
 
             String id_sql = "";
             if(exists) {
-                id_sql = "'" + item.m_id + "',";
+                id_sql = "'" + item.m_id + "'";
             } else {
-                id_sql = "nextval('items_id_seq'),";
+                id_sql = "nextval('items_id_seq')";
             }
 
             query = "INSERT INTO items VALUES(" +
-                    id_sql +
+                    id_sql + "," +
                     "'" + item.m_class + "'," +
                     "'" + item.m_subclass + "'," +
                     "'" + item.m_name + "'," +
@@ -261,19 +261,5 @@ public class ItemSqlTable {
         }
 
         return item;
-    }
-
-    private boolean doesItemExist(String name) {
-        boolean exists = false;
-        
-        try {
-            String query = "SELECT id FROM items WHERE name='"+name+"';";
-            Statement stmt = m_conn.createStatement();
-            exists = stmt.execute(query);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        
-        return exists;
     }
 }
