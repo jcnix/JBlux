@@ -20,7 +20,11 @@
 
 package org.jblux.suite.tabs;
 
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -28,9 +32,11 @@ import org.jblux.common.Map;
 import org.jblux.common.Relation;
 import org.jblux.sql.MapSqlTable;
 
-public class MapRelations extends JPanel {
+public class MapRelations extends JPanel implements ActionListener {
     private MapSqlTable m_db;
     private JTable m_mapTable;
+    private JButton m_newMapBtn;
+    private JButton m_saveBtn;
 
     public MapRelations() {
         m_db = new MapSqlTable();
@@ -66,7 +72,42 @@ public class MapRelations extends JPanel {
         }
 
         m_mapTable = new JTable(rows, columns);
+        
+        initGui();
+    }
+
+    private void initGui() {
+        m_newMapBtn = new JButton("New Map");
+        m_saveBtn = new JButton("Save");
         JScrollPane scrollPane = new JScrollPane(m_mapTable);
+
+        JPanel btnPanel = new JPanel();
+        GridLayout gLayout = new GridLayout(2, 1);
+        btnPanel.setLayout(gLayout);
+        btnPanel.add(m_newMapBtn);
+        btnPanel.add(m_saveBtn);
+
+        add(btnPanel);
         add(scrollPane);
+    }
+
+    private void save() {
+        for(int i = 0; i < m_mapTable.getRowCount(); i++) {
+            short map_id = Short.parseShort((String) m_mapTable.getValueAt(i, 0));
+            String map_name = (String) m_mapTable.getValueAt(i, 1);
+            short left = Short.parseShort((String) m_mapTable.getValueAt(i, 2));
+            short right = Short.parseShort((String) m_mapTable.getValueAt(i, 3));
+            short above = Short.parseShort((String) m_mapTable.getValueAt(i, 4));
+            short below = Short.parseShort((String) m_mapTable.getValueAt(i, 5));
+            m_db.saveMap(map_id, map_name, left, right, above, below);
+        }
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        Object action = e.getSource();
+
+        if(action == m_saveBtn) {
+            save();
+        }
     }
 }

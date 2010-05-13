@@ -154,4 +154,9 @@ public class MapSqlTable {
 
         return items;
     }
+
+    public void  saveMap(short id, String name, short left, short right,
+                         short above, short below) {
+        
+    }
 }
