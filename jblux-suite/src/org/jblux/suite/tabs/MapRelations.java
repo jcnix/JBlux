@@ -28,6 +28,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import org.jblux.common.Map;
 import org.jblux.common.Relation;
 import org.jblux.sql.MapSqlTable;
@@ -37,20 +38,20 @@ public class MapRelations extends JPanel implements ActionListener {
     private JTable m_mapTable;
     private JButton m_newMapBtn;
     private JButton m_saveBtn;
+    private DefaultTableModel m_model;
 
     public MapRelations() {
         m_db = new MapSqlTable();
         Vector<Map> maps = m_db.getAllMaps();
         
-        Vector<String> columns = new Vector<String>();
-        Vector<Vector> rows = new Vector<Vector>();
+        m_model = new DefaultTableModel();
 
-        columns.add("id");
-        columns.add("name");
-        columns.add("left");
-        columns.add("right");
-        columns.add("above");
-        columns.add("below");
+        m_model.addColumn("id");
+        m_model.addColumn("name");
+        m_model.addColumn("left");
+        m_model.addColumn("right");
+        m_model.addColumn("above");
+        m_model.addColumn("below");
 
         for(int i = 0; i < maps.size(); i++) {
             Vector<String> row = new Vector<String>();
@@ -68,17 +69,19 @@ public class MapRelations extends JPanel implements ActionListener {
             row.add(right);
             row.add(above);
             row.add(below);
-            rows.add(row);
+            m_model.addRow(row);
         }
 
-        m_mapTable = new JTable(rows, columns);
-        
+        m_mapTable = new JTable(m_model);
         initGui();
     }
 
     private void initGui() {
         m_newMapBtn = new JButton("New Map");
         m_saveBtn = new JButton("Save");
+        m_newMapBtn.addActionListener(this);
+        m_saveBtn.addActionListener(this);
+        
         JScrollPane scrollPane = new JScrollPane(m_mapTable);
 
         JPanel btnPanel = new JPanel();
@@ -103,11 +106,18 @@ public class MapRelations extends JPanel implements ActionListener {
         }
     }
 
+    private void addNewRow() {
+        m_model.addRow(new Vector<String>());
+    }
+
     public void actionPerformed(ActionEvent e) {
         Object action = e.getSource();
 
         if(action == m_saveBtn) {
             save();
+        }
+        else if(action == m_newMapBtn) {
+            addNewRow();
         }
     }
 }
