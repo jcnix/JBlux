@@ -165,6 +165,7 @@ public class MapSqlTable {
 
         Statement stmt = null;
         try {
+            m_conn = m_db.getConnection();
             stmt = m_conn.createStatement();
 
             if(m_db.doesRecordExist(name, "name", "maps")) {
@@ -187,6 +188,7 @@ public class MapSqlTable {
             query = String.format("INSERT INTO maps VALUES(%s, '%s', '%d', " +
                     "'%d', '%d', '%d');",
                     id_sql, name, left, right, above, below);
+
             stmt.execute(query);
         } catch (SQLException ex) {
         }
