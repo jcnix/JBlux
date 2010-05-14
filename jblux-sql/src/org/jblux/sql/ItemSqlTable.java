@@ -89,7 +89,6 @@ public class ItemSqlTable {
             if(m_db.doesRecordExist(item.m_name, "name", "items")) {
                 exists = true;
                 query = "DELETE FROM items WHERE name='"+item.m_name+"';";
-                System.out.println(query);
                 stmt.execute(query);
             }
 

@@ -63,8 +63,11 @@ public class MapSqlTable {
                 String name = map_rs.getString("name");
                 Vector<Item> items = new Vector<Item>();
 
-                q = String.format("SELECT * FROM map_items;");
+                q = String.format("SELECT * FROM map_items WHERE map_id='"+id+"';");
                 ResultSet items_rs = m_db.query_select(q);
+                if(items_rs == null)
+                    continue;
+                
                 while(items_rs.next()) {
                     short item_id = items_rs.getShort("item_id");
                     Item item = item_table.getItem(item_id);
@@ -171,7 +174,6 @@ public class MapSqlTable {
             if(m_db.doesRecordExist(name, "name", "maps")) {
                 exists = true;
                 query = "DELETE FROM items WHERE name='"+name+"';";
-                System.out.println(query);
                 stmt.execute(query);
             }
             
@@ -180,6 +182,7 @@ public class MapSqlTable {
 
             String id_sql = "";
             if(exists) {
+                System.out.println(exists);
                 id_sql = "'" + id + "'";
             } else {
                 id_sql = "nextval('items_id_seq')";
@@ -189,6 +192,7 @@ public class MapSqlTable {
                     "'%d', '%d', '%d');",
                     id_sql, name, left, right, above, below);
 
+            System.out.printf("Save: %s\n", query);
             stmt.execute(query);
         } catch (SQLException ex) {
         }
