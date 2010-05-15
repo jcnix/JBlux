@@ -101,8 +101,8 @@ public class MapRelations extends JPanel implements ActionListener {
             short left = Short.parseShort((String) m_mapTable.getValueAt(i, 2));
             short right = Short.parseShort((String) m_mapTable.getValueAt(i, 3));
             short above = Short.parseShort((String) m_mapTable.getValueAt(i, 4));
-            //short below = Short.parseShort((String) m_mapTable.getValueAt(i, 5));
-            short below = 0;
+            short below = Short.parseShort((String) m_mapTable.getValueAt(i, 5));
+            //short below = 0;
             m_db.saveMap(map_id, map_name, left, right, above, below);
         }
     }

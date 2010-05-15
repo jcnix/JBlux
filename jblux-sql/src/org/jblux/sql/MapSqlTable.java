@@ -173,8 +173,9 @@ public class MapSqlTable {
 
             if(m_db.doesRecordExist(name, "name", "maps")) {
                 exists = true;
-                query = "DELETE FROM items WHERE name='"+name+"';";
+                query = "DELETE FROM maps WHERE name='"+name+"';";
                 stmt.execute(query);
+                System.out.println("Delete.");
             }
             
             if(id < 1)
@@ -185,7 +186,7 @@ public class MapSqlTable {
                 System.out.println(exists);
                 id_sql = "'" + id + "'";
             } else {
-                id_sql = "nextval('items_id_seq')";
+                id_sql = "nextval('maps_id_seq')";
             }
 
             query = String.format("INSERT INTO maps VALUES(%s, '%s', '%d', " +
