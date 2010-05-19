@@ -66,13 +66,12 @@ public class MapSqlTable {
                 //Get items on map.
                 q = String.format("SELECT * FROM map_items WHERE map_id='"+id+"';");                
                 ResultSet items_rs = m_db.query_select(q);
-                if(items_rs == null)
-                    continue;
-                
-                while(items_rs.next()) {
-                    short item_id = items_rs.getShort("item_id");
-                    Item item = item_table.getItem(item_id);
-                    items.add(item);
+                if(items_rs != null) {
+                    while(items_rs.next()) {
+                        short item_id = items_rs.getShort("item_id");
+                        Item item = item_table.getItem(item_id);
+                        items.add(item);
+                    }
                 }
 
                 short left = getAdjacentMap(Relation.LEFT, id);
