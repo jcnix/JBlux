@@ -28,6 +28,7 @@ import java.util.Vector;
 import org.jblux.common.Map;
 import org.jblux.common.Relation;
 import org.jblux.common.items.Item;
+import org.postgresql.util.PSQLException;
 
 public class MapSqlTable {
     private DBManager m_db;
@@ -63,7 +64,8 @@ public class MapSqlTable {
                 String name = map_rs.getString("name");
                 Vector<Item> items = new Vector<Item>();
 
-                q = String.format("SELECT * FROM map_items WHERE map_id='"+id+"';");
+                //Get items on map.
+                q = String.format("SELECT * FROM map_items WHERE map_id='"+id+"';");                
                 ResultSet items_rs = m_db.query_select(q);
                 if(items_rs == null)
                     continue;

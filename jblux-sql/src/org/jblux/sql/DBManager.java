@@ -75,7 +75,7 @@ public class DBManager {
             Statement stmt = m_conn.createStatement();
             rs = stmt.executeQuery(query);
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            return null;
         }
 
         return rs;
