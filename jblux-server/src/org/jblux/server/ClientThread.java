@@ -272,7 +272,7 @@ class ClientListener extends Thread {
         }
         else if(c.startsWith(Commands.MAP)) {
             if(c1[1].equals("get")) {
-                Relation r = Relation.valueOf(c1[2]);
+                Relation r = stringToRelation(c1[2]);
                 String name = c1[3];
                 Map m = maps.getAdjacentMap(r, name);
                 String map_name = m.getName();
@@ -302,5 +302,22 @@ class ClientListener extends Thread {
         }
 
         this.interrupt();
+    }
+
+    private Relation stringToRelation(String r) {
+        Relation rel;
+
+        if(r.equals("map_left"))
+            rel = Relation.LEFT;
+        else if(r.equals("map_right"))
+            rel = Relation.RIGHT;
+        else if(r.equals("map_below"))
+            rel = Relation.BELOW;
+        else if(r.equals("map_above"))
+            rel = Relation.ABOVE;
+        else
+            rel = null;
+
+        return rel;
     }
 }

@@ -28,7 +28,6 @@ import java.util.Vector;
 import org.jblux.common.Map;
 import org.jblux.common.Relation;
 import org.jblux.common.items.Item;
-import org.postgresql.util.PSQLException;
 
 public class MapSqlTable {
     private DBManager m_db;
