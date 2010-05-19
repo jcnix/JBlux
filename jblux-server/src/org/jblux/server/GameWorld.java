@@ -20,18 +20,17 @@
 
 package org.jblux.server;
 
-import java.util.Vector;
-import org.jblux.common.Map;
 import org.jblux.common.items.Item;
+import org.jblux.server.maps.Maps;
 import org.jblux.sql.ItemSqlTable;
 import org.jblux.sql.MapSqlTable;
 import org.jblux.util.Coordinates;
 
 public class GameWorld extends Thread {
-    private Vector<Map> m_maps;
+    private Maps m_maps;
 
     public GameWorld() {
-        m_maps = new Vector<Map>();
+        m_maps = Maps.getInstance();
         //Fill Vector with maps
     }
 

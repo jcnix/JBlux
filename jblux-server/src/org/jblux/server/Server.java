@@ -30,7 +30,7 @@ import org.jblux.common.error.FatalError;
 public class Server {
     private ServerSocket serv;
     private Clients clients;
-    private GameWorld gameWorld;
+    private GameWorld m_gameworld;
 
     public Server() {
         System.out.printf("JBlux Server 0.0.1 -- running\n");
@@ -43,8 +43,8 @@ public class Server {
             FatalError.die(ex);
         }
 
-        gameWorld = new GameWorld();
-        gameWorld.start();
+        m_gameworld = new GameWorld();
+        m_gameworld.start();
 
         while(true) {
             try {
