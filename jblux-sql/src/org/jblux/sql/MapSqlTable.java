@@ -75,10 +75,10 @@ public class MapSqlTable {
                     items.add(item);
                 }
 
-                short left = getAdjacentMap(Relation.LEFT, name);
-                short right = getAdjacentMap(Relation.RIGHT, name);
-                short above = getAdjacentMap(Relation.ABOVE, name);
-                short below = getAdjacentMap(Relation.BELOW, name);
+                short left = getAdjacentMap(Relation.LEFT, id);
+                short right = getAdjacentMap(Relation.RIGHT, id);
+                short above = getAdjacentMap(Relation.ABOVE, id);
+                short below = getAdjacentMap(Relation.BELOW, id);
 
                 Map m = new Map(id, name, items);
                 m.set_adjacent_maps(left, right, above, below);
@@ -93,10 +93,10 @@ public class MapSqlTable {
     /**
      * Find out which map is next to the current map
      * @param   rel - also the name of the SQL column
-     * @param   mapName - the name of the map the player is currently on
+     * @param   mapId - the id of the map the player is currently on
      * @return  Returns the id of the new map, adjacent to the old map.
      */
-    public short getAdjacentMap(Relation rel, String mapName) {
+    public short getAdjacentMap(Relation rel, short mapId) {
         short newMap = 0;
         m_db.connect();
 
@@ -107,8 +107,8 @@ public class MapSqlTable {
             else
                 col = "id";
 
-            String q = String.format("SELECT %s FROM maps WHERE name='%s';",
-                    col, mapName);
+            String q = String.format("SELECT %s FROM maps WHERE id='%d';",
+                    col, mapId);
             ResultSet rs = m_db.query_select(q);
             rs.next();
             newMap = rs.getShort(rel.toString());
@@ -131,7 +131,24 @@ public class MapSqlTable {
         } catch(SQLException ex) {
         }
 
+        m_db.close();
         return name;
+    }
+
+    public short getIdForName(String name) {
+        short id = 0;
+        m_db.connect();
+
+        try {
+            String q = String.format("SELECT id FROM maps WHERE name='%s';", name);
+            ResultSet rs = m_db.query_select(q);
+            rs.next();
+            id = rs.getShort("id");
+        } catch(SQLException ex) {
+        }
+
+        m_db.close();
+        return id;
     }
 
     public Vector<Item> getItemsOnMap(String name) {

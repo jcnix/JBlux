@@ -274,7 +274,8 @@ class ClientListener extends Thread {
             if(c1[1].equals("get")) {
                 Relation r = stringToRelation(c1[2]);
                 String name = c1[3];
-                Map m = maps.getAdjacentMap(r, name);
+                short id = maps.getID(name);
+                Map m = maps.getAdjacentMap(r, id);
                 String map_name = m.getName();
 
                 //Respond to client

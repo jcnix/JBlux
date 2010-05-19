@@ -63,9 +63,20 @@ public class Maps {
         return m_maps.get(mapName);
     }
 
-    public Map getAdjacentMap(Relation rel, String current_map) {
+    public Map getAdjacentMap(Relation rel, short current_map) {
         short id = m_mapsTable.getAdjacentMap(rel, current_map);
         String mapName = m_mapsTable.getNameForId(id);
         return getMap(mapName);
+    }
+
+    /**
+     * Get the id of the map with the given name
+     *
+     * @param name  The name of the map to get the id of
+     * @return      The id of the map
+     */
+    public short getID(String name) {
+        short id = m_mapsTable.getIdForName(name);
+        return id;
     }
 }
