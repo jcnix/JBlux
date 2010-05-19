@@ -124,7 +124,7 @@ public class MapSqlTable {
         m_db.connect();
 
         try {
-            String q = String.format("SELECT name FROM maps WHERE id=", id);
+            String q = String.format("SELECT name FROM maps WHERE id='%d';", id);
             ResultSet rs = m_db.query_select(q);
             rs.next();
             name = rs.getString("name");
