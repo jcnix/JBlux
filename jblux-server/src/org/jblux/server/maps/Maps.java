@@ -70,8 +70,8 @@ public class Maps {
      * @return              The Map object of the adjacent map
      */
     public Map getAdjacentMap(Relation rel, short current_map) {
-        short id = m_mapsTable.getAdjacentMap(rel, current_map);
-        System.out.println(id);
+        Map m = getMap(current_map);
+        short id = m.get_adjacent_map(rel);
         return getMap(id);
     }
 
