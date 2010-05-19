@@ -29,12 +29,11 @@ import org.jblux.sql.MapSqlTable;
 public class Maps {
     private static Maps m_self;
     private MapSqlTable m_mapsTable;
-    private HashMap<String, Map> m_maps;
+    private HashMap<Short, Map> m_maps;
 
     protected Maps() {
         m_mapsTable = new MapSqlTable();
-        m_maps = new HashMap<String, Map>();
-
+        m_maps = new HashMap<Short, Map>();
         init_maps();
     }
 
@@ -49,24 +48,31 @@ public class Maps {
         Vector<Map> vmaps = m_mapsTable.getAllMaps();
         for(int i = 0; i < vmaps.size(); i++) {
             Map m = vmaps.get(i);
-            m_maps.put(m.getName(), m);
+            m_maps.put(m.getID(), m);
         }
     }
 
     /**
      * Gets the map object based on the String name
      * 
-     * @param   mapName - the Name of the map to get an object for
+     * @param   mapId - the Name of the map to get an object for
      * @return  The object of the Map based on the supplied name.
      */
-    public Map getMap(String mapName) {
-        return m_maps.get(mapName);
+    public Map getMap(short mapId) {
+        return m_maps.get(mapId);
     }
 
+    /**
+     * Gets map adjacent to given map.
+     *
+     * @param rel           Which direction to go
+     * @param current_map   The id of the current map
+     * @return              The Map object of the adjacent map
+     */
     public Map getAdjacentMap(Relation rel, short current_map) {
         short id = m_mapsTable.getAdjacentMap(rel, current_map);
-        String mapName = m_mapsTable.getNameForId(id);
-        return getMap(mapName);
+        System.out.println(id);
+        return getMap(id);
     }
 
     /**
