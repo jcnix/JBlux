@@ -32,6 +32,7 @@ public class MainWindow extends JFrame {
     public MainWindow() {
         super("JBlux Editor Suite");
 
+        preview = new GamePreview();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         init();
