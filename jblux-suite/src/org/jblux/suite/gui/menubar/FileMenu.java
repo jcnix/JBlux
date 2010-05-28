@@ -33,10 +33,12 @@ public class FileMenu extends JMenu implements ActionListener {
     private JMenuItem openItm;
     private JMenuItem exitItm;
     private GamePreview preview;
+    private String m_openDir;
 
     public FileMenu(GamePreview preview) {
         super("File");
 
+        m_openDir = System.getProperty("user.home");
         this.preview = preview;
         init();
     }
@@ -60,12 +62,14 @@ public class FileMenu extends JMenu implements ActionListener {
             System.exit(0);
         }
         if(action == openItm) {
-            JFileChooser jfc = new JFileChooser();
+            JFileChooser jfc = new JFileChooser(m_openDir);
             jfc.setFileFilter(new JBluxFileFilter());
             int returnVal = jfc.showOpenDialog(null);
 
             if(returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = jfc.getSelectedFile();
+                String f = file.getAbsolutePath();
+                m_openDir = f.substring(0, f.lastIndexOf('/'));
                 preview.setMap(file.getAbsolutePath());
             }
         }
