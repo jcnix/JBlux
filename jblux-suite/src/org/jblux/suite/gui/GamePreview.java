@@ -20,26 +20,32 @@
 
 package org.jblux.suite.gui;
 
+import org.jblux.suite.tools.Entity;
+import org.jblux.suite.tools.Tool;
+import org.jblux.util.Coordinates;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.tiled.TiledMap;
 
 public class GamePreview extends BasicGame {
     private TiledMap map;
-    private String map_file;
+    private Tool m_tool;
+    private boolean mouseReleased;
 
     public GamePreview(String file) {
         super("JBlux Editor Suite");
 
+        mouseReleased = true;
         setMap(file);
     }
 
     public void setMap(String file) {
         try {
             if(file != null) {
-                map_file = file;
                 String path = file.substring(0, file.lastIndexOf('/'));
                 System.out.println(path);
                 map = new TiledMap(file, path);
@@ -54,9 +60,23 @@ public class GamePreview extends BasicGame {
 
     @Override
     public void update(GameContainer gc, int i) throws SlickException {
+        Input input = gc.getInput();
+
+        if(gc.hasFocus()) {
+            if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON ) && (m_tool != null)) {
+                mouseReleased = false;
+                draw_with_tool(input);
+            }
+            else if(!input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)
+                    && !mouseReleased && (m_tool != null)) {
+                mouseReleased = true;
+                draw_with_tool(input);
+                Entity e = m_tool.getEntity();
+            }
+        }
     }
 
-    public void render(GameContainer gc, Graphics grphcs) throws SlickException {
+    public void render(GameContainer gc, Graphics g) throws SlickException {
         if(map != null) {
             try {
                 map.render(0, 0, 0);
@@ -64,6 +84,19 @@ public class GamePreview extends BasicGame {
                 map.render(0, 0, 2);
             } catch(IndexOutOfBoundsException ex) {
             }
+        }
+    }
+
+    public void setTool(Tool t) {
+        m_tool = t;
+    }
+
+    public void draw_with_tool(Input input) {
+        if(m_tool != null) {
+            Coordinates coords = new Coordinates();
+            coords.x = input.getMouseX();
+            coords.y = input.getMouseY();
+            m_tool.draw(coords);
         }
     }
 }
