@@ -36,14 +36,8 @@ public class GamePreview extends BasicGame {
     private boolean mouseReleased;
 
     public GamePreview() {
-        this(null);
-    }
-
-    public GamePreview(String file) {
         super("JBlux Editor Suite");
-
         mouseReleased = true;
-        setMap(file);
     }
 
     public void setMap(String file) {

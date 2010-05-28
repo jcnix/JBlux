@@ -33,14 +33,15 @@ import org.newdawn.slick.CanvasGameContainer;
 import org.newdawn.slick.SlickException;
 
 public class MapPanel extends JPanel implements ActionListener {
-    private GamePreview preview;
+    private GamePreview m_preview;
     private JPanel toolPanel;
     private JToggleButton entranceBtn;
     private Tool active_tool;
 
     boolean m_entity_tool;
 
-    public MapPanel() {
+    public MapPanel(GamePreview preview) {
+        m_preview = preview;
         m_entity_tool = false;
         init();
     }
@@ -54,8 +55,7 @@ public class MapPanel extends JPanel implements ActionListener {
 
             c.gridx = 0;
             c.gridy = 0;
-            preview = new GamePreview(null);
-            CanvasGameContainer cgc = new CanvasGameContainer(preview);
+            CanvasGameContainer cgc = new CanvasGameContainer(m_preview);
             cgc.setSize(800, 600);
             add(cgc, c);
 
@@ -79,11 +79,11 @@ public class MapPanel extends JPanel implements ActionListener {
             if(m_entity_tool) {
                 active_tool = new Tool();
                 active_tool.setEntity(new EntranceEntity());
-                preview.setTool(active_tool);
+                m_preview.setTool(active_tool);
             }
             else {
                 active_tool = null;
-                preview.setTool(active_tool);
+                m_preview.setTool(active_tool);
             }
         }
     }
