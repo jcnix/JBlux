@@ -20,6 +20,7 @@
 
 package org.jblux.suite.gui;
 
+import java.util.Vector;
 import org.jblux.suite.tools.Entity;
 import org.jblux.suite.tools.Tool;
 import org.jblux.util.Coordinates;
@@ -31,13 +32,15 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
 public class GamePreview extends BasicGame {
-    private TiledMap map;
+    private TiledMap m_map;
     private Tool m_tool;
     private boolean mouseReleased;
+    private Vector<Entity> m_entities;
 
     public GamePreview() {
         super("JBlux Editor Suite");
         mouseReleased = true;
+        m_entities = new Vector<Entity>();
     }
 
     public void setMap(String file) {
@@ -45,7 +48,7 @@ public class GamePreview extends BasicGame {
             if(file != null) {
                 String path = file.substring(0, file.lastIndexOf('/'));
                 System.out.println(file);
-                map = new TiledMap(file, path);
+                m_map = new TiledMap(file, path);
             }
         } catch (SlickException ex) {
             ex.printStackTrace();
@@ -61,27 +64,34 @@ public class GamePreview extends BasicGame {
         Input input = gc.getInput();
 
         if(gc.hasFocus()) {
-            if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON ) && (m_tool != null)) {
+            if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && (m_tool != null)) {
                 mouseReleased = false;
                 draw_with_tool(input);
             }
             else if(!input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)
-                    && !mouseReleased && (m_tool != null)) {
+                    && !mouseReleased && (m_tool != null))
+            {
                 mouseReleased = true;
                 draw_with_tool(input);
                 Entity e = m_tool.getEntity();
+                m_entities.add(e);
             }
         }
     }
 
     public void render(GameContainer gc, Graphics g) throws SlickException {
-        if(map != null) {
+        if(m_map != null) {
             try {
-                map.render(0, 0, 0);
-                map.render(0, 0, 1);
-                map.render(0, 0, 2);
+                m_map.render(0, 0, 0);
+                m_map.render(0, 0, 1);
+                m_map.render(0, 0, 2);
             } catch(IndexOutOfBoundsException ex) {
             }
+        }
+
+        for(int i = 0; i < m_entities.size(); i++) {
+            Entity e = m_entities.get(i);
+            e.render(gc, g);
         }
     }
 
