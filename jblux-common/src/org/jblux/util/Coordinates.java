@@ -39,11 +39,31 @@ public class Coordinates implements Serializable {
         return String.format("%d %d", x, y);
     }
 
-    public boolean equals(Coordinates c) {
-        if((this.x == c.x) && (this.y == c.y))
+    @Override
+    public int hashCode() {
+        int hash = 1;
+        hash = hash * 31 + this.x;
+        hash = hash * 31 + (this.x == 0 ? 0 : this.y);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj)
             return true;
+
+        boolean equal = false;
+        Coordinates c = null;
+        if(obj instanceof Coordinates) {
+            c = (Coordinates) obj;
+            
+            if((this.x == c.x) && (this.y == c.y))
+                equal = true;
+        }
         else
-            return false;
+            equal = false;
+
+        return equal;
     }
 
     public void setX(int x) {
