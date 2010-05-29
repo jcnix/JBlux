@@ -21,20 +21,28 @@
 package org.jblux.suite.tools;
 
 import java.util.Vector;
+import org.jblux.util.Coordinates;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 
 public class EntranceEntity implements Entity {
+    private Vector<Coordinates> m_coords;
     private Vector<Rectangle> m_rects;
     
     public EntranceEntity() {
+        m_coords = new Vector<Coordinates>();
         m_rects = new Vector<Rectangle>();
     }
 
     public void addTile(Rectangle r) {
-        if(!m_rects.contains(r)) {
+        Coordinates c = new Coordinates();
+        c.x = (int) r.getX();
+        c.y = (int) r.getY();
+
+        if(!m_coords.contains(c)) {
+            m_coords.add(c);
             m_rects.add(r);
         }
     }
@@ -54,6 +62,7 @@ public class EntranceEntity implements Entity {
     public void render(GameContainer gc, Graphics g) {
         for(int i = 0; i < m_rects.size(); i++) {
             Rectangle r = m_rects.get(i);
+            g.setColor(getColor());
             g.fill(r);
         }
     }
