@@ -39,6 +39,13 @@ public class Coordinates implements Serializable {
         return String.format("%d %d", x, y);
     }
 
+    public boolean equals(Coordinates c) {
+        if((this.x == c.x) && (this.y == c.y))
+            return true;
+        else
+            return false;
+    }
+
     public void setX(int x) {
         this.x = x;
     }
