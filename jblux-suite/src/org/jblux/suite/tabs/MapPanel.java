@@ -63,6 +63,7 @@ public class MapPanel extends JPanel implements ActionListener {
             c.gridy = 1;
             toolPanel = new JPanel();
             entranceBtn = new JToggleButton("Ent");
+            entranceBtn.addActionListener(this);
             toolPanel.add(entranceBtn);
             add(toolPanel, c);
 
