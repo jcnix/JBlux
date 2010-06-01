@@ -217,4 +217,40 @@ public class MapSqlTable {
 
         m_db.close();
     }
+
+    private short[] getEntrance(short map_id, String side) {
+        m_db.connect();
+        short range[] = new short[2];
+
+        String query = "";
+        try {
+            query = String.format("SELECT max_coord, min_coord FROM map_entrances " +
+                    "WHERE id='%d' AND side='%s';", map_id, side);
+
+            ResultSet rs = m_db.query_select(query);
+            rs.next();
+            range[0] = rs.getShort("max_coord");
+            range[1] = rs.getShort("min_coord");
+        } catch(SQLException ex) {
+        }
+
+        m_db.close();
+        return range;
+    }
+
+    public short[] getEntrance_left(short map_id) {
+        return getEntrance(map_id, "left");
+    }
+
+    public short[] getEntrance_right(short map_id) {
+        return getEntrance(map_id, "right");
+    }
+
+    public short[] getEntrance_top(short map_id) {
+        return getEntrance(map_id, "top");
+    }
+
+    public short[] getEntrance_bottom(short map_id) {
+        return getEntrance(map_id, "bottom");
+    }
 }
