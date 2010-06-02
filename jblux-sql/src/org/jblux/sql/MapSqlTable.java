@@ -253,4 +253,30 @@ public class MapSqlTable {
     public short[] getEntrance_bottom(short map_id) {
         return getEntrance(map_id, "bottom");
     }
+
+    private void setEntrance(short id, String side, short max, short min) {
+        m_db.connect();
+
+        String query = String.format("INSERT INTO map_entrances VALUES(%d, '%s'," +
+                "%d, %d);", id, side, max, min);
+        m_db.query_select(query);
+
+        m_db.close();
+    }
+
+    public void setEntrance_left(short id, short max, short min) {
+        setEntrance(id, "left", max, min);
+    }
+
+    public void setEntrance_right(short id, short max, short min) {
+        setEntrance(id, "right", max, min);
+    }
+
+    public void setEntrance_top(short id, short max, short min) {
+        setEntrance(id, "top", max, min);
+    }
+
+    public void setEntrance_bottom(short id, short max, short min) {
+        setEntrance(id, "bottom", max, min);
+    }
 }
