@@ -24,10 +24,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import org.jblux.suite.gui.GamePreview;
 import org.jblux.suite.tools.EntranceEntity;
+import org.jblux.suite.tools.EraserTool;
 import org.jblux.suite.tools.Tool;
 import org.newdawn.slick.CanvasGameContainer;
 import org.newdawn.slick.SlickException;
@@ -35,10 +37,13 @@ import org.newdawn.slick.SlickException;
 public class MapPanel extends JPanel implements ActionListener {
     private GamePreview m_preview;
     private JPanel toolPanel;
+    private ButtonGroup m_btnGroup;
     private JToggleButton entranceBtn;
+    private JToggleButton eraserBtn;
     private Tool active_tool;
 
     boolean m_entity_tool;
+    boolean m_eraser_tool;
 
     public MapPanel(GamePreview preview) {
         m_preview = preview;
@@ -47,45 +52,53 @@ public class MapPanel extends JPanel implements ActionListener {
     }
 
     private void init() {
+        GridBagLayout gb = new GridBagLayout();
+        setLayout(gb);
+        GridBagConstraints c = new GridBagConstraints();
+        m_btnGroup = new ButtonGroup();
+
         try {
-            GridBagLayout gb = new GridBagLayout();
-            setLayout(gb);
-
-            GridBagConstraints c = new GridBagConstraints();
-
             c.gridx = 0;
             c.gridy = 0;
             CanvasGameContainer cgc = new CanvasGameContainer(m_preview);
             cgc.setSize(800, 600);
             add(cgc, c);
-
-            c.gridx = 0;
-            c.gridy = 1;
-            toolPanel = new JPanel();
-            entranceBtn = new JToggleButton("Ent");
-            entranceBtn.addActionListener(this);
-            toolPanel.add(entranceBtn);
-            add(toolPanel, c);
-
             cgc.start();
         } catch (SlickException ex) {
         }
+
+        c.gridx = 0;
+        c.gridy = 1;
+        toolPanel = new JPanel();
+
+        entranceBtn = new JToggleButton("Ent");
+        eraserBtn = new JToggleButton("Eraser");
+
+        entranceBtn.addActionListener(this);
+        eraserBtn.addActionListener(this);
+
+        m_btnGroup.add(entranceBtn);
+        m_btnGroup.add(eraserBtn);
+
+        toolPanel.add(entranceBtn);
+        toolPanel.add(eraserBtn);
+        add(toolPanel, c);
     }
 
     public void actionPerformed(ActionEvent e) {
         Object obj = e.getSource();
 
         if(obj == entranceBtn) {
-            m_entity_tool = !m_entity_tool;
-            if(m_entity_tool) {
-                active_tool = new Tool();
-                active_tool.setEntity(new EntranceEntity());
-                m_preview.setTool(active_tool);
-            }
-            else {
-                active_tool = null;
-                m_preview.setTool(active_tool);
-            }
+            active_tool = new Tool();
+            active_tool.setEntity(new EntranceEntity());
         }
+        else if(obj == eraserBtn) {
+            active_tool = new EraserTool();
+        }
+        else {
+            active_tool = null;
+        }
+
+        m_preview.setTool(active_tool);
     }
 }

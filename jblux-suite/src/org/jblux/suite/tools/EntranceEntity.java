@@ -47,6 +47,10 @@ public class EntranceEntity implements Entity {
         }
     }
 
+    public void rmTile(Rectangle r) {
+        m_rects.remove(r);
+    }
+
     public Vector<Rectangle> getTiles() {
         return m_rects;
     }

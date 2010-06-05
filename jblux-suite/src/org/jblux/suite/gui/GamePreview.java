@@ -64,7 +64,7 @@ public class GamePreview extends BasicGame {
         Input input = gc.getInput();
 
         if(gc.hasFocus()) {
-            if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && (m_tool != null)) {
+            if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) && (m_tool != null)) {
                 mouseReleased = false;
                 draw_with_tool(input);
             }
@@ -105,5 +105,9 @@ public class GamePreview extends BasicGame {
             coords.y = input.getMouseY();
             m_tool.draw(coords);
         }
+    }
+
+    public Vector<Entity> getEntities() {
+        return m_entities;
     }
 }

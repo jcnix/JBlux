@@ -1,5 +1,5 @@
 /**
- * File: Entity.java
+ * File: EraserTool.java
  *
  * @author Casey Jones
  *
@@ -21,33 +21,33 @@
 package org.jblux.suite.tools;
 
 import java.util.Vector;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
+import org.jblux.suite.gui.GamePreview;
+import org.jblux.util.Coordinates;
 import org.newdawn.slick.geom.Rectangle;
 
-/**
- * These Entities are going to be non-dispayable in
- * the game client.
- */
-public interface Entity {
-    public void addTile(Rectangle r);
-    public void rmTile(Rectangle r);
-    public Vector<Rectangle> getTiles();
+public class EraserTool extends Tool {
+    private GamePreview m_gp;
 
+    @Override
     /**
-     * Saves the Entity into the database.
+     * Erases entities from map
+     *
+     * @param coords    Where the user clicked on the map
      */
-    public void save();
+    public void draw(Coordinates coords) {
+        if(m_gp == null)
+            return;
 
-    /**
-     * The color the rectangle should be.
-     * @return The color the rectangle should be.
-     */
-    public Color getColor();
+        Rectangle clicked_tile = Grid.getTile(coords);
+        Vector<Entity> entities = m_gp.getEntities();
 
-    /**
-     * Draws the Entity on the map
-     */
-    public void render(GameContainer gc, Graphics g);
+        for(int i = 0; i < entities.size(); i++) {
+            Entity e = entities.get(i);
+            e.rmTile(clicked_tile);
+        }
+    }
+
+    public void setGamePreview(GamePreview gp) {
+        m_gp = gp;
+    }
 }
