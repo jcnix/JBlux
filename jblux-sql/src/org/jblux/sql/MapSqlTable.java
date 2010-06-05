@@ -183,37 +183,29 @@ public class MapSqlTable {
         boolean exists = false;
         String query = "";
 
-        Statement stmt = null;
-        try {
-            m_conn = m_db.getConnection();
-            stmt = m_conn.createStatement();
-
-            if(m_db.doesRecordExist(name, "name", "maps")) {
-                exists = true;
-                query = "DELETE FROM maps WHERE name='"+name+"';";
-                stmt.execute(query);
-                System.out.println("Delete.");
-            }
-            
-            if(id < 1)
-                return;
-
-            String id_sql = "";
-            if(exists) {
-                System.out.println(exists);
-                id_sql = "'" + id + "'";
-            } else {
-                id_sql = "nextval('maps_id_seq')";
-            }
-
-            query = String.format("INSERT INTO maps VALUES(%s, '%s', '%d', " +
-                    "'%d', '%d', '%d');",
-                    id_sql, name, left, right, above, below);
-
-            System.out.printf("Save: %s\n", query);
-            stmt.execute(query);
-        } catch (SQLException ex) {
+        if(m_db.doesRecordExist(name, "name", "maps")) {
+            exists = true;
+            query = "DELETE FROM maps WHERE name='"+name+"';";
+            m_db.query_select(query);
         }
+
+        if(id < 1)
+            return;
+
+        String id_sql = "";
+        if(exists) {
+            System.out.println(exists);
+            id_sql = "'" + id + "'";
+        } else {
+            id_sql = "nextval('maps_id_seq')";
+        }
+
+        query = String.format("INSERT INTO maps VALUES(%s, '%s', '%d', " +
+                "'%d', '%d', '%d');",
+                id_sql, name, left, right, above, below);
+
+        System.out.printf("Save: %s\n", query);
+        m_db.query_select(query);
 
         m_db.close();
     }
