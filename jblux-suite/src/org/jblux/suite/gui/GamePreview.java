@@ -72,7 +72,6 @@ public class GamePreview extends BasicGame {
                     && !mouseReleased && (m_tool != null))
             {
                 mouseReleased = true;
-                draw_with_tool(input);
                 Entity e = m_tool.getEntity();
                 m_entities.add(e);
             }
