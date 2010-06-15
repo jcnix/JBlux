@@ -20,7 +20,6 @@
 
 package org.jblux.sql;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
@@ -30,7 +29,6 @@ import org.jblux.common.items.Item;
 
 public class MapSqlTable {
     private DBManager m_db;
-    private Connection m_conn;
 
     public MapSqlTable() {
         m_db = new DBManager();

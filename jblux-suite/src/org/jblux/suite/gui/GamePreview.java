@@ -21,6 +21,7 @@
 package org.jblux.suite.gui;
 
 import java.util.Vector;
+import org.jblux.common.Relation;
 import org.jblux.suite.tools.Entity;
 import org.jblux.suite.tools.Tool;
 import org.jblux.util.Coordinates;
@@ -74,6 +75,7 @@ public class GamePreview extends BasicGame {
                 mouseReleased = true;
                 Entity e = m_tool.getEntity();
                 m_entities.add(e);
+                e.save();
             }
         }
     }

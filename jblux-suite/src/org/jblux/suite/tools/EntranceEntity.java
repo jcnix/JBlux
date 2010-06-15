@@ -21,6 +21,9 @@
 package org.jblux.suite.tools;
 
 import java.util.Vector;
+import org.jblux.common.Relation;
+import org.jblux.sql.MapSqlTable;
+import org.jblux.suite.gui.EntranceSideDialog;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -30,6 +33,7 @@ import org.newdawn.slick.geom.Rectangle;
 public class EntranceEntity implements Entity {
     private Vector<Coordinates> m_coords;
     private Vector<Rectangle> m_rects;
+    private Relation side;
     
     public EntranceEntity() {
         m_coords = new Vector<Coordinates>();
@@ -56,6 +60,14 @@ public class EntranceEntity implements Entity {
     }
 
     public void save() {
+        EntranceSideDialog esd = new EntranceSideDialog(null);
+        Relation r = esd.showDialog();
+        setSide(r);
+        MapSqlTable map_table = new MapSqlTable();
+    }
+
+    private void setSide(Relation r) {
+        side = r;
     }
 
     public Color getColor() {
