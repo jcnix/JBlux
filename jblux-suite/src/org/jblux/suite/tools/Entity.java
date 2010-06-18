@@ -33,6 +33,7 @@ import org.newdawn.slick.geom.Rectangle;
 public interface Entity {
     public void addTile(Rectangle r);
     public void rmTile(Rectangle r);
+    public void setMap(String map_name);
     public Vector<Rectangle> getTiles();
 
     /**

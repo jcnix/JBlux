@@ -34,10 +34,12 @@ public class EntranceEntity implements Entity {
     private Vector<Coordinates> m_coords;
     private Vector<Rectangle> m_rects;
     private Relation side;
+    private String m_map_name;
     
     public EntranceEntity() {
         m_coords = new Vector<Coordinates>();
         m_rects = new Vector<Rectangle>();
+        m_map_name = "";
     }
 
     public void addTile(Rectangle r) {
@@ -55,6 +57,10 @@ public class EntranceEntity implements Entity {
         m_rects.remove(r);
     }
 
+    public void setMap(String map_name) {
+        m_map_name = map_name;
+    }
+
     public Vector<Rectangle> getTiles() {
         return m_rects;
     }
@@ -64,6 +70,39 @@ public class EntranceEntity implements Entity {
         Relation r = esd.showDialog();
         setSide(r);
         MapSqlTable map_table = new MapSqlTable();
+
+        //Find min and max
+        short min = 0;
+        short max = 0;
+        if(r == Relation.LEFT || r == Relation.RIGHT)
+            min = (short) m_coords.get(0).getY();
+        else
+            min = (short) m_coords.get(0).getX();
+        max = min;
+
+        for(int i = 1; i < m_coords.size(); i++) {
+            Coordinates c = m_coords.get(i);
+            short coord = 0;
+            if(r == Relation.LEFT || r == Relation.RIGHT)
+                coord = (short) m_coords.get(0).getY();
+            else
+                coord = (short) m_coords.get(0).getX();
+
+            if(coord < min)
+                min = coord;
+            if(coord > max)
+                max = coord;
+        }
+
+        short id = map_table.getIdForName(m_map_name);
+        if(r == Relation.LEFT)
+            map_table.setEntrance_left(id, max, min);
+        else if(r == Relation.RIGHT)
+            map_table.setEntrance_right(id, max, min);
+        else if(r == Relation.ABOVE)
+            map_table.setEntrance_top(id, max, min);
+        else if(r == Relation.BELOW)
+            map_table.setEntrance_bottom(id, max, min);
     }
 
     private void setSide(Relation r) {

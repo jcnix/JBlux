@@ -21,7 +21,6 @@
 package org.jblux.suite.gui;
 
 import java.util.Vector;
-import org.jblux.common.Relation;
 import org.jblux.suite.tools.Entity;
 import org.jblux.suite.tools.Tool;
 import org.jblux.util.Coordinates;
@@ -34,6 +33,7 @@ import org.newdawn.slick.tiled.TiledMap;
 
 public class GamePreview extends BasicGame {
     private TiledMap m_map;
+    private String m_map_name;
     private Tool m_tool;
     private boolean mouseReleased;
     private Vector<Entity> m_entities;
@@ -42,13 +42,17 @@ public class GamePreview extends BasicGame {
         super("JBlux Editor Suite");
         mouseReleased = true;
         m_entities = new Vector<Entity>();
+        m_map_name = "";
     }
 
     public void setMap(String file) {
         try {
             if(file != null) {
                 String path = file.substring(0, file.lastIndexOf('/'));
-                System.out.println(file);
+                // -4 removes the extension
+                String filename = file.substring(file.lastIndexOf('/'), file.length() - 4);
+                System.out.println(filename);
+                m_map_name = filename;
                 m_map = new TiledMap(file, path);
             }
         } catch (SlickException ex) {
@@ -74,6 +78,7 @@ public class GamePreview extends BasicGame {
             {
                 mouseReleased = true;
                 Entity e = m_tool.getEntity();
+                e.setMap(m_map_name);
                 m_entities.add(e);
                 e.save();
             }
