@@ -20,7 +20,9 @@
 
 package org.jblux.suite.tools;
 
-import java.util.Vector;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import org.jblux.common.Relation;
 import org.jblux.sql.MapSqlTable;
 import org.jblux.suite.gui.EntranceSideDialog;
@@ -31,14 +33,12 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 
 public class EntranceEntity implements Entity {
-    private Vector<Coordinates> m_coords;
-    private Vector<Rectangle> m_rects;
+    private HashMap<Coordinates, Rectangle> m_rects;
     private Relation side;
     private String m_map_name;
     
     public EntranceEntity() {
-        m_coords = new Vector<Coordinates>();
-        m_rects = new Vector<Rectangle>();
+        m_rects = new HashMap<Coordinates, Rectangle>();
         m_map_name = "";
     }
 
@@ -47,22 +47,28 @@ public class EntranceEntity implements Entity {
         c.x = (int) r.getX();
         c.y = (int) r.getY();
 
-        if(!m_coords.contains(c)) {
-            m_coords.add(c);
-            m_rects.add(r);
+        if(!m_rects.containsKey(c)) {
+            m_rects.put(c, r);
         }
     }
 
     public boolean rmTile(Rectangle r) {
-        return m_rects.remove(r);
+        Coordinates c = new Coordinates();
+        c.x = (int) r.getX();
+        c.y = (int) r.getY();
+        Rectangle d = m_rects.remove(c);
+        if(d != null)
+            return true;
+        else
+            return false;
     }
 
     public void setMap(String map_name) {
         m_map_name = map_name;
     }
 
-    public Vector<Rectangle> getTiles() {
-        return m_rects;
+    public Collection<Rectangle> getTiles() {
+        return m_rects.values();
     }
 
     public void save() {
@@ -77,23 +83,31 @@ public class EntranceEntity implements Entity {
         }
         
         MapSqlTable map_table = new MapSqlTable();
+        Collection<Rectangle> coords = m_rects.values();
+        Iterator i = coords.iterator();
 
         //Find min and max
         short min = 0;
         short max = 0;
+
+        Rectangle rect = (Rectangle) i.next();
         if(r == Relation.LEFT || r == Relation.RIGHT)
-            min = (short) m_coords.get(0).getY();
+            min = (short) rect.getY();
         else
-            min = (short) m_coords.get(0).getX();
+            min = (short) rect.getX();
         max = min;
 
-        for(int i = 1; i < m_coords.size(); i++) {
-            Coordinates c = m_coords.get(i);
+        while(i.hasNext()) {
+            rect = (Rectangle) i.next();
+            Coordinates c = new Coordinates();
+            c.x = (int) rect.getX();
+            c.y = (int) rect.getY();
+
             short coord = 0;
             if(r == Relation.LEFT || r == Relation.RIGHT)
-                coord = (short) m_coords.get(0).getY();
+                coord = (short) rect.getY();
             else
-                coord = (short) m_coords.get(0).getX();
+                coord = (short) rect.getX();
 
             if(coord < min)
                 min = coord;
@@ -122,9 +136,12 @@ public class EntranceEntity implements Entity {
     }
 
     public void render(GameContainer gc, Graphics g) {
-        for(int i = 0; i < m_rects.size(); i++) {
-            Rectangle r = m_rects.get(i);
-            g.setColor(getColor());
+        g.setColor(getColor());
+        Collection<Rectangle> vr = m_rects.values();
+        Iterator i = vr.iterator();
+
+        while(i.hasNext()) {
+            Rectangle r = (Rectangle) i.next();
             g.fill(r);
         }
     }

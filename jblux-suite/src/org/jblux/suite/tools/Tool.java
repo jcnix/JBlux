@@ -20,11 +20,13 @@
 
 package org.jblux.suite.tools;
 
+import org.jblux.suite.gui.GamePreview;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.geom.Rectangle;
 
 public class Tool {
-    private Entity m_entity;
+    protected Entity m_entity;
+    protected GamePreview m_gp;
 
     public Tool() {
     }
@@ -40,5 +42,9 @@ public class Tool {
 
     public Entity getEntity() {
         return m_entity;
+    }
+
+    public void setGamePreview(GamePreview gp) {
+        m_gp = gp;
     }
 }

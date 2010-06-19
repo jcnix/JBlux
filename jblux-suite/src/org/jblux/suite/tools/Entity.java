@@ -20,7 +20,7 @@
 
 package org.jblux.suite.tools;
 
-import java.util.Vector;
+import java.util.Collection;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -34,7 +34,7 @@ public interface Entity {
     public void addTile(Rectangle r);
     public boolean rmTile(Rectangle r);
     public void setMap(String map_name);
-    public Vector<Rectangle> getTiles();
+    public Collection<Rectangle> getTiles();
 
     /**
      * Saves the Entity into the database.

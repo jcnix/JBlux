@@ -99,6 +99,7 @@ public class MapPanel extends JPanel implements ActionListener {
             active_tool = null;
         }
 
+        active_tool.setGamePreview(m_preview);
         m_preview.setTool(active_tool);
     }
 }
