@@ -20,8 +20,6 @@
 
 package org.jblux.suite.tools;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Vector;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.geom.Rectangle;
@@ -38,19 +36,10 @@ public class EraserTool extends Tool {
             return;
 
         Rectangle clicked_tile = Grid.getTile(coords);
-        System.out.printf("clicked tile: %f %f\n", clicked_tile.getX(), clicked_tile.getY());
         Vector<Entity> entities = m_gp.getEntities();
 
         for(int i = 0; i < entities.size(); i++) {
             Entity e = entities.get(i);
-            
-            Collection<Rectangle> vr = e.getTiles();
-            Iterator it = vr.iterator();
-            while(it.hasNext()) {
-                Rectangle rect = (Rectangle) it.next();
-                System.out.printf("tile: %f %f\n", rect.getX(), rect.getY());
-            }
-
             if(e.rmTile(clicked_tile)) {
                 System.out.println("Erased tile");
                 e.save();
