@@ -4,8 +4,10 @@ A fan made Mario MMO.
 To use the client, the server must be running.
 The server uses port 4000.
 
-Download the libs.
-Get them from the Downloads section on Github and extract the folder to two places.
+Download the libs from:
+http://github.com/downloads/pvtcupcakes/JBlux/jblux-lib-06192010.tar.gz
+
+Extract the contents to these two places:
 jblux-client/lib
 jblux-suite/lib
 
