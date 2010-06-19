@@ -66,9 +66,16 @@ public class EntranceEntity implements Entity {
     }
 
     public void save() {
-        EntranceSideDialog esd = new EntranceSideDialog(null);
-        Relation r = esd.showDialog();
-        setSide(r);
+        Relation r;
+        if(side == null) {
+            EntranceSideDialog esd = new EntranceSideDialog(null);
+            r = esd.showDialog();
+            setSide(r);
+        }
+        else {
+            r = side;
+        }
+        
         MapSqlTable map_table = new MapSqlTable();
 
         //Find min and max

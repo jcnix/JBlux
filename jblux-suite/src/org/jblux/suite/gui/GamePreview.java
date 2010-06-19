@@ -78,9 +78,11 @@ public class GamePreview extends BasicGame {
             {
                 mouseReleased = true;
                 Entity e = m_tool.getEntity();
-                e.setMap(m_map_name);
-                m_entities.add(e);
-                e.save();
+                if(e != null) {
+                    e.setMap(m_map_name);
+                    m_entities.add(e);
+                    e.save();
+                }
             }
         }
     }
