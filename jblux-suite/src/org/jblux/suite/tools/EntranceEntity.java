@@ -53,8 +53,8 @@ public class EntranceEntity implements Entity {
         }
     }
 
-    public void rmTile(Rectangle r) {
-        m_rects.remove(r);
+    public boolean rmTile(Rectangle r) {
+        return m_rects.remove(r);
     }
 
     public void setMap(String map_name) {
