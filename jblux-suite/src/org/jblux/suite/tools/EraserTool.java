@@ -41,7 +41,6 @@ public class EraserTool extends Tool {
         for(int i = 0; i < entities.size(); i++) {
             Entity e = entities.get(i);
             if(e.rmTile(clicked_tile)) {
-                System.out.println("Erased tile");
                 e.save();
             }
         }
