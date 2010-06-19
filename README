@@ -4,6 +4,11 @@ A fan made Mario MMO.
 To use the client, the server must be running.
 The server uses port 4000.
 
+Download the libs.
+Get them from the Downloads section on Github and extract the folder to two places.
+jblux-client/lib
+jblux-suite/lib
+
 ****
 If you want to run your own server, edit this file to point to your server:
 jblux-common/src/com/jblux/common/ServerInfo.java
