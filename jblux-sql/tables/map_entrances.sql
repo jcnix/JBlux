@@ -1,6 +1,6 @@
 CREATE TABLE map_entrances (
     map_id smallint,
-    side varchar[6],
+    side text,
     max_coord smallint,
     min_coord smallint
 );
