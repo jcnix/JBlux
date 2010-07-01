@@ -32,6 +32,7 @@ import org.jblux.common.Map;
 import org.jblux.common.Relation;
 import org.jblux.common.items.Inventory;
 import org.jblux.sql.DBManager;
+import org.jblux.sql.MapSqlTable;
 import org.jblux.util.Base64;
 import org.jblux.util.Coordinates;
 
@@ -278,8 +279,12 @@ class ClientListener extends Thread {
                 Map m = maps.getAdjacentMap(r, id);
                 String map_name = m.getName();
 
+                Coordinates crd = new Coordinates();
+                MapSqlTable mst = new MapSqlTable();
+                crd = mst.getEntrance_Point(m.getID(), Relation.RIGHT);
+
                 //Respond to client
-                String command = String.format("%s goto %s", Commands.MAP, map_name);
+                String command = String.format("%s goto %s %s", Commands.MAP, map_name, crd);
                 System.out.printf("%s\n", command);
                 client.writeString(command);
             }

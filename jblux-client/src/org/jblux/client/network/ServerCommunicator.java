@@ -95,7 +95,7 @@ public class ServerCommunicator {
         writeString(command);
     }
 
-    public String ask_for_map(Relation r, String name) {
+    public String ask_for_map(Relation r, String name, Player p) {
         String map = "";
         String command = String.format("%s get %s %s", Commands.MAP, r, name);
         writeString(command);
@@ -108,7 +108,10 @@ public class ServerCommunicator {
         }
 
         map = sl.map_response;
+        p.setCoords(sl.coords);
+        
         sl.map_response = null;
+        
         return map;
     }
 
@@ -138,12 +141,14 @@ class ServerListener extends Thread {
     private Players players;
     private ChatBoxObserver cbObserver;
     public String map_response;
+    public Coordinates coords;
 
     public ServerListener(Socket s) {
         socket = s;
         players = Players.getInstance();
         cbObserver = ChatBoxObserver.getInstance();
         map_response = null;
+        coords = new Coordinates();
     }
 
     @Override
@@ -226,7 +231,9 @@ class ServerListener extends Thread {
             }
             else if(c0[1].equals("goto")) {
                 map_response = c0[2];
-                System.out.printf("response: %s\n", map_response);
+                coords.x = Integer.parseInt(c0[3]);
+                coords.y = Integer.parseInt(c0[4]);
+                System.out.printf("response: %s @ %s\n", map_response, coords);
             }
         }
         else if(command.startsWith("put")) {

@@ -25,6 +25,7 @@ import java.util.Calendar;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.common.Relation;
+import org.jblux.util.Coordinates;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
@@ -134,8 +135,10 @@ public class Player extends Sprite {
         }
     }
 
-    //parameters are deltas
-    public void move(int dx, int dy) {
+    /**
+     * parameters are deltas
+     */
+    private void move(int dx, int dy) {
         coords.x += dx;
         coords.y += dy;
 
@@ -185,7 +188,7 @@ public class Player extends Sprite {
             //TODO: Don't hardcode this
             coords.x = 350;
             coords.y = 250;
-            map_name = server.ask_for_map(relation, map_name);
+            map_name = server.ask_for_map(relation, map_name, this);
             GameCanvas gc = GameCanvas.getInstance();
             gc.setMap(map_name);
             walk_area = gc.getMap().getWalkArea();

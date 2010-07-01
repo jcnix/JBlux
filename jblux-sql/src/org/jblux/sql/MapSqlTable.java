@@ -22,10 +22,12 @@ package org.jblux.sql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Random;
 import java.util.Vector;
 import org.jblux.common.Map;
 import org.jblux.common.Relation;
 import org.jblux.common.items.Item;
+import org.jblux.util.Coordinates;
 
 public class MapSqlTable {
     private DBManager m_db;
@@ -214,7 +216,7 @@ public class MapSqlTable {
         String query = "";
         try {
             query = String.format("SELECT max_coord, min_coord FROM map_entrances " +
-                    "WHERE id='%d' AND side='%s';", map_id, side);
+                    "WHERE map_id='%d' AND side='%s';", map_id, side);
 
             ResultSet rs = m_db.query_select(query);
             rs.next();
@@ -241,6 +243,72 @@ public class MapSqlTable {
 
     public short[] getEntrance_bottom(short map_id) {
         return getEntrance(map_id, "bottom");
+    }
+
+    public Coordinates getEntrance_leftPoint(short map_id) {
+        short[] range = getEntrance(map_id, "left");
+        Random r = new Random();
+        Coordinates point = new Coordinates();
+        point.y = (short) r.nextInt(range[0]);
+        point.x = 1;
+        return point;
+    }
+
+    public Coordinates getEntrance_rightPoint(short map_id) {
+        short[] range = getEntrance(map_id, "right");
+        //Random r = new Random();
+        Coordinates point = new Coordinates();
+        //point.y = (short) r.nextInt(range[0]);
+        point.y = range[0];
+        //TODO: Find the rightmost point
+        point.x = 1;
+        return point;
+    }
+
+    public Coordinates getEntrance_topPoint(short map_id) {
+        short[] range = getEntrance(map_id, "top");
+        Random r = new Random();
+        Coordinates point = new Coordinates();
+
+        int rand_range = range[0] - range[1];
+        point.x = (short) r.nextInt(rand_range);
+        point.y = 1;
+        return point;
+    }
+
+    public Coordinates getEntrance_bottomPoint(short map_id) {
+        short[] range = getEntrance(map_id, "bottom");
+        Random r = new Random();
+        Coordinates point = new Coordinates();
+        point.x = (short) r.nextInt(range[0]);
+        //TODO: Find the bottommost point
+        point.y = 1;
+        return point;
+    }
+
+    public Coordinates getEntrance_Point(short map_id, Relation r) {
+        Coordinates point = new Coordinates();
+        point.x = 0;
+        point.y = 0;
+
+        switch(r) {
+            case LEFT:
+                point = getEntrance_leftPoint(map_id);
+                break;
+            case RIGHT:
+                point = getEntrance_rightPoint(map_id);
+                break;
+            case ABOVE:
+                point = getEntrance_topPoint(map_id);
+                break;
+            case BELOW:
+                point = getEntrance_bottomPoint(map_id);
+                break;
+            default:
+                break;
+        }
+
+        return point;
     }
 
     private void setEntrance(short id, String side, short max, short min) {
