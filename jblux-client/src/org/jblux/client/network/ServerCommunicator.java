@@ -45,34 +45,24 @@ public class ServerCommunicator {
     private ObjectOutputStream netOut;
     private ServerListener sl;
     private String username;
-    private boolean connected;
     public Player player;
 
     public ServerCommunicator() {
         try {
             socket = new Socket(ServerInfo.SERVER, ServerInfo.PORT);
-            if(!socket.isConnected()) {
-                //Server must be down
-                connected = false;
-            }
-            else {
-                connected = true;
+            if(socket.isConnected()) {
                 netOut = new ObjectOutputStream(socket.getOutputStream());
             }
         } catch (UnknownHostException ex) {
         } catch (IOException ex) {
         }
 
-        if(isConnected()) {
+        if(socket.isConnected()) {
             sl = new ServerListener(socket);
             sl.start();
         }
     }
-
-    public boolean isConnected() {
-        return connected;
-    }
-
+    
     public void connect_player(String player, Coordinates coords) {
         System.out.println("Connecting...");
         username = player;

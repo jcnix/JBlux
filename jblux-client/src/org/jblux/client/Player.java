@@ -25,7 +25,6 @@ import java.util.Calendar;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.common.Relation;
-import org.jblux.util.Coordinates;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
