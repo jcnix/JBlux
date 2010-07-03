@@ -62,7 +62,11 @@ public class ServerCommunicator {
             sl.start();
         }
     }
-    
+
+    public boolean isConnected() {
+        return socket.isConnected();
+    }
+
     public void connect_player(String player, Coordinates coords) {
         System.out.println("Connecting...");
         username = player;
