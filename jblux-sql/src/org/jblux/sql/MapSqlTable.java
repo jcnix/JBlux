@@ -104,12 +104,13 @@ public class MapSqlTable {
             else
                 col = "id";
 
-            String q = String.format("SELECT %s FROM maps WHERE id='%d';",
+            String q = String.format("SELECT map_%s FROM maps WHERE id='%d';",
                     col, mapId);
             ResultSet rs = m_db.query_select(q);
             rs.next();
-            newMap = rs.getShort(rel.toString());
+            newMap = rs.getShort("map_" + rel);
         } catch(SQLException ex) {
+            ex.printStackTrace();
         }
 
         m_db.close();
@@ -208,14 +209,14 @@ public class MapSqlTable {
         m_db.close();
     }
 
-    public Coordinates getEntrance(short map_id, String side) {
+    public Coordinates getEntrance(short map_id, Relation r) {
         m_db.connect();
         Coordinates c = new Coordinates();
 
         String query = "";
         try {
             query = String.format("SELECT x, y FROM map_entrances " +
-                    "WHERE map_id='%d' AND side='%s';", map_id, side);
+                    "WHERE map_id='%d' AND side='%s';", map_id, r.toString());
 
             ResultSet rs = m_db.query_select(query);
             rs.next();
@@ -229,19 +230,19 @@ public class MapSqlTable {
     }
 
     public Coordinates getEntrance_left(short map_id) {
-        return getEntrance(map_id, "left");
+        return getEntrance(map_id, Relation.LEFT);
     }
 
     public Coordinates getEntrance_right(short map_id) {
-        return getEntrance(map_id, "right");
+        return getEntrance(map_id, Relation.RIGHT);
     }
 
     public Coordinates getEntrance_top(short map_id) {
-        return getEntrance(map_id, "top");
+        return getEntrance(map_id, Relation.TOP);
     }
 
     public Coordinates getEntrance_bottom(short map_id) {
-        return getEntrance(map_id, "bottom");
+        return getEntrance(map_id, Relation.BOTTOM);
     }
 
     private void setEntrance(short id, String side, short x, short y) {

@@ -21,13 +21,14 @@
 package org.jblux.common;
 
 public enum Relation {
-    LEFT("map_left"),
-    RIGHT("map_right"),
-    ABOVE("map_above"),
-    BELOW("map_below");
-
+    LEFT("left"),
+    RIGHT("right"),
+    ABOVE("above"),
+    BELOW("below"),
+    TOP("top"),
+    BOTTOM("bottom");
+    
     private final String str;
-
     private Relation(String s) {
         str = s;
     }

@@ -71,7 +71,9 @@ public class Maps {
      */
     public Map getAdjacentMap(Relation rel, short current_map) {
         Map m = getMap(current_map);
+        System.out.println(m.getName() + " " + rel);
         short id = m.get_adjacent_map(rel);
+        System.out.println(id);
         return getMap(id);
     }
 

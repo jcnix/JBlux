@@ -273,6 +273,7 @@ class ClientListener extends Thread {
         }
         else if(c.startsWith(Commands.MAP)) {
             if(c1[1].equals("get")) {
+                System.out.println("Rel: " + c1[2]);
                 Relation r = stringToRelation(c1[2]);
                 String name = c1[3];
                 short id = maps.getID(name);
@@ -281,7 +282,7 @@ class ClientListener extends Thread {
 
                 Coordinates crd = new Coordinates();
                 MapSqlTable mst = new MapSqlTable();
-                crd = mst.getEntrance(m.getID(), "right");
+                crd = mst.getEntrance(m.getID(), Relation.RIGHT);
 
                 //Respond to client
                 String command = String.format("%s goto %s %s", Commands.MAP, map_name, crd);
@@ -313,13 +314,13 @@ class ClientListener extends Thread {
     private Relation stringToRelation(String r) {
         Relation rel;
 
-        if(r.equals("map_left"))
+        if(r.equals("left"))
             rel = Relation.LEFT;
-        else if(r.equals("map_right"))
+        else if(r.equals("right"))
             rel = Relation.RIGHT;
-        else if(r.equals("map_below"))
+        else if(r.equals("below"))
             rel = Relation.BELOW;
-        else if(r.equals("map_above"))
+        else if(r.equals("above"))
             rel = Relation.ABOVE;
         else
             rel = null;
