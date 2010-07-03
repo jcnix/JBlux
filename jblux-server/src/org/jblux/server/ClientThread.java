@@ -281,7 +281,7 @@ class ClientListener extends Thread {
 
                 Coordinates crd = new Coordinates();
                 MapSqlTable mst = new MapSqlTable();
-                crd = mst.getEntrance_Point(m.getID(), Relation.RIGHT);
+                crd = mst.getEntrance(m.getID(), "right");
 
                 //Respond to client
                 String command = String.format("%s goto %s %s", Commands.MAP, map_name, crd);
