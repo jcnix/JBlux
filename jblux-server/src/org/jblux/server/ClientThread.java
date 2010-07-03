@@ -273,7 +273,6 @@ class ClientListener extends Thread {
         }
         else if(c.startsWith(Commands.MAP)) {
             if(c1[1].equals("get")) {
-                System.out.println("Rel: " + c1[2]);
                 Relation r = stringToRelation(c1[2]);
                 String name = c1[3];
                 short id = maps.getID(name);
