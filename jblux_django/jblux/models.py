@@ -12,10 +12,16 @@ class User(models.Model):
     character4 = models.ForeignKey('Character', null=True, related_name='char4')
     character5 = models.ForeignKey('Character', null=True, related_name='char5')
 
+    def __unicode__(self):
+        return self.username
+
 class Character(models.Model):
     name = models.CharField(max_length=50)
     level = models.IntegerField()
     inventory = models.ForeignKey('Inventory', related_name='items')
+
+    def __unicode__(self):
+        return self.name
 
 class Inventory(models.Model):
     character = models.ForeignKey('Character', related_name='player')
@@ -56,6 +62,9 @@ class Inventory(models.Model):
     slot23 = models.ForeignKey('Item', related_name='s23')
     slot24 = models.ForeignKey('Item', related_name='s24')
     slot25 = models.ForeignKey('Item', related_name='s25')
+
+    def __unicode__(self):
+        return self.character
 
 class Item(models.Model):
     types = models.IntegerField()
@@ -119,4 +128,7 @@ class Item(models.Model):
     MaxDurability = models.IntegerField()
     ReqDisenchantSkill = models.IntegerField()
     ArmorDamageModifier = models.IntegerField()
+
+    def __unicode__(self):
+        return self.name
 
