@@ -73,7 +73,7 @@ public class Item implements Serializable {
     public short m_frost_resistance;
     public short m_shadow_resistance;
     public short m_arcane_resistance;
-    public short m_delay;
+    public float m_delay;
     public short m_ammo_type;
     public float m_range;
     public short m_spellid;
