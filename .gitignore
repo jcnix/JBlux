@@ -10,6 +10,7 @@ jblux-server/lib
 *jblux-sql.jar
 *.tar.gz
 jblux_django/settings.py
+jblux_django/**/*.pyc
 jblux_django/*.pyc
 jblux_django/static/media/lib
 

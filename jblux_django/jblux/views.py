@@ -8,7 +8,7 @@ def index(request):
     try:
         user = request.session['user']
     except KeyError:
-        return HttpResponseRedirect('jblux/login')
+        return HttpResponseRedirect('/tmuo/jblux/login')
 
     if user:
         return render_to_response('jblux/index.html', {'user': user})
@@ -25,12 +25,12 @@ def login(request):
         return render_to_response('jblux/login.html', {'form': form},
                 context_instance=RequestContext(request))
 
-    user = authenticate(username, password)
+    user = auth(username, password)
     if user is not None:
         request.session['user'] = user
         if user.is_active:
-            if not request.user.is_authenticated():
-                return HttpResponseRedirect("/jblux/index")
+            if request.user.is_authenticated():
+                return HttpResponseRedirect('jblux/index')
             else:
                 return render_to_response('jblux/login.html', {'form': form},
                         context_instance=RequestContext(request))
@@ -81,10 +81,10 @@ def logout(request):
     request.session.flush()
     return HttpResponseRedirect('jblux/login.html')
 
-def authenticate(username, password):
-    user = User.objects.get(username=username)
-    if user.password == password:
+def auth(username, password):
+    try:
+        user = User.objects.get(username=username, password=password)
         return user
-    else:
+    except User.DoesNotExist:
         return None
 
