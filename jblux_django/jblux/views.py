@@ -8,7 +8,7 @@ def index(request):
     try:
         user = request.session['user']
     except KeyError:
-        return HttpResponseRedirect('/tmuo/jblux/login')
+        return HttpResponseRedirect('/jblux/login')
 
     if user:
         return render_to_response('jblux/index.html', {'user': user})
