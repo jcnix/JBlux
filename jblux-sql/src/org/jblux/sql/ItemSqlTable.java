@@ -196,8 +196,8 @@ public class ItemSqlTable {
             rs.next();
 
             item.m_id = rs.getShort("id");
-            item.m_class = rs.getShort("class");
-            item.m_subclass = rs.getShort("subclass");
+            item.m_class = rs.getShort("type");
+            item.m_subclass = rs.getShort("subtype");
             item.m_name = rs.getString("name");
             item.m_description = rs.getString("description");
             item.m_image = rs.getString("displayimg");
@@ -243,9 +243,9 @@ public class ItemSqlTable {
             item.m_frost_resistance = rs.getShort("frost_res");
             item.m_shadow_resistance = rs.getShort("shadow_res");
             item.m_arcane_resistance = rs.getShort("arcane_res");
-            item.m_delay = rs.getShort("delay");
+            item.m_delay = rs.getFloat("delay");
             item.m_ammo_type = rs.getShort("ammo_type");
-            item.m_range = rs.getFloat("range");
+            item.m_range = rs.getFloat("attack_range");
             item.m_spellid = rs.getShort("spellid");
             item.m_spellTrigger = rs.getShort("spelltrigger");
             item.m_spellCharges = rs.getShort("spellcharges");

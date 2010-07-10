@@ -41,4 +41,3 @@ CREATE TABLE inventory )
     slot24 smallint NOT NULL DEFAULT -1,
     slot25 smallint NOT NULL DEFAULT -1,
 );
-
