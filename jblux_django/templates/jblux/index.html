@@ -7,7 +7,7 @@
 <script src="http://www.java.com/js/deployJava.js"></script> 
 <script> 
    var attributes = { 
-      codebase:'./jblux_media/lib', 
+      codebase:'/tmuo_media/lib', 
       code:'org.lwjgl.util.applet.AppletLoader', 
       archive:'lwjgl_util_applet.jar, lzma.jar', 
       width: 800, 
@@ -26,7 +26,7 @@
       al_mac: 'macosx_natives.jar.lzma',
       al_solaris: 'solaris_natives.jar.lzma',
       progressbar: true,
-      user: {{ user.username }}
+      user: '{{ user.username }}',
       separate_jvm: true
    }; 
 
