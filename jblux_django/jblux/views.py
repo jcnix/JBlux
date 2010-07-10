@@ -7,13 +7,9 @@ from jblux_django.jblux.forms import LoginForm, RegisterForm
 def index(request):
     try:
         user = request.session['user']
+        return render_to_response('jblux/index.html', {'user': user})
     except KeyError:
         return HttpResponseRedirect('/jblux/login')
-
-    if user:
-        return render_to_response('jblux/index.html', {'user': user})
-    else:
-        return HttpResponse("Not logged in")
 
 def login(request):
     form = LoginForm()
@@ -30,7 +26,7 @@ def login(request):
         request.session['user'] = user
         if user.is_active:
             if request.user.is_authenticated():
-                return HttpResponseRedirect('jblux/index')
+                return HttpResponseRedirect('/jblux/index')
             else:
                 return render_to_response('jblux/login.html', {'form': form},
                         context_instance=RequestContext(request))
