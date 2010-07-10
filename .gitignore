@@ -12,5 +12,5 @@ jblux-server/lib
 jblux_django/settings.py
 jblux_django/**/*.pyc
 jblux_django/*.pyc
-jblux_django/static/media/lib
+jblux_django/static/
 

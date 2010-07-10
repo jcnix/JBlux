@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import Context, loader, RequestContext
 from jblux_django.jblux.models import User
 from jblux_django.jblux.forms import LoginForm, RegisterForm
+import hashlib
 
 def index(request):
     try:
@@ -16,7 +17,7 @@ def login(request):
 
     try:
         username = request.POST['username']
-        password = request.POST['password']
+        password = hashlib.sha1(request.POST['password']).hexdigest()
     except Exception:
         return render_to_response('jblux/login.html', {'form': form},
                 context_instance=RequestContext(request))
@@ -44,8 +45,9 @@ def register_new_user(request):
     try:
         username = request.POST['username']
         email = request.POST['email']
-        password = request.POST['password']
-        password2 = request.POST['password2']
+        #Hash passwords immediately
+        password = hashlib.sha1(request.POST['password']).hexdigest()
+        password2 = hashlib.sha1(request.POST['password2']).hexdigest()
     except Exception:
         form = RegisterForm()
         return render_to_response('jblux/register.html', {'form': form},
@@ -77,6 +79,7 @@ def logout(request):
     request.session.flush()
     return HttpResponseRedirect('jblux/login.html')
 
+#Recieves hashed password
 def auth(username, password):
     try:
         user = User.objects.get(username=username, password=password)
