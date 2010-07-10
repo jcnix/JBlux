@@ -52,19 +52,20 @@ public class ServerCommunicator {
             socket = new Socket(ServerInfo.SERVER, ServerInfo.PORT);
             if(socket.isConnected()) {
                 netOut = new ObjectOutputStream(socket.getOutputStream());
+                sl = new ServerListener(socket);
+                sl.start();
             }
         } catch (UnknownHostException ex) {
         } catch (IOException ex) {
         }
-
-        if(socket.isConnected()) {
-            sl = new ServerListener(socket);
-            sl.start();
-        }
     }
 
     public boolean isConnected() {
-        return socket.isConnected();
+        try {
+            return socket.isConnected();
+        } catch(NullPointerException ex) {
+            return false;
+        }
     }
 
     public void connect_player(String player, Coordinates coords) {
