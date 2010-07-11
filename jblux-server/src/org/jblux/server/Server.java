@@ -34,6 +34,7 @@ public class Server {
 
     public Server() {
         System.out.printf("JBlux Server 0.0.1 -- running\n");
+        System.out.printf("Running on %s:%d\n", ServerInfo.LOCAL_IP, ServerInfo.PORT);
         clients = Clients.getInstance();
         
         try {
