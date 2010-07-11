@@ -277,15 +277,20 @@ class ClientListener extends Thread {
                 String name = c1[3];
                 short id = maps.getID(name);
                 Map m = maps.getAdjacentMap(r, id);
-                String map_name = m.getName();
 
-                Coordinates crd = new Coordinates();
-                MapSqlTable mst = new MapSqlTable();
-                crd = mst.getEntrance(m.getID(), Relation.RIGHT);
+                String command = "";
+                if(m != null) {
+                    Coordinates crd = new Coordinates();
+                    MapSqlTable mst = new MapSqlTable();
+                    String map_name = m.getName();
+                    crd = mst.getEntrance(m.getID(), Relation.RIGHT);
+                    command = String.format("%s goto %s %s", Commands.MAP, map_name, crd);
+                }
+                else {
+                    command = String.format("%s stay", Commands.MAP);
+                }
 
                 //Respond to client
-                String command = String.format("%s goto %s %s", Commands.MAP, map_name, crd);
-                System.out.printf("%s\n", command);
                 client.writeString(command);
             }
             else {

@@ -184,9 +184,6 @@ public class Player extends Sprite {
         }
 
         if(change) {
-            //TODO: Don't hardcode this
-            coords.x = 350;
-            coords.y = 250;
             map_name = server.ask_for_map(relation, map_name, this);
             GameCanvas gc = GameCanvas.getInstance();
             gc.setMap(map_name);
