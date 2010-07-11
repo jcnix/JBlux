@@ -66,11 +66,6 @@ def register_new_user(request):
                 password=password,
                 is_admin=False,
                 is_active=True,
-                character1=None,
-                character2=None,
-                character3=None,
-                character4=None,
-                character5=None,
                 )
         return render_to_response('jblux/login.html', {'form': form},
                 context_instance=RequestContext(request))
