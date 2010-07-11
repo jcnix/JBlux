@@ -90,9 +90,9 @@ public class ServerCommunicator {
         writeString(command);
     }
 
-    public String ask_for_map(Relation r, String name, Player p) {
+    public String ask_for_map(Relation r, String map_name, Player p) {
         String map = "";
-        String command = String.format("%s get %s %s", Commands.MAP, r, name);
+        String command = String.format("%s get %s %s", Commands.MAP, r, map_name);
         writeString(command);
 
         while(sl.map_response == null) {
@@ -102,9 +102,12 @@ public class ServerCommunicator {
             }
         }
 
+        if(sl.map_response.equals("stay")) {
+            return map_name;
+        }
+
         map = sl.map_response;
-        p.setCoords(sl.coords);
-        
+        p.setCoords(sl.coords);        
         sl.map_response = null;
         
         return map;
@@ -209,12 +212,12 @@ class ServerListener extends Thread {
             cbObserver.recievedMessage(new ChatMessage(name,message));
         }
         else if(command.startsWith(Commands.MAP)) {
-            String name = c0[2];
-            
             if(c0[1].equals("rm")) {
+                String name = c0[2];
                 players.removePlayer(name);
             }
             else if(c0[1].equals("add")) {
+                String name = c0[2];
                 int x = Integer.parseInt(c0[3]);
                 int y = Integer.parseInt(c0[4]);
 
@@ -229,6 +232,9 @@ class ServerListener extends Thread {
                 coords.x = Integer.parseInt(c0[3]);
                 coords.y = Integer.parseInt(c0[4]);
                 System.out.printf("response: %s @ %s\n", map_response, coords);
+            }
+            else if(c0[1].equals("stay")) {
+                map_response = "stay";
             }
         }
         else if(command.startsWith("put")) {
