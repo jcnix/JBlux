@@ -30,13 +30,15 @@ import org.jblux.util.Coordinates;
 
 public class MapSqlTable {
     private DBManager m_db;
+    private static final String MAP_TABLE = "jblux_map";
+    private static final String ITEMS_TABLE = "jblux_map_items";
 
     public MapSqlTable() {
         m_db = new DBManager();
     }
 
     /**
-     * Intializes all maps and returns them.
+     * Initializes all maps and returns them.
      *
      * Make sure this is only called once.
      * Calling it twice would return the Maps as they appear in the database,
@@ -53,7 +55,7 @@ public class MapSqlTable {
         m_db.connect();
 
         try {
-            String q = String.format("SELECT * FROM maps;");
+            String q = String.format("SELECT * FROM %s;", MAP_TABLE);
             ResultSet map_rs = m_db.query_select(q);
             
             while(map_rs.next()) {
@@ -62,7 +64,7 @@ public class MapSqlTable {
                 Vector<Item> items = new Vector<Item>();
 
                 //Get items on map.
-                q = String.format("SELECT * FROM map_items WHERE map_id='"+id+"';");                
+                q = String.format("SELECT * FROM %s WHERE map_id='%d';", ITEMS_TABLE, id);
                 ResultSet items_rs = m_db.query_select(q);
                 if(items_rs != null) {
                     while(items_rs.next()) {
@@ -104,11 +106,11 @@ public class MapSqlTable {
             else
                 col = "id";
 
-            String q = String.format("SELECT map_%s FROM maps WHERE id='%d';",
-                    col, mapId);
+            String q = String.format("SELECT map_%s_id FROM %s WHERE id='%d';",
+                    col, MAP_TABLE, mapId);
             ResultSet rs = m_db.query_select(q);
             rs.next();
-            newMap = rs.getShort("map_" + rel);
+            newMap = rs.getShort("map_" + rel + "_id");
         } catch(SQLException ex) {
             ex.printStackTrace();
         }
@@ -122,7 +124,7 @@ public class MapSqlTable {
         m_db.connect();
 
         try {
-            String q = String.format("SELECT name FROM maps WHERE id='%d';", id);
+            String q = String.format("SELECT name FROM %s WHERE id='%d';", MAP_TABLE, id);
             ResultSet rs = m_db.query_select(q);
             rs.next();
             name = rs.getString("name");
@@ -138,7 +140,7 @@ public class MapSqlTable {
         m_db.connect();
 
         try {
-            String q = String.format("SELECT id FROM maps WHERE name='%s';", name);
+            String q = String.format("SELECT id FROM %s WHERE name='%s';", MAP_TABLE, name);
             ResultSet rs = m_db.query_select(q);
             rs.next();
             id = rs.getShort("id");
@@ -154,13 +156,13 @@ public class MapSqlTable {
         m_db.connect();
 
         try {
-            String q = String.format("SELECT id FROM maps WHERE NAME='%s'", name);
+            String q = String.format("SELECT id FROM %s WHERE NAME='%s'", MAP_TABLE, name);
             ResultSet rs = m_db.query_select(q);
             rs.next();
             short map_id = rs.getShort("id");
 
-            q = String.format("SELECT item_id FROM map_items WHERE map_id='%d';",
-                    map_id);
+            q = String.format("SELECT item_id FROM %s WHERE map_id='%d';",
+                    ITEMS_TABLE, map_id);
             rs = m_db.query_select(q);
 
             ItemSqlTable ist = new ItemSqlTable();
@@ -184,7 +186,7 @@ public class MapSqlTable {
 
         if(m_db.doesRecordExist(name, "name", "maps")) {
             exists = true;
-            query = "DELETE FROM maps WHERE name='"+name+"';";
+            query = String.format("DELETE FROM %s WHERE name='"+name+"';", MAP_TABLE);
             m_db.query_select(query);
         }
 
@@ -215,13 +217,14 @@ public class MapSqlTable {
 
         String query = "";
         try {
-            query = String.format("SELECT x, y FROM map_entrances " +
-                    "WHERE map_id='%d' AND side='%s';", map_id, r.toString());
+            query = String.format("SELECT entrance_%s_x, entrance_%s_y FROM %s " +
+                    "WHERE id='%d';", r, r, MAP_TABLE, map_id);
+            System.out.println(query);
 
             ResultSet rs = m_db.query_select(query);
             rs.next();
-            c.x = rs.getShort("x");
-            c.y = rs.getShort("y");
+            c.x = rs.getShort(String.format("entrance_%s_x", r));
+            c.y = rs.getShort(String.format("entrance_%s_y", r));
         } catch(SQLException ex) {
         }
 

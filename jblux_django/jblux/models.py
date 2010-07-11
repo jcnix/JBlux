@@ -132,3 +132,22 @@ class Item(models.Model):
     def __unicode__(self):
         return self.name
 
+class Map(models.Model):
+    name = models.CharField(max_length=50)
+    map_left = models.ForeignKey('Map', blank=True, null=True, related_name='m_left')
+    map_right = models.ForeignKey('Map', blank=True, null=True, related_name='m_right')
+    map_above = models.ForeignKey('Map', blank=True, null=True, related_name='m_above')
+    map_below = models.ForeignKey('Map', blank=True, null=True, related_name='m_below')
+    items = models.ManyToManyField('Item', blank=True, null=True)
+    entrance_left_x = models.IntegerField(blank=True, null=True)
+    entrance_left_y = models.IntegerField(blank=True, null=True)
+    entrance_right_x = models.IntegerField(blank=True, null=True)
+    entrance_right_y = models.IntegerField(blank=True, null=True)
+    entrance_top_x = models.IntegerField(blank=True, null=True)
+    entrance_top_y = models.IntegerField(blank=True, null=True)
+    entrance_bottom_x = models.IntegerField(blank=True, null=True)
+    entrance_bottom_y = models.IntegerField(blank=True, null=True)
+
+    def __unicode__(self):
+        return self.name
+

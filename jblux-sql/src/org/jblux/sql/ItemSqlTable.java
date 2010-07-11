@@ -30,6 +30,7 @@ import org.jblux.common.items.Item;
 public class ItemSqlTable {
     private DBManager m_db;
     private Connection m_conn;
+    private static final String TABLE = "jblux_item";
 
     public ItemSqlTable() {
         m_db = new DBManager();
@@ -53,7 +54,7 @@ public class ItemSqlTable {
     public ResultSet getAllValues(short id) {
         m_db.connect();
 
-        String q = String.format("SELECT * FROM items WHERE id='%d';", id);
+        String q = String.format("SELECT * FROM %s WHERE id='%d';", TABLE, id);
         ResultSet item_rs = m_db.query_select(q);
 
         m_db.close();
@@ -63,7 +64,7 @@ public class ItemSqlTable {
     public ResultSet getAllValues(String name) {
         m_db.connect();
 
-        String q = String.format("SELECT * FROM items WHERE name='%s';", name);
+        String q = String.format("SELECT * FROM %s WHERE name='%s';", TABLE, name);
         ResultSet item_rs = m_db.query_select(q);
 
         m_db.close();
@@ -72,7 +73,7 @@ public class ItemSqlTable {
 
     public ResultSet getAllItemNames() {
         m_db.connect();
-        ResultSet rs = m_db.query_select("SELECT name FROM items");
+        ResultSet rs = m_db.query_select(String.format("SELECT name FROM %s", TABLE));
         m_db.close();
         return rs;
     }
@@ -177,7 +178,7 @@ public class ItemSqlTable {
         m_db.connect();
         
         try {
-            String q = String.format("SELECT id FROM items WHERE name='%s';", name);
+            String q = String.format("SELECT id FROM %s WHERE name='%s';", TABLE, name);
             ResultSet rs = m_db.query_select(q);
             rs.next();
             id = rs.getShort("id");
