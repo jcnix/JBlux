@@ -42,33 +42,37 @@ def register(request):
             context_instance=RequestContext(request))
 
 def register_new_user(request):
-    try:
-        username = request.POST['username']
-        email = request.POST['email']
-        #Hash passwords immediately
-        password = hashlib.sha1(request.POST['password']).hexdigest()
-        password2 = hashlib.sha1(request.POST['password2']).hexdigest()
-    except Exception:
-        form = RegisterForm()
-        return render_to_response('jblux/register.html', {'form': form},
-                context_instance=RequestContext(request))
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            #Hash passwords immediately
+            password = hashlib.sha1(form.cleaned_data['password']).hexdigest()
+            password2 = hashlib.sha1(form.cleaned_data['password2']).hexdigest()
 
-    if password != password2:
-        #passwords don't match
-        return render_to_response('jblux/register.html', {'form': form},
-                context_instance=RequestContext(request))
+            if password != password2:
+                #passwords don't match
+                form = RegisterForm()
+                return render_to_response('jblux/register.html', {'form': form},
+                        context_instance=RequestContext(request))
+            else:
+                #successful
+                user = User.objects.create(
+                    username=username,
+                    email=email,
+                    password=password,
+                    is_admin=False,
+                    is_active=True,
+                    )
+
+                form = LoginForm()
+                return render_to_response('jblux/login.html', {'form': form},
+                        context_instance=RequestContext(request))
+        else:
+            return HttpResponse("Invalid")
     else:
-        #successful
-        form = LoginForm()
-        user = User.objects.create(
-                username=username,
-                email=email,
-                password=password,
-                is_admin=False,
-                is_active=True,
-                )
-        return render_to_response('jblux/login.html', {'form': form},
-                context_instance=RequestContext(request))
+        return HttpResponse("Invalid")
 
 def logout(request):
     request.session.flush()
