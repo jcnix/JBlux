@@ -1,9 +1,11 @@
 from django.db import models
+from django.core.validators import MinLengthValidator
 
 class User(models.Model):
-    username = models.CharField(max_length=50)
+    min_name = MinLengthValidator(3)
+    username = models.CharField(max_length=50, validators=[min_name], unique=True)
     password = models.CharField(max_length=40) #SHA-1
-    email = models.CharField(max_length=75)
+    email = models.CharField(max_length=75, unique=True)
     is_admin = models.BooleanField()
     is_active = models.BooleanField()
     characters = models.ManyToManyField('Character', blank=True, null=True, related_name='char1')
@@ -12,7 +14,7 @@ class User(models.Model):
         return self.username
 
 class Character(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     level = models.IntegerField(default=1)
     inventory = models.ForeignKey('Inventory', blank=True, null=True, related_name='items')
     strength = models.IntegerField()
@@ -70,7 +72,7 @@ class Inventory(models.Model):
 class Item(models.Model):
     types = models.IntegerField()
     subtype = models.IntegerField()
-    name = models.CharField(max_length=75)
+    name = models.CharField(max_length=75, unique=True)
     description = models.CharField(max_length=255)
     diplayimg = models.CharField(max_length=255)
     quality = models.IntegerField()
@@ -134,7 +136,7 @@ class Item(models.Model):
         return self.name
 
 class Map(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     map_left = models.ForeignKey('Map', blank=True, null=True, related_name='m_left')
     map_right = models.ForeignKey('Map', blank=True, null=True, related_name='m_right')
     map_above = models.ForeignKey('Map', blank=True, null=True, related_name='m_above')
