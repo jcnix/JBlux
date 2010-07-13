@@ -1,23 +1,41 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
+        <link href="/tmuo_media/css/tmu.css" rel="stylesheet" type="text/css">
+        <!--[if IE]><link href="tmuo_media/css/tmu_ie.css" rel="stylesheet" type="text/css"><![endif]-->
         <title>{% block title %}{% endblock %} | TMUO</title>
     </head>
 
     <body>
-        <div id="header">
+        <center><a href="{% url jblux_django.jblux.views.index %}"><img src="/tmuo_media/img/tmupage.png"/></a></center>
+        <div class="urlbar">
+            <div class="align-left1"><a href="{% url jblux_django.jblux.views.index %}"><img src="/tmuo_media/img/home.png"/></a></div>
+            <div class="align-left"><a href="{% url jblux_django.jblux.views.game %}"><img src="/tmuo_media/img/play.png"/></a></div>
+            <div class="align-left"><a href="http://forums.shyguystoybox.net/index.php?act=idx"><img src="/tmuo_media/img/forums.png"/></a></div>
+            <div class="align-left"><a href="{% url jblux_django.jblux.views.info %}"><img src="/tmuo_media/img/info.png"/></a></div>
+            <div class="align-left"><a href="{% url jblux_django.jblux.views.screens %}"><img src="/tmuo_media/img/screens.png"/></a></div>
+            <div class="align-left"><a href="{% url jblux_django.jblux.views.help %}"><img src="/tmuo_media/img/help.png"/></a></div>
         </div>
-
-        <div id="content">
+        
+        <!--<div class="home">-->
+            <!--<a href="{% url jblux_django.jblux.views.index %}"><img src="/tmuo_media/img/home.png" class="home"/></a>-->
+            <!--<p>Home</p>-->
+        <!--</div>-->
+        
+        <center>
+        <div class="content">
+            <a href="{% url jblux_django.jblux.views.polls %}"><img src="/tmuo_media/img/poll.png"/></a>
             {% block content %}
             {% endblock %}
         </div>
-
-        <div id="sidebar">
+        </center>
+        
+        <center>
+        <div class="disclaimer">
+            <center>All Mario and Mario related characters are copyright to Nintendo. For contact info, see the "Help" page.</center>
         </div>
-
-        <div id="footer">
-        </div>
+        </center>
     </body>
 </html>
 

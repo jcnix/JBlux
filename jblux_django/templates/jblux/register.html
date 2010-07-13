@@ -3,7 +3,7 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-
+<center>
 {% if form.errors %}
 <p>Your passwords didn't match.  Please try again.</p>
 {% endif %}
@@ -16,6 +16,6 @@
         {% endfor %}
     <p><input type="submit" value="Register" /></p>
 </form>
-
+</center>
 {% endblock %}
 
