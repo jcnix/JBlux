@@ -6,7 +6,8 @@ from jblux_django.jblux.forms import LoginForm, RegisterForm
 import hashlib
 
 def index(request):
-    return render_to_response('jblux/index.html')
+    return render_to_response('jblux/index.html',
+            context_instance=RequestContext(request))
 
 def login(request):
     form = LoginForm()
@@ -22,11 +23,7 @@ def login(request):
     if user is not None:
         request.session['user'] = user
         if user.is_active:
-            if request.user.is_authenticated():
-                return HttpResponseRedirect('/jblux/index')
-            else:
-                return render_to_response('jblux/login.html', {'form': form},
-                        context_instance=RequestContext(request))
+            return HttpResponseRedirect('/jblux/index')
         else:
             return HttpResponse("Disabled")
     else:
@@ -73,12 +70,13 @@ def register_new_user(request):
 
 def logout(request):
     request.session.flush()
-    return HttpResponseRedirect('jblux/login.html')
+    return HttpResponseRedirect('/jblux/login')
 
 def game(request):
     try:
         user = request.session['user']
-        return render_to_response('jblux/game.html', {'user': user})
+        return render_to_response('jblux/game.html',
+                context_instance=RequestContext(request))
     except KeyError:
         return HttpResponseRedirect('/jblux/login')
 

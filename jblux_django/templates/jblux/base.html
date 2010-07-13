@@ -19,6 +19,12 @@
             <div class="align-left"><a href="{% url jblux_django.jblux.views.info %}"><img src="/tmuo_media/img/info.png"/></a></div>
             <div class="align-left"><a href="{% url jblux_django.jblux.views.screens %}"><img src="/tmuo_media/img/screens.png"/></a></div>
             <div class="align-left"><a href="{% url jblux_django.jblux.views.help %}"><img src="/tmuo_media/img/help.png"/></a></div>
+
+            {% if not my_user %}
+            <div class="align-right1"><a href="{% url jblux_django.jblux.views.login %}">Login</a></div>
+            {% else %}
+            <div class="alignt-right"><a href="{% url jblux_django.jblux.views.logout %}">Logout</a></div>
+            {% endif %}
         </div>
         
         <div id="content">
