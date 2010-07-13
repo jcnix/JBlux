@@ -71,14 +71,6 @@ public class GameplayState extends BasicGameState {
         }
         else {
             username = "casey";
-            try {
-                //Put this file in dist/ with the jar
-                BufferedReader r = new BufferedReader(new FileReader("testmap.txt"));
-                map_test = r.readLine();
-                System.out.printf("***Map: %s", map_test);
-            } catch (FileNotFoundException ex) {
-            } catch (IOException ex) {
-            }
         }
 
         if(map_test.equals(""))
