@@ -10,26 +10,11 @@
 
 <form method="post" action="{% url jblux_django.jblux.views.register_new_user %}">
     {% csrf_token %}
-    <table>
-        <tr>
-            <td>{{ form.username.label_tag }}</td>
-            <td>{{ form.username }}</td>
-        </tr>
-        <tr>
-            <td>{{ form.email.label_tag }}</td>
-            <td>{{ form.email }}</td>
-        </tr>
-        <tr>
-            <td>{{ form.password.label_tag }}</td>
-            <td>{{ form.password }}</td>
-        </tr>
-        <tr>
-            <td>{{ form.password2.label_tag }}</td>
-            <td>{{ form.password2 }}</td>
-        </tr>
-    </table>
-
-    <input type="submit" value="login" />
+        {% for field in form.visible_fields %}
+        <p>{{ field.errors }}</p>
+        <p>{{ field.label_tag }}: {{ field }}</p>
+        {% endfor %}
+    <p><input type="submit" value="Register" /></p>
 </form>
 
 {% endblock %}

@@ -69,9 +69,11 @@ def register_new_user(request):
                 form = LoginForm()
                 return HttpResponseRedirect('/jblux/login')
         else:
-            return HttpResponse("Invalid")
+            return render_to_response('jblux/register.html', {'form': form},
+                    context_instance=RequestContext(request))
     else:
-        return HttpResponse("Invalid")
+        return render_to_response('jblux/register.html', {'form': form},
+                context_instance=RequestContext(request))
 
 def logout(request):
     request.session.flush()
