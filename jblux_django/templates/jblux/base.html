@@ -8,8 +8,11 @@
     </head>
 
     <body>
-        <center><a href="{% url jblux_django.jblux.views.index %}"><img src="/tmuo_media/img/tmupage.png"/></a></center>
-        <div class="urlbar">
+        <div id="wrap">
+        <div id="header">
+            <center><a href="{% url jblux_django.jblux.views.index %}"><img src="/tmuo_media/img/tmupage.png"/></a></center>
+        </div>
+        <div id="urlbar">
             <div class="align-left1"><a href="{% url jblux_django.jblux.views.index %}"><img src="/tmuo_media/img/home.png"/></a></div>
             <div class="align-left"><a href="{% url jblux_django.jblux.views.game %}"><img src="/tmuo_media/img/play.png"/></a></div>
             <div class="align-left"><a href="http://forums.shyguystoybox.net/index.php?act=idx"><img src="/tmuo_media/img/forums.png"/></a></div>
@@ -18,21 +21,19 @@
             <div class="align-left"><a href="{% url jblux_django.jblux.views.help %}"><img src="/tmuo_media/img/help.png"/></a></div>
         </div>
         
-        <!--<div class="home">-->
-            <!--<a href="{% url jblux_django.jblux.views.index %}"><img src="/tmuo_media/img/home.png" class="home"/></a>-->
-            <!--<p>Home</p>-->
-        <!--</div>-->
-        
-        <center>
-        <div class="content">
-            <a href="{% url jblux_django.jblux.views.polls %}"><img src="/tmuo_media/img/poll.png"/></a>
+        <div id="content">
             {% block content %}
             {% endblock %}
         </div>
-        </center>
+        
+        <div id="sidebar">
+            <a href="{% url jblux_django.jblux.views.polls %}"><img src="/tmuo_media/img/poll.png"/></a>
+        </div>
+        &nbsp;
+        </div>
         
         <center>
-        <div class="disclaimer">
+        <div id="disclaimer">
             <center>All Mario and Mario related characters are copyright to Nintendo. For contact info, see the "Help" page.</center>
         </div>
         </center>
