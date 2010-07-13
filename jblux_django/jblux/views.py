@@ -6,11 +6,7 @@ from jblux_django.jblux.forms import LoginForm, RegisterForm
 import hashlib
 
 def index(request):
-    try:
-        user = request.session['user']
-        return render_to_response('jblux/index.html', {'user': user})
-    except KeyError:
-        return HttpResponseRedirect('/jblux/login')
+    return render_to_response('jblux/index.html')
 
 def login(request):
     form = LoginForm()
@@ -42,37 +38,61 @@ def register(request):
             context_instance=RequestContext(request))
 
 def register_new_user(request):
-    try:
-        username = request.POST['username']
-        email = request.POST['email']
-        #Hash passwords immediately
-        password = hashlib.sha1(request.POST['password']).hexdigest()
-        password2 = hashlib.sha1(request.POST['password2']).hexdigest()
-    except Exception:
-        form = RegisterForm()
-        return render_to_response('jblux/register.html', {'form': form},
-                context_instance=RequestContext(request))
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            #Hash passwords immediately
+            password = hashlib.sha1(form.cleaned_data['password']).hexdigest()
+            password2 = hashlib.sha1(form.cleaned_data['password2']).hexdigest()
 
-    if password != password2:
-        #passwords don't match
-        return render_to_response('jblux/register.html', {'form': form},
-                context_instance=RequestContext(request))
+            if password != password2:
+                #passwords don't match
+                form = RegisterForm()
+                return render_to_response('jblux/register.html', {'form': form},
+                        context_instance=RequestContext(request))
+            else:
+                #successful
+                user = User.objects.create(
+                    username=username,
+                    email=email,
+                    password=password,
+                    is_admin=False,
+                    is_active=True,
+                    )
+
+                form = LoginForm()
+                return HttpResponseRedirect('/jblux/login')
+        else:
+            return render_to_response('jblux/register.html', {'form': form},
+                    context_instance=RequestContext(request))
     else:
-        #successful
-        form = LoginForm()
-        user = User.objects.create(
-                username=username,
-                email=email,
-                password=password,
-                is_admin=False,
-                is_active=True,
-                )
-        return render_to_response('jblux/login.html', {'form': form},
+        return render_to_response('jblux/register.html', {'form': form},
                 context_instance=RequestContext(request))
 
 def logout(request):
     request.session.flush()
     return HttpResponseRedirect('jblux/login.html')
+
+def game(request):
+    try:
+        user = request.session['user']
+        return render_to_response('jblux/game.html', {'user': user})
+    except KeyError:
+        return HttpResponseRedirect('/jblux/login')
+
+def info(request):
+    return HttpResponse("Not Implemented Yet!")
+
+def screens(request):
+    return HttpResponse("Not Implemented Yet!")
+
+def help(request):
+    return HttpResponse("Not Implemented Yet!")
+
+def polls(request):
+    return HttpResponse("Not Implemented Yet!")
 
 #Recieves hashed password
 def auth(username, password):

@@ -1,0 +1,36 @@
+{% extends "jblux/base.html" %}
+
+{% block title %}Game{% endblock %}
+
+{% block content %}
+<center>
+<script src="http://www.java.com/js/deployJava.js"></script> 
+<script> 
+var attributes = { 
+    codebase:'/tmuo_media/lib', 
+    code:'org.lwjgl.util.applet.AppletLoader', 
+    archive:'lwjgl_util_applet.jar, lzma.jar', 
+    width: 800, 
+    height: 600 
+}; 
+
+var parameters = { 
+    al_title: 'JBlux', 
+    al_main: 'org.newdawn.slick.AppletGameContainer',
+    game: 'org.jblux.client.JBlux',
+    al_logo: 'appletlogo.png',
+    al_progressbar: 'appletprogress.gif',
+    al_jars: 'slick.jar, jblux.jar, jblux-common.jar, lwjgl.jar.pack.lzma, jinput.jar.pack.lzma, lwjgl_util.jar.pack.lzma',
+    al_windows: 'windows_natives.jar.lzma',
+    al_linux: 'linux_natives.jar.lzma',
+    al_mac: 'macosx_natives.jar.lzma',
+    al_solaris: 'solaris_natives.jar.lzma',
+    progressbar: true,
+    user: '{{ user.username }}',
+    separate_jvm: true
+}; 
+
+deployJava.runApplet(attributes, parameters, '1.6'); 
+</script> 
+</center>
+{% endblock %}

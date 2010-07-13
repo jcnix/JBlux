@@ -1,0 +1,82 @@
+body {
+    background-repeat: repeat-x;
+    background-image: url(background2.png);
+    background-color: #7DD5FF;
+    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    overflow:-moz-scrollbars-vertical;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+ 
+img
+{
+    border: 0;
+}
+ 
+a
+{
+  outline: none;
+}
+ 
+.align-right {
+    float:right; margin: 0 0 0px 0px;
+}
+ 
+.urlbar {
+    background-image: url(urlbar.png);
+    background-repeat: no-repeat;
+    background-position: top center;
+    width: 1001px; float: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -3px;
+    margin-bottom: auto;
+    height: 125px;
+}
+ 
+ 
+ 
+.home
+{
+position:relative ;
+    top:-60px;
+    bottom:0px;
+    left:-211px;
+    right:0px;
+}
+ 
+ 
+ 
+.news {
+    background-image: url(plain.png);
+    position:relative;
+    top:-123px;
+    bottom:0px;
+    left:0px;
+    right:0px;
+    width: 1002px;
+    height: 800;
+    text-align: left;
+}
+ 
+ 
+.updates {
+    float: right; margin: 0 0 0px 0px; 
+    width: 839;
+    margin-top: -145px;
+}
+ 
+.disclaimer {
+    background-image: url(bottom.png);
+    background-repeat: no-repeat;
+    position:relative;
+    top:-123px;
+    bottom:0px;
+    left:0px;
+    right:0px;
+    width: 1002px;
+    height: 90px;
+    text-align: left;
+    font-size: 0.7em;
+} 

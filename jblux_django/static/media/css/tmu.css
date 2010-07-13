@@ -1,0 +1,115 @@
+body,
+html {
+    margin: 0;
+    padding: 0;
+    background-repeat: repeat-x;
+    background-image: url(/tmuo_media/img/background2.png);
+    background-color: #7CD5FF;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+#wrap {
+    width: 1001px;
+    margin: 0 auto;
+    background-image: url(/tmuo_media/img/plain.png);
+    vertical-align: bottom;
+}
+
+img
+{
+    border: 0;
+}
+
+a
+{
+    outline: none;
+}
+
+p
+{
+    color: black;
+}
+
+.align-right {
+    float:right;
+    margin: 0 0 0px 0px;
+}
+
+.align-left1 {
+    float:left;
+    margin: 0 0 0px 0px;
+}
+
+.align-left {
+    float:left;
+    margin: 0 0 0px 2px;
+}
+
+#urlbar {
+    background-image: url(/tmuo_media/img/urlbar.png);
+    background-repeat: no-repeat;
+    background-position: top center;
+    width: 1001px; float: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    height: 125px;
+}
+
+#content {
+    float: right;
+    position:relative;
+    top: -60px;
+    bottom:0px;
+    left:0px;
+    right:0px;
+    width: 843px;
+    text-align: left;
+}
+
+#sidebar {
+    float: left;
+    position:relative;
+    top: -60px;
+    bottom:0px;
+    left:0px;
+    right:0px;
+    width: 843px;
+    width: 158px;
+}
+
+.updates {
+    float:right;
+    margin: 0px 0px 0px 0px; 
+    width: 839px;
+}
+
+#disclaimer {
+    clear:both;
+    margin-top: 50em;
+    background-image: url(/tmuo_media/img/bottom.png);
+    background-repeat: no-repeat;
+    width: 1001px;
+    height: 90px;
+    text-align: left;
+    font-size: 0.7em;
+    position: relative;
+    top: -60px;
+}
+
+.screenshots {
+    margin: 0 0 0px 55px;
+    border: 2px solid #2D98AF;
+}
+
+.screenpage {
+    position:relative;
+    top:-122px;
+    bottom:0px;
+    left:0px;
+    right:0px;
+    width: 1001px;
+    height: 700px;
+    text-align: left;
+}

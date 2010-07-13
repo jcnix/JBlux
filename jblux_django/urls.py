@@ -11,3 +11,8 @@ urlpatterns = patterns('',
     (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/tmuo_media/favicon.ico'}),
 )
 
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^tmuo_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    )
+

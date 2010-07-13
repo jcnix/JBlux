@@ -12,5 +12,7 @@ jblux-server/lib
 jblux_django/settings.py
 jblux_django/**/*.pyc
 jblux_django/*.pyc
-jblux_django/static/
+jblux_django/static/media/lib
+jblux_django/static/media/img
+jblux_django/static/media/favicon.ico
 
