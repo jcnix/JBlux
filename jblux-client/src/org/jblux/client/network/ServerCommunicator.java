@@ -117,6 +117,7 @@ public class ServerCommunicator {
         String command = String.format("%s %s %s", Commands.AUTH, username, password);
         System.out.println(command);
         writeString(command);
+        boolean auth = false;
 
         while(sl.response == null) {
             try {
@@ -126,11 +127,11 @@ public class ServerCommunicator {
         }
         
         if(sl.response.equals("true")) {
-            return true;
+            auth = true;
         }
-        else {
-            return false;
-        }
+
+        sl.response = null;
+        return auth;
     }
 
     public void close() {
