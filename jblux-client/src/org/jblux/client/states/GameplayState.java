@@ -26,8 +26,6 @@ import org.jblux.client.Sprite;
 import org.jblux.client.gui.GUI;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ServerCommunicator;
-import java.applet.Applet;
-import org.newdawn.slick.AppletGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -38,16 +36,18 @@ public class GameplayState extends BasicGameState {
     private int stateID = -1;
     private GameMap map;
     private Player player;
+    private String player_name;
     private GameCanvas canvas;
     private ServerCommunicator server;
 
     private Sprite npc;
     private GUI gui;
     
-    public GameplayState(int stateID, ServerCommunicator server)
+    public GameplayState(int stateID, ServerCommunicator server, String player_name)
     {
         this.stateID = stateID;
         this.server = server;
+        this.player_name = player_name;
     }
  
     @Override
@@ -57,33 +57,9 @@ public class GameplayState extends BasicGameState {
  
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        String username = "";
-        String password = "";
-
-        boolean authorized = false;
-        if (gc instanceof AppletGameContainer.Container) {
-            // get the parameters by casting container and getting the applet instance
-            Applet applet = ((AppletGameContainer.Container) gc).getApplet();
-            username = applet.getParameter("user");
-            password = applet.getParameter("password");
-            authorized = server.authenticate(username, password);
-        }
-        else {
-            username = "casey-test";
-            password = "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8";
-            //password = "wrong password";
-            authorized = server.authenticate(username, password);
-        }
-
-        if(!authorized) {
-            //Display some error
-            return;
-        }
-
         String map_test = "residential";
-
+        player = new Player(player_name, server);
         map = new GameMap(map_test);
-        player = new Player(username, server);
         canvas = GameCanvas.getInstance();
         canvas.init(player, map_test);
         //canvas = new GameCanvas(player, map_test);

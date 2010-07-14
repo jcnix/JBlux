@@ -20,11 +20,13 @@
 
 package org.jblux.client;
 
+import java.applet.Applet;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.client.states.MainMenuState;
 import org.jblux.client.states.GameplayState;
 import org.jblux.client.states.ServerDownState;
 import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.AppletGameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -43,8 +45,32 @@ public class JBlux extends StateBasedGame {
             this.enterState(SERVERDOWNSTATE);
         }
         else {
+            GameContainer gc = this.getContainer();
+            String username = "";
+            String password = "";
+
+            boolean authorized = false;
+            if (gc instanceof AppletGameContainer.Container) {
+                // get the parameters by casting container and getting the applet instance
+                Applet applet = ((AppletGameContainer.Container) gc).getApplet();
+                username = applet.getParameter("user");
+                password = applet.getParameter("password");
+                authorized = server.authenticate(username, password);
+            }
+            else {
+                username = "casey-test";
+                password = "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8";
+                //password = "wrong password";
+                authorized = server.authenticate(username, password);
+            }
+
+            if(!authorized) {
+                //Display some error
+                return;
+            }
+
             this.addState(new MainMenuState(MAINMENUSTATE));
-            this.addState(new GameplayState(GAMEPLAYSTATE, server));
+            this.addState(new GameplayState(GAMEPLAYSTATE, server, username));
             this.enterState(MAINMENUSTATE);
         }
     }
