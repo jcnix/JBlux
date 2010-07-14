@@ -1,0 +1,6 @@
+7-18-2010 Update
+****************
+- Implement Royce's site design
+- Do input validation during registration process
+- Make game client authenticate with server to prevent spoofing
+
