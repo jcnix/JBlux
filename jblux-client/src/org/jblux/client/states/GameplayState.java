@@ -27,10 +27,6 @@ import org.jblux.client.gui.GUI;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ServerCommunicator;
 import java.applet.Applet;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import org.newdawn.slick.AppletGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -62,19 +58,29 @@ public class GameplayState extends BasicGameState {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         String username = "";
-        String map_test = "";
+        String password = "";
 
+        boolean authorized = false;
         if (gc instanceof AppletGameContainer.Container) {
             // get the parameters by casting container and getting the applet instance
             Applet applet = ((AppletGameContainer.Container) gc).getApplet();
             username = applet.getParameter("user");
+            password = applet.getParameter("password");
+            authorized = server.authenticate(username, password);
         }
         else {
-            username = "casey";
+            username = "casey-test";
+            password = "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8";
+            //password = "wrong password";
+            authorized = server.authenticate(username, password);
         }
 
-        if(map_test.equals(""))
-            map_test = "residential";
+        if(!authorized) {
+            //Display some error
+            return;
+        }
+
+        String map_test = "residential";
 
         map = new GameMap(map_test);
         player = new Player(username, server);

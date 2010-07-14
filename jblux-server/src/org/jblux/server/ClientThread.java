@@ -33,6 +33,7 @@ import org.jblux.common.Relation;
 import org.jblux.common.items.Inventory;
 import org.jblux.sql.DBManager;
 import org.jblux.sql.MapSqlTable;
+import org.jblux.sql.UserTable;
 import org.jblux.util.Base64;
 import org.jblux.util.Coordinates;
 
@@ -101,6 +102,11 @@ public class ClientThread {
     public void move(String username, Coordinates coords) {
         String command = String.format("%s %s %d %d", Commands.MOVE, username, coords.x, coords.y);
         tell_all_clients_on_map(command);
+    }
+
+    public void auth(boolean b) {
+        String command = String.format("%s %b", Commands.AUTH, b);
+        writeString(command);
     }
 
     //Tell the other clients that a player has connected.
@@ -254,6 +260,13 @@ class ClientListener extends Thread {
             coords.x = Integer.parseInt(c1[2]);
             coords.y = Integer.parseInt(c1[3]);
             client.move(username, coords);
+        }
+        else if(c.startsWith(Commands.AUTH)) {
+            String name = c1[1];
+            String pass = c1[2];
+            UserTable ut = new UserTable();
+            boolean b = ut.authenticate(name, pass);
+            client.auth(b);
         }
         else if(c.startsWith(Commands.CONNECT)) {
             username = c1[1];

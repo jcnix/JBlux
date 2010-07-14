@@ -22,6 +22,7 @@ package org.jblux.common;
 
 public class Commands {
     public static final String MOVE = "move";
+    public static final String AUTH = "auth";
     public static final String CONNECT = "connect";
     public static final String DISCONNECT = "disconnect";
     public static final String CHAT = "chat";

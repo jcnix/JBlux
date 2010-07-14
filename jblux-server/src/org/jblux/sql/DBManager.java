@@ -42,7 +42,7 @@ public class DBManager {
         try {
             Class.forName("org.postgresql.Driver");
         } catch(ClassNotFoundException ex) {
-            System.out.println("Could not connect to DB");
+            System.out.println("Could not find PostgreSQL JDBC driver");
             return false;
         }
 
