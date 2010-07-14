@@ -67,9 +67,9 @@ public class Map {
             id = map_left;
         else if(r == Relation.RIGHT)
             id = map_right;
-        else if(r == Relation.ABOVE)
+        else if(r == Relation.TOP)
             id = map_above;
-        else if(r == Relation.BELOW)
+        else if(r == Relation.BOTTOM)
             id = map_below;
 
         return id;

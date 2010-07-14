@@ -76,8 +76,8 @@ public class MapSqlTable {
 
                 short left = getAdjacentMap(Relation.LEFT, id);
                 short right = getAdjacentMap(Relation.RIGHT, id);
-                short above = getAdjacentMap(Relation.ABOVE, id);
-                short below = getAdjacentMap(Relation.BELOW, id);
+                short above = getAdjacentMap(Relation.TOP, id);
+                short below = getAdjacentMap(Relation.BOTTOM, id);
 
                 Map m = new Map(id, name, items);
                 m.set_adjacent_maps(left, right, above, below);

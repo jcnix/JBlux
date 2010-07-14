@@ -45,7 +45,8 @@ public class MapParser implements CommandParser {
             if(m != null) {
                 MapSqlTable mst = new MapSqlTable();
                 String map_name = m.getName();
-                Coordinates crd = mst.getEntrance(m.getID(), Relation.RIGHT);
+                Relation map_side = RelationUtil.getOpposite(r);
+                Coordinates crd = mst.getEntrance(m.getID(), map_side);
                 cmd = String.format("%s goto %s %s", Commands.MAP, map_name, crd);
                 client.go_to_map(map_name, crd);
             }

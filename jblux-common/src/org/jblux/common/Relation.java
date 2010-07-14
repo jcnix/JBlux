@@ -23,8 +23,6 @@ package org.jblux.common;
 public enum Relation {
     LEFT("left"),
     RIGHT("right"),
-    ABOVE("above"),
-    BELOW("below"),
     TOP("top"),
     BOTTOM("bottom");
     

@@ -28,13 +28,28 @@ public class RelationUtil {
             rel = Relation.LEFT;
         else if(r.equals("right"))
             rel = Relation.RIGHT;
-        else if(r.equals("below"))
-            rel = Relation.BELOW;
-        else if(r.equals("above"))
-            rel = Relation.ABOVE;
+        else if(r.equals("bottom"))
+            rel = Relation.BOTTOM;
+        else if(r.equals("top"))
+            rel = Relation.TOP;
         else
             rel = null;
 
         return rel;
+    }
+
+    public static Relation getOpposite(Relation r) {
+        Relation r2 = null;
+
+        if(r == Relation.LEFT)
+            r2 = Relation.RIGHT;
+        else if(r == Relation.RIGHT)
+            r2 = Relation.LEFT;
+        else if(r == Relation.TOP)
+            r2 = Relation.BOTTOM;
+        else if(r == Relation.BOTTOM)
+            r2 = Relation.TOP;
+
+        return r2;
     }
 }
