@@ -26,7 +26,8 @@ var parameters = {
     al_mac: 'macosx_natives.jar.lzma',
     al_solaris: 'solaris_natives.jar.lzma',
     progressbar: true,
-    user: '{{ user.username }}',
+    user: '{{ my_user.username }}',
+    password: '{{ my_user.password }}',
     separate_jvm: true
 }; 
 
