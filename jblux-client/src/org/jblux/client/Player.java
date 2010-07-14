@@ -184,7 +184,7 @@ public class Player extends Sprite {
         }
 
         if(change) {
-            map_name = server.ask_for_map(relation, map_name, this);
+            map_name = server.goto_map(relation, map_name, this);
             GameCanvas gc = GameCanvas.getInstance();
             gc.setMap(map_name);
             walk_area = gc.getMap().getWalkArea();

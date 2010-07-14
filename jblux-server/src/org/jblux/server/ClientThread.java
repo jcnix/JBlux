@@ -20,7 +20,6 @@
 
 package org.jblux.server;
 
-import org.jblux.server.maps.Maps;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -28,12 +27,9 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.LinkedList;
 import org.jblux.common.Commands;
-import org.jblux.common.Map;
-import org.jblux.common.Relation;
 import org.jblux.common.items.Inventory;
-import org.jblux.sql.DBManager;
-import org.jblux.sql.MapSqlTable;
-import org.jblux.sql.UserTable;
+import org.jblux.server.command.parsers.AuthParser;
+import org.jblux.server.command.parsers.MapParser;
 import org.jblux.util.Base64;
 import org.jblux.util.Coordinates;
 
@@ -44,8 +40,8 @@ public class ClientThread {
     private Socket socket;
     private ObjectOutputStream netOut;
     private Inventory inv;
-    private DBManager dbm;
     private boolean authenticated;
+    private String username;
 
     private Clients clients;
     private ClientListener cl;
@@ -59,8 +55,6 @@ public class ClientThread {
             netOut = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException ex) {
         }
-
-        dbm = new DBManager();
 
         cl = new ClientListener(this, socket);
         cl.start();
@@ -78,6 +72,10 @@ public class ClientThread {
 
     public String getMap() {
         return cl.map;
+    }
+
+    public void setUsername(String name) {
+        this.username = name;
     }
 
     /*
@@ -123,7 +121,6 @@ public class ClientThread {
     //Tell the other clients that a player has connected.
     public void connect(String username, Coordinates coords) {
         String command = String.format("%s get %s %s", Commands.CONNECT, username, coords);
-        System.out.printf("%s connected\n", username);
 
         /* This can't use tell_all_clients yet because it sends data
          * back to the sender.
@@ -157,8 +154,9 @@ public class ClientThread {
     }
 
     /* Put the player on a new map */
-    public void go_to_map(String user, String map, Coordinates coords) {
-        String command = String.format("%s add %s %s", Commands.MAP, user, getCoords());
+    public void go_to_map(String map, Coordinates coords) {
+        System.out.printf("%s connected\n", username);
+        String command = String.format("%s add %s %s", Commands.MAP, username, getCoords());
 
         LinkedList<ClientThread> c = clients.getClients();
         for(int i = 0; i < c.size(); i++) {
@@ -224,8 +222,7 @@ class ClientListener extends Thread {
     private Socket clientSocket;
     private ObjectInputStream netIn;
     private ClientThread client;
-    private Maps maps;
-
+    
     public String username;
     public String map;
     public Coordinates coords;
@@ -235,7 +232,6 @@ class ClientListener extends Thread {
         clientSocket = s;
         coords = new Coordinates();
         username = "";
-        maps = Maps.getInstance();
     }
 
     @Override
@@ -268,11 +264,8 @@ class ClientListener extends Thread {
         String[] c1 = c.split("\\s");
 
         if(c.startsWith(Commands.AUTH)) {
-            String name = c1[1];
-            String pass = c1[2];
-            UserTable ut = new UserTable();
-            boolean b = ut.authenticate(name, pass);
-            client.auth(b);
+            AuthParser ap = new AuthParser();
+            ap.parse(c1, client);
         }
 
         //Ignore any other command if not authenticated.
@@ -302,34 +295,8 @@ class ClientListener extends Thread {
             client.sendChatMessage(username, message);
         }
         else if(c.startsWith(Commands.MAP)) {
-            if(c1[1].equals("get")) {
-                Relation r = stringToRelation(c1[2]);
-                String name = c1[3];
-                short id = maps.getID(name);
-                Map m = maps.getAdjacentMap(r, id);
-
-                String command = "";
-                if(m != null) {
-                    Coordinates crd = new Coordinates();
-                    MapSqlTable mst = new MapSqlTable();
-                    String map_name = m.getName();
-                    crd = mst.getEntrance(m.getID(), Relation.RIGHT);
-                    command = String.format("%s goto %s %s", Commands.MAP, map_name, crd);
-                }
-                else {
-                    command = String.format("%s stay", Commands.MAP);
-                }
-
-                //Respond to client
-                client.writeString(command);
-            }
-            else {
-                username = c1[1];
-                client.leave_map(username);
-                //Map switch here
-                map = c1[2];
-                client.go_to_map(username, map, coords);
-            }
+            MapParser mp = new MapParser();
+            mp.parse(c1, client);
         }
     }
 
@@ -343,22 +310,5 @@ class ClientListener extends Thread {
         }
 
         this.interrupt();
-    }
-
-    private Relation stringToRelation(String r) {
-        Relation rel;
-
-        if(r.equals("left"))
-            rel = Relation.LEFT;
-        else if(r.equals("right"))
-            rel = Relation.RIGHT;
-        else if(r.equals("below"))
-            rel = Relation.BELOW;
-        else if(r.equals("above"))
-            rel = Relation.ABOVE;
-        else
-            rel = null;
-
-        return rel;
     }
 }

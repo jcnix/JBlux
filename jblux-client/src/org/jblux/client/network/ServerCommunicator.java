@@ -85,14 +85,9 @@ public class ServerCommunicator {
         writeString(command);
     }
 
-    public void setMap(String map) {
-        String command = String.format("%s %s %s", Commands.MAP, username, map);
-        writeString(command);
-    }
-
-    public String ask_for_map(Relation r, String map_name, Player p) {
+    public String goto_map(Relation r, String map_name, Player p) {
         String map = "";
-        String command = String.format("%s get %s %s", Commands.MAP, r, map_name);
+        String command = String.format("%s goto %s %s", Commands.MAP, r, map_name);
         writeString(command);
 
         while(sl.response == null) {
