@@ -45,6 +45,7 @@ public class ClientThread {
     private ObjectOutputStream netOut;
     private Inventory inv;
     private DBManager dbm;
+    private boolean authenticated;
 
     private Clients clients;
     private ClientListener cl;
@@ -52,6 +53,7 @@ public class ClientThread {
     public ClientThread(Socket s) {
         socket = s;
         clients = Clients.getInstance();
+        authenticated = false;
 
         try {
             netOut = new ObjectOutputStream(socket.getOutputStream());
@@ -96,17 +98,26 @@ public class ClientThread {
         }
     }
 
+    public boolean isAuthenticated() {
+        return authenticated;
+    }
+
+    public void auth(boolean b) {
+        if(b)
+            authenticated = true;
+        else
+            authenticated = false;
+
+        String command = String.format("%s %b", Commands.AUTH, b);
+        writeString(command);
+    }
+
     /*
      * Send's all players' coordinates back to the client so they can be displayed.
      */
     public void move(String username, Coordinates coords) {
         String command = String.format("%s %s %d %d", Commands.MOVE, username, coords.x, coords.y);
         tell_all_clients_on_map(command);
-    }
-
-    public void auth(boolean b) {
-        String command = String.format("%s %b", Commands.AUTH, b);
-        writeString(command);
     }
 
     //Tell the other clients that a player has connected.
@@ -253,20 +264,26 @@ class ClientListener extends Thread {
         } catch (IOException ex) {
         } catch (ClassNotFoundException ex) {
         }
-        
+
         String[] c1 = c.split("\\s");
 
-        if(c.startsWith(Commands.MOVE)) {
-            coords.x = Integer.parseInt(c1[2]);
-            coords.y = Integer.parseInt(c1[3]);
-            client.move(username, coords);
-        }
-        else if(c.startsWith(Commands.AUTH)) {
+        if(c.startsWith(Commands.AUTH)) {
             String name = c1[1];
             String pass = c1[2];
             UserTable ut = new UserTable();
             boolean b = ut.authenticate(name, pass);
             client.auth(b);
+        }
+
+        //Ignore any other command if not authenticated.
+        if(!client.isAuthenticated()) {
+            return;
+        }
+
+        if(c.startsWith(Commands.MOVE)) {
+            coords.x = Integer.parseInt(c1[2]);
+            coords.y = Integer.parseInt(c1[3]);
+            client.move(username, coords);
         }
         else if(c.startsWith(Commands.CONNECT)) {
             username = c1[1];
