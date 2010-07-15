@@ -192,8 +192,11 @@ class ServerListener extends Thread {
         } catch (ClassNotFoundException ex) {
         }
 
+        System.out.println(command);
+
         if(command.startsWith(Commands.MOVE)) {
             String name = c0[1];
+            System.out.println(name);
             int x = Integer.parseInt(c0[2]);
             int y = Integer.parseInt(c0[3]);
 

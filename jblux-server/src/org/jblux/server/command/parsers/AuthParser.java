@@ -32,6 +32,6 @@ public class AuthParser implements CommandParser {
         String pass = command[2];
         UserTable ut = new UserTable();
         boolean b = ut.authenticate(name, pass);
-        client.auth(b);
+        client.auth(name, b);
     }
 }

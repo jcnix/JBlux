@@ -102,11 +102,14 @@ public class ClientThread {
         return authenticated;
     }
 
-    public void auth(boolean b) {
-        if(b)
+    public void auth(String name, boolean b) {
+        if(b) {
             authenticated = true;
-        else
+            setUsername(name);
+        }
+        else {
             authenticated = false;
+        }
 
         String command = String.format("%s %b", Commands.AUTH, b);
         writeString(command);
@@ -118,30 +121,6 @@ public class ClientThread {
     public void move(String username, Coordinates coords) {
         String command = String.format("%s %s %d %d", Commands.MOVE, username, coords.x, coords.y);
         tell_all_clients_on_map(command);
-    }
-
-    //Tell the other clients that a player has connected.
-    public void connect(String username, Coordinates coords) {
-        String command = String.format("%s get %s %s", Commands.CONNECT, username, coords);
-
-        /* This can't use tell_all_clients yet because it sends data
-         * back to the sender.
-         */
-        LinkedList<ClientThread> c = clients.getClients();
-        for(int i = 0; i < c.size(); i++) {
-            ClientThread ct = c.get(i);
-            if(ct == this || !is_on_same_map(ct)) {
-                continue;
-            }
-
-            //The the new player about the other clients
-            String otherPlayer = String.format("%s %s %s", Commands.CONNECT,
-                    ct.getUsername(), ct.getCoords());
-            writeString(otherPlayer);
-
-            //Tell other client about the new player
-            ct.writeString(command);
-        }
     }
 
     public void disconnect(String user) {
@@ -160,16 +139,18 @@ public class ClientThread {
         System.out.printf("%s connected\n", username);
         String command = String.format("%s add %s %s", Commands.MAP, username, getCoords());
 
+        System.out.printf("Map %s\n", map);
         this.map = map;
         LinkedList<ClientThread> c = clients.getClients();
         for(int i = 0; i < c.size(); i++) {
             ClientThread ct = c.get(i);
-            if(ct == this || !is_on_same_map(ct)) {
+            //if(ct == this || !is_on_same_map(ct)) {
+            if(ct == this) {
                 continue;
             }
 
             //Tell the new player about the other clients
-            String otherPlayer = String.format("%s %s %s", Commands.MAP,
+            String otherPlayer = String.format("%s add %s %s", Commands.MAP,
                     ct.getUsername(), ct.getCoords());
             writeString(otherPlayer);
 
@@ -187,6 +168,7 @@ public class ClientThread {
     }
 
     public boolean is_on_same_map(ClientThread ct) {
+        System.out.printf("%s == %s?\n", ct.getMap(), this.getMap());
         return ct.getMap().equals(this.getMap());
     }
 
@@ -284,7 +266,7 @@ class ClientListener extends Thread {
             username = c1[1];
             coords.x = Integer.parseInt(c1[2]);
             coords.y = Integer.parseInt(c1[3]);
-            client.connect(username, coords);
+            client.go_to_map("residential", coords);
         }
         else if(c.startsWith(Commands.CHAT)) {
             username = c1[1];
