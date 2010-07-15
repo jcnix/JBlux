@@ -1,6 +1,8 @@
 7-18-2010 Update
 ****************
 - Implement Royce's site design
+- Seeing other people move around works again
 - Do input validation during registration process
 - Make game client authenticate with server to prevent spoofing
+- Add New Character form to site
 
