@@ -1,0 +1,18 @@
+{% extends "jblux/base.html" %}
+
+{% block title %}New Character{% endblock %}
+
+{% block content %}
+<center>
+
+<form method="post" action="{% url jblux_django.jblux.views.new_character %}">
+    {% csrf_token %}
+        {% for field in form.visible_fields %}
+        <p>{{ field.errors }}</p>
+        <p>{{ field.label_tag }}: {{ field }}</p>
+        {% endfor %}
+    <p><input type="submit" value="Create Character" /></p>
+</form>
+</center>
+{% endblock %}
+

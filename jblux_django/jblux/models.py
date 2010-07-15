@@ -8,13 +8,15 @@ class User(models.Model):
     email = models.CharField(max_length=75, unique=True)
     is_admin = models.BooleanField()
     is_active = models.BooleanField()
-    characters = models.ManyToManyField('Character', blank=True, null=True, related_name='char1')
 
     def __unicode__(self):
         return self.username
 
 class Character(models.Model):
     name = models.CharField(max_length=50, unique=True)
+    user = models.ForeignKey('User')
+    race = models.ForeignKey('Race')
+    class_t = models.ForeignKey('Class')
     level = models.IntegerField(default=1)
     inventory = models.ForeignKey('Inventory', blank=True, null=True, related_name='items')
     strength = models.IntegerField()
@@ -22,6 +24,20 @@ class Character(models.Model):
     stamina = models.IntegerField()
     intelligence = models.IntegerField()
     spirit = models.IntegerField()
+    current_map = models.CharField(max_length=50)
+
+    def __unicode__(self):
+        return self.name
+
+class Race(models.Model):
+    name = models.CharField(max_length=25)
+    sprite_sheet = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.name
+
+class Class(models.Model):
+    name = models.CharField(max_length=25)
 
     def __unicode__(self):
         return self.name
