@@ -42,6 +42,7 @@ public class ClientThread {
     private Inventory inv;
     private boolean authenticated;
     private String username;
+    private String map;
 
     private Clients clients;
     private ClientListener cl;
@@ -50,6 +51,7 @@ public class ClientThread {
         socket = s;
         clients = Clients.getInstance();
         authenticated = false;
+        map = "";
 
         try {
             netOut = new ObjectOutputStream(socket.getOutputStream());
@@ -71,7 +73,7 @@ public class ClientThread {
     }
 
     public String getMap() {
-        return cl.map;
+        return map;
     }
 
     public void setUsername(String name) {
@@ -158,6 +160,7 @@ public class ClientThread {
         System.out.printf("%s connected\n", username);
         String command = String.format("%s add %s %s", Commands.MAP, username, getCoords());
 
+        this.map = map;
         LinkedList<ClientThread> c = clients.getClients();
         for(int i = 0; i < c.size(); i++) {
             ClientThread ct = c.get(i);
@@ -184,7 +187,7 @@ public class ClientThread {
     }
 
     public boolean is_on_same_map(ClientThread ct) {
-        return ct.cl.map.equals(this.cl.map);
+        return ct.getMap().equals(this.getMap());
     }
 
     public void writeString(String s) {
@@ -224,7 +227,6 @@ class ClientListener extends Thread {
     private ClientThread client;
     
     public String username;
-    public String map;
     public Coordinates coords;
 
     public ClientListener(ClientThread client, Socket s) {
