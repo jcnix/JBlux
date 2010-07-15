@@ -138,14 +138,12 @@ public class ClientThread {
     public void go_to_map(String map, Coordinates coords) {
         System.out.printf("%s connected\n", username);
         String command = String.format("%s add %s %s", Commands.MAP, username, getCoords());
-
-        System.out.printf("Map %s\n", map);
+        
         this.map = map;
         LinkedList<ClientThread> c = clients.getClients();
         for(int i = 0; i < c.size(); i++) {
             ClientThread ct = c.get(i);
-            //if(ct == this || !is_on_same_map(ct)) {
-            if(ct == this) {
+            if(ct == this || !is_on_same_map(ct)) {
                 continue;
             }
 
@@ -168,7 +166,6 @@ public class ClientThread {
     }
 
     public boolean is_on_same_map(ClientThread ct) {
-        System.out.printf("%s == %s?\n", ct.getMap(), this.getMap());
         return ct.getMap().equals(this.getMap());
     }
 
