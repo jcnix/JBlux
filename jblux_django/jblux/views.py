@@ -113,16 +113,20 @@ def game(request):
         return HttpResponseRedirect('/jblux/login')
 
 def info(request):
-    return HttpResponse("Not Implemented Yet!")
+    return render_to_response('jblux/info.html',
+            context_instance=RequestContext(request))
 
 def screens(request):
-    return HttpResponse("Not Implemented Yet!")
+    return render_to_response('jblux/screens.html',
+            context_instance=RequestContext(request))
 
 def help(request):
-    return HttpResponse("Not Implemented Yet!")
+    return render_to_response('jblux/help.html',
+            context_instance=RequestContext(request))
 
 def polls(request):
-    return HttpResponse("Not Implemented Yet!")
+    return render_to_response('jblux/polls.html',
+            context_instance=RequestContext(request))
 
 #Recieves hashed password
 def auth(username, password):
