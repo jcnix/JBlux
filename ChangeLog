@@ -5,4 +5,6 @@
 - Do input validation during registration process
 - Make game client authenticate with server to prevent spoofing
 - Add New Character form to site
+- Can play with a selected character in-game instead of the user account
+- Set limit at 10 characters per account
 

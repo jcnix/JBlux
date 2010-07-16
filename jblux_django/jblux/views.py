@@ -74,6 +74,12 @@ def new_character(request):
     if request.method == 'POST':
         form = CharacterForm(request.POST)
         if form.is_valid():
+            #verify the user has an open slot
+            user = request.session['user']
+            chars = Character.objects.filter(user=user).count()
+            if (chars + 1) > 10:
+                return HttpResponse("No open character slots")
+
             name = form.cleaned_data['name']
             race = form.cleaned_data['race']
             class_t = form.cleaned_data['class_t']
