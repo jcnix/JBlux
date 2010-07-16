@@ -26,6 +26,7 @@ import java.sql.SQLException;
 public class UserTable {
     private DBManager m_db;
     private static final String USER_TABLE = "jblux_user";
+    private static final String CHARACTER_TABLE="jblux_character";
 
     public UserTable() {
         m_db = new DBManager();
@@ -38,15 +39,28 @@ public class UserTable {
      * @param username  The user's account name
      * @param password  The user's password
      */
-    public boolean authenticate(String username, String password) {
+    public boolean authenticate(String username, String password, String character_name) {
         boolean auth = false;
         m_db.connect();
+        String query;
+        ResultSet rs;
         try {
-            String query = String.format("SELECT username, password from %s where username='%s' "
+            query = String.format("SELECT id, username, password FROM %s WHERE username='%s' "
                     + "and password='%s';", USER_TABLE, username, password);
-            ResultSet rs = m_db.query_select(query);
+            rs = m_db.query_select(query);
             auth = rs.next();
+            int id = rs.getInt("id");
+
+            //We're good so far
+            if(auth) {
+                query = String.format("SELECT user FROM %s WHERE name='%s' and user_id='%d';",
+                        CHARACTER_TABLE, character_name, id);
+                rs = m_db.query_select(query);
+                auth = rs.next();
+                //If we haven't SQLException'd, then we're good.
+            }
         } catch(SQLException ex) {
+            ex.printStackTrace();
             auth = false;
         }
 

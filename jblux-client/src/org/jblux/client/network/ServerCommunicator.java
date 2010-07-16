@@ -108,8 +108,9 @@ public class ServerCommunicator {
         return map;
     }
 
-    public boolean authenticate(String username, String password) {
-        String command = String.format("%s %s %s", Commands.AUTH, username, password);
+    public boolean authenticate(String username, String password, String character_name) {
+        String command = String.format("%s %s %s %s", Commands.AUTH, username, password,
+                character_name);
         System.out.println(command);
         writeString(command);
         boolean auth = false;
