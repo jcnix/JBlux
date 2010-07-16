@@ -41,7 +41,7 @@ public class ClientThread {
     private ObjectOutputStream netOut;
     private Inventory inv;
     private boolean authenticated;
-    private String username;
+    private String character_name;
     private String map;
 
     private Clients clients;
@@ -69,15 +69,15 @@ public class ClientThread {
     }
 
     public String getUsername() {
-        return cl.username;
+        return cl.character_name;
     }
 
     public String getMap() {
         return map;
     }
 
-    public void setUsername(String name) {
-        this.username = name;
+    public void setCharacterName(String name) {
+        this.character_name = name;
     }
 
     /*
@@ -105,7 +105,7 @@ public class ClientThread {
     public void auth(String name, boolean b) {
         if(b) {
             authenticated = true;
-            setUsername(name);
+            setCharacterName(name);
         }
         else {
             authenticated = false;
@@ -136,8 +136,8 @@ public class ClientThread {
 
     /* Put the player on a new map */
     public void go_to_map(String map, Coordinates coords) {
-        System.out.printf("%s connected\n", username);
-        String command = String.format("%s add %s %s", Commands.MAP, username, getCoords());
+        System.out.printf("%s connected\n", character_name);
+        String command = String.format("%s add %s %s", Commands.MAP, character_name, getCoords());
         
         this.map = map;
         LinkedList<ClientThread> c = clients.getClients();
@@ -205,14 +205,14 @@ class ClientListener extends Thread {
     private ObjectInputStream netIn;
     private ClientThread client;
     
-    public String username;
+    public String character_name;
     public Coordinates coords;
 
     public ClientListener(ClientThread client, Socket s) {
         this.client = client;
         clientSocket = s;
         coords = new Coordinates();
-        username = "";
+        character_name = "";
     }
 
     @Override
@@ -257,23 +257,23 @@ class ClientListener extends Thread {
         if(c.startsWith(Commands.MOVE)) {
             coords.x = Integer.parseInt(c1[2]);
             coords.y = Integer.parseInt(c1[3]);
-            client.move(username, coords);
+            client.move(character_name, coords);
         }
         else if(c.startsWith(Commands.CONNECT)) {
-            username = c1[1];
+            character_name = c1[1];
             coords.x = Integer.parseInt(c1[2]);
             coords.y = Integer.parseInt(c1[3]);
             client.go_to_map("residential", coords);
         }
         else if(c.startsWith(Commands.CHAT)) {
-            username = c1[1];
+            character_name = c1[1];
 
             //TODO: Make this less ugly
             String message = "";
             for(int i = 2; i < c1.length; i++) {
                 message += c1[i] + " ";
             }
-            client.sendChatMessage(username, message);
+            client.sendChatMessage(character_name, message);
         }
         else if(c.startsWith(Commands.MAP)) {
             MapParser mp = new MapParser();
@@ -282,8 +282,8 @@ class ClientListener extends Thread {
     }
 
     public void endThread() {
-        System.out.printf("%s disconnected.\n", username);
-        client.disconnect(username);
+        System.out.printf("%s disconnected.\n", character_name);
+        client.disconnect(character_name);
 
         try {
             netIn.close();
