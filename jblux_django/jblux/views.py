@@ -1,8 +1,10 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from django.forms.models import modelformset_factory
 from django.shortcuts import render_to_response, get_object_or_404
-from django.template import Context, loader, RequestContext
+from django.template import RequestContext
 from jblux_django.jblux.models import User, Character
 from jblux_django.jblux.forms import LoginForm, RegisterForm, CharacterForm
+from jblux_django.jblux.forms import SelectCharacterForm
 import hashlib
 
 def index(request):
@@ -107,10 +109,16 @@ def logout(request):
 def game(request):
     try:
         user = request.session['user']
-        return render_to_response('jblux/game.html',
-                context_instance=RequestContext(request))
     except KeyError:
         return HttpResponseRedirect('/jblux/login')
+
+    try:
+        character = request.session['character']
+    except KeyError:
+        return HttpResponseRedirect('/jblux/character/select')
+
+    return render_to_response('jblux/game.html', {'character': character},
+            context_instance=RequestContext(request))
 
 def info(request):
     return render_to_response('jblux/info.html',
@@ -127,6 +135,20 @@ def help(request):
 def polls(request):
     return render_to_response('jblux/polls.html',
             context_instance=RequestContext(request))
+
+def select_character(request):
+    if request.method == 'POST':
+        character = Character.objects.get(id=request.POST['character'])
+        request.session['character'] = character
+        return HttpResponseRedirect('/jblux/game')
+    else:
+        try:
+            user = request.session['user']
+            form = SelectCharacterForm(user=user)
+            return render_to_response('jblux/character_select.html', {'form': form},
+                    context_instance=RequestContext(request))
+        except KeyError:
+            return HttpResponseRedirect('/jblux/login')
 
 #Recieves hashed password
 def auth(username, password):
