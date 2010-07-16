@@ -44,7 +44,7 @@ public class ServerCommunicator {
     private Socket socket;
     private ObjectOutputStream netOut;
     private ServerListener sl;
-    private String username;
+    private String character_name;
     public Player player;
 
     public ServerCommunicator() {
@@ -70,18 +70,18 @@ public class ServerCommunicator {
 
     public void connect_player(String player, Coordinates coords) {
         System.out.println("Connecting...");
-        username = player;
-        String command = String.format("%s %s %d %d", Commands.CONNECT, username, coords.x, coords.y);
+        character_name = player;
+        String command = String.format("%s %s %d %d", Commands.CONNECT, character_name, coords.x, coords.y);
         writeString(command);
     }
 
     public void move(int x, int y) {
-        String command = String.format("%s %s %d %d", Commands.MOVE, username, x, y);
+        String command = String.format("%s %s %d %d", Commands.MOVE, character_name, x, y);
         writeString(command);
     }
 
     public void sendChat(String message) {
-        String command = String.format("%s %s %s", Commands.CHAT, username, message);
+        String command = String.format("%s %s %s", Commands.CHAT, character_name, message);
         writeString(command);
     }
 

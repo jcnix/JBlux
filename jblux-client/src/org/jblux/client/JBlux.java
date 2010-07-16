@@ -76,7 +76,7 @@ public class JBlux extends StateBasedGame {
             }
 
             this.addState(new MainMenuState(MAINMENUSTATE));
-            this.addState(new GameplayState(GAMEPLAYSTATE, server, username));
+            this.addState(new GameplayState(GAMEPLAYSTATE, server, username, character_name));
             this.enterState(MAINMENUSTATE);
         }
     }

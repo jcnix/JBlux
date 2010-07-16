@@ -36,18 +36,20 @@ public class GameplayState extends BasicGameState {
     private int stateID = -1;
     private GameMap map;
     private Player player;
-    private String player_name;
+    private String username;
+    private String character_name;
     private GameCanvas canvas;
     private ServerCommunicator server;
 
     private Sprite npc;
     private GUI gui;
     
-    public GameplayState(int stateID, ServerCommunicator server, String player_name)
+    public GameplayState(int stateID, ServerCommunicator server, String username, String character_name)
     {
         this.stateID = stateID;
         this.server = server;
-        this.player_name = player_name;
+        this.username = username;
+        this.character_name = character_name;
     }
  
     @Override
@@ -58,7 +60,7 @@ public class GameplayState extends BasicGameState {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         String map_test = "residential";
-        player = new Player(player_name, server);
+        player = new Player(username, character_name, server);
         map = new GameMap(map_test);
         canvas = GameCanvas.getInstance();
         canvas.init(player, map_test);

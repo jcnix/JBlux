@@ -38,16 +38,20 @@ public class Player extends Sprite {
     private int move_size;
     private String map_name;
     private Inventory inventory;
+    private String username;
+    private String character_name;
 
     private Calendar cal;
     private long lastMove;
 
-    public Player(String username, ServerCommunicator server) {
+    public Player(String username, String character_name, ServerCommunicator server) {
         //TODO: Replace this when accounts are set up.
         super("img/koopa.png");
 
         this.server = server;
-        setName(username);
+        setName(character_name);
+        this.username = username;
+        this.character_name = character_name;
         move_size = 7;
         image = spriteSheet.getSubImage(FACE_DOWN, 0);
         
@@ -66,7 +70,7 @@ public class Player extends Sprite {
         } catch (SlickException ex) {
         }
 
-        server.connect_player(username, coords);
+        server.connect_player(character_name, coords);
     }
 
     public void update(GameContainer gc) {
