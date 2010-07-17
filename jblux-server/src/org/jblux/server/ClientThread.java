@@ -27,9 +27,11 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.LinkedList;
 import org.jblux.common.Commands;
+import org.jblux.common.client.PlayerData;
 import org.jblux.common.items.Inventory;
 import org.jblux.server.command.parsers.AuthParser;
 import org.jblux.server.command.parsers.MapParser;
+import org.jblux.sql.UserTable;
 import org.jblux.util.Base64;
 import org.jblux.util.Coordinates;
 
@@ -112,6 +114,23 @@ public class ClientThread {
         }
 
         String command = String.format("%s %b", Commands.AUTH, b);
+        writeString(command);
+
+        if(authenticated) {
+            sendPlayerData();
+        }
+    }
+
+    public void sendPlayerData() {
+        UserTable ut = new UserTable();
+        PlayerData player = ut.getPlayer(character_name);
+        String player_enc = "";
+        try {
+            player_enc = Base64.encodeObject(player);
+        } catch (IOException ex) {
+        }
+
+        String command = String.format("%s self %s", Commands.PLAYER, player_enc);
         writeString(command);
     }
 

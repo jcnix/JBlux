@@ -25,6 +25,7 @@ import org.jblux.client.network.ServerCommunicator;
 import org.jblux.client.states.MainMenuState;
 import org.jblux.client.states.GameplayState;
 import org.jblux.client.states.ServerDownState;
+import org.jblux.common.client.PlayerData;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.AppletGameContainer;
 import org.newdawn.slick.state.StateBasedGame;
@@ -69,15 +70,17 @@ public class JBlux extends StateBasedGame {
                 //character_name = "pdude";
                 authorized = server.authenticate(username, password, character_name);
             }
-
-            if(!authorized) {
+            
+            if(authorized) {
+                PlayerData player_data = server.getPlayerData();
+                this.addState(new MainMenuState(MAINMENUSTATE));
+                this.addState(new GameplayState(GAMEPLAYSTATE, server, player_data));
+                this.enterState(MAINMENUSTATE);
+            }
+            else {
                 //Display some error
                 return;
-            }
-
-            this.addState(new MainMenuState(MAINMENUSTATE));
-            this.addState(new GameplayState(GAMEPLAYSTATE, server, username, character_name));
-            this.enterState(MAINMENUSTATE);
+            }            
         }
     }
     

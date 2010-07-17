@@ -25,6 +25,7 @@ import java.util.Calendar;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.common.Relation;
+import org.jblux.common.client.PlayerData;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
@@ -37,21 +38,19 @@ public class Player extends Sprite {
     private Image walk_area;
     private int move_size;
     private String map_name;
-    private Inventory inventory;
-    private String username;
-    private String character_name;
+    private PlayerData player_data;
 
     private Calendar cal;
     private long lastMove;
 
-    public Player(String username, String character_name, ServerCommunicator server) {
+    public Player(PlayerData data, ServerCommunicator server) {
         //TODO: Replace this when accounts are set up.
-        super("img/koopa.png");
+        super(data.race.sprite_sheet);
 
+        this.player_data = data;
         this.server = server;
-        setName(character_name);
-        this.username = username;
-        this.character_name = character_name;
+        setName(data.character_name);
+        
         move_size = 7;
         image = spriteSheet.getSubImage(FACE_DOWN, 0);
         
@@ -70,7 +69,7 @@ public class Player extends Sprite {
         } catch (SlickException ex) {
         }
 
-        server.connect_player(character_name, coords);
+        server.connect_player(data.character_name, coords);
     }
 
     public void update(GameContainer gc) {

@@ -28,4 +28,5 @@ public class Commands {
     public static final String CHAT = "chat";
     public static final String MAP = "map";
     public static final String DROP = "drop";
+    public static final String PLAYER = "player";
 }

@@ -22,11 +22,16 @@ package org.jblux.sql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.jblux.common.client.PlayerClass;
+import org.jblux.common.client.PlayerData;
+import org.jblux.common.client.Race;
 
 public class UserTable {
     private DBManager m_db;
     private static final String USER_TABLE = "jblux_user";
     private static final String CHARACTER_TABLE="jblux_character";
+    private static final String RACE_TABLE = "jblux_race";
+    private static final String CLASS_TABLE = "jblux_class";
 
     public UserTable() {
         m_db = new DBManager();
@@ -60,11 +65,72 @@ public class UserTable {
                 //If we haven't SQLException'd, then we're good.
             }
         } catch(SQLException ex) {
-            ex.printStackTrace();
             auth = false;
         }
 
         m_db.close();
         return auth;
+    }
+
+    public PlayerData getPlayer(String character_name) {
+        PlayerData pdata = new PlayerData();
+        m_db.connect();
+
+        try {
+            String query = String.format("SELECT * FROM %s WHERE name='%s'",
+                    CHARACTER_TABLE, character_name);
+            ResultSet rs = m_db.query_select(query);
+            rs.next();
+            
+            pdata.user_id = rs.getInt("id");
+            pdata.character_name = character_name;
+            pdata.current_map = rs.getString("current_map");
+            int race_id = rs.getInt("race_id");
+            int class_id = rs.getInt("class_t_id");
+            
+            Race race = getRace(race_id);
+            PlayerClass pclass = getClass(class_id);
+            pdata.race = race;
+            pdata.player_class = pclass;
+        } catch(SQLException ex) {
+        }
+        
+        m_db.close();
+        return pdata;
+    }
+
+    public Race getRace(int id) {
+        Race race = new Race();
+        m_db.connect();
+
+        try {
+            String query = String.format("SELECT * FROM %s WHERE id='%d'", RACE_TABLE, id);
+            ResultSet rs = m_db.query_select(query);
+            rs.next();
+            race.id = id;
+            race.name = rs.getString("name");
+            race.sprite_sheet = rs.getString("sprite_sheet");
+        } catch(SQLException ex) {
+        }
+
+        m_db.close();
+        return race;
+    }
+
+    public PlayerClass getClass(int id) {
+        PlayerClass pclass = new PlayerClass();
+        m_db.connect();
+
+        try {
+            String query = String.format("SELECT * FROM %s WHERE id='%d'", CLASS_TABLE, id);
+            ResultSet rs = m_db.query_select(query);
+            rs.next();
+            pclass.id = id;
+            pclass.name = rs.getString("name");
+        } catch(SQLException ex) {
+        }
+
+        m_db.close();
+        return pclass;
     }
 }

@@ -26,6 +26,7 @@ import org.jblux.client.Sprite;
 import org.jblux.client.gui.GUI;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ServerCommunicator;
+import org.jblux.common.client.PlayerData;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -36,20 +37,18 @@ public class GameplayState extends BasicGameState {
     private int stateID = -1;
     private GameMap map;
     private Player player;
-    private String username;
-    private String character_name;
+    private PlayerData player_data;
     private GameCanvas canvas;
     private ServerCommunicator server;
 
     private Sprite npc;
     private GUI gui;
     
-    public GameplayState(int stateID, ServerCommunicator server, String username, String character_name)
+    public GameplayState(int stateID, ServerCommunicator server, PlayerData data)
     {
         this.stateID = stateID;
         this.server = server;
-        this.username = username;
-        this.character_name = character_name;
+        this.player_data = data;
     }
  
     @Override
@@ -60,13 +59,14 @@ public class GameplayState extends BasicGameState {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         String map_test = "residential";
-        player = new Player(username, character_name, server);
+        System.out.printf("sprite sheet: %s\n", player_data.race.sprite_sheet);
+        player = new Player(player_data, server);
         map = new GameMap(map_test);
         canvas = GameCanvas.getInstance();
         canvas.init(player, map_test);
         //canvas = new GameCanvas(player, map_test);
 
-        npc = new Sprite("img/koopa.png");
+        npc = new Sprite("img/races/koopa.png");
         npc.setImage(Sprite.FACE_DOWN, 0);
 
         gui = new GUI(gc, server);

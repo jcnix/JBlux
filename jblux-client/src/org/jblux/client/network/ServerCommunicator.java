@@ -32,6 +32,7 @@ import org.jblux.client.gui.observers.ChatBoxObserver;
 import org.jblux.common.Commands;
 import org.jblux.common.Relation;
 import org.jblux.common.ServerInfo;
+import org.jblux.common.client.PlayerData;
 import org.jblux.common.items.Item;
 import org.jblux.util.Base64;
 import org.jblux.util.ChatMessage;
@@ -130,6 +131,19 @@ public class ServerCommunicator {
         return auth;
     }
 
+    public PlayerData getPlayerData() {
+        while(sl.data == null) {
+            try {
+                Thread.sleep(20);
+            } catch(InterruptedException ex) {
+            }
+        }
+        //Intermediate storage
+        PlayerData d = sl.data;
+        sl.data = null;
+        return d;
+    }
+
     public void close() {
         try {
             socket.close();
@@ -157,6 +171,7 @@ class ServerListener extends Thread {
     private ChatBoxObserver cbObserver;
     public String response;
     public Coordinates coords;
+    public PlayerData data;
 
     public ServerListener(Socket s) {
         socket = s;
@@ -218,6 +233,9 @@ class ServerListener extends Thread {
         else if(command.startsWith(Commands.DISCONNECT)) {
             String name = c0[1];
             players.removePlayer(name);
+        }
+        else if(command.startsWith(Commands.PLAYER)) {
+            PlayerParser.parse(c0, this);
         }
         else if(command.startsWith(Commands.CHAT)) {
             String name = c0[1];
