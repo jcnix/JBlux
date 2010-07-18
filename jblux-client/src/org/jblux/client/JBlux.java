@@ -20,11 +20,14 @@
 
 package org.jblux.client;
 
+import java.applet.Applet;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.client.states.MainMenuState;
 import org.jblux.client.states.GameplayState;
 import org.jblux.client.states.ServerDownState;
+import org.jblux.common.client.PlayerData;
 import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.AppletGameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -43,9 +46,41 @@ public class JBlux extends StateBasedGame {
             this.enterState(SERVERDOWNSTATE);
         }
         else {
-            this.addState(new MainMenuState(MAINMENUSTATE));
-            this.addState(new GameplayState(GAMEPLAYSTATE, server));
-            this.enterState(MAINMENUSTATE);
+            GameContainer gc = this.getContainer();
+            String username = "";
+            String password = "";
+            String character_name = "";
+
+            boolean authorized = false;
+            if (gc instanceof AppletGameContainer.Container) {
+                // get the parameters by casting container and getting the applet instance
+                Applet applet = ((AppletGameContainer.Container) gc).getApplet();
+                username = applet.getParameter("user");
+                password = applet.getParameter("password");
+                character_name = applet.getParameter("character");
+                authorized = server.authenticate(username, password, character_name);
+            }
+            else {
+                username = "casey-test";
+                password = "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8";
+                character_name = "mychar";
+                //username = "casey";
+                //password = "81b2f040df6152242feb966d071fe58977dab12e";
+                //password = "wrong password";
+                //character_name = "pdude";
+                authorized = server.authenticate(username, password, character_name);
+            }
+            
+            if(authorized) {
+                PlayerData player_data = server.getPlayerData();
+                this.addState(new MainMenuState(MAINMENUSTATE));
+                this.addState(new GameplayState(GAMEPLAYSTATE, server, player_data));
+                this.enterState(MAINMENUSTATE);
+            }
+            else {
+                //Display some error
+                return;
+            }            
         }
     }
     

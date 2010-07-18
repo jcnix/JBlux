@@ -1,0 +1,15 @@
+{% extends "jblux/base.html" %}
+
+{% block title %}Select Character{% endblock %}
+
+{% block content %}
+<center>
+<form method="post" action="{% url jblux_django.jblux.views.select_character %}">
+    {% csrf_token %}
+    <td>{{ form.character.label_tag }}</td>
+    <td>{{ form.character }}</td>
+    <p><input type="submit" value="Select" /></p>
+</form>
+</center>
+{% endblock %}
+

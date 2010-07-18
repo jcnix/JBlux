@@ -1,8 +1,10 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from django.forms.models import modelformset_factory
 from django.shortcuts import render_to_response, get_object_or_404
-from django.template import Context, loader, RequestContext
-from jblux_django.jblux.models import User
-from jblux_django.jblux.forms import LoginForm, RegisterForm
+from django.template import RequestContext
+from jblux_django.jblux.models import User, Character
+from jblux_django.jblux.forms import LoginForm, RegisterForm, CharacterForm
+from jblux_django.jblux.forms import SelectCharacterForm
 import hashlib
 
 def index(request):
@@ -68,6 +70,44 @@ def register_new_user(request):
         return render_to_response('jblux/register.html', {'form': form},
                 context_instance=RequestContext(request))
 
+def new_character(request):
+    if request.method == 'POST':
+        form = CharacterForm(request.POST)
+        if form.is_valid():
+            #verify the user has an open slot
+            user = request.session['user']
+            chars = Character.objects.filter(user=user).count()
+            if (chars + 1) > 5:
+                return HttpResponse("No open character slots")
+
+            name = form.cleaned_data['name']
+            race = form.cleaned_data['race']
+            class_t = form.cleaned_data['class_t']
+            user = request.session['user']
+
+            character = Character.objects.create(
+                    name=name,
+                    user=user,
+                    race=race,
+                    class_t=class_t,
+                    strength=1,
+                    agility=1,
+                    stamina=1,
+                    intelligence=1,
+                    spirit=1,
+                    current_map="residential",
+                    )
+            return HttpResponseRedirect("/jblux/index")
+
+    try:
+        user = request.session['user']
+    except KeyError:
+        return HttpResponseRedirect('/jblux/login')
+
+    form = CharacterForm()
+    return render_to_response('jblux/character_edit.html', {'form': form},
+            context_instance=RequestContext(request))
+
 def logout(request):
     request.session.flush()
     return HttpResponseRedirect('/jblux/login')
@@ -75,22 +115,46 @@ def logout(request):
 def game(request):
     try:
         user = request.session['user']
-        return render_to_response('jblux/game.html',
-                context_instance=RequestContext(request))
     except KeyError:
         return HttpResponseRedirect('/jblux/login')
 
+    try:
+        character = request.session['character']
+    except KeyError:
+        return HttpResponseRedirect('/jblux/character/select')
+
+    return render_to_response('jblux/game.html', {'character': character},
+            context_instance=RequestContext(request))
+
 def info(request):
-    return HttpResponse("Not Implemented Yet!")
+    return render_to_response('jblux/info.html',
+            context_instance=RequestContext(request))
 
 def screens(request):
-    return HttpResponse("Not Implemented Yet!")
+    return render_to_response('jblux/screens.html',
+            context_instance=RequestContext(request))
 
 def help(request):
-    return HttpResponse("Not Implemented Yet!")
+    return render_to_response('jblux/help.html',
+            context_instance=RequestContext(request))
 
 def polls(request):
-    return HttpResponse("Not Implemented Yet!")
+    return render_to_response('jblux/polls.html',
+            context_instance=RequestContext(request))
+
+def select_character(request):
+    if request.method == 'POST':
+        character = Character.objects.get(id=request.POST['character'])
+        request.session['character'] = character
+        return HttpResponseRedirect('/jblux/game')
+    else:
+        try:
+            user = request.session['user']
+            form = SelectCharacterForm(user=user)
+            return render_to_response('jblux/character_select.html', {'form': form},
+                    context_instance=RequestContext(request))
+        except KeyError:
+            return HttpResponseRedirect('/jblux/login')
 
 #Recieves hashed password
 def auth(username, password):

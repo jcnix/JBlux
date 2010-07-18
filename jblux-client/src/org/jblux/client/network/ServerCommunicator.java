@@ -32,6 +32,7 @@ import org.jblux.client.gui.observers.ChatBoxObserver;
 import org.jblux.common.Commands;
 import org.jblux.common.Relation;
 import org.jblux.common.ServerInfo;
+import org.jblux.common.client.PlayerData;
 import org.jblux.common.items.Item;
 import org.jblux.util.Base64;
 import org.jblux.util.ChatMessage;
@@ -44,7 +45,7 @@ public class ServerCommunicator {
     private Socket socket;
     private ObjectOutputStream netOut;
     private ServerListener sl;
-    private String username;
+    private String character_name;
     public Player player;
 
     public ServerCommunicator() {
@@ -70,47 +71,77 @@ public class ServerCommunicator {
 
     public void connect_player(String player, Coordinates coords) {
         System.out.println("Connecting...");
-        username = player;
-        String command = String.format("%s %s %d %d", Commands.CONNECT, username, coords.x, coords.y);
+        character_name = player;
+        String command = String.format("%s %s %d %d", Commands.CONNECT, character_name, coords.x, coords.y);
         writeString(command);
     }
 
     public void move(int x, int y) {
-        String command = String.format("%s %s %d %d", Commands.MOVE, username, x, y);
+        String command = String.format("%s %s %d %d", Commands.MOVE, character_name, x, y);
         writeString(command);
     }
 
     public void sendChat(String message) {
-        String command = String.format("%s %s %s", Commands.CHAT, username, message);
+        String command = String.format("%s %s %s", Commands.CHAT, character_name, message);
         writeString(command);
     }
 
-    public void setMap(String map) {
-        String command = String.format("%s %s %s", Commands.MAP, username, map);
-        writeString(command);
-    }
-
-    public String ask_for_map(Relation r, String map_name, Player p) {
+    public String goto_map(Relation r, String map_name, Player p) {
         String map = "";
-        String command = String.format("%s get %s %s", Commands.MAP, r, map_name);
+        String command = String.format("%s goto %s %s", Commands.MAP, r, map_name);
         writeString(command);
 
-        while(sl.map_response == null) {
+        while(sl.response == null) {
             try {
                 Thread.sleep(20);
-            } catch (InterruptedException ex) {
+            } catch(InterruptedException ex) {
             }
         }
 
-        if(sl.map_response.equals("stay")) {
+        if(sl.response.equals("stay")) {
             return map_name;
         }
 
-        map = sl.map_response;
+        map = sl.response;
         p.setCoords(sl.coords);        
-        sl.map_response = null;
+        sl.response = null;
         
         return map;
+    }
+
+    public boolean authenticate(String username, String password, String character_name) {
+        String command = String.format("%s %s %s %s", Commands.AUTH, username, password,
+                character_name);
+        System.out.println(command);
+        writeString(command);
+        boolean auth = false;
+
+        while(sl.response == null) {
+            try {
+                Thread.sleep(20);
+            } catch(InterruptedException ex) {
+            }
+        }
+        
+        if(sl.response.equals("true")) {
+            auth = true;
+        }
+
+        sl.response = null;
+        return auth;
+    }
+
+    public PlayerData getPlayerData() {
+        while(sl.data == null) {
+            try {
+                Thread.sleep(20);
+            } catch(InterruptedException ex) {
+            }
+        }
+        //Intermediate storage
+        PlayerData d = sl.data;
+        sl.data = null;
+        return d;
     }
 
     public void close() {
@@ -138,14 +169,15 @@ class ServerListener extends Thread {
     private ObjectInputStream netIn;
     private Players players;
     private ChatBoxObserver cbObserver;
-    public String map_response;
+    public String response;
     public Coordinates coords;
+    public PlayerData data;
 
     public ServerListener(Socket s) {
         socket = s;
         players = Players.getInstance();
         cbObserver = ChatBoxObserver.getInstance();
-        map_response = null;
+        response = null;
         coords = new Coordinates();
     }
 
@@ -159,7 +191,6 @@ class ServerListener extends Thread {
                 doCommand(command);
             }
         } catch(ClassNotFoundException ex) {
-            ex.printStackTrace();
         } catch(IOException ex) {
             ex.printStackTrace();
         }
@@ -185,6 +216,9 @@ class ServerListener extends Thread {
             Sprite npc = players.getPlayer(name);
             npc.setCoords(x, y);
         }
+        else if(command.startsWith(Commands.AUTH)) {
+            response = c0[1];
+        }
         else if(command.startsWith(Commands.CONNECT)) {
             String name = c0[1];
             int x = Integer.parseInt(c0[2]);
@@ -199,6 +233,9 @@ class ServerListener extends Thread {
         else if(command.startsWith(Commands.DISCONNECT)) {
             String name = c0[1];
             players.removePlayer(name);
+        }
+        else if(command.startsWith(Commands.PLAYER)) {
+            PlayerParser.parse(c0, this);
         }
         else if(command.startsWith(Commands.CHAT)) {
             String name = c0[1];
@@ -228,13 +265,13 @@ class ServerListener extends Thread {
                 players.addPlayer(npc);
             }
             else if(c0[1].equals("goto")) {
-                map_response = c0[2];
+                response = c0[2];
                 coords.x = Integer.parseInt(c0[3]);
                 coords.y = Integer.parseInt(c0[4]);
-                System.out.printf("response: %s @ %s\n", map_response, coords);
+                System.out.printf("response: %s @ %s\n", response, coords);
             }
             else if(c0[1].equals("stay")) {
-                map_response = "stay";
+                response = "stay";
             }
         }
         else if(command.startsWith("put")) {

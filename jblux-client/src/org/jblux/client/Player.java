@@ -25,6 +25,7 @@ import java.util.Calendar;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.common.Relation;
+import org.jblux.common.client.PlayerData;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
@@ -37,17 +38,19 @@ public class Player extends Sprite {
     private Image walk_area;
     private int move_size;
     private String map_name;
-    private Inventory inventory;
+    private PlayerData player_data;
 
     private Calendar cal;
     private long lastMove;
 
-    public Player(String username, ServerCommunicator server) {
+    public Player(PlayerData data, ServerCommunicator server) {
         //TODO: Replace this when accounts are set up.
-        super("img/koopa.png");
+        super(data.race.sprite_sheet);
 
+        this.player_data = data;
         this.server = server;
-        setName(username);
+        setName(data.character_name);
+        
         move_size = 7;
         image = spriteSheet.getSubImage(FACE_DOWN, 0);
         
@@ -66,7 +69,7 @@ public class Player extends Sprite {
         } catch (SlickException ex) {
         }
 
-        server.connect_player(username, coords);
+        server.connect_player(data.character_name, coords);
     }
 
     public void update(GameContainer gc) {
@@ -176,15 +179,15 @@ public class Player extends Sprite {
         }
         else if(coords.y <=0) {
             change = true;
-            relation = Relation.ABOVE;
+            relation = Relation.TOP;
         }
         else if(coords.y >= y) {
             change = true;
-            relation = Relation.BELOW;
+            relation = Relation.BOTTOM;
         }
 
         if(change) {
-            map_name = server.ask_for_map(relation, map_name, this);
+            map_name = server.goto_map(relation, map_name, this);
             GameCanvas gc = GameCanvas.getInstance();
             gc.setMap(map_name);
             walk_area = gc.getMap().getWalkArea();

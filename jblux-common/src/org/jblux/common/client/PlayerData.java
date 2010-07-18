@@ -1,5 +1,5 @@
 /**
- * File: Relations.java
+ * File: PlayerData.java
  *
  * @author Casey Jones
  *
@@ -18,21 +18,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common;
+package org.jblux.common.client;
 
-public enum Relation {
-    LEFT("left"),
-    RIGHT("right"),
-    TOP("top"),
-    BOTTOM("bottom");
-    
-    private final String str;
-    private Relation(String s) {
-        str = s;
-    }
+import java.io.Serializable;
+import org.jblux.common.items.Inventory;
 
-    @Override
-    public String toString() {
-        return str;
-    }
+public class PlayerData implements Serializable {
+    private final long serialVersionUID = 1L;
+
+    public String character_name;
+    public int user_id;
+    public int character_id;
+    public Race race;
+    public PlayerClass player_class;
+    public int level;
+    public Inventory inventory;
+
+    public int strength;
+    public int agility;
+    public int stamina;
+    public int intelligence;
+    public int spirit;
+    public String current_map;
 }

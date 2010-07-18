@@ -1,5 +1,5 @@
 /**
- * File: Relations.java
+ * File: CommandParser.java
  *
  * @author Casey Jones
  *
@@ -18,21 +18,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common;
+package org.jblux.server.command.parsers;
 
-public enum Relation {
-    LEFT("left"),
-    RIGHT("right"),
-    TOP("top"),
-    BOTTOM("bottom");
-    
-    private final String str;
-    private Relation(String s) {
-        str = s;
-    }
+import org.jblux.server.ClientThread;
 
-    @Override
-    public String toString() {
-        return str;
-    }
+public interface CommandParser {
+    public void parse(String[] command, ClientThread client);
 }

@@ -26,7 +26,9 @@ var parameters = {
     al_mac: 'macosx_natives.jar.lzma',
     al_solaris: 'solaris_natives.jar.lzma',
     progressbar: true,
-    user: '{{ user.username }}',
+    user: '{{ my_user.username }}',
+    password: '{{ my_user.password }}',
+    character: '{{ character.name }}',
     separate_jvm: true
 }; 
 
@@ -34,3 +36,4 @@ deployJava.runApplet(attributes, parameters, '1.6');
 </script> 
 </center>
 {% endblock %}
+

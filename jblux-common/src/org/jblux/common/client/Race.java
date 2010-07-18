@@ -1,5 +1,5 @@
 /**
- * File: Relations.java
+ * File: Race.java
  *
  * @author Casey Jones
  *
@@ -18,21 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common;
+package org.jblux.common.client;
 
-public enum Relation {
-    LEFT("left"),
-    RIGHT("right"),
-    TOP("top"),
-    BOTTOM("bottom");
-    
-    private final String str;
-    private Relation(String s) {
-        str = s;
-    }
+import java.io.Serializable;
 
-    @Override
-    public String toString() {
-        return str;
-    }
+public class Race implements Serializable {
+    private final long serialVersionUID = 1L;
+
+    public int id;
+    public String name;
+    public String sprite_sheet;
 }

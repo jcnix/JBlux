@@ -16,8 +16,6 @@
     <target name="init">
         <copy file="../jblux-common/dist/jblux-common.jar"
             toFile="${lib}/jblux-common.jar"/>
-        <copy file="../jblux-sql/store/jblux-sql.jar"
-            toFile="${lib}/jblux-sql.jar"/>
 
         <!-- Create time stamp -->
         <tstamp/>

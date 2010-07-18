@@ -26,12 +26,7 @@ import org.jblux.client.Sprite;
 import org.jblux.client.gui.GUI;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ServerCommunicator;
-import java.applet.Applet;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import org.newdawn.slick.AppletGameContainer;
+import org.jblux.common.client.PlayerData;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -42,16 +37,18 @@ public class GameplayState extends BasicGameState {
     private int stateID = -1;
     private GameMap map;
     private Player player;
+    private PlayerData player_data;
     private GameCanvas canvas;
     private ServerCommunicator server;
 
     private Sprite npc;
     private GUI gui;
     
-    public GameplayState(int stateID, ServerCommunicator server)
+    public GameplayState(int stateID, ServerCommunicator server, PlayerData data)
     {
         this.stateID = stateID;
         this.server = server;
+        this.player_data = data;
     }
  
     @Override
@@ -61,36 +58,15 @@ public class GameplayState extends BasicGameState {
  
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        String username = "";
-        String map_test = "";
-
-        if (gc instanceof AppletGameContainer.Container) {
-            // get the parameters by casting container and getting the applet instance
-            Applet applet = ((AppletGameContainer.Container) gc).getApplet();
-            username = applet.getParameter("user");
-        }
-        else {
-            username = "casey";
-            try {
-                //Put this file in dist/ with the jar
-                BufferedReader r = new BufferedReader(new FileReader("testmap.txt"));
-                map_test = r.readLine();
-                System.out.printf("***Map: %s", map_test);
-            } catch (FileNotFoundException ex) {
-            } catch (IOException ex) {
-            }
-        }
-
-        if(map_test.equals(""))
-            map_test = "residential";
-
+        String map_test = "residential";
+        System.out.printf("sprite sheet: %s\n", player_data.race.sprite_sheet);
+        player = new Player(player_data, server);
         map = new GameMap(map_test);
-        player = new Player(username, server);
         canvas = GameCanvas.getInstance();
         canvas.init(player, map_test);
         //canvas = new GameCanvas(player, map_test);
 
-        npc = new Sprite("img/koopa.png");
+        npc = new Sprite("img/races/koopa.png");
         npc.setImage(Sprite.FACE_DOWN, 0);
 
         gui = new GUI(gc, server);

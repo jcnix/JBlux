@@ -1,5 +1,5 @@
 /**
- * File: Relations.java
+ * File: AuthParser.java
  *
  * @author Casey Jones
  *
@@ -18,21 +18,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common;
+package org.jblux.server.command.parsers;
 
-public enum Relation {
-    LEFT("left"),
-    RIGHT("right"),
-    TOP("top"),
-    BOTTOM("bottom");
-    
-    private final String str;
-    private Relation(String s) {
-        str = s;
+import org.jblux.server.ClientThread;
+import org.jblux.sql.UserTable;
+
+public class AuthParser implements CommandParser {
+    public AuthParser() {
     }
 
-    @Override
-    public String toString() {
-        return str;
+    public void parse(String[] command, ClientThread client) {
+        String name = command[1];
+        String pass = command[2];
+        String character_name = command[3];
+        UserTable ut = new UserTable();
+        boolean b = ut.authenticate(name, pass, character_name);
+        client.auth(character_name, b);
     }
 }
