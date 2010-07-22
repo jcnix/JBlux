@@ -26,6 +26,6 @@ package org.jblux.common;
  */
 public class ServerInfo {
     public static final String SERVER = "casey-jones.org";
-    public static final String LOCAL_IP = "98.158.185.149";
+    public static final String LOCAL_IP = "178.63.153.67";
     public static final int PORT = 4000;
 }
