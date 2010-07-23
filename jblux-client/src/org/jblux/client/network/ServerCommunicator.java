@@ -123,19 +123,6 @@ public class ServerCommunicator {
         sl.add_observable(ro);
     }
 
-    public PlayerData getPlayerData() {
-        while(sl.data == null) {
-            try {
-                Thread.sleep(20);
-            } catch(InterruptedException ex) {
-            }
-        }
-        //Intermediate storage
-        PlayerData d = sl.data;
-        sl.data = null;
-        return d;
-    }
-
     public void close() {
         try {
             socket.close();
@@ -163,7 +150,6 @@ class ServerListener extends Thread {
     private ChatBoxObserver cbObserver;
     public String response;
     public Coordinates coords;
-    public PlayerData data;
     private ArrayList<ResponseWaiter> observables;
 
     public ServerListener(Socket s) {
@@ -225,15 +211,13 @@ class ServerListener extends Thread {
             Sprite npc = players.getPlayer(name);
             npc.setCoords(x, y);
         }
-        else if(command.startsWith(Commands.AUTH)) {
-            response = c0[1];
-        }
         else if(command.startsWith(Commands.CONNECT)) {
             String name = c0[1];
             int x = Integer.parseInt(c0[2]);
             int y = Integer.parseInt(c0[3]);
 
-            Sprite npc = new Sprite("img/koopa.png");
+            PlayerData data = PlayerDataFactory.getDataFromBase64(c0[4]);
+            Sprite npc = new Sprite(data.race.sprite_sheet);
             npc.setName(name);
             npc.setCoords(x, y);
             npc.setImage(0, 0);

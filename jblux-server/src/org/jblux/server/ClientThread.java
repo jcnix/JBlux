@@ -45,6 +45,7 @@ public class ClientThread {
     private boolean authenticated;
     private String character_name;
     private String map;
+    private PlayerData player_data;
 
     private Clients clients;
     private ClientListener cl;
@@ -153,7 +154,15 @@ public class ClientThread {
     /* Put the player on a new map */
     public void go_to_map(String map, Coordinates coords) {
         System.out.printf("%s connected\n", character_name);
-        String command = String.format("%s add %s %s", Commands.MAP, character_name, getCoords());
+
+        String encoded_player_data = "";
+        try {
+            encoded_player_data = Base64.encodeObject(player_data);
+        } catch(IOException ex) {
+        }
+        
+        String command = String.format("%s add %s %s %s",
+                Commands.MAP, character_name, getCoords(), encoded_player_data);
         
         this.map = map;
         LinkedList<ClientThread> c = clients.getClients();

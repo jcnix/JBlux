@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Observable;
 import java.util.Observer;
+import org.jblux.client.network.PlayerDataFactory;
 import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.client.states.MainMenuState;
@@ -109,14 +110,8 @@ public class JBlux extends StateBasedGame implements Observer {
         String[] command = c.split(" ");
         if(command[0].equals(Commands.PLAYER)) {
             if(command[1].equals("self")) {
-                try {
-                    byte[] bytes = Base64.decode(command[2]);
-                    ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bytes));
-                    PlayerData data = (PlayerData) is.readObject();
-                    this.enterGame(data);
-                } catch(IOException ex) {
-                } catch(ClassNotFoundException ex) {
-                }
+                PlayerData data = PlayerDataFactory.getDataFromBase64(command[2]);
+                this.enterGame(data);
             }
         }
     }
