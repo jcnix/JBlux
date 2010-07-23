@@ -25,6 +25,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Observable;
 import org.jblux.client.Player;
 import org.jblux.client.Players;
 import org.jblux.client.Sprite;
@@ -69,6 +71,10 @@ public class ServerCommunicator {
         }
     }
 
+    public void rm_observable(Observable o) {
+        sl.rm_observable((ResponseWaiter) o);
+    }
+
     public void connect_player(String player, Coordinates coords) {
         System.out.println("Connecting...");
         character_name = player;
@@ -109,26 +115,12 @@ public class ServerCommunicator {
         return map;
     }
 
-    public boolean authenticate(String username, String password, String character_name) {
+    public void authenticate(ResponseWaiter ro, String username, String password, String character_name) {
         String command = String.format("%s %s %s %s", Commands.AUTH, username, password,
                 character_name);
         System.out.println(command);
         writeString(command);
-        boolean auth = false;
-
-        while(sl.response == null) {
-            try {
-                Thread.sleep(20);
-            } catch(InterruptedException ex) {
-            }
-        }
-        
-        if(sl.response.equals("true")) {
-            auth = true;
-        }
-
-        sl.response = null;
-        return auth;
+        sl.add_observable(ro);
     }
 
     public PlayerData getPlayerData() {
@@ -172,6 +164,7 @@ class ServerListener extends Thread {
     public String response;
     public Coordinates coords;
     public PlayerData data;
+    private ArrayList<ResponseWaiter> observables;
 
     public ServerListener(Socket s) {
         socket = s;
@@ -179,6 +172,7 @@ class ServerListener extends Thread {
         cbObserver = ChatBoxObserver.getInstance();
         response = null;
         coords = new Coordinates();
+        observables = new ArrayList<ResponseWaiter>();
     }
 
     @Override
@@ -196,6 +190,20 @@ class ServerListener extends Thread {
         }
     }
 
+    public void add_observable(ResponseWaiter o) {
+        observables.add(o);
+    }
+
+    public void rm_observable(ResponseWaiter o) {
+        observables.remove(o);
+    }
+
+    private void notify_observers(Object o) {
+        for(int i = 0; i < observables.size(); i++) {
+            observables.get(i).responseReceived(o);
+        }
+    }
+
     public synchronized void doCommand(String c) {
         String command = "";
         String[] c0 = null;
@@ -207,6 +215,7 @@ class ServerListener extends Thread {
         } catch (IOException ex) {
         } catch (ClassNotFoundException ex) {
         }
+        notify_observers(command);
 
         if(command.startsWith(Commands.MOVE)) {
             String name = c0[1];
@@ -234,9 +243,6 @@ class ServerListener extends Thread {
             String name = c0[1];
             players.removePlayer(name);
         }
-        else if(command.startsWith(Commands.PLAYER)) {
-            PlayerParser.parse(c0, this);
-        }
         else if(command.startsWith(Commands.CHAT)) {
             String name = c0[1];
 
@@ -246,7 +252,7 @@ class ServerListener extends Thread {
                 message += c0[i] + " ";
             }
 
-            cbObserver.recievedMessage(new ChatMessage(name,message));
+            cbObserver.receivedMessage(new ChatMessage(name,message));
         }
         else if(command.startsWith(Commands.MAP)) {
             if(c0[1].equals("rm")) {

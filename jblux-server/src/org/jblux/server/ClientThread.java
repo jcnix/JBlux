@@ -113,9 +113,6 @@ public class ClientThread {
             authenticated = false;
         }
 
-        String command = String.format("%s %b", Commands.AUTH, b);
-        writeString(command);
-
         if(authenticated) {
             sendPlayerData();
         }
@@ -260,7 +257,6 @@ class ClientListener extends Thread {
         } catch (IOException ex) {
         } catch (ClassNotFoundException ex) {
         }
-
         String[] c1 = c.split("\\s");
 
         if(c.startsWith(Commands.AUTH)) {
