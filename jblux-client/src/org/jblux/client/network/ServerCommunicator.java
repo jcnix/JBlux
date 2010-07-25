@@ -92,27 +92,11 @@ public class ServerCommunicator {
         writeString(command);
     }
 
-    public String goto_map(Relation r, String map_name, Player p) {
+    public void goto_map(ResponseWaiter ro, Relation r, String map_name) {
         String map = "";
         String command = String.format("%s goto %s %s", Commands.MAP, r, map_name);
         writeString(command);
-
-        while(sl.response == null) {
-            try {
-                Thread.sleep(20);
-            } catch(InterruptedException ex) {
-            }
-        }
-
-        if(sl.response.equals("stay")) {
-            return map_name;
-        }
-
-        map = sl.response;
-        p.setCoords(sl.coords);        
-        sl.response = null;
-        
-        return map;
+        sl.add_observable(ro);
     }
 
     public void authenticate(ResponseWaiter ro, String username, String password, String character_name) {
@@ -148,7 +132,6 @@ class ServerListener extends Thread {
     private ObjectInputStream netIn;
     private Players players;
     private ChatBoxObserver cbObserver;
-    public String response;
     public Coordinates coords;
     private ArrayList<ResponseWaiter> observables;
 
@@ -156,7 +139,6 @@ class ServerListener extends Thread {
         socket = s;
         players = Players.getInstance();
         cbObserver = ChatBoxObserver.getInstance();
-        response = null;
         coords = new Coordinates();
         observables = new ArrayList<ResponseWaiter>();
     }
@@ -255,13 +237,15 @@ class ServerListener extends Thread {
                 players.addPlayer(npc);
             }
             else if(c0[1].equals("goto")) {
-                response = c0[2];
+                String map = c0[2];
                 coords.x = Integer.parseInt(c0[3]);
                 coords.y = Integer.parseInt(c0[4]);
-                System.out.printf("response: %s @ %s\n", response, coords);
+                System.out.printf("response: %s @ %s\n", map, coords);
+                String response = String.format("%s %s", map, coords);
+                this.notify_observers(response);
             }
             else if(c0[1].equals("stay")) {
-                response = "stay";
+                //Don't do anything
             }
         }
         else if(command.startsWith("put")) {

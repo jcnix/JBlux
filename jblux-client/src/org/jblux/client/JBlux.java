@@ -21,9 +21,6 @@
 package org.jblux.client;
 
 import java.applet.Applet;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.Observable;
 import java.util.Observer;
 import org.jblux.client.network.PlayerDataFactory;
@@ -34,7 +31,6 @@ import org.jblux.client.states.GameplayState;
 import org.jblux.client.states.ServerDownState;
 import org.jblux.common.Commands;
 import org.jblux.common.client.PlayerData;
-import org.jblux.util.Base64;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.AppletGameContainer;
 import org.newdawn.slick.state.StateBasedGame;
