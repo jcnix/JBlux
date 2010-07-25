@@ -121,10 +121,10 @@ public class ClientThread {
 
     public void sendPlayerData() {
         UserTable ut = new UserTable();
-        PlayerData player = ut.getPlayer(character_name);
+        player_data = ut.getPlayer(character_name);
         String player_enc = "";
         try {
-            player_enc = Base64.encodeObject(player);
+            player_enc = Base64.encodeObject(player_data);
         } catch (IOException ex) {
         }
 
