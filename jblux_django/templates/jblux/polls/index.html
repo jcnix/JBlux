@@ -1,0 +1,16 @@
+{% extends "jblux/base.html" %}
+
+{% block title %}Polls{% endblock %}
+
+{% block content %}
+<h1>{{ latest_poll.question }}</h1>
+{% for choice in latest_poll.choice_set.all %}
+{{ choice.choice }}
+{% endfor %}
+<ul>
+    {% for poll in poll_list %}
+    <li><a href="/jblux/polls/{{ poll.id }}/">{{ poll.question }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}
+

@@ -1,5 +1,4 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.forms.models import modelformset_factory
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from jblux_django.jblux.models import User, Character
@@ -136,10 +135,6 @@ def screens(request):
 
 def help(request):
     return render_to_response('jblux/help.html',
-            context_instance=RequestContext(request))
-
-def polls(request):
-    return render_to_response('jblux/polls.html',
             context_instance=RequestContext(request))
 
 def select_character(request):

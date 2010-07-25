@@ -14,6 +14,9 @@ urlpatterns = patterns('jblux_django',
     (r'^info/$', 'jblux.views.info'),
     (r'^screens/$', 'jblux.views.screens'),
     (r'^help/$', 'jblux.views.help'),
-    (r'^polls/$', 'jblux.views.polls'),
+    (r'^polls/$', 'jblux.polls.polls'),
+    (r'^polls/(?P<poll_id>\d+)/$', 'jblux.polls.detail'),
+    (r'^polls/(?P<poll_id>\d+)/results/$', 'jblux.polls.results'),
+    (r'^polls/(?P<poll_id>\d+)/vote/$', 'jblux.polls.vote'),
 )
 
