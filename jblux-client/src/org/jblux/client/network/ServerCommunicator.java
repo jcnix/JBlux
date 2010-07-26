@@ -196,18 +196,6 @@ class ServerListener extends Thread {
             System.err.println(command);
             notify_observers(command);
         }
-        else if(command.startsWith(Commands.CONNECT)) {
-            String name = c0[1];
-            int x = Integer.parseInt(c0[2]);
-            int y = Integer.parseInt(c0[3]);
-
-            PlayerData data = PlayerDataFactory.getDataFromBase64(c0[4]);
-            Sprite npc = new Sprite(data.race.sprite_sheet);
-            npc.setName(name);
-            npc.setCoords(x, y);
-            npc.setImage(0, 0);
-            players.addPlayer(npc);
-        }
         else if(command.startsWith(Commands.DISCONNECT)) {
             String name = c0[1];
             players.removePlayer(name);
@@ -232,8 +220,9 @@ class ServerListener extends Thread {
                 String name = c0[2];
                 int x = Integer.parseInt(c0[3]);
                 int y = Integer.parseInt(c0[4]);
+                PlayerData data = PlayerDataFactory.getDataFromBase64(c0[5]);
 
-                Sprite npc = new Sprite("img/koopa.png");
+                Sprite npc = new Sprite(data.race.sprite_sheet);
                 npc.setName(name);
                 npc.setCoords(x, y);
                 npc.setImage(0, 0);
