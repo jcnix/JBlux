@@ -25,6 +25,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Observable;
 import org.jblux.client.Player;
 import org.jblux.client.Players;
 import org.jblux.client.Sprite;
@@ -69,6 +71,10 @@ public class ServerCommunicator {
         }
     }
 
+    public void rm_observable(Observable o) {
+        sl.rm_observable((ResponseWaiter) o);
+    }
+
     public void connect_player(String player, Coordinates coords) {
         System.out.println("Connecting...");
         character_name = player;
@@ -86,62 +92,19 @@ public class ServerCommunicator {
         writeString(command);
     }
 
-    public String goto_map(Relation r, String map_name, Player p) {
+    public void goto_map(ResponseWaiter ro, Relation r, String map_name) {
         String map = "";
         String command = String.format("%s goto %s %s", Commands.MAP, r, map_name);
+        sl.add_observable(ro);
         writeString(command);
-
-        while(sl.response == null) {
-            try {
-                Thread.sleep(20);
-            } catch(InterruptedException ex) {
-            }
-        }
-
-        if(sl.response.equals("stay")) {
-            return map_name;
-        }
-
-        map = sl.response;
-        p.setCoords(sl.coords);        
-        sl.response = null;
-        
-        return map;
     }
 
-    public boolean authenticate(String username, String password, String character_name) {
+    public void authenticate(ResponseWaiter ro, String username, String password, String character_name) {
         String command = String.format("%s %s %s %s", Commands.AUTH, username, password,
                 character_name);
         System.out.println(command);
+        sl.add_observable(ro);
         writeString(command);
-        boolean auth = false;
-
-        while(sl.response == null) {
-            try {
-                Thread.sleep(20);
-            } catch(InterruptedException ex) {
-            }
-        }
-        
-        if(sl.response.equals("true")) {
-            auth = true;
-        }
-
-        sl.response = null;
-        return auth;
-    }
-
-    public PlayerData getPlayerData() {
-        while(sl.data == null) {
-            try {
-                Thread.sleep(20);
-            } catch(InterruptedException ex) {
-            }
-        }
-        //Intermediate storage
-        PlayerData d = sl.data;
-        sl.data = null;
-        return d;
     }
 
     public void close() {
@@ -169,16 +132,15 @@ class ServerListener extends Thread {
     private ObjectInputStream netIn;
     private Players players;
     private ChatBoxObserver cbObserver;
-    public String response;
     public Coordinates coords;
-    public PlayerData data;
+    private ArrayList<ResponseWaiter> observables;
 
     public ServerListener(Socket s) {
         socket = s;
         players = Players.getInstance();
         cbObserver = ChatBoxObserver.getInstance();
-        response = null;
         coords = new Coordinates();
+        observables = new ArrayList<ResponseWaiter>();
     }
 
     @Override
@@ -193,6 +155,20 @@ class ServerListener extends Thread {
         } catch(ClassNotFoundException ex) {
         } catch(IOException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void add_observable(ResponseWaiter o) {
+        observables.add(o);
+    }
+
+    public void rm_observable(ResponseWaiter o) {
+        observables.remove(o);
+    }
+
+    private void notify_observers(Object o) {
+        for(int i = 0; i < observables.size(); i++) {
+            observables.get(i).responseReceived(o);
         }
     }
 
@@ -216,15 +192,17 @@ class ServerListener extends Thread {
             Sprite npc = players.getPlayer(name);
             npc.setCoords(x, y);
         }
-        else if(command.startsWith(Commands.AUTH)) {
-            response = c0[1];
+        else if(command.startsWith(Commands.PLAYER)) {
+            System.err.println(command);
+            notify_observers(command);
         }
         else if(command.startsWith(Commands.CONNECT)) {
             String name = c0[1];
             int x = Integer.parseInt(c0[2]);
             int y = Integer.parseInt(c0[3]);
 
-            Sprite npc = new Sprite("img/koopa.png");
+            PlayerData data = PlayerDataFactory.getDataFromBase64(c0[4]);
+            Sprite npc = new Sprite(data.race.sprite_sheet);
             npc.setName(name);
             npc.setCoords(x, y);
             npc.setImage(0, 0);
@@ -233,9 +211,6 @@ class ServerListener extends Thread {
         else if(command.startsWith(Commands.DISCONNECT)) {
             String name = c0[1];
             players.removePlayer(name);
-        }
-        else if(command.startsWith(Commands.PLAYER)) {
-            PlayerParser.parse(c0, this);
         }
         else if(command.startsWith(Commands.CHAT)) {
             String name = c0[1];
@@ -246,7 +221,7 @@ class ServerListener extends Thread {
                 message += c0[i] + " ";
             }
 
-            cbObserver.recievedMessage(new ChatMessage(name,message));
+            cbObserver.receivedMessage(new ChatMessage(name,message));
         }
         else if(command.startsWith(Commands.MAP)) {
             if(c0[1].equals("rm")) {
@@ -265,13 +240,15 @@ class ServerListener extends Thread {
                 players.addPlayer(npc);
             }
             else if(c0[1].equals("goto")) {
-                response = c0[2];
+                String map = c0[2];
                 coords.x = Integer.parseInt(c0[3]);
                 coords.y = Integer.parseInt(c0[4]);
-                System.out.printf("response: %s @ %s\n", response, coords);
+                System.out.printf("response: %s @ %s\n", map, coords);
+                String response = String.format("%s %s", map, coords);
+                this.notify_observers(response);
             }
             else if(c0[1].equals("stay")) {
-                response = "stay";
+                //Don't do anything
             }
         }
         else if(command.startsWith("put")) {

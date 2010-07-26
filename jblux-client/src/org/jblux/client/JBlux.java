@@ -21,10 +21,15 @@
 package org.jblux.client;
 
 import java.applet.Applet;
+import java.util.Observable;
+import java.util.Observer;
+import org.jblux.client.network.PlayerDataFactory;
+import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.client.states.MainMenuState;
 import org.jblux.client.states.GameplayState;
 import org.jblux.client.states.ServerDownState;
+import org.jblux.common.Commands;
 import org.jblux.common.client.PlayerData;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.AppletGameContainer;
@@ -32,15 +37,17 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 
-public class JBlux extends StateBasedGame {
+public class JBlux extends StateBasedGame implements Observer {
     public static final int MAINMENUSTATE = 0;
     public static final int GAMEPLAYSTATE = 1;
     public static final int SERVERDOWNSTATE = 2;
+    private ServerCommunicator server;
+    private ResponseWaiter ro;
     
     public JBlux() {
         super("JBlux");
 
-        ServerCommunicator server = new ServerCommunicator();
+        server = new ServerCommunicator();
         if(!server.isConnected()) {
             this.addState(new ServerDownState(SERVERDOWNSTATE));
             this.enterState(SERVERDOWNSTATE);
@@ -58,7 +65,10 @@ public class JBlux extends StateBasedGame {
                 username = applet.getParameter("user");
                 password = applet.getParameter("password");
                 character_name = applet.getParameter("character");
-                authorized = server.authenticate(username, password, character_name);
+
+                ro = new ResponseWaiter();
+                ro.addObserver(this);
+                server.authenticate(ro, username, password, character_name);
             }
             else {
                 username = "casey-test";
@@ -68,19 +78,10 @@ public class JBlux extends StateBasedGame {
                 //password = "81b2f040df6152242feb966d071fe58977dab12e";
                 //password = "wrong password";
                 //character_name = "pdude";
-                authorized = server.authenticate(username, password, character_name);
-            }
-            
-            if(authorized) {
-                PlayerData player_data = server.getPlayerData();
-                this.addState(new MainMenuState(MAINMENUSTATE));
-                this.addState(new GameplayState(GAMEPLAYSTATE, server, player_data));
-                this.enterState(MAINMENUSTATE);
-            }
-            else {
-                //Display some error
-                return;
-            }            
+                ro = new ResponseWaiter();
+                ro.addObserver(this);
+                server.authenticate(ro, username, password, character_name);
+            }         
         }
     }
     
@@ -89,7 +90,27 @@ public class JBlux extends StateBasedGame {
         //this.getState(MAINMENUSTATE).init(gc, this);
         //this.getState(GAMEPLAYSTATE).init(gc, this);
     }
-    
+
+    private void enterGame(PlayerData player_data) {
+        this.addState(new MainMenuState(MAINMENUSTATE));
+        this.addState(new GameplayState(GAMEPLAYSTATE, server, player_data));
+        this.enterState(MAINMENUSTATE);
+    }
+
+    public void update(Observable o, Object arg) {
+        if(o == ro) {
+            server.rm_observable(o);
+            String c = (String) arg;
+            String[] command = c.split(" ");
+            if(command[0].equals(Commands.PLAYER)) {
+                if(command[1].equals("self")) {
+                    PlayerData data = PlayerDataFactory.getDataFromBase64(command[2]);
+                    this.enterGame(data);
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         try
         {

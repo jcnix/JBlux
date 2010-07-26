@@ -1,5 +1,5 @@
 /**
- * File: PlayerParser.java
+ * File: PlayerDataFactory.java
  *
  * @author Casey Jones
  *
@@ -26,18 +26,20 @@ import java.io.ObjectInputStream;
 import org.jblux.common.client.PlayerData;
 import org.jblux.util.Base64;
 
-public class PlayerParser {
-    public static void parse(String[] command, ServerListener server) {
-        if(command[1].equals("self")) {
-            try {
-                byte[] bytes = Base64.decode(command[2]);
-                ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bytes));
-                PlayerData data = (PlayerData) is.readObject();
-                server.data = data;
-                System.out.println(data.character_name);
-            } catch(IOException ex) {
-            } catch(ClassNotFoundException ex) {
-            }
+public class PlayerDataFactory {
+    private PlayerDataFactory() {
+    }
+
+    public static PlayerData getDataFromBase64(String p) {
+        PlayerData data = null;
+        try {
+            byte[] bytes = Base64.decode(p);
+            ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bytes));
+            data = (PlayerData) is.readObject();
+        } catch(IOException ex) {
+        } catch(ClassNotFoundException ex) {
         }
+
+        return data;
     }
 }

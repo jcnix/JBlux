@@ -5,8 +5,6 @@
 
     <target name="jar">
         <ant dir="jblux-common"/>
-        <ant dir="jblux-sql"/>
-        <ant dir="jblux-suite"/>
         <ant dir="jblux-server"/>
         <ant dir="jblux-client"/>
     </target>

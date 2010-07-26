@@ -20,28 +20,34 @@
 
 package org.jblux.client;
 
+import java.util.Observable;
 import org.jblux.common.items.Inventory;
 import java.util.Calendar;
+import java.util.Observer;
 import org.jblux.client.gui.GameCanvas;
+import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.common.Relation;
 import org.jblux.common.client.PlayerData;
+import org.jblux.util.Coordinates;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-public class Player extends Sprite {
+public class Player extends Sprite implements Observer {
     private boolean switch_walk;  //Just means switch to other walk sprite
     private ServerCommunicator server;
     private Image walk_area;
     private int move_size;
     private String map_name;
     private PlayerData player_data;
+    private ResponseWaiter response;
 
     private Calendar cal;
     private long lastMove;
+    private boolean execute_change;
 
     public Player(PlayerData data, ServerCommunicator server) {
         //TODO: Replace this when accounts are set up.
@@ -187,10 +193,31 @@ public class Player extends Sprite {
         }
 
         if(change) {
-            map_name = server.goto_map(relation, map_name, this);
+            response = new ResponseWaiter();
+            response.addObserver(this);
+            server.goto_map(response, relation, map_name);
+        }
+
+        if(execute_change) {
             GameCanvas gc = GameCanvas.getInstance();
             gc.setMap(map_name);
             walk_area = gc.getMap().getWalkArea();
+            execute_change = false;
+        }
+    }
+
+    public void update(Observable o, Object arg) {
+        System.out.println("new map");
+        if(response == o) {
+            server.rm_observable(o);
+            String sarg = (String) arg;
+            String[] args = sarg.split("\\s");
+            map_name = args[0];
+            Coordinates c = new Coordinates();
+            c.x = Integer.parseInt(args[1]);
+            c.y = Integer.parseInt(args[2]);
+            setCoords(c);
+            execute_change = true;
         }
     }
 }
