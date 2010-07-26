@@ -47,6 +47,7 @@ public class Player extends Sprite implements Observer {
 
     private Calendar cal;
     private long lastMove;
+    private boolean execute_change;
 
     public Player(PlayerData data, ServerCommunicator server) {
         //TODO: Replace this when accounts are set up.
@@ -193,23 +194,30 @@ public class Player extends Sprite implements Observer {
 
         if(change) {
             response = new ResponseWaiter();
+            response.addObserver(this);
             server.goto_map(response, relation, map_name);
+        }
+
+        if(execute_change) {
+            GameCanvas gc = GameCanvas.getInstance();
+            gc.setMap(map_name);
+            walk_area = gc.getMap().getWalkArea();
+            execute_change = false;
         }
     }
 
     public void update(Observable o, Object arg) {
+        System.out.println("new map");
         if(response == o) {
             server.rm_observable(o);
             String sarg = (String) arg;
             String[] args = sarg.split("\\s");
-            String map = args[0];
+            map_name = args[0];
             Coordinates c = new Coordinates();
             c.x = Integer.parseInt(args[1]);
             c.y = Integer.parseInt(args[2]);
             setCoords(c);
-            GameCanvas gc = GameCanvas.getInstance();
-            gc.setMap(map_name);
-            walk_area = gc.getMap().getWalkArea();
+            execute_change = true;
         }
     }
 }

@@ -95,16 +95,16 @@ public class ServerCommunicator {
     public void goto_map(ResponseWaiter ro, Relation r, String map_name) {
         String map = "";
         String command = String.format("%s goto %s %s", Commands.MAP, r, map_name);
-        writeString(command);
         sl.add_observable(ro);
+        writeString(command);
     }
 
     public void authenticate(ResponseWaiter ro, String username, String password, String character_name) {
         String command = String.format("%s %s %s %s", Commands.AUTH, username, password,
                 character_name);
         System.out.println(command);
-        writeString(command);
         sl.add_observable(ro);
+        writeString(command);
     }
 
     public void close() {
@@ -183,7 +183,6 @@ class ServerListener extends Thread {
         } catch (IOException ex) {
         } catch (ClassNotFoundException ex) {
         }
-        notify_observers(command);
 
         if(command.startsWith(Commands.MOVE)) {
             String name = c0[1];
@@ -192,6 +191,10 @@ class ServerListener extends Thread {
 
             Sprite npc = players.getPlayer(name);
             npc.setCoords(x, y);
+        }
+        else if(command.startsWith(Commands.PLAYER)) {
+            System.err.println(command);
+            notify_observers(command);
         }
         else if(command.startsWith(Commands.CONNECT)) {
             String name = c0[1];

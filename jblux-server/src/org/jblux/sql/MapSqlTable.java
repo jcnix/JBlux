@@ -219,7 +219,6 @@ public class MapSqlTable {
         try {
             query = String.format("SELECT entrance_%s_x, entrance_%s_y FROM %s " +
                     "WHERE id='%d';", r, r, MAP_TABLE, map_id);
-            System.out.println(query);
 
             ResultSet rs = m_db.query_select(query);
             rs.next();

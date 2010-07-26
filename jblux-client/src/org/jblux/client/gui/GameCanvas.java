@@ -67,6 +67,7 @@ public class GameCanvas {
     }
 
     public void setMap(String name) {
+//        init(player, name);
         try {
             map = new GameMap(name);
         } catch (SlickException ex) {

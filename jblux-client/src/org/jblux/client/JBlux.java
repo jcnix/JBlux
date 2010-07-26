@@ -100,14 +100,13 @@ public class JBlux extends StateBasedGame implements Observer {
     public void update(Observable o, Object arg) {
         if(o == ro) {
             server.rm_observable(o);
-        }
-
-        String c = (String) arg;
-        String[] command = c.split(" ");
-        if(command[0].equals(Commands.PLAYER)) {
-            if(command[1].equals("self")) {
-                PlayerData data = PlayerDataFactory.getDataFromBase64(command[2]);
-                this.enterGame(data);
+            String c = (String) arg;
+            String[] command = c.split(" ");
+            if(command[0].equals(Commands.PLAYER)) {
+                if(command[1].equals("self")) {
+                    PlayerData data = PlayerDataFactory.getDataFromBase64(command[2]);
+                    this.enterGame(data);
+                }
             }
         }
     }
