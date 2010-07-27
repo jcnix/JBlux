@@ -50,16 +50,14 @@ public class Player extends Sprite implements Observer {
     private boolean execute_change;
 
     public Player(PlayerData data, ServerCommunicator server) {
-        //TODO: Replace this when accounts are set up.
         super(data.race.sprite_sheet);
 
         this.player_data = data;
         this.server = server;
         setName(data.character_name);
-        
-        move_size = 7;
+
         image = spriteSheet.getSubImage(FACE_DOWN, 0);
-        
+        move_size = 7;        
         coords.x = 352;
         coords.y = 384;
         switch_walk = false;

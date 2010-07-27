@@ -20,9 +20,18 @@
 
 package org.jblux.client.states;
 
+import java.util.Observable;
 import org.jblux.client.JBlux;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Observer;
+import org.jblux.client.Player;
+import org.jblux.client.gui.GameCanvas;
+import org.jblux.client.network.PlayerDataFactory;
+import org.jblux.client.network.ResponseWaiter;
+import org.jblux.client.network.ServerCommunicator;
+import org.jblux.common.Commands;
+import org.jblux.common.client.PlayerData;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -42,9 +51,11 @@ public class MainMenuState extends BasicGameState {
     private float startGameScale = 1;
     private float exitScale = 1;
     private int stateID = -1;
+    private ServerCommunicator server;
     
-    public MainMenuState(int stateID) {
+    public MainMenuState(int stateID, ServerCommunicator server) {
         this.stateID = stateID;
+        this.server = server;
     }
     
     @Override

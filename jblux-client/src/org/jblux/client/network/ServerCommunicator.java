@@ -193,7 +193,6 @@ class ServerListener extends Thread {
             npc.setCoords(x, y);
         }
         else if(command.startsWith(Commands.PLAYER)) {
-            System.err.println(command);
             notify_observers(command);
         }
         else if(command.startsWith(Commands.DISCONNECT)) {
