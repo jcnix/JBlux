@@ -23,13 +23,21 @@ def results(request, poll_id):
 
 def vote(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id)
+    cookie_name = str(poll_id + '_choice')
+    response = HttpResponseRedirect(reverse('jblux_django.jblux.polls.results', args=(p.id,)))
+
     try:
-        selected_choice = p.choice_set.get(pk=request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):
-        return render_to_response('jblux/polls/detail.html', {'poll': p, 'error_message': "You didn't select anything"},
-                context_instance=RequestContext(request))
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        return HttpResponseRedirect(reverse('jblux_django.jblux.polls.results', args=(p.id,)))
+        already_voted = request.COOKIES[cookie_name]
+    except KeyError:
+        try:
+            selected_choice = p.choice_set.get(pk=request.POST['choice'])
+        except (KeyError, Choice.DoesNotExist):
+            return render_to_response('jblux/polls/detail.html', {'poll': p, 'error_message': "You didn't select anything"},
+                    context_instance=RequestContext(request))
+        else:
+            response.set_cookie(cookie_name, selected_choice.id, max_age=99999)
+            selected_choice.votes += 1
+            selected_choice.save()
+
+    return response 
 

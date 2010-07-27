@@ -2,6 +2,7 @@
 ***************
 - Update Slick to build #274
 - Update LWJGL to 2.5
+- Client wasn't figuring out it was running an Applet (fixed now)
 
 7-25-2010 Update
 ****************
