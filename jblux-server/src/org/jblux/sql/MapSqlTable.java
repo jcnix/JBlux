@@ -178,39 +178,6 @@ public class MapSqlTable {
         return items;
     }
 
-    public void  saveMap(short id, String name, short left, short right,
-                         short above, short below) {
-        m_db.connect();
-        boolean exists = false;
-        String query = "";
-
-        if(m_db.doesRecordExist(name, "name", "maps")) {
-            exists = true;
-            query = String.format("DELETE FROM %s WHERE name='"+name+"';", MAP_TABLE);
-            m_db.query_select(query);
-        }
-
-        if(id < 1)
-            return;
-
-        String id_sql = "";
-        if(exists) {
-            System.out.println(exists);
-            id_sql = "'" + id + "'";
-        } else {
-            id_sql = "nextval('maps_id_seq')";
-        }
-
-        query = String.format("INSERT INTO maps VALUES(%s, '%s', '%d', " +
-                "'%d', '%d', '%d');",
-                id_sql, name, left, right, above, below);
-
-        System.out.printf("Save: %s\n", query);
-        m_db.query_select(query);
-
-        m_db.close();
-    }
-
     public Coordinates getEntrance(short map_id, Relation r) {
         m_db.connect();
         Coordinates c = new Coordinates();
@@ -245,29 +212,5 @@ public class MapSqlTable {
 
     public Coordinates getEntrance_bottom(short map_id) {
         return getEntrance(map_id, Relation.BOTTOM);
-    }
-
-    private void setEntrance(short id, String side, short x, short y) {
-        m_db.connect();
-        String query = String.format("INSERT INTO map_entrances VALUES(%d, '%s'," +
-                "%d, %d);", id, side, x, y);
-        m_db.query_select(query);
-        m_db.close();
-    }
-
-    public void setEntrance_left(short id, short max, short min) {
-        setEntrance(id, "left", max, min);
-    }
-
-    public void setEntrance_right(short id, short max, short min) {
-        setEntrance(id, "right", max, min);
-    }
-
-    public void setEntrance_top(short id, short max, short min) {
-        setEntrance(id, "top", max, min);
-    }
-
-    public void setEntrance_bottom(short id, short max, short min) {
-        setEntrance(id, "bottom", max, min);
     }
 }

@@ -73,7 +73,6 @@ public class GameplayState extends BasicGameState implements Observer {
 
             boolean authorized = false;
             if (gc instanceof AppletGameContainer.Container) {
-                System.out.println("Applet");
                 // get the parameters by casting container and getting the applet instance
                 Applet applet = ((AppletGameContainer.Container) gc).getApplet();
                 username = applet.getParameter("user");
