@@ -79,7 +79,7 @@ public class Player extends Sprite implements Observer {
     public void update(GameContainer gc) {
         Input input = gc.getInput();
 
-        if(gc.hasFocus() && can_move()) {
+        if(gc.hasFocus()) {
             if(input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A)) {
                 if(coords.x > 0) {
                     if(switch_walk)
@@ -145,6 +145,10 @@ public class Player extends Sprite implements Observer {
      * parameters are deltas
      */
     private void move(int dx, int dy) {
+        if(!can_move()) {
+            return;
+        }
+
         coords.x += dx;
         coords.y += dy;
 
