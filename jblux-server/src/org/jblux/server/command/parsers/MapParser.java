@@ -21,10 +21,10 @@
 package org.jblux.server.command.parsers;
 
 import org.jblux.common.Commands;
-import org.jblux.common.Map;
 import org.jblux.common.Relation;
 import org.jblux.common.RelationUtil;
 import org.jblux.server.ClientThread;
+import org.jblux.server.maps.Map;
 import org.jblux.server.maps.Maps;
 import org.jblux.sql.MapSqlTable;
 import org.jblux.util.Coordinates;

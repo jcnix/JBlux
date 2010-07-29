@@ -22,7 +22,6 @@ package org.jblux.server.maps;
 
 import java.util.HashMap;
 import java.util.Vector;
-import org.jblux.common.Map;
 import org.jblux.common.Relation;
 import org.jblux.sql.MapSqlTable;
 

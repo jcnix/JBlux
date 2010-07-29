@@ -22,16 +22,17 @@ package org.jblux.sql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Vector;
-import org.jblux.common.Map;
 import org.jblux.common.Relation;
 import org.jblux.common.items.Item;
+import org.jblux.server.maps.Map;
 import org.jblux.util.Coordinates;
 
 public class MapSqlTable {
     private DBManager m_db;
     private static final String MAP_TABLE = "jblux_map";
-    private static final String ITEMS_TABLE = "jblux_map_items";
+    private static final String ITEMS_TABLE = "jblux_mapitems";
 
     public MapSqlTable() {
         m_db = new DBManager();
@@ -61,7 +62,7 @@ public class MapSqlTable {
             while(map_rs.next()) {
                 short id = map_rs.getShort("id");
                 String name = map_rs.getString("name");
-                Vector<Item> items = new Vector<Item>();
+                HashMap<Coordinates, Item> items = new HashMap<Coordinates, Item>();
 
                 //Get items on map.
                 q = String.format("SELECT * FROM %s WHERE map_id='%d';", ITEMS_TABLE, id);
@@ -69,8 +70,11 @@ public class MapSqlTable {
                 if(items_rs != null) {
                     while(items_rs.next()) {
                         short item_id = items_rs.getShort("item_id");
+                        Coordinates c = new Coordinates();
+                        c.x = items_rs.getInt("x_coord");
+                        c.y = items_rs.getInt("y_coord");
                         Item item = item_table.getItem(item_id);
-                        items.add(item);
+                        items.put(c, item);
                     }
                 }
 

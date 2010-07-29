@@ -124,6 +124,12 @@ public class Player extends Sprite implements Observer {
                     move(0, move_size);
                 }
             }
+            //Action key
+            if(input.isKeyDown(Input.KEY_SPACE)) {
+                //TODO: Check in front of the player
+                //Only checking below the player for now
+                Coordinates tile = MapGrid.getTile(coords);
+            }
         }
     }
 

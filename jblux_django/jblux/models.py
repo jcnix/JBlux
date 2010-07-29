@@ -157,7 +157,6 @@ class Map(models.Model):
     map_right = models.ForeignKey('Map', blank=True, null=True, related_name='m_right')
     map_top = models.ForeignKey('Map', blank=True, null=True, related_name='m_above')
     map_bottom = models.ForeignKey('Map', blank=True, null=True, related_name='m_below')
-    items = models.ManyToManyField('Item', blank=True, null=True)
     entrance_left_x = models.IntegerField(blank=True, null=True)
     entrance_left_y = models.IntegerField(blank=True, null=True)
     entrance_right_x = models.IntegerField(blank=True, null=True)
@@ -169,6 +168,15 @@ class Map(models.Model):
 
     def __unicode__(self):
         return self.name
+
+class MapItems(models.Model):
+    map_id = models.ForeignKey('Map')
+    item_id = models.ForeignKey('Item')
+    x_coord = models.IntegerField()
+    y_coord = models.IntegerField()
+
+    def __unicode__(self):
+        return str(self.item + '@' + x + ',' + y)
 
 #Polls
 class Poll(models.Model):
