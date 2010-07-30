@@ -20,15 +20,18 @@
 
 package org.jblux.client;
 
+import org.jblux.common.MapGrid;
 import java.util.Observable;
 import org.jblux.common.items.Inventory;
 import java.util.Calendar;
 import java.util.Observer;
 import org.jblux.client.gui.GameCanvas;
+import org.jblux.client.network.ItemFactory;
 import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.common.Relation;
 import org.jblux.common.client.PlayerData;
+import org.jblux.common.items.Item;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -128,17 +131,21 @@ public class Player extends Sprite implements Observer {
             if(input.isKeyDown(Input.KEY_SPACE)) {
                 //TODO: Check in front of the player
                 //Only checking below the player for now
-                Coordinates tile = MapGrid.getTile(coords);
+                if(can_perform_action(500)) {
+                    response = new ResponseWaiter();
+                    Coordinates tile = MapGrid.getTile(coords);
+                    server.pickup_item(tile, response);
+                }
             }
         }
     }
 
-    public boolean can_move() {
+    public boolean can_perform_action(int delay_time) {
         cal = Calendar.getInstance();
         long time = cal.getTimeInMillis();
         long diff_time = time - lastMove;
 
-        if(diff_time < 100) {
+        if(diff_time < delay_time) {
             return false;
         }
         else {
@@ -151,7 +158,7 @@ public class Player extends Sprite implements Observer {
      * parameters are deltas
      */
     private void move(int dx, int dy) {
-        if(!can_move()) {
+        if(!can_perform_action(100)) {
             return;
         }
 
@@ -226,6 +233,14 @@ public class Player extends Sprite implements Observer {
             c.y = Integer.parseInt(args[2]);
             setCoords(c);
             execute_change = true;
+        }
+        if(response == o) {
+            server.rm_observable(o);
+            String sarg = (String) arg;
+            String[] args = sarg.split("\\s");
+            if(!args[1].equals("null")) {
+                Item item = ItemFactory.getItemFromBase64(args[1]);
+            }
         }
     }
 }

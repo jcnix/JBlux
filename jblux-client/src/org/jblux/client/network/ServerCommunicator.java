@@ -107,6 +107,12 @@ public class ServerCommunicator {
         writeString(command);
     }
 
+    public void pickup_item(Coordinates coords, ResponseWaiter response) {
+        String command = String.format("%s %s %s", Commands.MAP, Commands.PICKUP, coords);
+        sl.add_observable(response);
+        writeString(command);
+    }
+
     public void close() {
         try {
             socket.close();

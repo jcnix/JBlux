@@ -1,5 +1,5 @@
 /**
- * Commands.java
+ * File: ItemFactory.java
  *
  * @author Casey Jones
  *
@@ -18,17 +18,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common;
+package org.jblux.client.network;
 
-public class Commands {
-    public static final String MOVE = "move";
-    public static final String AUTH = "auth";
-    public static final String CONNECT = "connect";
-    public static final String DISCONNECT = "disconnect";
-    public static final String CHAT = "chat";
-    public static final String MAP = "map";
-    public static final String ITEM = "item";
-    public static final String DROP = "drop";
-    public static final String PICKUP = "pickup";
-    public static final String PLAYER = "player";
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import org.jblux.common.items.Item;
+import org.jblux.util.Base64;
+
+public class ItemFactory {
+    private ItemFactory() {
+    }
+
+    public static Item getItemFromBase64(String p) {
+        Item item = null;
+        try {
+            byte[] bytes = Base64.decode(p);
+            ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bytes));
+            item = (Item) is.readObject();
+        } catch(IOException ex) {
+        } catch(ClassNotFoundException ex) {
+        }
+
+        return item;
+    }
 }

@@ -29,6 +29,7 @@ import java.util.LinkedList;
 import org.jblux.common.Commands;
 import org.jblux.common.client.PlayerData;
 import org.jblux.common.items.Inventory;
+import org.jblux.common.items.Item;
 import org.jblux.server.command.parsers.AuthParser;
 import org.jblux.server.command.parsers.MapParser;
 import org.jblux.sql.UserTable;
@@ -177,8 +178,6 @@ public class ClientThread {
                     ct.getUsername(), ct.getCoords());
             writeString(otherPlayer);
 
-            //Tell the new player about items on the map
-
             //Tell other client about the new player
             ct.writeString(command);
         }
@@ -192,6 +191,10 @@ public class ClientThread {
 
     public boolean is_on_same_map(ClientThread ct) {
         return ct.getMap().equals(this.getMap());
+    }
+
+    public void add_to_inventory(Item i) {
+        inv.addItem(i);
     }
 
     public void writeString(String s) {

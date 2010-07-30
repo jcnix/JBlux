@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.client;
+package org.jblux.common;
 
 import org.jblux.util.Coordinates;
 
