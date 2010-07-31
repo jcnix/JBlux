@@ -164,19 +164,19 @@ class Quest(models.Model):
     details = models.CharField(max_length=500)
     objectives = models.CharField(max_length=100)
     completion_text = models.CharField(max_length=500)
-    npc = models.ForeignKey('Npc')
+    npc = models.ForeignKey('Npc', related_name='quest_giver')
     min_level = models.IntegerField()
     flag = models.IntegerField()
     next_quest = models.ForeignKey('Quest', null=True, blank=True)
     src_item = models.ForeignKey('Item', null=True, blank=True)
     reward_xp = models.IntegerField()
     reward_money = models.IntegerField()
-    reqItem1 = models.ForeignKey('Item', null=True, blank=True)
-    reqItem2 = models.ForeignKey('Item', null=True, blank=True
-    reqItem3 = models.ForeignKey('Item', null=True, blank=True
-    reqNpc1 = models.ForeignKey('Npc', null=True, blank=True);
-    reqNpc2 = models.ForeignKey('Npc', null=True, blank=True);
-    reqNpc3 = models.ForeignKey('Npc', null=True, blank=True);
+    reqItem1 = models.ForeignKey('Item', null=True, blank=True, related_name='req_item1')
+    reqItem2 = models.ForeignKey('Item', null=True, blank=True, related_name='req_item2')
+    reqItem3 = models.ForeignKey('Item', null=True, blank=True, related_name='req_item3')
+    reqNpc1 = models.ForeignKey('Npc', null=True, blank=True, related_name='req_npc1')
+    reqNpc2 = models.ForeignKey('Npc', null=True, blank=True, related_name='req_npc2')
+    reqNpc3 = models.ForeignKey('Npc', null=True, blank=True, related_name='req_npc3')
 
     def __unicode(self):
         return self.name
