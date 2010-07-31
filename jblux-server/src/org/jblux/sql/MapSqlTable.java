@@ -125,7 +125,7 @@ public class MapSqlTable {
         return newMap;
     }
 
-    public String getNameForId(short id) {
+    public String getNameForId(int id) {
         String name = "";
         m_db.connect();
 
