@@ -119,7 +119,6 @@ public class GameplayState extends BasicGameState implements Observer {
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         if(received_data) {
-            System.out.println("init player");
             received_data = false;
             player = new Player(player_data, server);
             canvas.setPlayer(player);

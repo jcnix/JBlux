@@ -21,15 +21,12 @@
 package org.jblux.common.client;
 
 import java.io.Serializable;
-import org.jblux.util.Coordinates;
 
 public class CharacterData implements Serializable {
     private final long serialVersionUID = 1L;
 
     public String character_name;
     public int level;
-    public String map;
-    public Coordinates coords;
     public Race race;
     public PlayerClass player_class;
 
