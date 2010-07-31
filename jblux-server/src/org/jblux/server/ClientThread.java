@@ -124,6 +124,7 @@ public class ClientThread {
     public void sendPlayerData() {
         UserTable ut = new UserTable();
         player_data = ut.getPlayer(character_name);
+        System.err.println(player_data.character_id);
         String player_enc = "";
         try {
             player_enc = Base64.encodeObject(player_data);

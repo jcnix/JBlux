@@ -85,6 +85,7 @@ public class UserTable {
             
             pdata.user_id = rs.getInt("id");
             pdata.character_name = character_name;
+            pdata.character_id = rs.getInt("id");
             pdata.coords.x = rs.getInt("x_coord");
             pdata.coords.y = rs.getInt("y_coord");
             int map_id = rs.getInt("current_map_id");
@@ -110,7 +111,7 @@ public class UserTable {
     public void setMap(int character_id, int map_id, Coordinates coords) {
         m_db.connect();
 
-        String q = String.format("UPDATE %s SET current_map=%d, x_coord=%d, y_coord=%d"
+        String q = String.format("UPDATE %s SET current_map_id=%d, x_coord=%d, y_coord=%d"
                 + " WHERE id=%d;",
                 CHARACTER_TABLE, map_id, coords.x, coords.y, character_id);
         m_db.query_select(q);
