@@ -24,7 +24,7 @@ class Character(models.Model):
     stamina = models.IntegerField()
     intelligence = models.IntegerField()
     spirit = models.IntegerField()
-    current_map = models.CharField(max_length=50)
+    current_map = models.ForeignKey('Map')
     x_coord = models.IntegerField()
     y_coord = models.IntegerField()
 
