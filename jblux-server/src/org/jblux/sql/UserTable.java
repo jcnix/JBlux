@@ -95,6 +95,7 @@ public class UserTable {
             pdata.race = race;
             pdata.player_class = pclass;
         } catch(SQLException ex) {
+            ex.printStackTrace();
         }
         
         m_db.close();

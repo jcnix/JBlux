@@ -20,37 +20,27 @@
 
 package org.jblux.client.states;
 
-import java.applet.Applet;
-import java.util.Observable;
-import java.util.Observer;
 import org.jblux.client.GameMap;
 import org.jblux.client.Player;
 import org.jblux.client.Sprite;
 import org.jblux.client.gui.GUI;
 import org.jblux.client.gui.GameCanvas;
-import org.jblux.client.network.PlayerDataFactory;
 import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
-import org.jblux.common.Commands;
 import org.jblux.common.client.PlayerData;
-import org.newdawn.slick.AppletGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class GameplayState extends BasicGameState implements Observer {
+public class GameplayState extends BasicGameState {
     private int stateID = -1;
     private GameMap map;
     private Player player;
     private PlayerData player_data;
     private GameCanvas canvas;
     private ServerCommunicator server;
-    private ResponseWaiter response;
-    private boolean received_data;
-
-    private Sprite npc;
     private GUI gui;
     
     public GameplayState(int stateID, ServerCommunicator server)
@@ -63,49 +53,21 @@ public class GameplayState extends BasicGameState implements Observer {
     public int getID() {
         return stateID;
     }
- 
+
+    public void setPlayer(PlayerData data) {
+        System.out.printf("data null? %b\n", data.race == null);
+        player_data = data;
+        player = new Player(data, server);
+        canvas.setPlayer(player);
+    }
+
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        if(server.isConnected()) {
-            String username = "";
-            String password = "";
-            String character_name = "";
-
-            boolean authorized = false;
-            if (gc instanceof AppletGameContainer.Container) {
-                // get the parameters by casting container and getting the applet instance
-                Applet applet = ((AppletGameContainer.Container) gc).getApplet();
-                username = applet.getParameter("user");
-                password = applet.getParameter("password");
-                character_name = applet.getParameter("character");
-
-                response = new ResponseWaiter();
-                response.addObserver(this);
-                server.authenticate(response, username, password, character_name);
-            }
-            else {
-                username = "casey-test";
-                password = "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8";
-                character_name = "mychar";
-                //username = "casey";
-                //password = "81b2f040df6152242feb966d071fe58977dab12e";
-                //password = "wrong password";
-                //character_name = "pdude";
-                response = new ResponseWaiter();
-                response.addObserver(this);
-                server.authenticate(response, username, password, character_name);
-            }
-        }
-
         String map_test = "residential";
         map = new GameMap(map_test);
         canvas = GameCanvas.getInstance();
         canvas.init(map_test);
         //canvas = new GameCanvas(player, map_test);
-
-        npc = new Sprite("img/races/koopa.png");
-        npc.setImage(Sprite.FACE_DOWN, 0);
-
         gui = new GUI(gc, server);
     }
  
@@ -117,29 +79,8 @@ public class GameplayState extends BasicGameState implements Observer {
     }
  
     @Override
-    public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-        if(received_data) {
-            received_data = false;
-            player = new Player(player_data, server);
-            canvas.setPlayer(player);
-        }
-        
+    public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {        
         player.update(gc);
         gui.update();
-    }
-
-    public void update(Observable o, Object arg) {
-        System.out.println("Received response");
-        if(o == response) {
-            server.rm_observable(o);
-            String c = (String) arg;
-            String[] command = c.split(" ");
-            if(command[0].equals(Commands.PLAYER)) {
-                if(command[1].equals("self")) {
-                    player_data = PlayerDataFactory.getDataFromBase64(command[2]);
-                    received_data = true;
-                }
-            }
-        }
     }
 }

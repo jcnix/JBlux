@@ -20,6 +20,7 @@
 
 package org.jblux.client.states;
 
+import java.applet.Applet;
 import java.util.Observable;
 import org.jblux.client.JBlux;
 import java.awt.Color;
@@ -32,6 +33,7 @@ import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.common.Commands;
 import org.jblux.common.client.PlayerData;
+import org.newdawn.slick.AppletGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -43,10 +45,13 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class MainMenuState extends BasicGameState {
+public class MainMenuState extends BasicGameState implements Observer {
     private Image background;
     private Image loginButton;
     private TextField txtUsername;
+    private ResponseWaiter response;
+    private boolean received_data;
+    private PlayerData player_data;
     
     private float startGameScale = 1;
     private float exitScale = 1;
@@ -65,6 +70,37 @@ public class MainMenuState extends BasicGameState {
     
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+        if(server.isConnected()) {
+            String username = "";
+            String password = "";
+            String character_name = "";
+
+            boolean authorized = false;
+            if (gc instanceof AppletGameContainer.Container) {
+                // get the parameters by casting container and getting the applet instance
+                Applet applet = ((AppletGameContainer.Container) gc).getApplet();
+                username = applet.getParameter("user");
+                password = applet.getParameter("password");
+                character_name = applet.getParameter("character");
+
+                response = new ResponseWaiter();
+                response.addObserver(this);
+                server.authenticate(response, username, password, character_name);
+            }
+            else {
+                username = "casey-test";
+                password = "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8";
+                character_name = "mychar";
+                //username = "casey";
+                //password = "81b2f040df6152242feb966d071fe58977dab12e";
+                //password = "wrong password";
+                //character_name = "pdude";
+                response = new ResponseWaiter();
+                response.addObserver(this);
+                server.authenticate(response, username, password, character_name);
+            }
+        }
+
         background = new Image("img/menu.png");
         loginButton = new Image("img/login.png");
 
@@ -87,6 +123,13 @@ public class MainMenuState extends BasicGameState {
  
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+        if(received_data) {
+            received_data = false;
+            GameplayState gps = (GameplayState) sbg.getState(JBlux.GAMEPLAYSTATE);
+            gps.setPlayer(player_data);
+            sbg.enterState(JBlux.GAMEPLAYSTATE);
+        }
+
         Input input = gc.getInput();
 
         int mouseX = input.getMouseX();
@@ -103,6 +146,21 @@ public class MainMenuState extends BasicGameState {
         if(insideStartGame){
             if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON))
                 sbg.enterState(JBlux.GAMEPLAYSTATE);
+        }
+    }
+
+    public void update(Observable o, Object arg) {
+        System.out.println("Received response");
+        if(o == response) {
+            server.rm_observable(o);
+            String c = (String) arg;
+            String[] command = c.split(" ");
+            if(command[0].equals(Commands.PLAYER)) {
+                if(command[1].equals("self")) {
+                    player_data = PlayerDataFactory.getDataFromBase64(command[2]);
+                    received_data = true;
+                }
+            }
         }
     }
 }
