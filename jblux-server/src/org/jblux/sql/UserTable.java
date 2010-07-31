@@ -84,7 +84,7 @@ public class UserTable {
             
             pdata.user_id = rs.getInt("id");
             pdata.character_name = character_name;
-            pdata.current_map = rs.getString("current_map");
+            pdata.map = rs.getString("current_map");
             int race_id = rs.getInt("race_id");
             int class_id = rs.getInt("class_t_id");
             

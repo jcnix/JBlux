@@ -1,5 +1,5 @@
 /**
- * File: PlayerData.java
+ * File: NPCData.java
  *
  * @author Casey Jones
  *
@@ -21,12 +21,16 @@
 package org.jblux.common.client;
 
 import java.io.Serializable;
-import org.jblux.common.items.Inventory;
 
-public class PlayerData extends CharacterData implements Serializable {
+public class NpcData extends CharacterData implements Serializable {
     private final long serialVersionUID = 1L;
+
+    public int npc_id;
     
-    public int user_id;
-    public int character_id;
-    public Inventory inventory;
+    //Job will be things like Vendor or Enemy
+    public int job;
+    
+    /* Custom sprite sheet.  If not set, use the
+     * default race sprite sheet. */
+    public String sprite_sheet;
 }

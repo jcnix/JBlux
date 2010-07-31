@@ -25,6 +25,8 @@ class Character(models.Model):
     intelligence = models.IntegerField()
     spirit = models.IntegerField()
     current_map = models.CharField(max_length=50)
+    x_coord = models.IntegerField()
+    y_coord = models.IntegerField()
 
     def __unicode__(self):
         return self.name
@@ -159,6 +161,7 @@ class Item(models.Model):
 class Npc(models.Model):
     name = models.CharField(max_length=50)
     race = models.ForeignKey('Race')
+    class_t = models.ForeignKey('Class')
     job = models.IntegerField()
     sprite_sheet = models.CharField(max_length=50,null=True, blank=True)
 

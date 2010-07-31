@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Vector;
 import org.jblux.common.Relation;
+import org.jblux.common.client.NpcData;
 import org.jblux.common.items.Item;
 import org.jblux.server.maps.Map;
 import org.jblux.util.Coordinates;
@@ -33,6 +34,7 @@ public class MapSqlTable {
     private DBManager m_db;
     private static final String MAP_TABLE = "jblux_map";
     private static final String ITEMS_TABLE = "jblux_mapitems";
+    private static final String NPCS_TABLE = "jblux_mapnpcs";
 
     public MapSqlTable() {
         m_db = new DBManager();
@@ -155,19 +157,14 @@ public class MapSqlTable {
         return id;
     }
 
-    public Vector<Item> getItemsOnMap(String name) {
+    public Vector<Item> getItemsOnMap(int id) {
         Vector<Item> items = new Vector<Item>();
         m_db.connect();
 
         try {
-            String q = String.format("SELECT id FROM %s WHERE NAME='%s'", MAP_TABLE, name);
+            String q = String.format("SELECT * FROM %s WHERE map_id=%d;",
+                    ITEMS_TABLE, id);
             ResultSet rs = m_db.query_select(q);
-            rs.next();
-            short map_id = rs.getShort("id");
-
-            q = String.format("SELECT item_id FROM %s WHERE map_id='%d';",
-                    ITEMS_TABLE, map_id);
-            rs = m_db.query_select(q);
 
             ItemSqlTable ist = new ItemSqlTable();
             while(rs.next()) {
@@ -180,6 +177,27 @@ public class MapSqlTable {
 
         m_db.close();
         return items;
+    }
+
+    public Vector<NpcData> getNpcsOnMap(int id) {
+        Vector<NpcData> npcs = new Vector<NpcData>();
+        m_db.connect();
+
+        try {
+            String q = String.format("SELECT * FROM %s WHERE map_id=%d;",
+                    NPCS_TABLE, id);
+            ResultSet rs = m_db.query_select(q);
+
+            NpcTable npct = new NpcTable();
+            while(rs.next()) {
+                NpcData npc = npct.getNpc(rs.getInt("npc_id"));
+                npcs.add(npc);
+            }
+        } catch(SQLException ex) {
+        }
+
+        m_db.close();
+        return npcs;
     }
 
     public Coordinates getEntrance(short map_id, Relation r) {

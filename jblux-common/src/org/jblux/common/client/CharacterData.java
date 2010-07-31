@@ -21,12 +21,21 @@
 package org.jblux.common.client;
 
 import java.io.Serializable;
-import org.jblux.common.items.Inventory;
+import org.jblux.util.Coordinates;
 
-public class PlayerData extends CharacterData implements Serializable {
+public class CharacterData implements Serializable {
     private final long serialVersionUID = 1L;
-    
-    public int user_id;
-    public int character_id;
-    public Inventory inventory;
+
+    public String character_name;
+    public int level;
+    public String map;
+    public Coordinates coords;
+    public Race race;
+    public PlayerClass player_class;
+
+    public int strength;
+    public int agility;
+    public int stamina;
+    public int intelligence;
+    public int spirit;
 }
