@@ -85,6 +85,11 @@ class Inventory(models.Model):
     def __unicode__(self):
         return self.character
 
+class QuestLog(models.Model):
+    character = models.ForeignKey('Character')
+    quest = models.ForeignKey('Quest')
+    status = models.IntegerField()
+
 class Item(models.Model):
     types = models.IntegerField()
     subtype = models.IntegerField()
