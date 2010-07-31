@@ -155,6 +155,7 @@ class Npc(models.Model):
     name = models.CharField(max_length=50)
     race = models.ForeignKey('Race')
     job = models.IntegerField()
+    sprite_sheet = models.CharField(max_length=50,null=True, blank=True)
 
     def __unicode(self):
         return self.name
