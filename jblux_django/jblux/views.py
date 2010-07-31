@@ -95,6 +95,8 @@ def new_character(request):
                     intelligence=1,
                     spirit=1,
                     current_map="residential",
+                    x_coord = 352,
+                    y_coord = 384,
                     )
             return HttpResponseRedirect("/jblux/index")
 
