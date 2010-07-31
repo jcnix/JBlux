@@ -60,12 +60,10 @@ public class Player extends Sprite implements Observer {
 
         image = spriteSheet.getSubImage(FACE_DOWN, 0);
         move_size = 7;        
-        coords.x = 352;
-        coords.y = 384;
+        coords.x = data.coords.x;
+        coords.y = data.coords.y;
+        map_name = data.map;
         switch_walk = false;
-
-        //TODO: get this from the server
-        map_name = "residential";
 
         cal = Calendar.getInstance();
         lastMove = cal.getTimeInMillis();

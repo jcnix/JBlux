@@ -22,10 +22,8 @@ package org.jblux.client.states;
 
 import org.jblux.client.GameMap;
 import org.jblux.client.Player;
-import org.jblux.client.Sprite;
 import org.jblux.client.gui.GUI;
 import org.jblux.client.gui.GameCanvas;
-import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.common.client.PlayerData;
 import org.newdawn.slick.GameContainer;
@@ -59,15 +57,18 @@ public class GameplayState extends BasicGameState {
         player_data = data;
         player = new Player(data, server);
         canvas.setPlayer(player);
+        
+        try {
+            map = new GameMap(data.map);
+            canvas.setMap(map);
+        } catch (SlickException ex) {
+        }
     }
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        String map_test = "residential";
-        map = new GameMap(map_test);
         canvas = GameCanvas.getInstance();
-        canvas.init(map_test);
-        //canvas = new GameCanvas(player, map_test);
+        canvas.init();
         gui = new GUI(gc, server);
     }
  
