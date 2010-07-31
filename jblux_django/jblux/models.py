@@ -151,6 +151,36 @@ class Item(models.Model):
     def __unicode__(self):
         return self.name
 
+class Npc(models.Model):
+    name = models.CharField(max_length=50)
+    race = models.ForeignKey('Race')
+    job = models.IntegerField()
+
+    def __unicode(self):
+        return self.name
+
+class Quest(models.Model):
+    name = models.CharField(max_length=50)
+    details = models.CharField(max_length=500)
+    objectives = models.CharField(max_length=100)
+    completion_text = models.CharField(max_length=500)
+    npc = models.ForeignKey('Npc')
+    min_level = models.IntegerField()
+    flag = models.IntegerField()
+    next_quest = models.ForeignKey('Quest', null=True, blank=True)
+    src_item = models.ForeignKey('Item', null=True, blank=True)
+    reward_xp = models.IntegerField()
+    reward_money = models.IntegerField()
+    reqItem1 = models.ForeignKey('Item', null=True, blank=True)
+    reqItem2 = models.ForeignKey('Item', null=True, blank=True
+    reqItem3 = models.ForeignKey('Item', null=True, blank=True
+    reqNpc1 = models.ForeignKey('Npc', null=True, blank=True);
+    reqNpc2 = models.ForeignKey('Npc', null=True, blank=True);
+    reqNpc3 = models.ForeignKey('Npc', null=True, blank=True);
+
+    def __unicode(self):
+        return self.name
+
 class Map(models.Model):
     name = models.CharField(max_length=50, unique=True)
     map_left = models.ForeignKey('Map', blank=True, null=True, related_name='m_left')
@@ -176,7 +206,16 @@ class MapItems(models.Model):
     y_coord = models.IntegerField()
 
     def __unicode__(self):
-        return str(self.item + '@' + x + ',' + y)
+        return str(self.item + '@' + x_coord + ',' + y_coord)
+
+class MapNpcs(models.Model):
+    map_id = models.ForeignKey('Map')
+    npc_id = models.ForeignKey('Npc')
+    x_coord = models.IntegerField()
+    y_coord = models.IntegerField()
+
+    def __unicode__(self):
+        return str(self.npc_id + '@' + x_coord + ',' + y_coord)
 
 #Polls
 class Poll(models.Model):

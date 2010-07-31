@@ -22,7 +22,6 @@ package org.jblux.client;
 
 import org.jblux.common.MapGrid;
 import java.util.Observable;
-import org.jblux.common.items.Inventory;
 import java.util.Calendar;
 import java.util.Observer;
 import org.jblux.client.gui.GameCanvas;
