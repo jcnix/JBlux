@@ -53,7 +53,6 @@ public class GameplayState extends BasicGameState {
     }
 
     public void setPlayer(PlayerData data) {
-        System.out.printf("data null? %b\n", data.race == null);
         player_data = data;
         player = new Player(data, server);
         canvas.setPlayer(player);

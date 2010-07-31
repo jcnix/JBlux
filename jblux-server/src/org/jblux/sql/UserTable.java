@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import org.jblux.common.client.PlayerClass;
 import org.jblux.common.client.PlayerData;
 import org.jblux.common.client.Race;
+import org.jblux.util.Coordinates;
 
 public class UserTable {
     private DBManager m_db;
@@ -100,6 +101,17 @@ public class UserTable {
         
         m_db.close();
         return pdata;
+    }
+
+    public void setMap(int character_id, int map_id, Coordinates coords) {
+        m_db.connect();
+
+        String q = String.format("UPDATE %s SET current_map=%d, x_coord=%d, y_coord=%d"
+                + " WHERE id=%d;",
+                CHARACTER_TABLE, map_id, coords.x, coords.y, character_id);
+        m_db.query_select(q);
+
+        m_db.close();
     }
 
     public Race getRace(int id) {

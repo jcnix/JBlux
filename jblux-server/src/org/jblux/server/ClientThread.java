@@ -32,6 +32,7 @@ import org.jblux.common.items.Inventory;
 import org.jblux.common.items.Item;
 import org.jblux.server.command.parsers.AuthParser;
 import org.jblux.server.command.parsers.MapParser;
+import org.jblux.sql.MapSqlTable;
 import org.jblux.sql.UserTable;
 import org.jblux.util.Base64;
 import org.jblux.util.Coordinates;
@@ -156,6 +157,11 @@ public class ClientThread {
     public void go_to_map(String map, Coordinates coords) {
         System.out.printf("%s connected\n", character_name);
 
+        UserTable ut = new UserTable();
+        MapSqlTable mst = new MapSqlTable();
+        int map_id = mst.getIdForName(map);
+        ut.setMap(player_data.character_id, map_id, getCoords());
+        
         String encoded_player_data = "";
         try {
             encoded_player_data = Base64.encodeObject(player_data);
