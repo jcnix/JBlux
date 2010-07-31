@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from jblux_djanog.jblux.models import Poll, Choice
+from jblux_django.jblux.models import Poll, Choice
 
 def polls(request):
     latest_poll = Poll.objects.all().order_by('pub_date')[:1]
