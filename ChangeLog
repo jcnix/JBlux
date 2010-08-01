@@ -6,6 +6,7 @@
 - Prevent users from voting on the same poll multiple times
 - Start on defining Npcs and Quests
 - Set player position and map based on data from server
+- Always select character before entering game.
 
 7-25-2010 Update
 ****************
