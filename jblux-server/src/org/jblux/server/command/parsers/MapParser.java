@@ -20,13 +20,16 @@
 
 package org.jblux.server.command.parsers;
 
+import java.io.IOException;
 import org.jblux.common.Commands;
-import org.jblux.common.Map;
 import org.jblux.common.Relation;
 import org.jblux.common.RelationUtil;
+import org.jblux.common.items.Item;
 import org.jblux.server.ClientThread;
+import org.jblux.server.maps.Map;
 import org.jblux.server.maps.Maps;
 import org.jblux.sql.MapSqlTable;
+import org.jblux.util.Base64;
 import org.jblux.util.Coordinates;
 
 public class MapParser implements CommandParser {
@@ -55,6 +58,30 @@ public class MapParser implements CommandParser {
             }
             
             //Respond to client
+            client.writeString(cmd);
+        }
+        else if(command[1].equals(Commands.PICKUP)) {
+            Coordinates c = new Coordinates();
+            c.x = Integer.parseInt(command[2]);
+            c.y = Integer.parseInt(command[3]);
+
+            Maps maps = Maps.getInstance();
+            short id = maps.getID(client.getMap());
+            Map m = maps.getMap(id);
+            Item item = m.getItemAt(c);
+
+            String enc_item = "";
+            if(item == null) {
+                enc_item = "null";
+            } else {
+                client.add_to_inventory(item);
+                try {
+                    enc_item = Base64.encodeObject(item);
+                } catch (IOException ex) {
+                }
+            }
+            
+            String cmd = String.format("%s %s", Commands.ITEM, enc_item);
             client.writeString(cmd);
         }
     }

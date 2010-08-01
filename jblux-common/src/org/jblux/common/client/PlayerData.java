@@ -22,22 +22,18 @@ package org.jblux.common.client;
 
 import java.io.Serializable;
 import org.jblux.common.items.Inventory;
+import org.jblux.util.Coordinates;
 
-public class PlayerData implements Serializable {
+public class PlayerData extends CharacterData implements Serializable {
     private final long serialVersionUID = 1L;
 
-    public String character_name;
+    public String map;
     public int user_id;
     public int character_id;
-    public Race race;
-    public PlayerClass player_class;
-    public int level;
     public Inventory inventory;
+    public Coordinates coords;
 
-    public int strength;
-    public int agility;
-    public int stamina;
-    public int intelligence;
-    public int spirit;
-    public String current_map;
+    public PlayerData() {
+        coords = new Coordinates();
+    }
 }

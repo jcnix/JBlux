@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from jblux_django.jblux.models import User, Character
+from jblux_django.jblux.models import User, Character, Map
 from jblux_django.jblux.forms import LoginForm, RegisterForm, CharacterForm
 from jblux_django.jblux.forms import SelectCharacterForm
 import hashlib
@@ -84,6 +84,7 @@ def new_character(request):
             class_t = form.cleaned_data['class_t']
             user = request.session['user']
 
+            starter_map = Map.objects.get(name='residential')
             character = Character.objects.create(
                     name=name,
                     user=user,
@@ -94,7 +95,9 @@ def new_character(request):
                     stamina=1,
                     intelligence=1,
                     spirit=1,
-                    current_map="residential",
+                    current_map=starter_map,
+                    x_coord = 352,
+                    y_coord = 384,
                     )
             return HttpResponseRedirect("/jblux/index")
 

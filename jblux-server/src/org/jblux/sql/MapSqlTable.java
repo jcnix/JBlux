@@ -22,16 +22,19 @@ package org.jblux.sql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Vector;
-import org.jblux.common.Map;
 import org.jblux.common.Relation;
+import org.jblux.common.client.NpcData;
 import org.jblux.common.items.Item;
+import org.jblux.server.maps.Map;
 import org.jblux.util.Coordinates;
 
 public class MapSqlTable {
     private DBManager m_db;
     private static final String MAP_TABLE = "jblux_map";
-    private static final String ITEMS_TABLE = "jblux_map_items";
+    private static final String ITEMS_TABLE = "jblux_mapitems";
+    private static final String NPCS_TABLE = "jblux_mapnpcs";
 
     public MapSqlTable() {
         m_db = new DBManager();
@@ -61,7 +64,7 @@ public class MapSqlTable {
             while(map_rs.next()) {
                 short id = map_rs.getShort("id");
                 String name = map_rs.getString("name");
-                Vector<Item> items = new Vector<Item>();
+                HashMap<Coordinates, Item> items = new HashMap<Coordinates, Item>();
 
                 //Get items on map.
                 q = String.format("SELECT * FROM %s WHERE map_id='%d';", ITEMS_TABLE, id);
@@ -69,8 +72,11 @@ public class MapSqlTable {
                 if(items_rs != null) {
                     while(items_rs.next()) {
                         short item_id = items_rs.getShort("item_id");
+                        Coordinates c = new Coordinates();
+                        c.x = items_rs.getInt("x_coord");
+                        c.y = items_rs.getInt("y_coord");
                         Item item = item_table.getItem(item_id);
-                        items.add(item);
+                        items.put(c, item);
                     }
                 }
 
@@ -119,7 +125,7 @@ public class MapSqlTable {
         return newMap;
     }
 
-    public String getNameForId(short id) {
+    public String getNameForId(int id) {
         String name = "";
         m_db.connect();
 
@@ -151,19 +157,14 @@ public class MapSqlTable {
         return id;
     }
 
-    public Vector<Item> getItemsOnMap(String name) {
+    public Vector<Item> getItemsOnMap(int id) {
         Vector<Item> items = new Vector<Item>();
         m_db.connect();
 
         try {
-            String q = String.format("SELECT id FROM %s WHERE NAME='%s'", MAP_TABLE, name);
+            String q = String.format("SELECT * FROM %s WHERE map_id=%d;",
+                    ITEMS_TABLE, id);
             ResultSet rs = m_db.query_select(q);
-            rs.next();
-            short map_id = rs.getShort("id");
-
-            q = String.format("SELECT item_id FROM %s WHERE map_id='%d';",
-                    ITEMS_TABLE, map_id);
-            rs = m_db.query_select(q);
 
             ItemSqlTable ist = new ItemSqlTable();
             while(rs.next()) {
@@ -178,37 +179,25 @@ public class MapSqlTable {
         return items;
     }
 
-    public void  saveMap(short id, String name, short left, short right,
-                         short above, short below) {
+    public Vector<NpcData> getNpcsOnMap(int id) {
+        Vector<NpcData> npcs = new Vector<NpcData>();
         m_db.connect();
-        boolean exists = false;
-        String query = "";
 
-        if(m_db.doesRecordExist(name, "name", "maps")) {
-            exists = true;
-            query = String.format("DELETE FROM %s WHERE name='"+name+"';", MAP_TABLE);
-            m_db.query_select(query);
+        try {
+            String q = String.format("SELECT * FROM %s WHERE map_id=%d;",
+                    NPCS_TABLE, id);
+            ResultSet rs = m_db.query_select(q);
+
+            NpcTable npct = new NpcTable();
+            while(rs.next()) {
+                NpcData npc = npct.getNpc(rs.getInt("npc_id"));
+                npcs.add(npc);
+            }
+        } catch(SQLException ex) {
         }
-
-        if(id < 1)
-            return;
-
-        String id_sql = "";
-        if(exists) {
-            System.out.println(exists);
-            id_sql = "'" + id + "'";
-        } else {
-            id_sql = "nextval('maps_id_seq')";
-        }
-
-        query = String.format("INSERT INTO maps VALUES(%s, '%s', '%d', " +
-                "'%d', '%d', '%d');",
-                id_sql, name, left, right, above, below);
-
-        System.out.printf("Save: %s\n", query);
-        m_db.query_select(query);
 
         m_db.close();
+        return npcs;
     }
 
     public Coordinates getEntrance(short map_id, Relation r) {
@@ -245,29 +234,5 @@ public class MapSqlTable {
 
     public Coordinates getEntrance_bottom(short map_id) {
         return getEntrance(map_id, Relation.BOTTOM);
-    }
-
-    private void setEntrance(short id, String side, short x, short y) {
-        m_db.connect();
-        String query = String.format("INSERT INTO map_entrances VALUES(%d, '%s'," +
-                "%d, %d);", id, side, x, y);
-        m_db.query_select(query);
-        m_db.close();
-    }
-
-    public void setEntrance_left(short id, short max, short min) {
-        setEntrance(id, "left", max, min);
-    }
-
-    public void setEntrance_right(short id, short max, short min) {
-        setEntrance(id, "right", max, min);
-    }
-
-    public void setEntrance_top(short id, short max, short min) {
-        setEntrance(id, "top", max, min);
-    }
-
-    public void setEntrance_bottom(short id, short max, short min) {
-        setEntrance(id, "bottom", max, min);
     }
 }

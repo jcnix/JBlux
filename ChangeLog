@@ -1,3 +1,12 @@
+8-1-2010 Update
+***************
+- Update Slick to build #274
+- Update LWJGL to 2.5
+- Client wasn't figuring out it was running as an Applet (fixed now)
+- Prevent users from voting on the same poll multiple times
+- Start on defining Npcs and Quests
+- Set player position and map based on data from server
+
 7-25-2010 Update
 ****************
 - Can vote in Polls on the site

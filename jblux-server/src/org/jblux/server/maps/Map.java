@@ -18,15 +18,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common;
+package org.jblux.server.maps;
 
-import java.util.Vector;
+import java.util.HashMap;
+import org.jblux.common.Relation;
 import org.jblux.common.items.Item;
+import org.jblux.util.Coordinates;
 
 public class Map {
     private short m_id;
     private String m_name;
-    private Vector<Item> m_items;
+    private HashMap<Coordinates, Item> m_items;
 
     /* Ids of adjacent maps for convenience */
     private short map_left;
@@ -34,7 +36,7 @@ public class Map {
     private short map_above;
     private short map_below;
 
-    public Map(short id, String name, Vector<Item> items) {
+    public Map(short id, String name, HashMap<Coordinates, Item> items) {
         m_id = id;
         m_name = name;
         m_items = items;
@@ -48,8 +50,12 @@ public class Map {
         return m_name;
     }
 
-    public Vector<Item> getItems() {
+    public HashMap<Coordinates, Item> getItems() {
         return m_items;
+    }
+
+    public Item getItemAt(Coordinates c) {
+        return m_items.get(c);
     }
 
     public void set_adjacent_maps(short left, short right, short above,

@@ -24,7 +24,9 @@ class Character(models.Model):
     stamina = models.IntegerField()
     intelligence = models.IntegerField()
     spirit = models.IntegerField()
-    current_map = models.CharField(max_length=50)
+    current_map = models.ForeignKey('Map')
+    x_coord = models.IntegerField()
+    y_coord = models.IntegerField()
 
     def __unicode__(self):
         return self.name
@@ -84,6 +86,11 @@ class Inventory(models.Model):
 
     def __unicode__(self):
         return self.character
+
+class QuestLog(models.Model):
+    character = models.ForeignKey('Character')
+    quest = models.ForeignKey('Quest')
+    status = models.IntegerField()
 
 class Item(models.Model):
     types = models.IntegerField()
@@ -151,13 +158,44 @@ class Item(models.Model):
     def __unicode__(self):
         return self.name
 
+class Npc(models.Model):
+    name = models.CharField(max_length=50)
+    race = models.ForeignKey('Race')
+    class_t = models.ForeignKey('Class')
+    job = models.IntegerField()
+    sprite_sheet = models.CharField(max_length=50,null=True, blank=True)
+
+    def __unicode(self):
+        return self.name
+
+class Quest(models.Model):
+    name = models.CharField(max_length=50)
+    details = models.CharField(max_length=500)
+    objectives = models.CharField(max_length=100)
+    completion_text = models.CharField(max_length=500)
+    npc = models.ForeignKey('Npc', related_name='quest_giver')
+    min_level = models.IntegerField()
+    flag = models.IntegerField()
+    next_quest = models.ForeignKey('Quest', null=True, blank=True)
+    src_item = models.ForeignKey('Item', null=True, blank=True)
+    reward_xp = models.IntegerField()
+    reward_money = models.IntegerField()
+    reqItem1 = models.ForeignKey('Item', null=True, blank=True, related_name='req_item1')
+    reqItem2 = models.ForeignKey('Item', null=True, blank=True, related_name='req_item2')
+    reqItem3 = models.ForeignKey('Item', null=True, blank=True, related_name='req_item3')
+    reqNpc1 = models.ForeignKey('Npc', null=True, blank=True, related_name='req_npc1')
+    reqNpc2 = models.ForeignKey('Npc', null=True, blank=True, related_name='req_npc2')
+    reqNpc3 = models.ForeignKey('Npc', null=True, blank=True, related_name='req_npc3')
+
+    def __unicode(self):
+        return self.name
+
 class Map(models.Model):
     name = models.CharField(max_length=50, unique=True)
     map_left = models.ForeignKey('Map', blank=True, null=True, related_name='m_left')
     map_right = models.ForeignKey('Map', blank=True, null=True, related_name='m_right')
     map_top = models.ForeignKey('Map', blank=True, null=True, related_name='m_above')
     map_bottom = models.ForeignKey('Map', blank=True, null=True, related_name='m_below')
-    items = models.ManyToManyField('Item', blank=True, null=True)
     entrance_left_x = models.IntegerField(blank=True, null=True)
     entrance_left_y = models.IntegerField(blank=True, null=True)
     entrance_right_x = models.IntegerField(blank=True, null=True)
@@ -169,6 +207,24 @@ class Map(models.Model):
 
     def __unicode__(self):
         return self.name
+
+class MapItems(models.Model):
+    map_id = models.ForeignKey('Map')
+    item_id = models.ForeignKey('Item')
+    x_coord = models.IntegerField()
+    y_coord = models.IntegerField()
+
+    def __unicode__(self):
+        return str(self.item + '@' + x_coord + ',' + y_coord)
+
+class MapNpcs(models.Model):
+    map_id = models.ForeignKey('Map')
+    npc_id = models.ForeignKey('Npc')
+    x_coord = models.IntegerField()
+    y_coord = models.IntegerField()
+
+    def __unicode__(self):
+        return str(self.npc_id + '@' + x_coord + ',' + y_coord)
 
 #Polls
 class Poll(models.Model):

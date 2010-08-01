@@ -22,7 +22,6 @@ package org.jblux.client.states;
 
 import org.jblux.client.GameMap;
 import org.jblux.client.Player;
-import org.jblux.client.Sprite;
 import org.jblux.client.gui.GUI;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ServerCommunicator;
@@ -40,35 +39,35 @@ public class GameplayState extends BasicGameState {
     private PlayerData player_data;
     private GameCanvas canvas;
     private ServerCommunicator server;
-
-    private Sprite npc;
     private GUI gui;
     
-    public GameplayState(int stateID, ServerCommunicator server, PlayerData data)
+    public GameplayState(int stateID, ServerCommunicator server)
     {
         this.stateID = stateID;
         this.server = server;
-        this.player_data = data;
     }
  
     @Override
     public int getID() {
         return stateID;
     }
- 
+
+    public void setPlayer(PlayerData data) {
+        player_data = data;
+        player = new Player(data, server);
+        canvas.setPlayer(player);
+        
+        try {
+            map = new GameMap(data.map);
+            canvas.setMap(map);
+        } catch (SlickException ex) {
+        }
+    }
+
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        String map_test = "residential";
-        System.out.printf("sprite sheet: %s\n", player_data.race.sprite_sheet);
-        player = new Player(player_data, server);
-        map = new GameMap(map_test);
         canvas = GameCanvas.getInstance();
-        canvas.init(player, map_test);
-        //canvas = new GameCanvas(player, map_test);
-
-        npc = new Sprite("img/races/koopa.png");
-        npc.setImage(Sprite.FACE_DOWN, 0);
-
+        canvas.init();
         gui = new GUI(gc, server);
     }
  
@@ -80,7 +79,7 @@ public class GameplayState extends BasicGameState {
     }
  
     @Override
-    public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+    public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {        
         player.update(gc);
         gui.update();
     }

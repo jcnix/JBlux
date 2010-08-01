@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import org.jblux.common.client.PlayerClass;
 import org.jblux.common.client.PlayerData;
 import org.jblux.common.client.Race;
+import org.jblux.util.Coordinates;
 
 public class UserTable {
     private DBManager m_db;
@@ -84,7 +85,10 @@ public class UserTable {
             
             pdata.user_id = rs.getInt("id");
             pdata.character_name = character_name;
-            pdata.current_map = rs.getString("current_map");
+            pdata.character_id = rs.getInt("id");
+            pdata.coords.x = rs.getInt("x_coord");
+            pdata.coords.y = rs.getInt("y_coord");
+            int map_id = rs.getInt("current_map_id");
             int race_id = rs.getInt("race_id");
             int class_id = rs.getInt("class_t_id");
             
@@ -92,11 +96,27 @@ public class UserTable {
             PlayerClass pclass = getClass(class_id);
             pdata.race = race;
             pdata.player_class = pclass;
+
+            MapSqlTable mst = new MapSqlTable();
+            String map_name = mst.getNameForId(map_id);
+            pdata.map = map_name;
         } catch(SQLException ex) {
+            ex.printStackTrace();
         }
         
         m_db.close();
         return pdata;
+    }
+
+    public void setMap(int character_id, int map_id, Coordinates coords) {
+        m_db.connect();
+
+        String q = String.format("UPDATE %s SET current_map_id=%d, x_coord=%d, y_coord=%d"
+                + " WHERE id=%d;",
+                CHARACTER_TABLE, map_id, coords.x, coords.y, character_id);
+        m_db.query_select(q);
+
+        m_db.close();
     }
 
     public Race getRace(int id) {

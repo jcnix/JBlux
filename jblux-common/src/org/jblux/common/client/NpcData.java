@@ -1,5 +1,5 @@
 /**
- * Commands.java
+ * File: NPCData.java
  *
  * @author Casey Jones
  *
@@ -18,17 +18,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common;
+package org.jblux.common.client;
 
-public class Commands {
-    public static final String MOVE = "move";
-    public static final String AUTH = "auth";
-    public static final String CONNECT = "connect";
-    public static final String DISCONNECT = "disconnect";
-    public static final String CHAT = "chat";
-    public static final String MAP = "map";
-    public static final String ITEM = "item";
-    public static final String DROP = "drop";
-    public static final String PICKUP = "pickup";
-    public static final String PLAYER = "player";
+import java.io.Serializable;
+
+public class NpcData extends CharacterData implements Serializable {
+    private final long serialVersionUID = 1L;
+
+    public int npc_id;
+    
+    //Job will be things like Vendor or Enemy
+    public int job;
+    
+    /* Custom sprite sheet.  If not set, use the
+     * default race sprite sheet. */
+    public String sprite_sheet;
 }

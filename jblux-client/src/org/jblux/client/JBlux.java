@@ -20,101 +20,53 @@
 
 package org.jblux.client;
 
-import java.applet.Applet;
-import java.util.Observable;
-import java.util.Observer;
-import org.jblux.client.network.PlayerDataFactory;
-import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
-import org.jblux.client.states.MainMenuState;
 import org.jblux.client.states.GameplayState;
+import org.jblux.client.states.MainMenuState;
 import org.jblux.client.states.ServerDownState;
-import org.jblux.common.Commands;
-import org.jblux.common.client.PlayerData;
 import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.AppletGameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 
-public class JBlux extends StateBasedGame implements Observer {
+public class JBlux extends StateBasedGame{
     public static final int MAINMENUSTATE = 0;
     public static final int GAMEPLAYSTATE = 1;
     public static final int SERVERDOWNSTATE = 2;
     private ServerCommunicator server;
-    private ResponseWaiter ro;
     
     public JBlux() {
         super("JBlux");
-
         server = new ServerCommunicator();
-        if(!server.isConnected()) {
+    }
+
+    public void init() {
+    }
+
+    @Override
+    public void initStatesList(GameContainer gc) throws SlickException {
+         if(!server.isConnected()) {
             this.addState(new ServerDownState(SERVERDOWNSTATE));
             this.enterState(SERVERDOWNSTATE);
         }
-        else {
-            GameContainer gc = this.getContainer();
-            String username = "";
-            String password = "";
-            String character_name = "";
-
-            boolean authorized = false;
-            if (gc instanceof AppletGameContainer.Container) {
-                // get the parameters by casting container and getting the applet instance
-                Applet applet = ((AppletGameContainer.Container) gc).getApplet();
-                username = applet.getParameter("user");
-                password = applet.getParameter("password");
-                character_name = applet.getParameter("character");
-
-                ro = new ResponseWaiter();
-                ro.addObserver(this);
-                server.authenticate(ro, username, password, character_name);
-            }
-            else {
-                username = "casey-test";
-                password = "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8";
-                character_name = "mychar";
-                //username = "casey";
-                //password = "81b2f040df6152242feb966d071fe58977dab12e";
-                //password = "wrong password";
-                //character_name = "pdude";
-                ro = new ResponseWaiter();
-                ro.addObserver(this);
-                server.authenticate(ro, username, password, character_name);
-            }         
-        }
-    }
-    
-    @Override
-    public void initStatesList(GameContainer gc) throws SlickException {
-        //this.getState(MAINMENUSTATE).init(gc, this);
-        //this.getState(GAMEPLAYSTATE).init(gc, this);
-    }
-
-    private void enterGame(PlayerData player_data) {
-        this.addState(new MainMenuState(MAINMENUSTATE));
-        this.addState(new GameplayState(GAMEPLAYSTATE, server, player_data));
-        this.enterState(MAINMENUSTATE);
-    }
-
-    public void update(Observable o, Object arg) {
-        if(o == ro) {
-            server.rm_observable(o);
-            String c = (String) arg;
-            String[] command = c.split(" ");
-            if(command[0].equals(Commands.PLAYER)) {
-                if(command[1].equals("self")) {
-                    PlayerData data = PlayerDataFactory.getDataFromBase64(command[2]);
-                    this.enterGame(data);
-                }
-            }
+        else {            
+             MainMenuState mms = new MainMenuState(MAINMENUSTATE, server);
+             this.addState(mms);
+             mms.init(gc, this);
+             
+             GameplayState gps = new GameplayState(GAMEPLAYSTATE, server);
+             this.addState(gps);
+             gps.init(gc, this);
+             
+             this.enterState(MAINMENUSTATE);
         }
     }
 
     public static void main(String[] args) {
         try
         {
-            AppGameContainer app = new AppGameContainer(new JBlux());
+            JBlux game = new JBlux();
+            AppGameContainer app = new AppGameContainer(game);
             app.setShowFPS(false);
             app.setDisplayMode(800, 600, false);
             app.start();

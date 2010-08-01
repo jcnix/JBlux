@@ -20,15 +20,17 @@
 
 package org.jblux.client;
 
+import org.jblux.common.MapGrid;
 import java.util.Observable;
-import org.jblux.common.items.Inventory;
 import java.util.Calendar;
 import java.util.Observer;
 import org.jblux.client.gui.GameCanvas;
+import org.jblux.client.network.ItemFactory;
 import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.common.Relation;
 import org.jblux.common.client.PlayerData;
+import org.jblux.common.items.Item;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -50,22 +52,18 @@ public class Player extends Sprite implements Observer {
     private boolean execute_change;
 
     public Player(PlayerData data, ServerCommunicator server) {
-        //TODO: Replace this when accounts are set up.
         super(data.race.sprite_sheet);
 
         this.player_data = data;
         this.server = server;
         setName(data.character_name);
-        
-        move_size = 7;
-        image = spriteSheet.getSubImage(FACE_DOWN, 0);
-        
-        coords.x = 352;
-        coords.y = 384;
-        switch_walk = false;
 
-        //TODO: get this from the server
-        map_name = "residential";
+        image = spriteSheet.getSubImage(FACE_DOWN, 0);
+        move_size = 7;        
+        coords.x = data.coords.x;
+        coords.y = data.coords.y;
+        map_name = data.map;
+        switch_walk = false;
 
         cal = Calendar.getInstance();
         lastMove = cal.getTimeInMillis();
@@ -81,7 +79,7 @@ public class Player extends Sprite implements Observer {
     public void update(GameContainer gc) {
         Input input = gc.getInput();
 
-        if(gc.hasFocus() && can_move()) {
+        if(gc.hasFocus()) {
             if(input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A)) {
                 if(coords.x > 0) {
                     if(switch_walk)
@@ -126,15 +124,25 @@ public class Player extends Sprite implements Observer {
                     move(0, move_size);
                 }
             }
+            //Action key
+            if(input.isKeyDown(Input.KEY_SPACE)) {
+                //TODO: Check in front of the player
+                //Only checking below the player for now
+                if(can_perform_action(500)) {
+                    response = new ResponseWaiter();
+                    Coordinates tile = MapGrid.getTile(coords);
+                    server.pickup_item(tile, response);
+                }
+            }
         }
     }
 
-    public boolean can_move() {
+    public boolean can_perform_action(int delay_time) {
         cal = Calendar.getInstance();
         long time = cal.getTimeInMillis();
         long diff_time = time - lastMove;
 
-        if(diff_time < 100) {
+        if(diff_time < delay_time) {
             return false;
         }
         else {
@@ -147,6 +155,10 @@ public class Player extends Sprite implements Observer {
      * parameters are deltas
      */
     private void move(int dx, int dy) {
+        if(!can_perform_action(100)) {
+            return;
+        }
+
         coords.x += dx;
         coords.y += dy;
 
@@ -218,6 +230,14 @@ public class Player extends Sprite implements Observer {
             c.y = Integer.parseInt(args[2]);
             setCoords(c);
             execute_change = true;
+        }
+        if(response == o) {
+            server.rm_observable(o);
+            String sarg = (String) arg;
+            String[] args = sarg.split("\\s");
+            if(!args[1].equals("null")) {
+                Item item = ItemFactory.getItemFromBase64(args[1]);
+            }
         }
     }
 }

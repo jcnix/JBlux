@@ -24,7 +24,6 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import org.jblux.common.items.Item;
 
 public class ItemSqlTable {
@@ -76,101 +75,6 @@ public class ItemSqlTable {
         ResultSet rs = m_db.query_select(String.format("SELECT name FROM %s", TABLE));
         m_db.close();
         return rs;
-    }
-
-    public void saveItem(Item item) {
-        m_db.connect();
-        
-        try {
-            String query = "";
-            m_conn = m_db.getConnection();
-            Statement stmt = m_conn.createStatement();
-
-            boolean exists = false;
-            if(m_db.doesRecordExist(item.m_name, "name", "items")) {
-                exists = true;
-                query = "DELETE FROM items WHERE name='"+item.m_name+"';";
-                stmt.execute(query);
-            }
-
-            String id_sql = "";
-            if(exists) {
-                id_sql = "'" + item.m_id + "'";
-            } else {
-                id_sql = "nextval('items_id_seq')";
-            }
-
-            query = "INSERT INTO items VALUES(" +
-                    id_sql + "," +
-                    "'" + item.m_class + "'," +
-                    "'" + item.m_subclass + "'," +
-                    "'" + item.m_name + "'," +
-                    "'" + item.m_description + "'," +
-                    "'" + item.m_image + "'," +
-                    "'" + item.m_quality + "'," +
-                    "'" + item.m_buyPrice + "'," +
-                    "'" + item.m_sellPrice + "'," +
-                    "'" + item.m_allowableClass + "'," +
-                    "'" + item.m_allowableRace + "'," +
-                    "'" + item.m_itemLevel + "'," +
-                    "'" + item.m_requiredLevel + "'," +
-                    "'" + item.m_requiredFaction + "'," +
-                    "'" + item.m_requiredFaction + "'," +
-                    "'" + item.m_isUnique + "'," +
-                    "'" + item.m_maxStack + "'," +
-                    "'" + item.m_itemStatsCount + "'," +
-                    "'" + item.m_stat_type1 + "'," +
-                    "'" + item.m_stat_value1 + "'," +
-                    "'" + item.m_stat_type2 + "'," +
-                    "'" + item.m_stat_value2 + "'," +
-                    "'" + item.m_stat_type3 + "'," +
-                    "'" + item.m_stat_value3 + "'," +
-                    "'" + item.m_stat_type4 + "'," +
-                    "'" + item.m_stat_value4 + "'," +
-                    "'" + item.m_stat_type5 + "'," +
-                    "'" + item.m_stat_value5 + "'," +
-                    "'" + item.m_stat_type6 + "'," +
-                    "'" + item.m_stat_value6 + "'," +
-                    "'" + item.m_stat_type7 + "'," +
-                    "'" + item.m_stat_value7 + "'," +
-                    "'" + item.m_stat_type8 + "'," +
-                    "'" + item.m_stat_value8 + "'," +
-                    "'" + item.m_stat_type9 + "'," +
-                    "'" + item.m_stat_value9 + "'," +
-                    "'" + item.m_stat_type10 + "'," +
-                    "'" + item.m_stat_value10 + "'," +
-                    "'" + item.m_dmg_min + "'," +
-                    "'" + item.m_dmg_max + "'," +
-                    "'" + item.m_dmg_type + "'," +
-                    "'" + item.m_armor + "'," +
-                    "'" + item.m_water_resistance + "'," +
-                    "'" + item.m_fire_resistance + "'," +
-                    "'" + item.m_nature_resistance + "'," +
-                    "'" + item.m_frost_resistance + "'," +
-                    "'" + item.m_shadow_resistance + "'," +
-                    "'" + item.m_arcane_resistance + "'," +
-                    "'" + item.m_delay + "'," +
-                    "'" + item.m_ammo_type + "'," +
-                    "'" + item.m_range + "'," +
-                    "'" + item.m_spellid + "'," +
-                    "'" + item.m_spellTrigger + "'," +
-                    "'" + item.m_spellCooldown + "'," +
-                    "'" + item.m_quest_item + "'," +
-                    "'" + item.m_quest_id + "'," +
-                    "'" + item.m_block_amount + "'," +
-                    "'" + item.m_itemset + "'," +
-                    "'" + item.m_maxDurability + "'," +
-                    "'" + item.m_requiredDisenchantSkill + "'," +
-                    "'" + item.m_armorDamageModifier + "'" +
-                    ");";
-
-            System.out.println(query);
-
-            stmt.execute(query);
-        } catch (SQLException ex) {
-        }
-
-        m_db.close();
     }
 
     public Item getItem(String name) {

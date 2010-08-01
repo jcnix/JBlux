@@ -37,14 +37,8 @@ public class GameCanvas {
     protected GameCanvas() {
     }
 
-    public void init(Player player, String map_name) {
-        this.player = player;
+    public void init() {
         players = Players.getInstance();
-
-        try {
-            map = new GameMap(map_name);
-        } catch (SlickException ex) {
-        }
     }
 
     public static GameCanvas getInstance() {
@@ -54,7 +48,18 @@ public class GameCanvas {
         return gc;
     }
 
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void setMap(GameMap map) {
+        this.map = map;
+    }
+
     public void render(GameContainer gc, Graphics g) throws SlickException {
+        if(map == null || player == null)
+            return;
+
         map.render(0,0,0); //Ground Layer
         map.render(0,0,1); //Objects Layer
 
@@ -67,7 +72,6 @@ public class GameCanvas {
     }
 
     public void setMap(String name) {
-//        init(player, name);
         try {
             map = new GameMap(name);
         } catch (SlickException ex) {
