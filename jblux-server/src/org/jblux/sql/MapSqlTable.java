@@ -64,28 +64,12 @@ public class MapSqlTable {
             while(map_rs.next()) {
                 short id = map_rs.getShort("id");
                 String name = map_rs.getString("name");
-                HashMap<Coordinates, Item> items = new HashMap<Coordinates, Item>();
-
-                //Get items on map.
-                q = String.format("SELECT * FROM %s WHERE map_id='%d';", ITEMS_TABLE, id);
-                ResultSet items_rs = m_db.query_select(q);
-                if(items_rs != null) {
-                    while(items_rs.next()) {
-                        short item_id = items_rs.getShort("item_id");
-                        Coordinates c = new Coordinates();
-                        c.x = items_rs.getInt("x_coord");
-                        c.y = items_rs.getInt("y_coord");
-                        Item item = item_table.getItem(item_id);
-                        items.put(c, item);
-                    }
-                }
-
                 short left = getAdjacentMap(Relation.LEFT, id);
                 short right = getAdjacentMap(Relation.RIGHT, id);
                 short above = getAdjacentMap(Relation.TOP, id);
                 short below = getAdjacentMap(Relation.BOTTOM, id);
 
-                Map m = new Map(id, name, items);
+                Map m = new Map(id, name);
                 m.set_adjacent_maps(left, right, above, below);
                 map_list.add(m);
             }
@@ -179,8 +163,8 @@ public class MapSqlTable {
         return items;
     }
 
-    public Vector<NpcData> getNpcsOnMap(int id) {
-        Vector<NpcData> npcs = new Vector<NpcData>();
+    public HashMap<Coordinates, NpcData> getNpcsOnMap(int id) {
+        HashMap<Coordinates, NpcData> npcs = new HashMap<Coordinates, NpcData>();
         m_db.connect();
 
         try {
@@ -191,7 +175,10 @@ public class MapSqlTable {
             NpcTable npct = new NpcTable();
             while(rs.next()) {
                 NpcData npc = npct.getNpc(rs.getInt("npc_id"));
-                npcs.add(npc);
+                Coordinates c = new Coordinates();
+                c.x = rs.getInt("x_coord");
+                c.y = rs.getInt("y_coord");
+                npcs.put(c, npc);
             }
         } catch(SQLException ex) {
         }

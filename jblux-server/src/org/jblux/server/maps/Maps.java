@@ -23,7 +23,9 @@ package org.jblux.server.maps;
 import java.util.HashMap;
 import java.util.Vector;
 import org.jblux.common.Relation;
+import org.jblux.common.client.NpcData;
 import org.jblux.sql.MapSqlTable;
+import org.jblux.util.Coordinates;
 
 public class Maps {
     private static Maps m_self;
@@ -47,6 +49,8 @@ public class Maps {
         Vector<Map> vmaps = m_mapsTable.getAllMaps();
         for(int i = 0; i < vmaps.size(); i++) {
             Map m = vmaps.get(i);
+            HashMap<Coordinates, NpcData> npcs = m_mapsTable.getNpcsOnMap(m.getID());
+            m.setNpcs(npcs);
             m_maps.put(m.getID(), m);
         }
     }

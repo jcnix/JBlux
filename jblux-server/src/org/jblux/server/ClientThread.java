@@ -154,12 +154,16 @@ public class ClientThread {
     }
 
     /* Put the player on a new map */
-    public void go_to_map(String map, Coordinates coords) {
+    public void go_to_map(int map_id, String map_name, Coordinates coords) {
         System.out.printf("%s connected\n", character_name);
 
+        this.map = map_name;
         UserTable ut = new UserTable();
         MapSqlTable mst = new MapSqlTable();
-        int map_id = mst.getIdForName(map);
+
+        if(map_id == -1)
+            map_id = mst.getIdForName(map_name);
+        
         ut.setMap(player_data.character_id, map_id, getCoords());
         
         String encoded_player_data = "";
@@ -171,7 +175,6 @@ public class ClientThread {
         String command = String.format("%s add %s %s %s",
                 Commands.MAP, character_name, getCoords(), encoded_player_data);
         
-        this.map = map;
         LinkedList<ClientThread> c = clients.getClients();
         for(int i = 0; i < c.size(); i++) {
             ClientThread ct = c.get(i);
@@ -296,7 +299,7 @@ class ClientListener extends Thread {
             character_name = c1[1];
             coords.x = Integer.parseInt(c1[2]);
             coords.y = Integer.parseInt(c1[3]);
-            client.go_to_map("residential", coords);
+            client.go_to_map(-1, "residential", coords);
         }
         else if(c.startsWith(Commands.CHAT)) {
             character_name = c1[1];

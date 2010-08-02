@@ -46,8 +46,8 @@ public class NpcTable {
             npc.sprite_sheet = rs.getString("sprite_sheet");
             
             UserTable ut = new UserTable();
-            npc.race = ut.getRace(rs.getInt("race"));
-            npc.player_class = ut.getClass(rs.getInt("class_t"));
+            npc.race = ut.getRace(rs.getInt("race_id"));
+            npc.player_class = ut.getClass(rs.getInt("class_t_id"));
         } catch(SQLException ex) {
         }
 

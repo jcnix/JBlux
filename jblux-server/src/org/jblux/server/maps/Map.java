@@ -22,6 +22,7 @@ package org.jblux.server.maps;
 
 import java.util.HashMap;
 import org.jblux.common.Relation;
+import org.jblux.common.client.NpcData;
 import org.jblux.common.items.Item;
 import org.jblux.util.Coordinates;
 
@@ -29,6 +30,7 @@ public class Map {
     private short m_id;
     private String m_name;
     private HashMap<Coordinates, Item> m_items;
+    private HashMap<Coordinates, NpcData> m_npcs;
 
     /* Ids of adjacent maps for convenience */
     private short map_left;
@@ -36,10 +38,9 @@ public class Map {
     private short map_above;
     private short map_below;
 
-    public Map(short id, String name, HashMap<Coordinates, Item> items) {
+    public Map(short id, String name) {
         m_id = id;
         m_name = name;
-        m_items = items;
     }
 
     public short getID() {
@@ -56,6 +57,22 @@ public class Map {
 
     public Item getItemAt(Coordinates c) {
         return m_items.get(c);
+    }
+
+    public void setItems(HashMap<Coordinates, Item> items) {
+        m_items = items;
+    }
+
+    public HashMap<Coordinates, NpcData> getNpcs() {
+        return m_npcs;
+    }
+
+    public NpcData getNpcAt(Coordinates c) {
+        return m_npcs.get(c);
+    }
+
+    public void setNpcs(HashMap<Coordinates, NpcData> npcs) {
+        m_npcs = npcs;
     }
 
     public void set_adjacent_maps(short left, short right, short above,

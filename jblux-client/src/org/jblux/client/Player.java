@@ -23,12 +23,15 @@ package org.jblux.client;
 import org.jblux.common.MapGrid;
 import java.util.Observable;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Observer;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ItemFactory;
+import org.jblux.client.network.NpcDataFactory;
 import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.common.Relation;
+import org.jblux.common.client.NpcData;
 import org.jblux.common.client.PlayerData;
 import org.jblux.common.items.Item;
 import org.jblux.util.Coordinates;
@@ -45,6 +48,7 @@ public class Player extends Sprite implements Observer {
     private int move_size;
     private String map_name;
     private PlayerData player_data;
+    private HashMap<Coordinates, NpcData> npcs;
     private ResponseWaiter response;
 
     private Calendar cal;
@@ -61,6 +65,7 @@ public class Player extends Sprite implements Observer {
         this.server = server;
         setName(data.character_name);
 
+        npcs = new HashMap<Coordinates, NpcData>();
         image = spriteSheet.getSubImage(FACE_DOWN, 0);
         move_size = 7;        
         coords.x = data.coords.x;
@@ -216,10 +221,11 @@ public class Player extends Sprite implements Observer {
         }
 
         if(execute_change) {
+            execute_change = false;
             GameCanvas gc = GameCanvas.getInstance();
             gc.setMap(map_name);
             walk_area = gc.getMap().getWalkArea();
-            execute_change = false;
+            gc.setNpcs(npcs);
         }
     }
 
@@ -233,6 +239,7 @@ public class Player extends Sprite implements Observer {
             c.x = Integer.parseInt(args[1]);
             c.y = Integer.parseInt(args[2]);
             setCoords(c);
+            npcs = NpcDataFactory.getHashMapFromBase64(args[3]);
             execute_change = true;
         }
         if(response == o && wait_pressed_action) {

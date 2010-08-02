@@ -20,10 +20,18 @@
 
 package org.jblux.client.gui;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Vector;
 import org.jblux.client.GameMap;
+import org.jblux.client.Npc;
 import org.jblux.client.Player;
 import org.jblux.client.Players;
 import org.jblux.client.Sprite;
+import org.jblux.common.client.NpcData;
+import org.jblux.util.Coordinates;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -32,6 +40,7 @@ public class GameCanvas {
     private static GameCanvas gc;
     private Player player;
     private Players players;
+    private Vector<Npc> npcs;
     private GameMap map;
 
     protected GameCanvas() {
@@ -39,6 +48,7 @@ public class GameCanvas {
 
     public void init() {
         players = Players.getInstance();
+        npcs = new Vector<Npc>();
     }
 
     public static GameCanvas getInstance() {
@@ -56,6 +66,21 @@ public class GameCanvas {
         this.map = map;
     }
 
+    public void setNpcs(HashMap<Coordinates, NpcData> n) {
+        npcs = new Vector<Npc>();
+
+        Set<Coordinates> c_set = n.keySet();
+        Iterator<Coordinates> it = c_set.iterator();
+        while(it.hasNext()) {
+            Coordinates c = it.next();
+            System.out.println(c.toString());
+            NpcData data = n.get(c);
+            Npc npc = new Npc(data);
+            npc.setCoords(c);
+            npcs.add(npc);
+        }
+    }
+
     public void render(GameContainer gc, Graphics g) throws SlickException {
         if(map == null || player == null)
             return;
@@ -68,6 +93,12 @@ public class GameCanvas {
             Sprite s = players.getPlayer(i);
             s.draw();
         }
+
+        for(int i = 0; i < npcs.size(); i++) {
+            Npc n = npcs.get(i);
+            n.draw();
+        }
+
         map.render(0,0,2);  //Fringe Layer
     }
 

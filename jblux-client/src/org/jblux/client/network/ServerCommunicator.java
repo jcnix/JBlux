@@ -237,8 +237,9 @@ class ServerListener extends Thread {
                 String map = c0[2];
                 coords.x = Integer.parseInt(c0[3]);
                 coords.y = Integer.parseInt(c0[4]);
+                String npcs = c0[6];
                 System.out.printf("response: %s @ %s\n", map, coords);
-                String response = String.format("%s %s", map, coords);
+                String response = String.format("%s %s %s", map, coords, npcs);
                 this.notify_observers(response);
             }
             else if(c0[1].equals("stay")) {

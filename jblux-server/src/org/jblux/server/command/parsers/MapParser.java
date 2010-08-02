@@ -21,6 +21,8 @@
 package org.jblux.server.command.parsers;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jblux.common.Commands;
 import org.jblux.common.Relation;
 import org.jblux.common.RelationUtil;
@@ -50,8 +52,16 @@ public class MapParser implements CommandParser {
                 String map_name = m.getName();
                 Relation map_side = RelationUtil.getOpposite(r);
                 Coordinates crd = mst.getEntrance(m.getID(), map_side);
-                cmd = String.format("%s goto %s %s", Commands.MAP, map_name, crd);
-                client.go_to_map(map_name, crd);
+
+                String npcs_enc = "";
+                try {
+                    npcs_enc = Base64.encodeObject(m.getNpcs());
+                } catch (IOException ex) {
+                }
+
+                cmd = String.format("%s goto %s %s npcs %s",
+                        Commands.MAP, map_name, crd, npcs_enc);
+                client.go_to_map(m.getID(), map_name, crd);
             }
             else {
                 cmd = String.format("%s stay", Commands.MAP);
