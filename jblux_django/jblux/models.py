@@ -215,7 +215,7 @@ class MapItems(models.Model):
     y_coord = models.IntegerField()
 
     def __unicode__(self):
-        return str(self.item + '@' + x_coord + ',' + y_coord)
+        return str(self.item.__unicode__() + '@' + str(self.x_coord) + ',' + str(self.y_coord))
 
 class MapNpcs(models.Model):
     map_id = models.ForeignKey('Map')
@@ -224,7 +224,7 @@ class MapNpcs(models.Model):
     y_coord = models.IntegerField()
 
     def __unicode__(self):
-        return str(self.npc_id + '@' + x_coord + ',' + y_coord)
+        return str(self.npc_id.__unicode__() + '@' + str(self.x_coord) + ',' + str(self.y_coord))
 
 #Polls
 class Poll(models.Model):
