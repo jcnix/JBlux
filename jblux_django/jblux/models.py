@@ -165,7 +165,7 @@ class Npc(models.Model):
     job = models.IntegerField()
     sprite_sheet = models.CharField(max_length=50,null=True, blank=True)
 
-    def __unicode(self):
+    def __unicode__(self):
         return self.name
 
 class Quest(models.Model):
