@@ -162,7 +162,7 @@ public class MapSqlTable {
         m_db.connect();
 
         try {
-            String q = String.format("SELECT * FROM %s WHERE map_id=%d;",
+            String q = String.format("SELECT * FROM %s WHERE map_t_id=%d;",
                     ITEMS_TABLE, id);
             ResultSet rs = m_db.query_select(q);
 
@@ -184,7 +184,7 @@ public class MapSqlTable {
         m_db.connect();
 
         try {
-            String q = String.format("SELECT * FROM %s WHERE map_id=%d;",
+            String q = String.format("SELECT * FROM %s WHERE map_t_id=%d;",
                     NPCS_TABLE, id);
             ResultSet rs = m_db.query_select(q);
 

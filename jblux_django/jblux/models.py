@@ -209,7 +209,8 @@ class Map(models.Model):
         return self.name
 
 class MapItems(models.Model):
-    map_id = models.ForeignKey('Map')
+    #Working around the word map being a python keyword
+    map_t = models.ForeignKey('Map')
     item_id = models.ForeignKey('Item')
     x_coord = models.IntegerField()
     y_coord = models.IntegerField()
@@ -218,8 +219,8 @@ class MapItems(models.Model):
         return str(self.item.__unicode__() + '@' + str(self.x_coord) + ',' + str(self.y_coord))
 
 class MapNpcs(models.Model):
-    map_id = models.ForeignKey('Map')
-    npc_id = models.ForeignKey('Npc')
+    map_t = models.ForeignKey('Map')
+    npc = models.ForeignKey('Npc')
     x_coord = models.IntegerField()
     y_coord = models.IntegerField()
 
