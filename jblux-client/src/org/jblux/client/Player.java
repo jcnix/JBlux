@@ -51,6 +51,9 @@ public class Player extends Sprite implements Observer {
     private long lastMove;
     private boolean execute_change;
 
+    private boolean wait_new_map;
+    private boolean wait_pressed_action;
+
     public Player(PlayerData data, ServerCommunicator server) {
         super(data.race.sprite_sheet);
 
@@ -129,6 +132,7 @@ public class Player extends Sprite implements Observer {
                 //TODO: Check in front of the player
                 //Only checking below the player for now
                 if(can_perform_action(500)) {
+                    wait_pressed_action = true;
                     response = new ResponseWaiter();
                     Coordinates tile = MapGrid.getTile(coords);
                     server.pickup_item(tile, response);
@@ -205,6 +209,7 @@ public class Player extends Sprite implements Observer {
         }
 
         if(change) {
+            wait_new_map = true;
             response = new ResponseWaiter();
             response.addObserver(this);
             server.goto_map(response, relation, map_name);
@@ -219,8 +224,7 @@ public class Player extends Sprite implements Observer {
     }
 
     public void update(Observable o, Object arg) {
-        System.out.println("new map");
-        if(response == o) {
+        if(response == o && wait_new_map) {
             server.rm_observable(o);
             String sarg = (String) arg;
             String[] args = sarg.split("\\s");
@@ -231,7 +235,7 @@ public class Player extends Sprite implements Observer {
             setCoords(c);
             execute_change = true;
         }
-        if(response == o) {
+        if(response == o && wait_pressed_action) {
             server.rm_observable(o);
             String sarg = (String) arg;
             String[] args = sarg.split("\\s");
