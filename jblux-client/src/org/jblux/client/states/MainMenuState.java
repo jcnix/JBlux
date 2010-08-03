@@ -26,8 +26,6 @@ import org.jblux.client.JBlux;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Observer;
-import org.jblux.client.Player;
-import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.PlayerDataFactory;
 import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;

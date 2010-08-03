@@ -77,7 +77,8 @@ public class Player extends Sprite implements Observer {
         lastMove = cal.getTimeInMillis();
 
         try {
-            walk_area = new Image("maps/residential/residentialbw.png");
+            String wa = String.format("maps/%s/%sbw.png", data.map, data.map);
+            walk_area = new Image(wa);
         } catch (SlickException ex) {
         }
 
