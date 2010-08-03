@@ -21,6 +21,7 @@
 package org.jblux.client;
 
 import org.jblux.client.gui.PlayerNameFontFactory;
+import org.jblux.common.Relation;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -90,5 +91,28 @@ public class Sprite {
 
     public void setCoords(Coordinates c) {
         coords = c;
+    }
+
+    public void faceDirection(Relation r) {
+        //x and y are coords on the sprite sheet
+        int y = 0;
+        int x = 0;
+        
+        switch(r) {
+            case TOP:
+                x = 1;
+                break;
+            case BOTTOM:
+                x = 4;
+                break;
+            case LEFT:
+                x = 7;
+                break;
+            case RIGHT:
+                x = 10;
+                break;
+        }
+
+        setImage(x, y);
     }
 }

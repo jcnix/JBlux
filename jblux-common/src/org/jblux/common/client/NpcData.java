@@ -27,10 +27,13 @@ public class NpcData extends CharacterData implements Serializable {
 
     public int npc_id;
     
-    //Job will be things like Vendor or Enemy
+    /* Job will be things like Vendor or Enemy */
     public int job;
     
     /* Custom sprite sheet.  If not set, use the
      * default race sprite sheet. */
     public String sprite_sheet;
+    
+    /* The direction the npc will face */
+    public String direction;
 }

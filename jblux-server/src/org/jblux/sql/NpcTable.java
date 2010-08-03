@@ -49,6 +49,7 @@ public class NpcTable {
             npc.race = ut.getRace(rs.getInt("race_id"));
             npc.player_class = ut.getClass(rs.getInt("class_t_id"));
         } catch(SQLException ex) {
+            ex.printStackTrace();
         }
 
         m_db.close();

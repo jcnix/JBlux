@@ -175,6 +175,7 @@ public class MapSqlTable {
             NpcTable npct = new NpcTable();
             while(rs.next()) {
                 NpcData npc = npct.getNpc(rs.getInt("npc_id"));
+                npc.direction = rs.getString("direction");
                 Coordinates c = new Coordinates();
                 c.x = rs.getInt("x_coord");
                 c.y = rs.getInt("y_coord");

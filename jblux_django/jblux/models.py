@@ -221,11 +221,12 @@ class MapItems(models.Model):
 class MapNpcs(models.Model):
     map_t = models.ForeignKey('Map')
     npc = models.ForeignKey('Npc')
+    direction = models.CharField(max_length=6)
     x_coord = models.IntegerField()
     y_coord = models.IntegerField()
 
     def __unicode__(self):
-        return str(self.npc_id.__unicode__() + '@' + str(self.x_coord) + ',' + str(self.y_coord))
+        return str(self.npc.__unicode__() + '@' + str(self.x_coord) + ',' + str(self.y_coord))
 
 #Polls
 class Poll(models.Model):

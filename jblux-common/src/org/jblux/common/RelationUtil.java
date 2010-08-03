@@ -52,4 +52,25 @@ public class RelationUtil {
 
         return r2;
     }
+
+    /*
+     * Product of bad design.
+     * Converts a string like "up" to Relation.TOP
+     */
+    public static Relation upDownRelation(String r) {
+        Relation rel;
+
+        if(r.equals("left"))
+            rel = Relation.LEFT;
+        else if(r.equals("right"))
+            rel = Relation.RIGHT;
+        else if(r.equals("down"))
+            rel = Relation.BOTTOM;
+        else if(r.equals("up"))
+            rel = Relation.TOP;
+        else
+            rel = null;
+
+        return rel;
+    }
 }

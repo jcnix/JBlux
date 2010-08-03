@@ -20,6 +20,8 @@
 
 package org.jblux.client;
 
+import org.jblux.common.Relation;
+import org.jblux.common.RelationUtil;
 import org.jblux.common.client.NpcData;
 
 public class Npc extends Sprite {
@@ -28,6 +30,8 @@ public class Npc extends Sprite {
     public Npc(NpcData data) {
         super(data.race.sprite_sheet);
         this.data = data;
-        this.setImage(0, 0);
+        
+        Relation r = RelationUtil.upDownRelation(data.direction);
+        this.faceDirection(r);
     }
 }
