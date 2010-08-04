@@ -2,6 +2,8 @@
 **************
 - Render Npcs on screen
 - Walking diagonally works again
+- Save the correct player coordinates (prevents spawning in no-walk areas)
+- Use the correct walk_area map when the game initializes
 
 8-1-2010 Update
 ***************
