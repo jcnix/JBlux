@@ -89,7 +89,7 @@ public class Player extends Sprite implements Observer {
         Input input = gc.getInput();
 
         if(gc.hasFocus()) {
-            //Can only move once ever 100ms
+            //Can only move once every 100ms
             if(can_perform_action(100)) {
                 if(input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A)) {
                     if(coords.x > 0) {

@@ -87,6 +87,7 @@ public class GameCanvas {
 
         map.render(0,0,0); //Ground Layer
         map.render(0,0,1); //Objects Layer
+        map.render(0,0,2); //Objects Layer 2
 
         player.draw();
         for(int i = 0; i < players.size(); i++) {
@@ -99,7 +100,8 @@ public class GameCanvas {
             n.draw();
         }
 
-        map.render(0,0,2);  //Fringe Layer
+        map.render(0,0,3); //Fringe layer
+        map.render(0,0,4); //Fringe layer 2
     }
 
     public void setMap(String name) {
