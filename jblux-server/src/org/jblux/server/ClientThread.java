@@ -48,6 +48,7 @@ public class ClientThread {
     private String character_name;
     private String map;
     private PlayerData player_data;
+    public Coordinates coords;
 
     private Clients clients;
     private ClientListener cl;
@@ -57,6 +58,7 @@ public class ClientThread {
         clients = Clients.getInstance();
         authenticated = false;
         map = "";
+        coords = new Coordinates();
 
         try {
             netOut = new ObjectOutputStream(socket.getOutputStream());
@@ -70,7 +72,7 @@ public class ClientThread {
     }
 
     public Coordinates getCoords() {
-        return cl.coords;
+        return coords;
     }
 
     public String getUsername() {
@@ -243,12 +245,10 @@ class ClientListener extends Thread {
     private ClientThread client;
     
     public String character_name;
-    public Coordinates coords;
 
     public ClientListener(ClientThread client, Socket s) {
         this.client = client;
         clientSocket = s;
-        coords = new Coordinates();
         character_name = "";
     }
 
@@ -291,15 +291,15 @@ class ClientListener extends Thread {
         }
 
         if(c.startsWith(Commands.MOVE)) {
-            coords.x = Integer.parseInt(c1[2]);
-            coords.y = Integer.parseInt(c1[3]);
-            client.move(character_name, coords);
+            client.coords.x = Integer.parseInt(c1[2]);
+            client.coords.y = Integer.parseInt(c1[3]);
+            client.move(character_name, client.coords);
         }
         else if(c.startsWith(Commands.CONNECT)) {
             character_name = c1[1];
-            coords.x = Integer.parseInt(c1[2]);
-            coords.y = Integer.parseInt(c1[3]);
-            client.go_to_map(-1, "residential", coords);
+            client.coords.x = Integer.parseInt(c1[2]);
+            client.coords.y = Integer.parseInt(c1[3]);
+            client.go_to_map(-1, "residential", client.coords);
         }
         else if(c.startsWith(Commands.CHAT)) {
             character_name = c1[1];

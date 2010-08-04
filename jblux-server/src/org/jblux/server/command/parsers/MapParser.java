@@ -52,6 +52,7 @@ public class MapParser implements CommandParser {
                 String map_name = m.getName();
                 Relation map_side = RelationUtil.getOpposite(r);
                 Coordinates crd = mst.getEntrance(m.getID(), map_side);
+                client.coords = crd;
 
                 String npcs_enc = "";
                 try {

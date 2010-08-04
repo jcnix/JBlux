@@ -110,12 +110,10 @@ public class UserTable {
 
     public void setMap(int character_id, int map_id, Coordinates coords) {
         m_db.connect();
-
         String q = String.format("UPDATE %s SET current_map_id=%d, x_coord=%d, y_coord=%d"
                 + " WHERE id=%d;",
                 CHARACTER_TABLE, map_id, coords.x, coords.y, character_id);
         m_db.query_select(q);
-
         m_db.close();
     }
 
