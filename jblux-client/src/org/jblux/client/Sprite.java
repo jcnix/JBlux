@@ -93,6 +93,10 @@ public class Sprite {
         coords = c;
     }
 
+    public Coordinates getCoords() {
+        return coords;
+    }
+
     public void faceDirection(Relation r) {
         //x and y are coords on the sprite sheet
         int y = 0;

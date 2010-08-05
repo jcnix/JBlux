@@ -35,21 +35,19 @@ import org.jblux.common.client.NpcData;
 import org.jblux.common.client.PlayerData;
 import org.jblux.common.items.Item;
 import org.jblux.util.Coordinates;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 
 public class Player extends Sprite implements Observer {
     private boolean switch_walk;  //Just means switch to other walk sprite
     private ServerCommunicator server;
-    private Image walk_area;
     private int move_size;
     private String map_name;
     private PlayerData player_data;
     private HashMap<Coordinates, NpcData> npcs;
     private ResponseWaiter response;
+    private GameCanvas canvas;
+    private Coordinates bwcoords;
 
     private Calendar cal;
     private long lastMove;
@@ -67,21 +65,15 @@ public class Player extends Sprite implements Observer {
 
         npcs = new HashMap<Coordinates, NpcData>();
         image = spriteSheet.getSubImage(FACE_DOWN, 0);
-        move_size = 7;        
-        coords.x = data.coords.x;
-        coords.y = data.coords.y;
+        move_size = 7;
+        bwcoords = data.coords.clone();
+        coords = data.coords;
         map_name = data.map;
         switch_walk = false;
+        canvas = GameCanvas.getInstance();
 
         cal = Calendar.getInstance();
         lastMove = cal.getTimeInMillis();
-
-        try {
-            String wa = String.format("maps/%s/%sbw.png", data.map, data.map);
-            walk_area = new Image(wa);
-        } catch (SlickException ex) {
-        }
-
         server.connect_player(data.character_name, coords);
     }
 
@@ -173,22 +165,23 @@ public class Player extends Sprite implements Observer {
      * parameters are deltas
      */
     private void move(int dx, int dy) {
+        bwcoords.x += dx;
+        bwcoords.y += dy;
+        System.out.println(bwcoords);
+
         coords.x += dx;
         coords.y += dy;
 
-        boolean blocked = false;
-        Color c = walk_area.getColor(coords.x, coords.y);
-
+        boolean walkable = canvas.is_walkable(bwcoords);
         //Check to see if we need to change maps
         changeMap();
 
-        if(c.getRed() == 0) {
-            blocked = true;
-        }
-
-        if(blocked) {
+        if(!walkable) {
+            //move back
             coords.x -= dx;
             coords.y -= dy;
+            bwcoords.x -= dx;
+            bwcoords.y -= dy;
         }
         else {
             server.move(coords.x, coords.y);
@@ -196,8 +189,8 @@ public class Player extends Sprite implements Observer {
     }
 
     public void changeMap() {
-        int x = walk_area.getWidth();
-        int y = walk_area.getHeight();
+        int x = canvas.getWalkArea().getWidth();
+        int y = canvas.getWalkArea().getHeight();
         boolean change = false;
         Relation relation = null;
 
@@ -228,10 +221,24 @@ public class Player extends Sprite implements Observer {
         if(execute_change) {
             execute_change = false;
             GameCanvas gc = GameCanvas.getInstance();
-            gc.setMap(map_name);
-            walk_area = gc.getMap().getWalkArea();
+            gc.setMap(map_name, coords);
             gc.setNpcs(npcs);
         }
+    }
+
+    @Override
+    public void draw() {
+        //Player must be drawn in the center of the screen
+        // 400 and 300 need to be adjusted to account for the height of the sprite
+        image.draw(400, 300);
+        draw_name();
+    }
+
+    @Override
+    public void draw_name() {
+        int x = 380;
+        int y = 280;
+        nameFont.drawString(x, y, name);
     }
 
     public void update(Observable o, Object arg) {

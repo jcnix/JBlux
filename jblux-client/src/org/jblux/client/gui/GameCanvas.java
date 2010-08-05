@@ -20,7 +20,6 @@
 
 package org.jblux.client.gui;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -32,8 +31,10 @@ import org.jblux.client.Players;
 import org.jblux.client.Sprite;
 import org.jblux.common.client.NpcData;
 import org.jblux.util.Coordinates;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 public class GameCanvas {
@@ -42,13 +43,17 @@ public class GameCanvas {
     private Players players;
     private Vector<Npc> npcs;
     private GameMap map;
+    private Image walk_area;
+    private Coordinates init_map_coords;
 
     protected GameCanvas() {
+        init();
     }
 
     public void init() {
         players = Players.getInstance();
         npcs = new Vector<Npc>();
+        init_map_coords = new Coordinates();
     }
 
     public static GameCanvas getInstance() {
@@ -60,10 +65,6 @@ public class GameCanvas {
 
     public void setPlayer(Player player) {
         this.player = player;
-    }
-
-    public void setMap(GameMap map) {
-        this.map = map;
     }
 
     public void setNpcs(HashMap<Coordinates, NpcData> n) {
@@ -81,13 +82,57 @@ public class GameCanvas {
         }
     }
 
+    /**
+     * The Coords param sets the initial coords when a map is entered.
+     * This will determine where to draw the top left
+     * corner of the map in relation to the player
+     *
+     * @param c     The initial coordinates when entering a map.
+     */
+    public void setMap(GameMap map, Coordinates c) {
+        this.map = map;
+        walk_area = map.getWalkArea();
+        init_map_coords = c;
+    }
+
+    public void setMap(String name, Coordinates c) {
+        try {
+            setMap(new GameMap(name), c);
+        } catch (SlickException ex) {
+        }
+    }
+
+    public GameMap getMap() {
+        return map;
+    }
+
+    public Image getWalkArea() {
+        return walk_area;
+    }
+
+    public boolean is_walkable(Coordinates coords) {
+        Color c = walk_area.getColor(coords.x, coords.y);
+        
+        if(c.getRed() == 0) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
     public void render(GameContainer gc, Graphics g) throws SlickException {
         if(map == null || player == null)
             return;
 
-        map.render(0,0,0); //Ground Layer
-        map.render(0,0,1); //Objects Layer
-        map.render(0,0,2); //Objects Layer 2
+        Coordinates map_coords = player.getCoords();
+        // 400 and 300 need to be adjusted to account for the height of the sprite
+        int map_x = 400 - map_coords.x;
+        int map_y = 300 - map_coords.y;
+
+        map.render(map_x, map_y, 0); //Ground Layer
+        map.render(map_x, map_y, 1); //Objects Layer
+        map.render(map_x, map_y, 2); //Objects Layer 2
 
         player.draw();
         for(int i = 0; i < players.size(); i++) {
@@ -100,18 +145,7 @@ public class GameCanvas {
             n.draw();
         }
 
-        map.render(0,0,3); //Fringe layer
-        map.render(0,0,4); //Fringe layer 2
-    }
-
-    public void setMap(String name) {
-        try {
-            map = new GameMap(name);
-        } catch (SlickException ex) {
-        }
-    }
-
-    public GameMap getMap() {
-        return map;
+        map.render(map_x, map_y, 3); //Fringe layer
+        map.render(map_x, map_y, 4); //Fringe layer 2
     }
 }
