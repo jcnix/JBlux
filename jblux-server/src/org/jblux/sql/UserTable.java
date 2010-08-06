@@ -122,7 +122,7 @@ public class UserTable {
         int id = -1;
 
         try {
-            String q = String.format("SELECT current_map_id FROM %s WHERE name=%s;",
+            String q = String.format("SELECT current_map_id FROM %s WHERE name='%s';",
                     CHARACTER_TABLE, character);
             ResultSet rs = m_db.query_select(q);
             rs.next();
