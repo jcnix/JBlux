@@ -43,7 +43,7 @@ public class MapParser implements CommandParser {
             Relation r = RelationUtil.fromString(command[2]);
             String name = command[3];
             Maps maps = Maps.getInstance();
-            short id = maps.getID(name);
+            int id = maps.getID(name);
             Map m = maps.getAdjacentMap(r, id);
 
             String cmd = "";
@@ -62,7 +62,7 @@ public class MapParser implements CommandParser {
 
                 cmd = String.format("%s goto %s %s npcs %s",
                         Commands.MAP, map_name, crd, npcs_enc);
-                client.go_to_map(m.getID(), map_name, crd);
+                client.go_to_map(m.getID(), crd);
             }
             else {
                 cmd = String.format("%s stay", Commands.MAP);
@@ -77,7 +77,7 @@ public class MapParser implements CommandParser {
             c.y = Integer.parseInt(command[3]);
 
             Maps maps = Maps.getInstance();
-            short id = maps.getID(client.getMap());
+            int id = client.getMap();
             Map m = maps.getMap(id);
             Item item = m.getItemAt(c);
 

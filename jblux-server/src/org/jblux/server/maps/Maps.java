@@ -30,11 +30,11 @@ import org.jblux.util.Coordinates;
 public class Maps {
     private static Maps m_self;
     private MapSqlTable m_mapsTable;
-    private HashMap<Short, Map> m_maps;
+    private HashMap<Integer, Map> m_maps;
 
     protected Maps() {
         m_mapsTable = new MapSqlTable();
-        m_maps = new HashMap<Short, Map>();
+        m_maps = new HashMap<Integer, Map>();
         init_maps();
     }
 
@@ -61,7 +61,7 @@ public class Maps {
      * @param   mapId - the Name of the map to get an object for
      * @return  The object of the Map based on the supplied name.
      */
-    public Map getMap(short mapId) {
+    public Map getMap(int mapId) {
         return m_maps.get(mapId);
     }
 
@@ -72,9 +72,9 @@ public class Maps {
      * @param current_map   The id of the current map
      * @return              The Map object of the adjacent map
      */
-    public Map getAdjacentMap(Relation rel, short current_map) {
+    public Map getAdjacentMap(Relation rel, int current_map) {
         Map m = getMap(current_map);
-        short id = m.get_adjacent_map(rel);
+        int id = m.get_adjacent_map(rel);
         return getMap(id);
     }
 
@@ -84,7 +84,7 @@ public class Maps {
      * @param name  The name of the map to get the id of
      * @return      The id of the map
      */
-    public short getID(String name) {
+    public int getID(String name) {
         short id = m_mapsTable.getIdForName(name);
         return id;
     }

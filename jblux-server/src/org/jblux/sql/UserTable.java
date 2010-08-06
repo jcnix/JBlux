@@ -117,6 +117,24 @@ public class UserTable {
         m_db.close();
     }
 
+    public int getMapForPlayer(String character) {
+        m_db.connect();
+        int id = -1;
+
+        try {
+            String q = String.format("SELECT current_map_id FROM %s WHERE name=%s;",
+                    CHARACTER_TABLE, character);
+            ResultSet rs = m_db.query_select(q);
+            rs.next();
+            id = rs.getInt("current_map_id");
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        m_db.close();
+        return id;
+    }
+
     public Race getRace(int id) {
         Race race = new Race();
         m_db.connect();

@@ -56,10 +56,10 @@ public class Clients {
         }
     }
 
-    public void tell_all_clients_on_map(String mapName, Object... o) {
+    public void tell_all_clients_on_map(int map_id, Object... o) {
         for(int i = 0; i < clients.size(); i++) {
             ClientThread ct = clients.get(i);
-            if(ct.getMap().equals(mapName)) {
+            if(ct.getMap() == map_id) {
                 ct.writeObjects(o);
             }
         }

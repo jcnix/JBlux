@@ -46,7 +46,7 @@ public class ClientThread {
     private Inventory inv;
     private boolean authenticated;
     private String character_name;
-    private String map;
+    private int map_id;
     private PlayerData player_data;
     public Coordinates coords;
 
@@ -57,7 +57,7 @@ public class ClientThread {
         socket = s;
         clients = Clients.getInstance();
         authenticated = false;
-        map = "";
+        map_id = 0;
         coords = new Coordinates();
 
         try {
@@ -79,8 +79,8 @@ public class ClientThread {
         return cl.character_name;
     }
 
-    public String getMap() {
-        return map;
+    public int getMap() {
+        return map_id;
     }
 
     public void setCharacterName(String name) {
@@ -156,16 +156,12 @@ public class ClientThread {
     }
 
     /* Put the player on a new map */
-    public void go_to_map(int map_id, String map_name, Coordinates coords) {
+    public void go_to_map(int map_id, Coordinates coords) {
         System.out.printf("%s connected\n", character_name);
 
-        this.map = map_name;
+        this.map_id = map_id;
         UserTable ut = new UserTable();
-        MapSqlTable mst = new MapSqlTable();
-
-        if(map_id == -1)
-            map_id = mst.getIdForName(map_name);
-        
+        MapSqlTable mst = new MapSqlTable();        
         ut.setMap(player_data.character_id, map_id, getCoords());
         
         String encoded_player_data = "";
@@ -201,7 +197,7 @@ public class ClientThread {
     }
 
     public boolean is_on_same_map(ClientThread ct) {
-        return ct.getMap().equals(this.getMap());
+        return (ct.getMap() == this.getMap());
     }
 
     public void add_to_inventory(Item i) {
@@ -299,7 +295,9 @@ class ClientListener extends Thread {
             character_name = c1[1];
             client.coords.x = Integer.parseInt(c1[2]);
             client.coords.y = Integer.parseInt(c1[3]);
-            client.go_to_map(-1, "residential", client.coords);
+            UserTable ut = new UserTable();
+            int id = ut.getMapForPlayer(character_name);
+            client.go_to_map(id, client.coords);
         }
         else if(c.startsWith(Commands.CHAT)) {
             character_name = c1[1];

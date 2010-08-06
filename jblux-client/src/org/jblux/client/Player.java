@@ -236,6 +236,7 @@ public class Player extends Sprite implements Observer {
         int y = 300 - (height - 9);
         image.draw(400, 300);
         draw_name();
+        System.out.println(coords);
     }
 
     @Override
