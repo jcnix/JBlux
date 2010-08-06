@@ -167,12 +167,14 @@ public class Player extends Sprite implements Observer {
     private void move(int dx, int dy) {
         bwcoords.x += dx;
         bwcoords.y += dy;
-        System.out.println(bwcoords);
+        Coordinates c = new Coordinates();
+        c.x = bwcoords.x + (width/2);
+        c.y = bwcoords.y + (height - 9);
 
         coords.x += dx;
         coords.y += dy;
 
-        boolean walkable = canvas.is_walkable(bwcoords);
+        boolean walkable = canvas.is_walkable(c);
         //Check to see if we need to change maps
         changeMap();
 
@@ -230,6 +232,8 @@ public class Player extends Sprite implements Observer {
     public void draw() {
         //Player must be drawn in the center of the screen
         // 400 and 300 need to be adjusted to account for the height of the sprite
+        int x = 400 - width/2;
+        int y = 300 - (height - 9);
         image.draw(400, 300);
         draw_name();
     }

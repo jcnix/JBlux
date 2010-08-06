@@ -74,7 +74,6 @@ public class GameCanvas {
         Iterator<Coordinates> it = c_set.iterator();
         while(it.hasNext()) {
             Coordinates c = it.next();
-            System.out.println(c.toString());
             NpcData data = n.get(c);
             Npc npc = new Npc(data);
             npc.setCoords(c);
