@@ -47,7 +47,8 @@ public class Player extends Sprite implements Observer {
     private HashMap<Coordinates, NpcData> npcs;
     private ResponseWaiter response;
     private GameCanvas canvas;
-    private Coordinates bwcoords;
+    //TODO: create a way to show the bw image and show where the player is on that.
+    //private Image bwtest;
 
     private Calendar cal;
     private long lastMove;
@@ -66,7 +67,6 @@ public class Player extends Sprite implements Observer {
         npcs = new HashMap<Coordinates, NpcData>();
         image = spriteSheet.getSubImage(FACE_DOWN, 0);
         move_size = 7;
-        bwcoords = data.coords.clone();
         coords = data.coords;
         map_name = data.map;
         switch_walk = false;
@@ -75,6 +75,11 @@ public class Player extends Sprite implements Observer {
         cal = Calendar.getInstance();
         lastMove = cal.getTimeInMillis();
         server.connect_player(data.character_name, coords);
+        
+//        try {
+//            bwtest = new Image("test.png");
+//        } catch (SlickException ex) {
+//        }
     }
 
     public void update(GameContainer gc) {
@@ -165,16 +170,10 @@ public class Player extends Sprite implements Observer {
      * parameters are deltas
      */
     private void move(int dx, int dy) {
-        bwcoords.x += dx;
-        bwcoords.y += dy;
-        Coordinates c = new Coordinates();
-        c.x = bwcoords.x + (width/2);
-        c.y = bwcoords.y + (height - 9);
-
         coords.x += dx;
         coords.y += dy;
 
-        boolean walkable = canvas.is_walkable(c);
+        boolean walkable = canvas.is_walkable(coords);
         //Check to see if we need to change maps
         changeMap();
 
@@ -182,8 +181,6 @@ public class Player extends Sprite implements Observer {
             //move back
             coords.x -= dx;
             coords.y -= dy;
-            bwcoords.x -= dx;
-            bwcoords.y -= dy;
         }
         else {
             server.move(coords.x, coords.y);
@@ -231,12 +228,11 @@ public class Player extends Sprite implements Observer {
     @Override
     public void draw() {
         //Player must be drawn in the center of the screen
-        // 400 and 300 need to be adjusted to account for the height of the sprite
         int x = 400 - width/2;
         int y = 300 - (height - 9);
-        image.draw(400, 300);
+        image.draw(x, y);
         draw_name();
-        System.out.println(coords);
+        //bwtest.draw(coords.x, coords.y);
     }
 
     @Override

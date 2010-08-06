@@ -146,5 +146,7 @@ public class GameCanvas {
 
         map.render(map_x, map_y, 3); //Fringe layer
         map.render(map_x, map_y, 4); //Fringe layer 2
+//        this.walk_area.setAlpha(0.6f);
+//        this.walk_area.draw(0, 0);
     }
 }
