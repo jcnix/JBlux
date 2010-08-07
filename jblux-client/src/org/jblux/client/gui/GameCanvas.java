@@ -45,6 +45,8 @@ public class GameCanvas {
     private GameMap map;
     private Image walk_area;
     private Coordinates map_coords;
+    private boolean developer_mode;
+    private Image bw_location_sprite;
 
     protected GameCanvas() {
         init();
@@ -54,6 +56,7 @@ public class GameCanvas {
         players = Players.getInstance();
         npcs = new Vector<Npc>();
         map_coords = new Coordinates();
+        developer_mode = false;
     }
 
     public static GameCanvas getInstance() {
@@ -150,7 +153,20 @@ public class GameCanvas {
 
         map.render(map_coords.x, map_coords.y, 3); //Fringe layer
         map.render(map_coords.x, map_coords.y, 4); //Fringe layer 2
-//        this.walk_area.setAlpha(0.6f);
-//        this.walk_area.draw(0, 0);
+
+        if(developer_mode) {
+            this.walk_area.setAlpha(0.6f);
+            this.walk_area.draw(0, 0);
+            Coordinates c = player.getCoords();
+            bw_location_sprite.draw(c.x, c.y);
+        }
+    }
+
+    public void set_developer_mode() {
+        developer_mode = true;
+        try {
+            bw_location_sprite = new Image("test.png");
+        } catch(SlickException ex) {
+        }
     }
 }

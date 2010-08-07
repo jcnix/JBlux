@@ -46,8 +46,6 @@ public class Player extends Sprite implements Observer {
     private PlayerData player_data;
     private HashMap<Coordinates, NpcData> npcs;
     private ResponseWaiter response;
-    //TODO: create a way to show the bw image and show where the player is on that.
-    //private Image bwtest;
 
     private Calendar cal;
     private long lastMove;
@@ -77,11 +75,6 @@ public class Player extends Sprite implements Observer {
         wait_new_map = true;
         response = get_new_waiter();
         server.getMapInfo(response);
-        
-//        try {
-//            bwtest = new Image("test.png");
-//        } catch (SlickException ex) {
-//        }
     }
 
     public void update(GameContainer gc) {
@@ -137,6 +130,9 @@ public class Player extends Sprite implements Observer {
                     Coordinates tile = MapGrid.getTile(coords);
                     server.pickup_item(tile, response);
                 }
+            }
+            if(input.isKeyDown(Input.KEY_D)) {
+                canvas.set_developer_mode();
             }
         }
     }
@@ -225,7 +221,6 @@ public class Player extends Sprite implements Observer {
         int y = 300 - (height - 9);
         image.draw(x, y);
         draw_name();
-        //bwtest.draw(coords.x, coords.y);
     }
 
     @Override
