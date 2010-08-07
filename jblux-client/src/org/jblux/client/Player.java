@@ -46,7 +46,6 @@ public class Player extends Sprite implements Observer {
     private PlayerData player_data;
     private HashMap<Coordinates, NpcData> npcs;
     private ResponseWaiter response;
-    private GameCanvas canvas;
     //TODO: create a way to show the bw image and show where the player is on that.
     //private Image bwtest;
 
@@ -70,11 +69,15 @@ public class Player extends Sprite implements Observer {
         coords = data.coords;
         map_name = data.map;
         switch_walk = false;
-        canvas = GameCanvas.getInstance();
 
         cal = Calendar.getInstance();
         lastMove = cal.getTimeInMillis();
-        server.connect_player(data.character_name, coords);
+
+        //Ask for map info
+        response = new ResponseWaiter();
+        response.addObserver(this);
+        wait_new_map = true;
+        server.getMapInfo(response);
         
 //        try {
 //            bwtest = new Image("test.png");
@@ -132,6 +135,7 @@ public class Player extends Sprite implements Observer {
                 if(can_perform_action(500)) {
                     wait_pressed_action = true;
                     response = new ResponseWaiter();
+                    response.addObserver(this);
                     Coordinates tile = MapGrid.getTile(coords);
                     server.pickup_item(tile, response);
                 }
@@ -235,6 +239,7 @@ public class Player extends Sprite implements Observer {
     }
 
     public void update(Observable o, Object arg) {
+        System.out.println("Update!");
         if(response == o && wait_new_map) {
             server.rm_observable(o);
             String sarg = (String) arg;
