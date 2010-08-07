@@ -104,16 +104,16 @@ public class Sprite {
         
         switch(r) {
             case TOP:
-                x = 1;
+                x = FACE_UP;
                 break;
             case BOTTOM:
-                x = 4;
+                x = FACE_DOWN;
                 break;
             case LEFT:
-                x = 7;
+                x = FACE_LEFT;
                 break;
             case RIGHT:
-                x = 10;
+                x = FACE_RIGHT;
                 break;
         }
 
