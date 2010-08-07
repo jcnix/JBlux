@@ -140,8 +140,8 @@ public class ClientThread {
         tell_all_clients_on_map(command);
     }
 
-    public void disconnect(String user) {
-        String command = String.format("%s %s", Commands.DISCONNECT, user);
+    public void disconnect() {
+        String command = String.format("%s %s", Commands.DISCONNECT, player_data.character_name);
         tell_all_clients_on_map(command);
         clients.removeClient(this);
     }
@@ -321,7 +321,7 @@ class ClientListener extends Thread {
 
     public void endThread() {
         System.out.printf("%s disconnected.\n", character_name);
-        client.disconnect(character_name);
+        client.disconnect();
 
         try {
             netIn.close();
