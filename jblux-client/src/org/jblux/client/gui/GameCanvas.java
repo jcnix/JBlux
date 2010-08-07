@@ -44,7 +44,7 @@ public class GameCanvas {
     private Vector<Npc> npcs;
     private GameMap map;
     private Image walk_area;
-    private Coordinates init_map_coords;
+    private Coordinates map_coords;
 
     protected GameCanvas() {
         init();
@@ -53,7 +53,7 @@ public class GameCanvas {
     public void init() {
         players = Players.getInstance();
         npcs = new Vector<Npc>();
-        init_map_coords = new Coordinates();
+        map_coords = new Coordinates();
     }
 
     public static GameCanvas getInstance() {
@@ -91,7 +91,7 @@ public class GameCanvas {
     public void setMap(GameMap map, Coordinates c) {
         this.map = map;
         walk_area = map.getWalkArea();
-        init_map_coords = c;
+        map_coords = c;
     }
 
     public void setMap(String name, Coordinates c) {
@@ -120,18 +120,22 @@ public class GameCanvas {
         }
     }
 
+    public Coordinates getMapCoords() {
+        return map_coords;
+    }
+
     public void render(GameContainer gc, Graphics g) throws SlickException {
         if(map == null || player == null)
             return;
 
-        Coordinates map_coords = player.getCoords();
+        map_coords = player.getCoords().clone();
         // 400 and 300 need to be adjusted to account for the height of the sprite
-        int map_x = 400 - map_coords.x;
-        int map_y = 300 - map_coords.y;
+        map_coords.x = 400 - map_coords.x;
+        map_coords.y = 300 - map_coords.y;
 
-        map.render(map_x, map_y, 0); //Ground Layer
-        map.render(map_x, map_y, 1); //Objects Layer
-        map.render(map_x, map_y, 2); //Objects Layer 2
+        map.render(map_coords.x, map_coords.y, 0); //Ground Layer
+        map.render(map_coords.x, map_coords.y, 1); //Objects Layer
+        map.render(map_coords.x, map_coords.y, 2); //Objects Layer 2
 
         player.draw();
         for(int i = 0; i < players.size(); i++) {
@@ -144,8 +148,8 @@ public class GameCanvas {
             n.draw();
         }
 
-        map.render(map_x, map_y, 3); //Fringe layer
-        map.render(map_x, map_y, 4); //Fringe layer 2
+        map.render(map_coords.x, map_coords.y, 3); //Fringe layer
+        map.render(map_coords.x, map_coords.y, 4); //Fringe layer 2
 //        this.walk_area.setAlpha(0.6f);
 //        this.walk_area.draw(0, 0);
     }

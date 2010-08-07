@@ -20,6 +20,7 @@
 
 package org.jblux.client;
 
+import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.gui.PlayerNameFontFactory;
 import org.jblux.common.Relation;
 import org.jblux.util.Coordinates;
@@ -47,12 +48,14 @@ public class Sprite {
     protected String name;
     protected PlayerNameFontFactory pnff;
     protected UnicodeFont nameFont;
+    protected GameCanvas canvas;
 
     public Sprite(String sheet) {
         width = 32;
         height = 39;
         name = "";
         coords = new Coordinates();
+        canvas = GameCanvas.getInstance();
 
         try {
             pnff = PlayerNameFontFactory.getInstance();
@@ -63,7 +66,10 @@ public class Sprite {
     }
 
     public void draw() {
-        image.draw(coords.x - width/2, coords.y - height);
+        Coordinates c = canvas.getMapCoords();
+        c.x += coords.x;
+        c.y += coords.y;
+        image.draw(c.x - width/2, c.y - height);
         draw_name();
     }
 
