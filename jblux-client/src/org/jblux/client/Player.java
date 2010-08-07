@@ -119,20 +119,18 @@ public class Player extends Sprite implements Observer {
                     switch_walk = !switch_walk;
                     move(0, move_size);
                 }
-            }
-            //Action key
-            if(input.isKeyDown(Input.KEY_SPACE)) {
-                //TODO: Check in front of the player
-                //Only checking below the player for now
-                if(can_perform_action(500)) {
+                //Action key
+                if(input.isKeyDown(Input.KEY_SPACE)) {
+                    //TODO: Check in front of the player
+                    //Only checking below the player for now
                     wait_pressed_action = true;
                     response = get_new_waiter();
                     Coordinates tile = MapGrid.getTile(coords);
                     server.pickup_item(tile, response);
                 }
-            }
-            if(input.isKeyDown(Input.KEY_D)) {
-                canvas.set_developer_mode();
+                if(input.isKeyDown(Input.KEY_F1)) {
+                    canvas.toggle_developer_mode();
+                }
             }
         }
     }
@@ -237,7 +235,6 @@ public class Player extends Sprite implements Observer {
     }
 
     public void update(Observable o, Object arg) {
-        System.out.println("Update!");
         if(response == o && wait_new_map) {
             server.rm_observable(o);
             String sarg = (String) arg;

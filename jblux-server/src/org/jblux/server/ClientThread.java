@@ -33,7 +33,6 @@ import org.jblux.common.items.Item;
 import org.jblux.server.command.parsers.AuthParser;
 import org.jblux.server.command.parsers.MapParser;
 import org.jblux.server.maps.Map;
-import org.jblux.server.maps.Maps;
 import org.jblux.sql.MapSqlTable;
 import org.jblux.sql.UserTable;
 import org.jblux.util.Base64;

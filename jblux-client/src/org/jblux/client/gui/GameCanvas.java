@@ -162,11 +162,17 @@ public class GameCanvas {
         }
     }
 
-    public void set_developer_mode() {
-        developer_mode = true;
-        try {
-            bw_location_sprite = new Image("test.png");
-        } catch(SlickException ex) {
+    public void toggle_developer_mode() {
+        developer_mode = !developer_mode;
+
+        if(developer_mode) {
+            try {
+                bw_location_sprite = new Image("test.png");
+            } catch(SlickException ex) {
+            }
+        }
+        else {
+            bw_location_sprite = null;
         }
     }
 }

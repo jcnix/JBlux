@@ -172,7 +172,6 @@ class ServerListener extends Thread {
     }
 
     private void notify_observers(Object o) {
-        System.out.println(observables.size());
         for(int i = 0; i < observables.size(); i++) {
             observables.get(i).responseReceived(o);
         }
