@@ -89,48 +89,40 @@ public class Player extends Sprite implements Observer {
             //Can only move once every 100ms
             if(can_perform_action(100)) {
                 if(input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A)) {
-                    if(coords.x > 0) {
-                        if(switch_walk)
-                            image = spriteSheet.getSprite(Sprite.FACE_LEFT-1, 0);
-                        else
-                            image = spriteSheet.getSprite(Sprite.FACE_LEFT+1, 0);
+                    if(switch_walk)
+                        image = spriteSheet.getSprite(Sprite.FACE_LEFT-1, 0);
+                    else
+                        image = spriteSheet.getSprite(Sprite.FACE_LEFT+1, 0);
 
-                        switch_walk = !switch_walk;
-                        move(-move_size, 0);
-                    }
+                    switch_walk = !switch_walk;
+                    move(-move_size, 0);
                 }
                 if(input.isKeyDown(Input.KEY_RIGHT) || input.isKeyDown(Input.KEY_D)) {
-                    if(coords.x < 800 - 32) {
-                        if(switch_walk)
-                            image = spriteSheet.getSprite(Sprite.FACE_RIGHT-1, 0);
-                        else
-                            image = spriteSheet.getSprite(Sprite.FACE_RIGHT+1, 0);
+                    if(switch_walk)
+                        image = spriteSheet.getSprite(Sprite.FACE_RIGHT-1, 0);
+                    else
+                        image = spriteSheet.getSprite(Sprite.FACE_RIGHT+1, 0);
 
-                        switch_walk = !switch_walk;
-                        move(move_size, 0);
-                    }
+                    switch_walk = !switch_walk;
+                    move(move_size, 0);
                 }
                 if(input.isKeyDown(Input.KEY_UP) || input.isKeyDown(Input.KEY_W)) {
-                    if(coords.y > 0) {
-                        if(switch_walk)
-                            image = spriteSheet.getSprite(Sprite.FACE_UP-1, 0);
-                        else
-                            image = spriteSheet.getSprite(Sprite.FACE_UP+1, 0);
+                    if(switch_walk)
+                        image = spriteSheet.getSprite(Sprite.FACE_UP-1, 0);
+                    else
+                        image = spriteSheet.getSprite(Sprite.FACE_UP+1, 0);
 
-                        switch_walk = !switch_walk;
-                        move(0, -move_size);
-                    }
+                    switch_walk = !switch_walk;
+                    move(0, -move_size);
                 }
                 if(input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)) {
-                    if(coords.y < 600 - 32) {
-                        if(switch_walk)
-                            image = spriteSheet.getSprite(Sprite.FACE_DOWN-1, 0);
-                        else
-                            image = spriteSheet.getSprite(Sprite.FACE_DOWN+1, 0);
+                    if(switch_walk)
+                        image = spriteSheet.getSprite(Sprite.FACE_DOWN-1, 0);
+                    else
+                        image = spriteSheet.getSprite(Sprite.FACE_DOWN+1, 0);
 
-                        switch_walk = !switch_walk;
-                        move(0, move_size);
-                    }
+                    switch_walk = !switch_walk;
+                    move(0, move_size);
                 }
             }
             //Action key
