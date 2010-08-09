@@ -75,13 +75,6 @@ public class ServerCommunicator {
         sl.rm_observable((ResponseWaiter) o);
     }
 
-    public void connect_player(String player, Coordinates coords) {
-        System.out.println("Connecting...");
-        character_name = player;
-        String command = String.format("%s %s %d %d", Commands.CONNECT, character_name, coords.x, coords.y);
-        writeString(command);
-    }
-
     public void move(int x, int y) {
         String command = String.format("%s %s %d %d", Commands.MOVE, character_name, x, y);
         writeString(command);
@@ -95,6 +88,12 @@ public class ServerCommunicator {
     public void goto_map(ResponseWaiter ro, Relation r, String map_name) {
         String map = "";
         String command = String.format("%s goto %s %s", Commands.MAP, r, map_name);
+        sl.add_observable(ro);
+        writeString(command);
+    }
+
+    public void getMapInfo(ResponseWaiter ro) {
+        String command = String.format("%s info", Commands.MAP);
         sl.add_observable(ro);
         writeString(command);
     }

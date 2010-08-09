@@ -188,7 +188,7 @@ public class MapSqlTable {
         return npcs;
     }
 
-    public Coordinates getEntrance(short map_id, Relation r) {
+    public Coordinates getEntrance(int map_id, Relation r) {
         m_db.connect();
         Coordinates c = new Coordinates();
 

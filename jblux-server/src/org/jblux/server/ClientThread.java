@@ -32,6 +32,7 @@ import org.jblux.common.items.Inventory;
 import org.jblux.common.items.Item;
 import org.jblux.server.command.parsers.AuthParser;
 import org.jblux.server.command.parsers.MapParser;
+import org.jblux.server.maps.Map;
 import org.jblux.sql.MapSqlTable;
 import org.jblux.sql.UserTable;
 import org.jblux.util.Base64;
@@ -45,8 +46,7 @@ public class ClientThread {
     private ObjectOutputStream netOut;
     private Inventory inv;
     private boolean authenticated;
-    private String character_name;
-    private String map;
+    private int map_id;
     private PlayerData player_data;
     public Coordinates coords;
 
@@ -57,7 +57,7 @@ public class ClientThread {
         socket = s;
         clients = Clients.getInstance();
         authenticated = false;
-        map = "";
+        map_id = 0;
         coords = new Coordinates();
 
         try {
@@ -75,16 +75,12 @@ public class ClientThread {
         return coords;
     }
 
-    public String getUsername() {
-        return cl.character_name;
+    public PlayerData getPlayerData() {
+        return player_data;
     }
 
-    public String getMap() {
-        return map;
-    }
-
-    public void setCharacterName(String name) {
-        this.character_name = name;
+    public int getMap() {
+        return map_id;
     }
 
     /*
@@ -112,20 +108,19 @@ public class ClientThread {
     public void auth(String name, boolean b) {
         if(b) {
             authenticated = true;
-            setCharacterName(name);
         }
         else {
             authenticated = false;
         }
 
         if(authenticated) {
-            sendPlayerData();
+            sendPlayerData(name);
         }
     }
 
-    public void sendPlayerData() {
+    public void sendPlayerData(String name) {
         UserTable ut = new UserTable();
-        player_data = ut.getPlayer(character_name);
+        player_data = ut.getPlayer(name);
         String player_enc = "";
         try {
             player_enc = Base64.encodeObject(player_data);
@@ -144,8 +139,8 @@ public class ClientThread {
         tell_all_clients_on_map(command);
     }
 
-    public void disconnect(String user) {
-        String command = String.format("%s %s", Commands.DISCONNECT, user);
+    public void disconnect() {
+        String command = String.format("%s %s", Commands.DISCONNECT, player_data.character_name);
         tell_all_clients_on_map(command);
         clients.removeClient(this);
     }
@@ -156,26 +151,38 @@ public class ClientThread {
     }
 
     /* Put the player on a new map */
-    public void go_to_map(int map_id, String map_name, Coordinates coords) {
-        System.out.printf("%s connected\n", character_name);
+    public void go_to_map(Map map, Coordinates coords) {
+        if(map == null) {
+            String cmd = String.format("%s stay", Commands.MAP);
+            writeString(cmd);
+            return;
+        }
 
-        this.map = map_name;
-        UserTable ut = new UserTable();
-        MapSqlTable mst = new MapSqlTable();
-
-        if(map_id == -1)
-            map_id = mst.getIdForName(map_name);
+        System.out.printf("%s connected\n", player_data.character_name);
+        this.map_id = map.getID();
+        this.coords = coords;
         
+        UserTable ut = new UserTable();
+        MapSqlTable mst = new MapSqlTable();        
         ut.setMap(player_data.character_id, map_id, getCoords());
         
         String encoded_player_data = "";
+        String encoded_npcs = "";
         try {
             encoded_player_data = Base64.encodeObject(player_data);
+            encoded_npcs = Base64.encodeObject(map.getNpcs());
         } catch(IOException ex) {
         }
-        
+
+        //Tell the player where to go, and provide some info about the map
+        String cmd = String.format("%s goto %s %s npcs %s",
+                        Commands.MAP, map.getName(), coords, encoded_npcs);
+        writeString(cmd);
+
+        //This command tells other players about the player being added to the map
         String command = String.format("%s add %s %s %s",
-                Commands.MAP, character_name, getCoords(), encoded_player_data);
+                Commands.MAP, player_data.character_name, getCoords(),
+                encoded_player_data);
         
         LinkedList<ClientThread> c = clients.getClients();
         for(int i = 0; i < c.size(); i++) {
@@ -186,7 +193,7 @@ public class ClientThread {
 
             //Tell the new player about the other clients
             String otherPlayer = String.format("%s add %s %s", Commands.MAP,
-                    ct.getUsername(), ct.getCoords());
+                    player_data.character_name, ct.getCoords());
             writeString(otherPlayer);
 
             //Tell other client about the new player
@@ -201,7 +208,7 @@ public class ClientThread {
     }
 
     public boolean is_on_same_map(ClientThread ct) {
-        return ct.getMap().equals(this.getMap());
+        return (ct.getMap() == this.getMap());
     }
 
     public void add_to_inventory(Item i) {
@@ -295,12 +302,6 @@ class ClientListener extends Thread {
             client.coords.y = Integer.parseInt(c1[3]);
             client.move(character_name, client.coords);
         }
-        else if(c.startsWith(Commands.CONNECT)) {
-            character_name = c1[1];
-            client.coords.x = Integer.parseInt(c1[2]);
-            client.coords.y = Integer.parseInt(c1[3]);
-            client.go_to_map(-1, "residential", client.coords);
-        }
         else if(c.startsWith(Commands.CHAT)) {
             character_name = c1[1];
 
@@ -319,7 +320,7 @@ class ClientListener extends Thread {
 
     public void endThread() {
         System.out.printf("%s disconnected.\n", character_name);
-        client.disconnect(character_name);
+        client.disconnect();
 
         try {
             netIn.close();

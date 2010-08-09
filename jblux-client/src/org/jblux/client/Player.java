@@ -35,16 +35,12 @@ import org.jblux.common.client.NpcData;
 import org.jblux.common.client.PlayerData;
 import org.jblux.common.items.Item;
 import org.jblux.util.Coordinates;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 
 public class Player extends Sprite implements Observer {
     private boolean switch_walk;  //Just means switch to other walk sprite
     private ServerCommunicator server;
-    private Image walk_area;
     private int move_size;
     private String map_name;
     private PlayerData player_data;
@@ -67,84 +63,73 @@ public class Player extends Sprite implements Observer {
 
         npcs = new HashMap<Coordinates, NpcData>();
         image = spriteSheet.getSubImage(FACE_DOWN, 0);
-        move_size = 7;        
-        coords.x = data.coords.x;
-        coords.y = data.coords.y;
+        move_size = 7;
+        coords = data.coords;
         map_name = data.map;
         switch_walk = false;
 
         cal = Calendar.getInstance();
         lastMove = cal.getTimeInMillis();
 
-        try {
-            String wa = String.format("maps/%s/%sbw.png", data.map, data.map);
-            walk_area = new Image(wa);
-        } catch (SlickException ex) {
-        }
-
-        server.connect_player(data.character_name, coords);
+        //Ask for map info
+        wait_new_map = true;
+        response = get_new_waiter();
+        server.getMapInfo(response);
     }
 
     public void update(GameContainer gc) {
         Input input = gc.getInput();
 
         if(gc.hasFocus()) {
-            //Can only move once ever 100ms
+            //Can only move once every 100ms
             if(can_perform_action(100)) {
                 if(input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A)) {
-                    if(coords.x > 0) {
-                        if(switch_walk)
-                            image = spriteSheet.getSprite(Sprite.FACE_LEFT-1, 0);
-                        else
-                            image = spriteSheet.getSprite(Sprite.FACE_LEFT+1, 0);
+                    if(switch_walk)
+                        image = spriteSheet.getSprite(Sprite.FACE_LEFT-1, 0);
+                    else
+                        image = spriteSheet.getSprite(Sprite.FACE_LEFT+1, 0);
 
-                        switch_walk = !switch_walk;
-                        move(-move_size, 0);
-                    }
+                    switch_walk = !switch_walk;
+                    move(-move_size, 0);
                 }
                 if(input.isKeyDown(Input.KEY_RIGHT) || input.isKeyDown(Input.KEY_D)) {
-                    if(coords.x < 800 - 32) {
-                        if(switch_walk)
-                            image = spriteSheet.getSprite(Sprite.FACE_RIGHT-1, 0);
-                        else
-                            image = spriteSheet.getSprite(Sprite.FACE_RIGHT+1, 0);
+                    if(switch_walk)
+                        image = spriteSheet.getSprite(Sprite.FACE_RIGHT-1, 0);
+                    else
+                        image = spriteSheet.getSprite(Sprite.FACE_RIGHT+1, 0);
 
-                        switch_walk = !switch_walk;
-                        move(move_size, 0);
-                    }
+                    switch_walk = !switch_walk;
+                    move(move_size, 0);
                 }
                 if(input.isKeyDown(Input.KEY_UP) || input.isKeyDown(Input.KEY_W)) {
-                    if(coords.y > 0) {
-                        if(switch_walk)
-                            image = spriteSheet.getSprite(Sprite.FACE_UP-1, 0);
-                        else
-                            image = spriteSheet.getSprite(Sprite.FACE_UP+1, 0);
+                    if(switch_walk)
+                        image = spriteSheet.getSprite(Sprite.FACE_UP-1, 0);
+                    else
+                        image = spriteSheet.getSprite(Sprite.FACE_UP+1, 0);
 
-                        switch_walk = !switch_walk;
-                        move(0, -move_size);
-                    }
+                    switch_walk = !switch_walk;
+                    move(0, -move_size);
                 }
                 if(input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)) {
-                    if(coords.y < 600 - 32) {
-                        if(switch_walk)
-                            image = spriteSheet.getSprite(Sprite.FACE_DOWN-1, 0);
-                        else
-                            image = spriteSheet.getSprite(Sprite.FACE_DOWN+1, 0);
+                    if(switch_walk)
+                        image = spriteSheet.getSprite(Sprite.FACE_DOWN-1, 0);
+                    else
+                        image = spriteSheet.getSprite(Sprite.FACE_DOWN+1, 0);
 
-                        switch_walk = !switch_walk;
-                        move(0, move_size);
-                    }
+                    switch_walk = !switch_walk;
+                    move(0, move_size);
                 }
-            }
-            //Action key
-            if(input.isKeyDown(Input.KEY_SPACE)) {
-                //TODO: Check in front of the player
-                //Only checking below the player for now
-                if(can_perform_action(500)) {
+                //Action key
+                if(input.isKeyDown(Input.KEY_SPACE)) {
+                    //TODO: Check in front of the player
+                    //Only checking below the player for now
                     wait_pressed_action = true;
-                    response = new ResponseWaiter();
+                    response = get_new_waiter();
                     Coordinates tile = MapGrid.getTile(coords);
                     server.pickup_item(tile, response);
+                }
+                if(input.isKeyDown(Input.KEY_F1)) {
+                    canvas.toggle_developer_mode();
                 }
             }
         }
@@ -176,17 +161,12 @@ public class Player extends Sprite implements Observer {
         coords.x += dx;
         coords.y += dy;
 
-        boolean blocked = false;
-        Color c = walk_area.getColor(coords.x, coords.y);
-
+        boolean walkable = canvas.is_walkable(coords);
         //Check to see if we need to change maps
         changeMap();
 
-        if(c.getRed() == 0) {
-            blocked = true;
-        }
-
-        if(blocked) {
+        if(!walkable) {
+            //move back
             coords.x -= dx;
             coords.y -= dy;
         }
@@ -196,8 +176,8 @@ public class Player extends Sprite implements Observer {
     }
 
     public void changeMap() {
-        int x = walk_area.getWidth();
-        int y = walk_area.getHeight();
+        int x = canvas.getWalkArea().getWidth();
+        int y = canvas.getWalkArea().getHeight();
         boolean change = false;
         Relation relation = null;
 
@@ -220,18 +200,38 @@ public class Player extends Sprite implements Observer {
 
         if(change) {
             wait_new_map = true;
-            response = new ResponseWaiter();
-            response.addObserver(this);
+            response = get_new_waiter();
             server.goto_map(response, relation, map_name);
         }
 
         if(execute_change) {
             execute_change = false;
             GameCanvas gc = GameCanvas.getInstance();
-            gc.setMap(map_name);
-            walk_area = gc.getMap().getWalkArea();
+            gc.setMap(map_name, coords);
             gc.setNpcs(npcs);
         }
+    }
+
+    @Override
+    public void draw() {
+        //Player must be drawn in the center of the screen
+        int x = 400 - width/2;
+        int y = 300 - (height - 9);
+        image.draw(x, y);
+        draw_name();
+    }
+
+    @Override
+    public void draw_name() {
+        int x = 380;
+        int y = 280;
+        nameFont.drawString(x, y, name);
+    }
+
+    private ResponseWaiter get_new_waiter() {
+        ResponseWaiter rw = new ResponseWaiter();
+        rw.addObserver(this);
+        return rw;
     }
 
     public void update(Observable o, Object arg) {

@@ -27,23 +27,23 @@ import org.jblux.common.items.Item;
 import org.jblux.util.Coordinates;
 
 public class Map {
-    private short m_id;
+    private int m_id;
     private String m_name;
     private HashMap<Coordinates, Item> m_items;
     private HashMap<Coordinates, NpcData> m_npcs;
 
     /* Ids of adjacent maps for convenience */
-    private short map_left;
-    private short map_right;
-    private short map_above;
-    private short map_below;
+    private int map_left;
+    private int map_right;
+    private int map_above;
+    private int map_below;
 
-    public Map(short id, String name) {
+    public Map(int id, String name) {
         m_id = id;
         m_name = name;
     }
 
-    public short getID() {
+    public int getID() {
         return m_id;
     }
 
@@ -83,8 +83,8 @@ public class Map {
         map_below = below;
     }
 
-    public short get_adjacent_map(Relation r) {
-        short id = 0;
+    public int get_adjacent_map(Relation r) {
+        int id = 0;
 
         if(r == Relation.LEFT)
             id = map_left;

@@ -36,12 +36,12 @@ public class GameWorld extends Thread {
 
     @Override
     public void run() {
-        drop_item(null, "residential");
+        //drop_item(null, 1);
     }
 
     /* TODO: this probably isn't something we need
      * other than to test some stuff */
-    public void drop_item(Item item, String map) {
+    public void drop_item(Item item, int map_id) {
         ItemSqlTable items = new ItemSqlTable();
         item = items.getItem("test");
         System.out.printf("item id: %d\n", item.m_id);
@@ -55,6 +55,6 @@ public class GameWorld extends Thread {
         String command = String.format("put item %s at %s",
             item.m_name, coords);
         Clients clients = Clients.getInstance();
-        clients.tell_all_clients_on_map(map, command, item);
+        clients.tell_all_clients_on_map(map_id, command, item);
     }
 }

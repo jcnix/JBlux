@@ -26,6 +26,7 @@ import org.jblux.client.gui.GUI;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.common.client.PlayerData;
+import org.jblux.util.Coordinates;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -59,7 +60,9 @@ public class GameplayState extends BasicGameState {
         
         try {
             map = new GameMap(data.map);
-            canvas.setMap(map);
+            //Create a new Coords object, so it won't change when the player moves
+            Coordinates c = player.getCoords().clone();
+            canvas.setMap(map, c);
         } catch (SlickException ex) {
         }
     }
@@ -67,7 +70,6 @@ public class GameplayState extends BasicGameState {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         canvas = GameCanvas.getInstance();
-        canvas.init();
         gui = new GUI(gc, server);
     }
  

@@ -21,16 +21,16 @@
 package org.jblux.server.command.parsers;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jblux.common.Commands;
 import org.jblux.common.Relation;
 import org.jblux.common.RelationUtil;
+import org.jblux.common.client.PlayerData;
 import org.jblux.common.items.Item;
 import org.jblux.server.ClientThread;
 import org.jblux.server.maps.Map;
 import org.jblux.server.maps.Maps;
 import org.jblux.sql.MapSqlTable;
+import org.jblux.sql.UserTable;
 import org.jblux.util.Base64;
 import org.jblux.util.Coordinates;
 
@@ -43,7 +43,7 @@ public class MapParser implements CommandParser {
             Relation r = RelationUtil.fromString(command[2]);
             String name = command[3];
             Maps maps = Maps.getInstance();
-            short id = maps.getID(name);
+            int id = maps.getID(name);
             Map m = maps.getAdjacentMap(r, id);
 
             String cmd = "";
@@ -51,25 +51,12 @@ public class MapParser implements CommandParser {
                 MapSqlTable mst = new MapSqlTable();
                 String map_name = m.getName();
                 Relation map_side = RelationUtil.getOpposite(r);
-                Coordinates crd = mst.getEntrance(m.getID(), map_side);
-                client.coords = crd;
-
-                String npcs_enc = "";
-                try {
-                    npcs_enc = Base64.encodeObject(m.getNpcs());
-                } catch (IOException ex) {
-                }
-
-                cmd = String.format("%s goto %s %s npcs %s",
-                        Commands.MAP, map_name, crd, npcs_enc);
-                client.go_to_map(m.getID(), map_name, crd);
+                Coordinates crd = mst.getEntrance(m.getID(), map_side);            
+                client.go_to_map(m, crd);
             }
             else {
-                cmd = String.format("%s stay", Commands.MAP);
+                client.go_to_map(null, null);
             }
-            
-            //Respond to client
-            client.writeString(cmd);
         }
         else if(command[1].equals(Commands.PICKUP)) {
             Coordinates c = new Coordinates();
@@ -77,7 +64,7 @@ public class MapParser implements CommandParser {
             c.y = Integer.parseInt(command[3]);
 
             Maps maps = Maps.getInstance();
-            short id = maps.getID(client.getMap());
+            int id = client.getMap();
             Map m = maps.getMap(id);
             Item item = m.getItemAt(c);
 
@@ -94,6 +81,15 @@ public class MapParser implements CommandParser {
             
             String cmd = String.format("%s %s", Commands.ITEM, enc_item);
             client.writeString(cmd);
+        }
+        else if(command[1].equals("info")) {
+            //Tell the player about the map they're on.
+            PlayerData pd = client.getPlayerData();
+            UserTable ut = new UserTable();
+            int mid = ut.getMapForPlayer(pd.character_name);
+            Maps maps = Maps.getInstance();
+            Map map = maps.getMap(mid);
+            client.go_to_map(map, pd.coords);
         }
     }
 }

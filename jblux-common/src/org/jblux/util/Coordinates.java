@@ -34,6 +34,10 @@ public class Coordinates implements Serializable {
         setY(y);
     }
 
+    public Coordinates clone() {
+        return new Coordinates(x, y);
+    }
+
     @Override
     public String toString() {
         return String.format("%d %d", x, y);
