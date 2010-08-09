@@ -1,10 +1,16 @@
+8-8-2010 Update
+***************
+- New maps use 5 layers
+- Map scrolling
+- Developer Mode (Press F1)
+
 8-3-2010 Update
-**************
+***************
 - Render Npcs on screen
 - Walking diagonally works again
 - Save the correct player coordinates (prevents spawning in no-walk areas)
 - Use the correct walk_area map when the game initializes
-- Npcs will show up on the map when initialing connectiong.
+- Npcs will show up on the map when initialing connecting.
 
 8-1-2010 Update
 ***************
