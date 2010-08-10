@@ -73,7 +73,7 @@ public class Player extends Sprite implements Observer {
 
         //Ask for map info
         wait_new_map = true;
-        response = get_new_waiter();
+        response = ResponseWaiter.get_new_waiter(this);
         server.getMapInfo(response);
     }
 
@@ -124,7 +124,7 @@ public class Player extends Sprite implements Observer {
                     //TODO: Check in front of the player
                     //Only checking below the player for now
                     wait_pressed_action = true;
-                    response = get_new_waiter();
+                    response = ResponseWaiter.get_new_waiter(this);
                     Coordinates tile = MapGrid.getTile(coords);
                     server.pickup_item(tile, response);
                 }
@@ -200,7 +200,7 @@ public class Player extends Sprite implements Observer {
 
         if(change) {
             wait_new_map = true;
-            response = get_new_waiter();
+            response = ResponseWaiter.get_new_waiter(this);
             server.goto_map(response, relation, map_name);
         }
 
@@ -226,12 +226,6 @@ public class Player extends Sprite implements Observer {
         int x = 380;
         int y = 280;
         nameFont.drawString(x, y, name);
-    }
-
-    private ResponseWaiter get_new_waiter() {
-        ResponseWaiter rw = new ResponseWaiter();
-        rw.addObserver(this);
-        return rw;
     }
 
     public void update(Observable o, Object arg) {

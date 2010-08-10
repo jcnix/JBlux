@@ -81,8 +81,7 @@ public class MainMenuState extends BasicGameState implements Observer {
                 password = applet.getParameter("password");
                 character_name = applet.getParameter("character");
 
-                response = new ResponseWaiter();
-                response.addObserver(this);
+                response = ResponseWaiter.get_new_waiter(this);
                 server.authenticate(response, username, password, character_name);
             }
             else {
@@ -93,8 +92,7 @@ public class MainMenuState extends BasicGameState implements Observer {
                 //password = "81b2f040df6152242feb966d071fe58977dab12e";
                 //password = "wrong password";
                 //character_name = "pdude";
-                response = new ResponseWaiter();
-                response.addObserver(this);
+                response = ResponseWaiter.get_new_waiter(this);
                 server.authenticate(response, username, password, character_name);
             }
         }
