@@ -28,7 +28,7 @@ public class Npc extends Sprite {
     private NpcData data;
 
     public Npc(NpcData data) {
-        super(data.race.sprite_sheet);
+        super(data);
         this.data = data;
         
         Relation r = RelationUtil.upDownRelation(data.direction);

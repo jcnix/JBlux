@@ -23,6 +23,7 @@ package org.jblux.client;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.gui.PlayerNameFontFactory;
 import org.jblux.common.Relation;
+import org.jblux.common.client.CharacterData;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -50,9 +51,10 @@ public class Sprite {
     protected UnicodeFont nameFont;
     protected GameCanvas canvas;
 
-    public Sprite(String sheet) {
+    public Sprite(CharacterData data) {
+        System.out.println(data.race.name + " " + data.race.sprite_height);
         width = 32;
-        height = 39;
+        height = data.race.sprite_height;
         name = "";
         coords = new Coordinates();
         canvas = GameCanvas.getInstance();
@@ -60,7 +62,7 @@ public class Sprite {
         try {
             pnff = PlayerNameFontFactory.getInstance();
             nameFont = pnff.getFont();
-            spriteSheet = new SpriteSheet(sheet, width, height);
+            spriteSheet = new SpriteSheet(data.race.sprite_sheet, width, height);
         } catch (SlickException ex) {
         }
     }

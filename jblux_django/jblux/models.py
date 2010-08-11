@@ -34,6 +34,7 @@ class Character(models.Model):
 class Race(models.Model):
     name = models.CharField(max_length=25)
     sprite_sheet = models.CharField(max_length=100)
+    sprite_height = models.IntegerField()
 
     def __unicode__(self):
         return self.name

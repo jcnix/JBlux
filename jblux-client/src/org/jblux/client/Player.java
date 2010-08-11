@@ -55,14 +55,14 @@ public class Player extends Sprite implements Observer {
     private boolean wait_pressed_action;
 
     public Player(PlayerData data, ServerCommunicator server) {
-        super(data.race.sprite_sheet);
+        super(data);
 
         this.player_data = data;
         this.server = server;
         setName(data.character_name);
 
         npcs = new HashMap<Coordinates, NpcData>();
-        image = spriteSheet.getSubImage(FACE_DOWN, 0);
+        setImage(FACE_DOWN, 0);
         move_size = 7;
         coords = data.coords;
         map_name = data.map;

@@ -226,7 +226,7 @@ class ServerListener extends Thread {
                 int y = Integer.parseInt(c0[4]);
                 PlayerData data = PlayerDataFactory.getDataFromBase64(c0[5]);
 
-                Sprite npc = new Sprite(data.race.sprite_sheet);
+                Sprite npc = new Sprite(data);
                 npc.setName(name);
                 npc.setCoords(x, y);
                 npc.setImage(0, 0);
