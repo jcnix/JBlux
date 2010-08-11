@@ -52,7 +52,6 @@ public class Sprite {
     protected GameCanvas canvas;
 
     public Sprite(CharacterData data) {
-        System.out.println(data.race.name + " " + data.race.sprite_height);
         width = 32;
         height = data.race.sprite_height;
         name = "";

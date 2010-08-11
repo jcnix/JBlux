@@ -212,7 +212,7 @@ class Map(models.Model):
 class MapItems(models.Model):
     #Working around the word map being a python keyword
     map_t = models.ForeignKey('Map')
-    item_id = models.ForeignKey('Item')
+    item = models.ForeignKey('Item')
     x_coord = models.IntegerField()
     y_coord = models.IntegerField()
 
