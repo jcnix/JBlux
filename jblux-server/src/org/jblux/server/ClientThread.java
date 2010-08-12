@@ -134,8 +134,8 @@ public class ClientThread {
     /*
      * Send's all players' coordinates back to the client so they can be displayed.
      */
-    public void move(String username, Coordinates coords) {
-        String command = String.format("%s %s %d %d", Commands.MOVE, username, coords.x, coords.y);
+    public void move(Coordinates coords) {
+        String command = String.format("%s %s %d %d", Commands.MOVE, player_data.character_name, coords.x, coords.y);
         tell_all_clients_on_map(command);
     }
 
@@ -251,7 +251,6 @@ class ClientListener extends Thread {
     private Socket clientSocket;
     private ObjectInputStream netIn;
     private ClientThread client;
-    
     public String character_name;
 
     public ClientListener(ClientThread client, Socket s) {
@@ -301,7 +300,7 @@ class ClientListener extends Thread {
         if(c.startsWith(Commands.MOVE)) {
             client.coords.x = Integer.parseInt(c1[2]);
             client.coords.y = Integer.parseInt(c1[3]);
-            client.move(character_name, client.coords);
+            client.move(client.coords);
         }
         else if(c.startsWith(Commands.CHAT)) {
             character_name = c1[1];
