@@ -43,18 +43,18 @@ public class Sprite {
 
     protected int width;
     protected int height;
-    
+
+    protected CharacterData char_data;
     protected SpriteSheet spriteSheet;
     protected Image image;
-    protected String name;
     protected PlayerNameFontFactory pnff;
     protected UnicodeFont nameFont;
     protected GameCanvas canvas;
 
     public Sprite(CharacterData data) {
+        char_data = data;
         width = 32;
         height = data.race.sprite_height;
-        name = "";
         coords = new Coordinates();
         canvas = GameCanvas.getInstance();
 
@@ -67,7 +67,7 @@ public class Sprite {
     }
 
     public void draw() {
-        Coordinates c = canvas.getMapCoords();
+        Coordinates c = canvas.getMapCoords().clone();
         c.x += coords.x;
         c.y += coords.y;
         image.draw(c.x - width/2, c.y - height);
@@ -75,21 +75,18 @@ public class Sprite {
     }
 
     public void draw_name() {
-        float x = coords.x - width/2;
-        float y = coords.y - (height + 9);
-        nameFont.drawString(x, y, name);
+        Coordinates c = canvas.getMapCoords().clone();
+        c.x += coords.x;
+        c.y += coords.y;
+        nameFont.drawString(c.x - width/2, c.y - (height + 5), char_data.character_name);
     }
 
     public void setImage(int x, int y) {
         image = spriteSheet.getSprite(x, y);
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
     
     public String getName() {
-        return name;
+        return char_data.character_name;
     }
 
     public void setCoords(int x, int y) {

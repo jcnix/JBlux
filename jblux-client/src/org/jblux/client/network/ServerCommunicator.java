@@ -193,7 +193,6 @@ class ServerListener extends Thread {
         }
 
         if(command.startsWith(Commands.MOVE)) {
-            System.out.println(command);
             String name = c0[1];
             int x = Integer.parseInt(c0[2]);
             int y = Integer.parseInt(c0[3]);

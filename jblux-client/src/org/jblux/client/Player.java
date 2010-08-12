@@ -59,7 +59,6 @@ public class Player extends Sprite implements Observer {
 
         this.player_data = data;
         this.server = server;
-        setName(data.character_name);
 
         npcs = new HashMap<Coordinates, NpcData>();
         setImage(FACE_DOWN, 0);
@@ -250,7 +249,7 @@ public class Player extends Sprite implements Observer {
     public void draw_name() {
         int x = 380;
         int y = 280;
-        nameFont.drawString(x, y, name);
+        nameFont.drawString(x, y, player_data.character_name);
     }
     
     public void update(Observable o, Object arg) {

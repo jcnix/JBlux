@@ -34,4 +34,11 @@ public class Npc extends Sprite {
         Relation r = RelationUtil.upDownRelation(data.direction);
         this.faceDirection(r);
     }
+
+    /**
+     * Don't draw names for Npcs
+     */
+    public void draw_name() {
+        return;
+    }
 }

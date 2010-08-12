@@ -143,7 +143,6 @@ public class GameCanvas implements Observer {
         if(new_player) {
             new_player = false;
             Sprite npc = new Sprite(new_data);
-            npc.setName(new_data.character_name);
             npc.setCoords(new_data.coords.x, new_data.coords.y);
             npc.setImage(0, 0);
             players.addPlayer(npc);

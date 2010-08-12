@@ -47,7 +47,7 @@ public class Players {
     public void removePlayer(String username) {
         for(int i = 0; i < players.size(); i++) {
             Sprite npc = players.get(i);
-            if(npc.name.equals(username)) {
+            if(npc.getName().equals(username)) {
                 players.remove(npc);
                 break;
             }
@@ -62,7 +62,7 @@ public class Players {
         Sprite npc = null;
         for(int i = 0; i < players.size(); i++) {
             Sprite n = players.get(i);
-            if(n.name.equals(username)) {
+            if(n.getName().equals(username)) {
                 npc = n;
                 break;
             }
