@@ -159,7 +159,10 @@ public class Player extends Sprite implements Observer {
      */
     private void move(int dx, int dy) {
         //Check to see if we need to change maps
-        changeMap();
+        Coordinates end = new Coordinates();
+        end.x = coords.x + dx;
+        end.y = coords.y + dy;
+        changeMap(end);
 
         boolean negative = (dx < 0 || dy < 0);
         int adx = Math.abs(dx);
@@ -176,7 +179,6 @@ public class Player extends Sprite implements Observer {
             Coordinates c = new Coordinates(coords.x + x, coords.y + y);
             boolean walkable = canvas.is_walkable(c);
             if(!walkable) {
-                System.out.printf("Not walkable at %s\n", c);
                 return;
             }
             
@@ -191,26 +193,32 @@ public class Player extends Sprite implements Observer {
         server.move(coords.x, coords.y);
     }
 
-    public void changeMap() {
-        System.out.println("ChangeMap;");
+    /**
+     * Since this is checked before moving the player and whether or not
+     * they can move, we're going to giv this function the location of
+     * where the player would be assuming they are able to move.
+     *
+     * @param c     Where the player would be
+     */
+    public void changeMap(Coordinates c) {
         int x = canvas.getWalkArea().getWidth();
         int y = canvas.getWalkArea().getHeight();
         boolean change = false;
         Relation relation = null;
 
-        if(coords.x <= 0) {
+        if(c.x <= 0) {
             change = true;
             relation = Relation.LEFT;
         }
-        else if(coords.x >= x) {
+        else if(c.x >= x) {
             change = true;
             relation = Relation.RIGHT;
         }
-        else if(coords.y <=0) {
+        else if(c.y <= 0) {
             change = true;
             relation = Relation.TOP;
         }
-        else if(coords.y >= y) {
+        else if(c.y >= y) {
             change = true;
             relation = Relation.BOTTOM;
         }
