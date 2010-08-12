@@ -158,24 +158,41 @@ public class Player extends Sprite implements Observer {
      * parameters are deltas
      */
     private void move(int dx, int dy) {
-        coords.x += dx;
-        coords.y += dy;
-
-        boolean walkable = canvas.is_walkable(coords);
         //Check to see if we need to change maps
         changeMap();
 
-        if(!walkable) {
-            //move back
-            coords.x -= dx;
-            coords.y -= dy;
+        boolean negative = (dx < 0 || dy < 0);
+        int adx = Math.abs(dx);
+        int ady = Math.abs(dy);
+
+        while(adx > 0 || ady > 0) {
+            int x = adx;
+            int y = ady;
+            if(negative) {
+                x = -adx;
+                y = -ady;
+            }
+
+            Coordinates c = new Coordinates(coords.x + x, coords.y + y);
+            boolean walkable = canvas.is_walkable(c);
+            if(!walkable) {
+                System.out.printf("Not walkable at %s\n", c);
+                return;
+            }
+            
+            if(adx > 0)
+                adx--;
+            if(ady > 0)
+                ady--;
         }
-        else {
-            server.move(coords.x, coords.y);
-        }
+
+        coords.x += dx;
+        coords.y += dy;
+        server.move(coords.x, coords.y);
     }
 
     public void changeMap() {
+        System.out.println("ChangeMap;");
         int x = canvas.getWalkArea().getWidth();
         int y = canvas.getWalkArea().getHeight();
         boolean change = false;
@@ -227,7 +244,7 @@ public class Player extends Sprite implements Observer {
         int y = 280;
         nameFont.drawString(x, y, name);
     }
-
+    
     public void update(Observable o, Object arg) {
         if(response == o && wait_new_map) {
             server.rm_observable(o);
