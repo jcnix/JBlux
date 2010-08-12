@@ -31,6 +31,7 @@ import org.jblux.client.Player;
 import org.jblux.client.Players;
 import org.jblux.client.Sprite;
 import org.jblux.client.gui.observers.ChatBoxObserver;
+import org.jblux.client.gui.observers.NewPlayerObserver;
 import org.jblux.common.Commands;
 import org.jblux.common.Relation;
 import org.jblux.common.ServerInfo;
@@ -139,6 +140,7 @@ class ServerListener extends Thread {
     private ChatBoxObserver cbObserver;
     public Coordinates coords;
     private ArrayList<ResponseWaiter> observables;
+    private NewPlayerObserver player_observer;
 
     public ServerListener(Socket s) {
         socket = s;
@@ -146,6 +148,7 @@ class ServerListener extends Thread {
         cbObserver = ChatBoxObserver.getInstance();
         coords = new Coordinates();
         observables = new ArrayList<ResponseWaiter>();
+        player_observer = NewPlayerObserver.getInstance();
     }
 
     @Override
@@ -226,11 +229,7 @@ class ServerListener extends Thread {
                 int y = Integer.parseInt(c0[4]);
                 PlayerData data = PlayerDataFactory.getDataFromBase64(c0[5]);
 
-                Sprite npc = new Sprite(data);
-                npc.setName(name);
-                npc.setCoords(x, y);
-                npc.setImage(0, 0);
-                players.addPlayer(npc);
+                player_observer.receivedMessage(data);
             }
             else if(c0[1].equals("goto")) {
                 String map = c0[2];

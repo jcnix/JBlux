@@ -22,6 +22,8 @@ package org.jblux.client.gui;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 import java.util.Vector;
 import org.jblux.client.GameMap;
@@ -29,7 +31,9 @@ import org.jblux.client.Npc;
 import org.jblux.client.Player;
 import org.jblux.client.Players;
 import org.jblux.client.Sprite;
+import org.jblux.client.gui.observers.NewPlayerObserver;
 import org.jblux.common.client.NpcData;
+import org.jblux.common.client.PlayerData;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -37,7 +41,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-public class GameCanvas {
+public class GameCanvas implements Observer {
     private static GameCanvas gc;
     private Player player;
     private Players players;
@@ -47,6 +51,10 @@ public class GameCanvas {
     private Coordinates map_coords;
     private boolean developer_mode;
     private Image bw_location_sprite;
+    private NewPlayerObserver player_observer;
+
+    private boolean new_player;
+    private PlayerData new_data;
 
     protected GameCanvas() {
         init();
@@ -56,7 +64,11 @@ public class GameCanvas {
         players = Players.getInstance();
         npcs = new Vector<Npc>();
         map_coords = new Coordinates();
+        player_observer = NewPlayerObserver.getInstance();
+        player_observer.addObserver(this);
         developer_mode = false;
+        new_player = false;
+        new_data = null;
     }
 
     public static GameCanvas getInstance() {
@@ -127,6 +139,18 @@ public class GameCanvas {
         return map_coords;
     }
 
+    public void update() {
+        if(new_player) {
+            new_player = false;
+            Sprite npc = new Sprite(new_data);
+            npc.setName(new_data.character_name);
+            npc.setCoords(new_data.coords.x, new_data.coords.y);
+            npc.setImage(0, 0);
+            players.addPlayer(npc);
+            new_data = null;
+        }
+    }
+
     public void render(GameContainer gc, Graphics g) throws SlickException {
         if(map == null || player == null)
             return;
@@ -173,6 +197,13 @@ public class GameCanvas {
         }
         else {
             bw_location_sprite = null;
+        }
+    }
+
+    public void update(Observable o, Object arg) {
+        if(arg instanceof PlayerData) {
+            new_player = true;
+            new_data = (PlayerData) arg;
         }
     }
 }

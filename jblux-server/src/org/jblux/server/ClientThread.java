@@ -172,6 +172,7 @@ public class ClientThread {
             encoded_player_data = Base64.encodeObject(player_data);
             encoded_npcs = Base64.encodeObject(map.getNpcs());
         } catch(IOException ex) {
+            ex.printStackTrace();
         }
 
         //Tell the player where to go, and provide some info about the map
