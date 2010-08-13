@@ -48,6 +48,7 @@ public class ClientThread {
     private boolean authenticated;
     private int map_id;
     private PlayerData player_data;
+    private String enc_player_data;
     public Coordinates coords;
 
     private Clients clients;
@@ -77,6 +78,18 @@ public class ClientThread {
 
     public PlayerData getPlayerData() {
         return player_data;
+    }
+
+    public String getEncPlayerData() {
+        return enc_player_data;
+    }
+
+    public void setPlayerData(PlayerData pd) {
+        player_data = pd;
+        try {
+            enc_player_data = Base64.encodeObject(pd);
+        } catch(IOException ex) {
+        }
     }
 
     public int getMap() {
@@ -120,14 +133,9 @@ public class ClientThread {
 
     public void sendPlayerData(String name) {
         UserTable ut = new UserTable();
-        player_data = ut.getPlayer(name);
-        String player_enc = "";
-        try {
-            player_enc = Base64.encodeObject(player_data);
-        } catch (IOException ex) {
-        }
-
-        String command = String.format("%s self %s", Commands.PLAYER, player_enc);
+        PlayerData data = ut.getPlayer(name);
+        setPlayerData(data);
+        String command = String.format("%s self %s", Commands.PLAYER, getEncPlayerData());
         writeString(command);
     }
 
@@ -158,7 +166,6 @@ public class ClientThread {
             return;
         }
 
-        System.out.printf("%s connected\n", player_data.character_name);
         this.map_id = map.getID();
         this.coords = coords;
         
@@ -166,10 +173,8 @@ public class ClientThread {
         MapSqlTable mst = new MapSqlTable();        
         ut.setMap(player_data.character_id, map_id, getCoords());
         
-        String encoded_player_data = "";
         String encoded_npcs = "";
         try {
-            encoded_player_data = Base64.encodeObject(player_data);
             encoded_npcs = Base64.encodeObject(map.getNpcs());
         } catch(IOException ex) {
             ex.printStackTrace();
@@ -183,7 +188,7 @@ public class ClientThread {
         //This command tells other players about the player being added to the map
         String command = String.format("%s add %s %s %s",
                 Commands.MAP, player_data.character_name, getCoords(),
-                encoded_player_data);
+                getEncPlayerData());
         
         LinkedList<ClientThread> c = clients.getClients();
         for(int i = 0; i < c.size(); i++) {
@@ -193,8 +198,8 @@ public class ClientThread {
             }
 
             //Tell the new player about the other clients
-            String otherPlayer = String.format("%s add %s %s", Commands.MAP,
-                    player_data.character_name, ct.getCoords());
+            String otherPlayer = String.format("%s add %s %s %s", Commands.MAP,
+                    player_data.character_name, ct.getCoords(), ct.getEncPlayerData());
             writeString(otherPlayer);
 
             //Tell other client about the new player
