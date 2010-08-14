@@ -188,7 +188,7 @@ class Quest(models.Model):
     reqNpc2 = models.ForeignKey('Npc', null=True, blank=True, related_name='req_npc2')
     reqNpc3 = models.ForeignKey('Npc', null=True, blank=True, related_name='req_npc3')
 
-    def __unicode(self):
+    def __unicode__(self):
         return self.name
 
 class Map(models.Model):
