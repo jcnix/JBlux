@@ -48,6 +48,9 @@ public class NpcTable {
             UserTable ut = new UserTable();
             npc.race = ut.getRace(rs.getInt("race_id"));
             npc.player_class = ut.getClass(rs.getInt("class_t_id"));
+            
+            QuestTable qt = new QuestTable();
+            npc.quests = qt.getQuestsForNpc(id);
         } catch(SQLException ex) {
             ex.printStackTrace();
         }
