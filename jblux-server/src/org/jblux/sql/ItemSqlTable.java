@@ -50,7 +50,7 @@ public class ItemSqlTable {
         return rs;
     }
 
-    public ResultSet getAllValues(short id) {
+    public ResultSet getAllValues(int id) {
         m_db.connect();
 
         String q = String.format("SELECT * FROM %s WHERE id='%d';", TABLE, id);
@@ -93,7 +93,7 @@ public class ItemSqlTable {
         return getItem(id);
     }
 
-    public Item getItem(short id) {
+    public Item getItem(int id) {
         Item item = new Item();
         
         try {
