@@ -125,7 +125,12 @@ public class GameCanvas implements Observer {
     }
 
     public boolean is_walkable(Coordinates coords) {
-        Color c = walk_area.getColor(coords.x, coords.y);
+        Color c = Color.black;
+        try {
+            c = walk_area.getColor(coords.x, coords.y);
+        } catch(ArrayIndexOutOfBoundsException ex) {
+            return false;
+        }
         
         if(c.getRed() == 0) {
             return false;
