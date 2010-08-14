@@ -76,7 +76,7 @@ public class ServerCommunicator {
     }
 
     public void move(int x, int y) {
-        String command = String.format("%s %s %d %d", Commands.MOVE, x, y);
+        String command = String.format("%s %d %d", Commands.MOVE, x, y);
         writeString(command);
     }
 

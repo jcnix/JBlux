@@ -43,7 +43,6 @@ public class ChatInputBox extends TextField {
     @Override
     public void keyPressed(int key, char c) {
         if(hasFocus() && key == Input.KEY_ENTER) {
-            System.out.println("Sending message...");
             server.sendChat(getText());
             setText("");
         }

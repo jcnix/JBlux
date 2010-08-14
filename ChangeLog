@@ -4,6 +4,7 @@
 - Sprite heights are set in the DB
 - Can no longer walk over thin "no-walk" areas
 - Fixed seeing other players on screen yet again
+- Chatbox shows sender's name again
 
 8-8-2010 Update
 ***************
