@@ -48,7 +48,6 @@ public class ServerCommunicator {
     private Socket socket;
     private ObjectOutputStream netOut;
     private ServerListener sl;
-    private String character_name;
     public Player player;
 
     public ServerCommunicator() {
@@ -77,7 +76,7 @@ public class ServerCommunicator {
     }
 
     public void move(int x, int y) {
-        String command = String.format("%s %s %d %d", Commands.MOVE, character_name, x, y);
+        String command = String.format("%s %s %d %d", Commands.MOVE, x, y);
         writeString(command);
     }
 

@@ -303,8 +303,8 @@ class ClientListener extends Thread {
         }
 
         if(c.startsWith(Commands.MOVE)) {
-            client.coords.x = Integer.parseInt(c1[2]);
-            client.coords.y = Integer.parseInt(c1[3]);
+            client.coords.x = Integer.parseInt(c1[1]);
+            client.coords.y = Integer.parseInt(c1[2]);
             client.move(client.coords);
         }
         else if(c.startsWith(Commands.CHAT)) {
