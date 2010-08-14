@@ -207,8 +207,8 @@ public class ClientThread {
         }
     }
 
-    public void sendChatMessage(String username, String message) {
-        String command = String.format("%s %s %s", Commands.CHAT, username, message);
+    public void sendChatMessage(String message) {
+        String command = String.format("%s %s %s", Commands.CHAT, player_data.character_name, message);
         tell_all_clients_on_map(command);
         writeString(command);
     }
@@ -308,14 +308,12 @@ class ClientListener extends Thread {
             client.move(client.coords);
         }
         else if(c.startsWith(Commands.CHAT)) {
-            character_name = c1[1];
-
             //TODO: Make this less ugly
             String message = "";
-            for(int i = 2; i < c1.length; i++) {
+            for(int i = 1; i < c1.length; i++) {
                 message += c1[i] + " ";
             }
-            client.sendChatMessage(character_name, message);
+            client.sendChatMessage(message);
         }
         else if(c.startsWith(Commands.MAP)) {
             MapParser mp = new MapParser();

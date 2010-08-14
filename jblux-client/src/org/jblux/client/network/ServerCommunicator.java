@@ -82,7 +82,7 @@ public class ServerCommunicator {
     }
 
     public void sendChat(String message) {
-        String command = String.format("%s %s %s", Commands.CHAT, character_name, message);
+        String command = String.format("%s %s", Commands.CHAT, message);
         writeString(command);
     }
 
