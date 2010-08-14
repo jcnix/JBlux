@@ -148,9 +148,14 @@ public class ClientThread {
     }
 
     public void disconnect() {
-        String command = String.format("%s %s", Commands.DISCONNECT, player_data.character_name);
-        tell_all_clients_on_map(command);
-        clients.removeClient(this);
+        try {
+            System.out.printf("%s disconnected.\n", player_data.character_name);
+            String command = String.format("%s %s", Commands.DISCONNECT, player_data.character_name);
+            tell_all_clients_on_map(command);
+            clients.removeClient(this);
+        } catch(NullPointerException ex) {
+            //character_name is null.  So ignore it.
+        }
     }
 
     public void leave_map(String user) {
@@ -322,7 +327,6 @@ class ClientListener extends Thread {
     }
 
     public void endThread() {
-        System.out.printf("%s disconnected.\n", character_name);
         client.disconnect();
 
         try {
