@@ -146,6 +146,7 @@ public class UserTable {
             race.id = id;
             race.name = rs.getString("name");
             race.sprite_sheet = rs.getString("sprite_sheet");
+            race.sprite_height = rs.getInt("sprite_height");
         } catch(SQLException ex) {
         }
 

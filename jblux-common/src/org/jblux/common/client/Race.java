@@ -28,4 +28,5 @@ public class Race implements Serializable {
     public int id;
     public String name;
     public String sprite_sheet;
+    public int sprite_height;
 }

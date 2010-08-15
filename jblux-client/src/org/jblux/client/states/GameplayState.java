@@ -81,7 +81,8 @@ public class GameplayState extends BasicGameState {
     }
  
     @Override
-    public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {        
+    public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+        canvas.update();
         player.update(gc);
         gui.update();
     }

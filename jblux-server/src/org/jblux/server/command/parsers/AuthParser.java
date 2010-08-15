@@ -28,11 +28,16 @@ public class AuthParser implements CommandParser {
     }
 
     public void parse(String[] command, ClientThread client) {
-        String name = command[1];
-        String pass = command[2];
-        String character_name = command[3];
-        UserTable ut = new UserTable();
-        boolean b = ut.authenticate(name, pass, character_name);
-        client.auth(character_name, b);
+        String character_name = null;
+        try {
+            String name = command[1];
+            String pass = command[2];
+            character_name = command[3];
+            UserTable ut = new UserTable();
+            boolean b = ut.authenticate(name, pass, character_name);
+            client.auth(character_name, b);
+        } catch(ArrayIndexOutOfBoundsException ex) {
+            //Incomplete command.  Ignore it
+        }
     }
 }

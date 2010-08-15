@@ -48,6 +48,7 @@ public class ClientThread {
     private boolean authenticated;
     private int map_id;
     private PlayerData player_data;
+    private String enc_player_data;
     public Coordinates coords;
 
     private Clients clients;
@@ -77,6 +78,18 @@ public class ClientThread {
 
     public PlayerData getPlayerData() {
         return player_data;
+    }
+
+    public String getEncPlayerData() {
+        return enc_player_data;
+    }
+
+    public void setPlayerData(PlayerData pd) {
+        player_data = pd;
+        try {
+            enc_player_data = Base64.encodeObject(pd);
+        } catch(IOException ex) {
+        }
     }
 
     public int getMap() {
@@ -120,29 +133,29 @@ public class ClientThread {
 
     public void sendPlayerData(String name) {
         UserTable ut = new UserTable();
-        player_data = ut.getPlayer(name);
-        String player_enc = "";
-        try {
-            player_enc = Base64.encodeObject(player_data);
-        } catch (IOException ex) {
-        }
-
-        String command = String.format("%s self %s", Commands.PLAYER, player_enc);
+        PlayerData data = ut.getPlayer(name);
+        setPlayerData(data);
+        String command = String.format("%s self %s", Commands.PLAYER, getEncPlayerData());
         writeString(command);
     }
 
     /*
      * Send's all players' coordinates back to the client so they can be displayed.
      */
-    public void move(String username, Coordinates coords) {
-        String command = String.format("%s %s %d %d", Commands.MOVE, username, coords.x, coords.y);
+    public void move(Coordinates coords) {
+        String command = String.format("%s %s %d %d", Commands.MOVE, player_data.character_name, coords.x, coords.y);
         tell_all_clients_on_map(command);
     }
 
     public void disconnect() {
-        String command = String.format("%s %s", Commands.DISCONNECT, player_data.character_name);
-        tell_all_clients_on_map(command);
-        clients.removeClient(this);
+        try {
+            System.out.printf("%s disconnected.\n", player_data.character_name);
+            String command = String.format("%s %s", Commands.DISCONNECT, player_data.character_name);
+            tell_all_clients_on_map(command);
+            clients.removeClient(this);
+        } catch(NullPointerException ex) {
+            //character_name is null.  So ignore it.
+        }
     }
 
     public void leave_map(String user) {
@@ -158,7 +171,6 @@ public class ClientThread {
             return;
         }
 
-        System.out.printf("%s connected\n", player_data.character_name);
         this.map_id = map.getID();
         this.coords = coords;
         
@@ -166,12 +178,11 @@ public class ClientThread {
         MapSqlTable mst = new MapSqlTable();        
         ut.setMap(player_data.character_id, map_id, getCoords());
         
-        String encoded_player_data = "";
         String encoded_npcs = "";
         try {
-            encoded_player_data = Base64.encodeObject(player_data);
             encoded_npcs = Base64.encodeObject(map.getNpcs());
         } catch(IOException ex) {
+            ex.printStackTrace();
         }
 
         //Tell the player where to go, and provide some info about the map
@@ -182,7 +193,7 @@ public class ClientThread {
         //This command tells other players about the player being added to the map
         String command = String.format("%s add %s %s %s",
                 Commands.MAP, player_data.character_name, getCoords(),
-                encoded_player_data);
+                getEncPlayerData());
         
         LinkedList<ClientThread> c = clients.getClients();
         for(int i = 0; i < c.size(); i++) {
@@ -192,8 +203,8 @@ public class ClientThread {
             }
 
             //Tell the new player about the other clients
-            String otherPlayer = String.format("%s add %s %s", Commands.MAP,
-                    player_data.character_name, ct.getCoords());
+            String otherPlayer = String.format("%s add %s %s %s", Commands.MAP,
+                    player_data.character_name, ct.getCoords(), ct.getEncPlayerData());
             writeString(otherPlayer);
 
             //Tell other client about the new player
@@ -201,8 +212,8 @@ public class ClientThread {
         }
     }
 
-    public void sendChatMessage(String username, String message) {
-        String command = String.format("%s %s %s", Commands.CHAT, username, message);
+    public void sendChatMessage(String message) {
+        String command = String.format("%s %s %s", Commands.CHAT, player_data.character_name, message);
         tell_all_clients_on_map(command);
         writeString(command);
     }
@@ -250,7 +261,6 @@ class ClientListener extends Thread {
     private Socket clientSocket;
     private ObjectInputStream netIn;
     private ClientThread client;
-    
     public String character_name;
 
     public ClientListener(ClientThread client, Socket s) {
@@ -298,19 +308,17 @@ class ClientListener extends Thread {
         }
 
         if(c.startsWith(Commands.MOVE)) {
-            client.coords.x = Integer.parseInt(c1[2]);
-            client.coords.y = Integer.parseInt(c1[3]);
-            client.move(character_name, client.coords);
+            client.coords.x = Integer.parseInt(c1[1]);
+            client.coords.y = Integer.parseInt(c1[2]);
+            client.move(client.coords);
         }
         else if(c.startsWith(Commands.CHAT)) {
-            character_name = c1[1];
-
             //TODO: Make this less ugly
             String message = "";
-            for(int i = 2; i < c1.length; i++) {
+            for(int i = 1; i < c1.length; i++) {
                 message += c1[i] + " ";
             }
-            client.sendChatMessage(character_name, message);
+            client.sendChatMessage(message);
         }
         else if(c.startsWith(Commands.MAP)) {
             MapParser mp = new MapParser();
@@ -319,7 +327,6 @@ class ClientListener extends Thread {
     }
 
     public void endThread() {
-        System.out.printf("%s disconnected.\n", character_name);
         client.disconnect();
 
         try {

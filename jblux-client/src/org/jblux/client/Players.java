@@ -20,23 +20,17 @@
 
 package org.jblux.client;
 
-import java.util.Hashtable;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 /*
  * Represents all players on the current map.
  */
 public class Players {
-    private LinkedList<Sprite> players;
-    private LinkedList<Sprite> dirtyPlayers;
-    //Gives the position in the player list for a given username
-    private Hashtable<String, Integer> playerMap;
+    private ArrayList<Sprite> players;
     private static Players plys;
 
     protected Players() {
-        players = new LinkedList<Sprite>();
-        dirtyPlayers = new LinkedList<Sprite>();
-        playerMap = new Hashtable<String, Integer>();
+        players = new ArrayList<Sprite>();
     }
 
     public static Players getInstance() {
@@ -47,33 +41,34 @@ public class Players {
     }
 
     public void addPlayer(Sprite player) {
-        playerMap.put(player.getName(), players.size());
         players.add(player);
     }
 
     public void removePlayer(String username) {
-        players.remove(players.get(playerMap.get(username)));
-        playerMap.remove(username);
+        for(int i = 0; i < players.size(); i++) {
+            Sprite npc = players.get(i);
+            if(npc.getName().equals(username)) {
+                players.remove(npc);
+                break;
+            }
+        }
     }
 
     public Sprite getPlayer(int i) {
         return players.get(i);
     }
 
-    public void addDirtyPlayer(Sprite player) {
-        dirtyPlayers.add(player);
-    }
-
-    public void removeDirtyPlayer(Sprite player) {
-        dirtyPlayers.remove(player);
-    }
-
-    public Sprite getDirtyPlayer(int i) {
-        return dirtyPlayers.get(i);
-    }
-
     public Sprite getPlayer(String username) {
-        return getPlayer(playerMap.get(username));
+        Sprite npc = null;
+        for(int i = 0; i < players.size(); i++) {
+            Sprite n = players.get(i);
+            if(n.getName().equals(username)) {
+                npc = n;
+                break;
+            }
+        }
+
+        return npc;
     }
 
     public int size() {

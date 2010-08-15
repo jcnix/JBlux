@@ -55,14 +55,13 @@ public class Player extends Sprite implements Observer {
     private boolean wait_pressed_action;
 
     public Player(PlayerData data, ServerCommunicator server) {
-        super(data.race.sprite_sheet);
+        super(data);
 
         this.player_data = data;
         this.server = server;
-        setName(data.character_name);
 
         npcs = new HashMap<Coordinates, NpcData>();
-        image = spriteSheet.getSubImage(FACE_DOWN, 0);
+        setImage(FACE_DOWN, 0);
         move_size = 7;
         coords = data.coords;
         map_name = data.map;
@@ -73,7 +72,7 @@ public class Player extends Sprite implements Observer {
 
         //Ask for map info
         wait_new_map = true;
-        response = get_new_waiter();
+        response = ResponseWaiter.get_new_waiter(this);
         server.getMapInfo(response);
     }
 
@@ -124,7 +123,7 @@ public class Player extends Sprite implements Observer {
                     //TODO: Check in front of the player
                     //Only checking below the player for now
                     wait_pressed_action = true;
-                    response = get_new_waiter();
+                    response = ResponseWaiter.get_new_waiter(this);
                     Coordinates tile = MapGrid.getTile(coords);
                     server.pickup_item(tile, response);
                 }
@@ -158,49 +157,74 @@ public class Player extends Sprite implements Observer {
      * parameters are deltas
      */
     private void move(int dx, int dy) {
+        //Check to see if we need to change maps
+        Coordinates end = new Coordinates();
+        end.x = coords.x + dx;
+        end.y = coords.y + dy;
+        changeMap(end);
+
+        boolean negative = (dx < 0 || dy < 0);
+        int adx = Math.abs(dx);
+        int ady = Math.abs(dy);
+
+        while(adx > 0 || ady > 0) {
+            int x = adx;
+            int y = ady;
+            if(negative) {
+                x = -adx;
+                y = -ady;
+            }
+
+            Coordinates c = new Coordinates(coords.x + x, coords.y + y);
+            boolean walkable = canvas.is_walkable(c);
+            if(!walkable) {
+                return;
+            }
+            
+            if(adx > 0)
+                adx--;
+            if(ady > 0)
+                ady--;
+        }
+
         coords.x += dx;
         coords.y += dy;
-
-        boolean walkable = canvas.is_walkable(coords);
-        //Check to see if we need to change maps
-        changeMap();
-
-        if(!walkable) {
-            //move back
-            coords.x -= dx;
-            coords.y -= dy;
-        }
-        else {
-            server.move(coords.x, coords.y);
-        }
+        server.move(coords.x, coords.y);
     }
 
-    public void changeMap() {
+    /**
+     * Since this is checked before moving the player and whether or not
+     * they can move, we're going to giv this function the location of
+     * where the player would be assuming they are able to move.
+     *
+     * @param c     Where the player would be
+     */
+    public void changeMap(Coordinates c) {
         int x = canvas.getWalkArea().getWidth();
         int y = canvas.getWalkArea().getHeight();
         boolean change = false;
         Relation relation = null;
 
-        if(coords.x <= 0) {
+        if(c.x <= 0) {
             change = true;
             relation = Relation.LEFT;
         }
-        else if(coords.x >= x) {
+        else if(c.x >= x) {
             change = true;
             relation = Relation.RIGHT;
         }
-        else if(coords.y <=0) {
+        else if(c.y <= 0) {
             change = true;
             relation = Relation.TOP;
         }
-        else if(coords.y >= y) {
+        else if(c.y >= y) {
             change = true;
             relation = Relation.BOTTOM;
         }
 
         if(change) {
             wait_new_map = true;
-            response = get_new_waiter();
+            response = ResponseWaiter.get_new_waiter(this);
             server.goto_map(response, relation, map_name);
         }
 
@@ -225,15 +249,9 @@ public class Player extends Sprite implements Observer {
     public void draw_name() {
         int x = 380;
         int y = 280;
-        nameFont.drawString(x, y, name);
+        nameFont.drawString(x, y, player_data.character_name);
     }
-
-    private ResponseWaiter get_new_waiter() {
-        ResponseWaiter rw = new ResponseWaiter();
-        rw.addObserver(this);
-        return rw;
-    }
-
+    
     public void update(Observable o, Object arg) {
         if(response == o && wait_new_map) {
             server.rm_observable(o);

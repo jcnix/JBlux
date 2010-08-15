@@ -34,6 +34,7 @@ class Character(models.Model):
 class Race(models.Model):
     name = models.CharField(max_length=25)
     sprite_sheet = models.CharField(max_length=100)
+    sprite_height = models.IntegerField()
 
     def __unicode__(self):
         return self.name
@@ -177,17 +178,27 @@ class Quest(models.Model):
     min_level = models.IntegerField()
     flag = models.IntegerField()
     next_quest = models.ForeignKey('Quest', null=True, blank=True)
-    src_item = models.ForeignKey('Item', null=True, blank=True)
+    quest_item = models.ForeignKey('Item', null=True, blank=True, related_name='src_item')
     reward_xp = models.IntegerField()
     reward_money = models.IntegerField()
+    rewardItem1 = models.ForeignKey('Item', null=True, blank=True, related_name='reward_item1')
+    rewardItem1_count = models.IntegerField(null=True, blank=True)
+    rewardItem2 = models.ForeignKey('Item', null=True, blank=True, related_name='reward_itme1')
+    rewardItem2_count = models.IntegerField(null=True, blank=True)
     reqItem1 = models.ForeignKey('Item', null=True, blank=True, related_name='req_item1')
+    reqItem1_count = models.IntegerField(null=True, blank=True)
     reqItem2 = models.ForeignKey('Item', null=True, blank=True, related_name='req_item2')
+    reqItem2_count = models.IntegerField(null=True, blank=True)
     reqItem3 = models.ForeignKey('Item', null=True, blank=True, related_name='req_item3')
+    reqItem3_count = models.IntegerField(null=True, blank=True)
     reqNpc1 = models.ForeignKey('Npc', null=True, blank=True, related_name='req_npc1')
+    reqNpc1_count = models.IntegerField(null=True, blank=True)
     reqNpc2 = models.ForeignKey('Npc', null=True, blank=True, related_name='req_npc2')
+    reqNpc2_count = models.IntegerField(null=True, blank=True)
     reqNpc3 = models.ForeignKey('Npc', null=True, blank=True, related_name='req_npc3')
+    reqNpc3_count = models.IntegerField(null=True, blank=True)
 
-    def __unicode(self):
+    def __unicode__(self):
         return self.name
 
 class Map(models.Model):
@@ -211,7 +222,7 @@ class Map(models.Model):
 class MapItems(models.Model):
     #Working around the word map being a python keyword
     map_t = models.ForeignKey('Map')
-    item_id = models.ForeignKey('Item')
+    item = models.ForeignKey('Item')
     x_coord = models.IntegerField()
     y_coord = models.IntegerField()
 

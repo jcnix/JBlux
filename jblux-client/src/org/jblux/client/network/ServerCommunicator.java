@@ -31,6 +31,7 @@ import org.jblux.client.Player;
 import org.jblux.client.Players;
 import org.jblux.client.Sprite;
 import org.jblux.client.gui.observers.ChatBoxObserver;
+import org.jblux.client.gui.observers.NewPlayerObserver;
 import org.jblux.common.Commands;
 import org.jblux.common.Relation;
 import org.jblux.common.ServerInfo;
@@ -47,7 +48,6 @@ public class ServerCommunicator {
     private Socket socket;
     private ObjectOutputStream netOut;
     private ServerListener sl;
-    private String character_name;
     public Player player;
 
     public ServerCommunicator() {
@@ -76,12 +76,12 @@ public class ServerCommunicator {
     }
 
     public void move(int x, int y) {
-        String command = String.format("%s %s %d %d", Commands.MOVE, character_name, x, y);
+        String command = String.format("%s %d %d", Commands.MOVE, x, y);
         writeString(command);
     }
 
     public void sendChat(String message) {
-        String command = String.format("%s %s %s", Commands.CHAT, character_name, message);
+        String command = String.format("%s %s", Commands.CHAT, message);
         writeString(command);
     }
 
@@ -139,6 +139,7 @@ class ServerListener extends Thread {
     private ChatBoxObserver cbObserver;
     public Coordinates coords;
     private ArrayList<ResponseWaiter> observables;
+    private NewPlayerObserver player_observer;
 
     public ServerListener(Socket s) {
         socket = s;
@@ -146,6 +147,7 @@ class ServerListener extends Thread {
         cbObserver = ChatBoxObserver.getInstance();
         coords = new Coordinates();
         observables = new ArrayList<ResponseWaiter>();
+        player_observer = NewPlayerObserver.getInstance();
     }
 
     @Override
@@ -226,11 +228,7 @@ class ServerListener extends Thread {
                 int y = Integer.parseInt(c0[4]);
                 PlayerData data = PlayerDataFactory.getDataFromBase64(c0[5]);
 
-                Sprite npc = new Sprite(data.race.sprite_sheet);
-                npc.setName(name);
-                npc.setCoords(x, y);
-                npc.setImage(0, 0);
-                players.addPlayer(npc);
+                player_observer.receivedMessage(data);
             }
             else if(c0[1].equals("goto")) {
                 String map = c0[2];

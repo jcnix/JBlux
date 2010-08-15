@@ -21,6 +21,7 @@
 package org.jblux.common.client;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class NpcData extends CharacterData implements Serializable {
     private final long serialVersionUID = 1L;
@@ -36,4 +37,5 @@ public class NpcData extends CharacterData implements Serializable {
     
     /* The direction the npc will face */
     public String direction;
+    public ArrayList<Quest> quests;
 }

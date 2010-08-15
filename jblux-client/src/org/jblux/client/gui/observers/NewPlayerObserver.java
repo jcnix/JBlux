@@ -1,5 +1,5 @@
 /**
- * File: Npc.java
+ * File: NewPlayerObserver.java
  *
  * @author Casey Jones
  *
@@ -18,27 +18,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.client;
+package org.jblux.client.gui.observers;
 
-import org.jblux.common.Relation;
-import org.jblux.common.RelationUtil;
-import org.jblux.common.client.NpcData;
+import java.util.Observable;
+import org.jblux.common.client.PlayerData;
 
-public class Npc extends Sprite {
-    private NpcData data;
+public class NewPlayerObserver extends Observable {
+    private static NewPlayerObserver npo;
 
-    public Npc(NpcData data) {
-        super(data);
-        this.data = data;
-        
-        Relation r = RelationUtil.upDownRelation(data.direction);
-        this.faceDirection(r);
+    protected NewPlayerObserver() {
     }
 
-    /**
-     * Don't draw names for Npcs
-     */
-    public void draw_name() {
-        return;
+    public static NewPlayerObserver getInstance() {
+        if(npo == null) {
+            npo = new NewPlayerObserver();
+        }
+
+        return npo;
+    }
+
+    public void receivedMessage(PlayerData pd) {
+        setChanged();
+        this.notifyObservers(pd);
     }
 }
