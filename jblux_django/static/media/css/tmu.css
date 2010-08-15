@@ -49,7 +49,8 @@ p
     background-image: url(/tmuo_media/img/urlbar.png);
     background-repeat: no-repeat;
     background-position: top center;
-    width: 1001px; float: center;
+    width: 1001px;
+    float: center;
     margin-left: auto;
     margin-right: auto;
     margin-top: auto;
@@ -70,24 +71,23 @@ p
 
 #sidebar {
     float: left;
-    position:relative;
+    position: relative;
     top: -60px;
-    bottom:0px;
-    left:0px;
-    right:0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
     width: 843px;
     width: 158px;
 }
 
 .updates {
-    float:right;
+    float: right;
     margin: 0px 0px 0px 0px; 
     width: 839px;
 }
 
 #disclaimer {
-    clear:both;
-    margin-top: 50em;
+    clear: both;
     background-image: url(/tmuo_media/img/bottom.png);
     background-repeat: no-repeat;
     width: 1001px;
@@ -95,7 +95,12 @@ p
     text-align: left;
     font-size: 0.7em;
     position: relative;
-    top: -60px;
+    top: 60px;
+}
+
+#disclaimer p {
+    position: relative;
+    left: 50px;
 }
 
 .screenshots {

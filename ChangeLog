@@ -5,6 +5,8 @@
 - Can no longer walk over thin "no-walk" areas
 - Fixed seeing other players on screen yet again
 - Chatbox shows sender's name again
+- Show an error on the login page if username & pass aren't correct
+- Fixed some XHTML 1.1 and CSS errors on the site
 
 8-8-2010 Update
 ***************
