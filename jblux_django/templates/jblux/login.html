@@ -4,8 +4,8 @@
 
 {% block content %}
 
-{% if form.errors %}
-<p>Your username and password didn't match.  Please try again.</p>
+{% if error %}
+<p><font color="red">Your username and password didn't match.  Please try again.</font></p>
 {% endif %}
 <center>
 <form method="post" action="">

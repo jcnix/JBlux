@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <link href="/tmuo_media/css/tmu.css" rel="stylesheet" type="text/css">
+        <link href="/tmuo_media/css/tmu.css" rel="stylesheet" type="text/css" />
         <!--[if IE]><link href="tmuo_media/css/tmu_ie.css" rel="stylesheet" type="text/css"><![endif]-->
         <title>{% block title %}{% endblock %} | TMUO</title>
     </head>
@@ -10,15 +10,15 @@
     <body>
         <div id="wrap">
         <div id="header">
-            <center><a href="{% url jblux_django.jblux.views.index %}"><img src="/tmuo_media/img/tmupage.png"/></a></center>
+            <a href="{% url jblux_django.jblux.views.index %}"><img src="/tmuo_media/img/tmupage.png"/></a>
         </div>
         <div id="urlbar">
-            <div class="align-left1"><a href="{% url jblux_django.jblux.views.index %}"><img src="/tmuo_media/img/home.png"/></a></div>
-            <div class="align-left"><a href="{% url jblux_django.jblux.views.select_character %}"><img src="/tmuo_media/img/play.png"/></a></div>
-            <div class="align-left"><a href="http://forums.shyguystoybox.net/index.php?act=idx"><img src="/tmuo_media/img/forums.png"/></a></div>
-            <div class="align-left"><a href="{% url jblux_django.jblux.views.info %}"><img src="/tmuo_media/img/info.png"/></a></div>
-            <div class="align-left"><a href="{% url jblux_django.jblux.views.screens %}"><img src="/tmuo_media/img/screens.png"/></a></div>
-            <div class="align-left"><a href="{% url jblux_django.jblux.views.help %}"><img src="/tmuo_media/img/help.png"/></a></div>
+            <div class="align-left1"><a href="{% url jblux_django.jblux.views.index %}"><img src="/tmuo_media/img/home.png" alt="Home"/></a></div>
+            <div class="align-left"><a href="{% url jblux_django.jblux.views.select_character %}"><img src="/tmuo_media/img/play.png" alt="Play"/></a></div>
+            <div class="align-left"><a href="http://forums.shyguystoybox.net/index.php?act=idx"><img src="/tmuo_media/img/forums.png" alt="Forums"/></a></div>
+            <div class="align-left"><a href="{% url jblux_django.jblux.views.info %}"><img src="/tmuo_media/img/info.png" alt="Info"/></a></div>
+            <div class="align-left"><a href="{% url jblux_django.jblux.views.screens %}"><img src="/tmuo_media/img/screens.png" alt="Screens"/></a></div>
+            <div class="align-left"><a href="{% url jblux_django.jblux.views.help %}"><img src="/tmuo_media/img/help.png" alt="Help"/></a></div>
 
             {% if not my_user %}
             <div class="align-right1"><a href="{% url jblux_django.jblux.views.login %}">Login</a></div>
@@ -36,13 +36,11 @@
             <a href="{% url jblux_django.jblux.polls.polls %}"><img src="/tmuo_media/img/poll.png"/></a>
         </div>
         &nbsp;
-        </div>
         
-        <center>
         <div id="disclaimer">
-            <center>All Mario and Mario related characters are copyright to Nintendo. For contact info, see the "Help" page.</center>
+            <p>All Mario and Mario related characters are copyright to Nintendo. For contact info, see the "Help" page.</p>
         </div>
-        </center>
+    </div>
     </body>
 </html>
 

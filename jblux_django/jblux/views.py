@@ -28,7 +28,8 @@ def login(request):
         else:
             return HttpResponse("Disabled")
     else:
-        return HttpResponse("Not logged in")
+        return render_to_response('jblux/login.html', {'form': form, 'error': True},
+                context_instance=RequestContext(request))
 
 def register(request):
     form = RegisterForm()
