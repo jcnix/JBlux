@@ -25,6 +25,7 @@ import org.jblux.common.RelationUtil;
 import org.jblux.common.client.NpcData;
 import org.jblux.common.client.PlayerData;
 import org.jblux.common.client.Quest;
+import org.jblux.util.Coordinates;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -53,7 +54,10 @@ public class Npc extends Sprite {
         super.draw();
         
         if(available_quests) {
-            available_quest_icon.draw(0, 0);
+            Coordinates c = canvas.getMapCoords().clone();
+            c.x += coords.x - available_quest_icon.getWidth()/2;
+            c.y += coords.y - (height + available_quest_icon.getHeight() + 3);
+            available_quest_icon.draw(c.x, c.y);
         }
     }
 
