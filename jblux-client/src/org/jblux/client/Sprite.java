@@ -75,10 +75,12 @@ public class Sprite {
     }
 
     public void draw_name() {
+        int w = nameFont.getWidth(char_data.character_name);
+        int h = nameFont.getHeight(char_data.character_name);
         Coordinates c = canvas.getMapCoords().clone();
         c.x += coords.x;
         c.y += coords.y;
-        nameFont.drawString(c.x - width/2, c.y - (height + 5), char_data.character_name);
+        nameFont.drawString(c.x - w/2, c.y - (height + h), char_data.character_name);
     }
 
     public void setImage(int x, int y) {

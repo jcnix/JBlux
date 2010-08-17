@@ -244,15 +244,17 @@ public class Player extends Sprite implements Observer {
     public void draw() {
         //Player must be drawn in the center of the screen
         int x = 400 - width/2;
-        int y = 300 - (height - 9);
+        int y = 300 - (height);
         image.draw(x, y);
         draw_name();
     }
 
     @Override
     public void draw_name() {
-        int x = 380;
-        int y = 280;
+        int w = nameFont.getWidth(player_data.character_name);
+        int h = nameFont.getHeight(player_data.character_name);
+        int x = 400 - (w/2);
+        int y = 300 - (height + h);
         nameFont.drawString(x, y, player_data.character_name);
     }
     
