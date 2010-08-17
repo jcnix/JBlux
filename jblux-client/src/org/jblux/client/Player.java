@@ -76,6 +76,10 @@ public class Player extends Sprite implements Observer {
         server.getMapInfo(response);
     }
 
+    public PlayerData getData() {
+        return player_data;
+    }
+
     public void update(GameContainer gc) {
         Input input = gc.getInput();
 

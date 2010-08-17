@@ -144,7 +144,7 @@ public class GameCanvas implements Observer {
         return map_coords;
     }
 
-    public void update() {
+    public void update(GameContainer gc) {
         if(new_player) {
             new_player = false;
             Sprite npc = new Sprite(new_data);
@@ -152,6 +152,12 @@ public class GameCanvas implements Observer {
             npc.setImage(0, 0);
             players.addPlayer(npc);
             new_data = null;
+        }
+
+        player.update(gc);
+        for(int i = 0; i < npcs.size(); i++) {
+            Npc npc = npcs.get(i);
+            npc.update(player.getData());
         }
     }
 
