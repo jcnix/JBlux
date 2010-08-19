@@ -40,6 +40,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 
 public class GameCanvas implements Observer {
     private static GameCanvas gc;
@@ -141,7 +142,7 @@ public class GameCanvas implements Observer {
     }
 
     public Coordinates getMapCoords() {
-        return map_coords;
+        return map_coords.clone();
     }
 
     public void update(GameContainer gc) {
@@ -208,6 +209,34 @@ public class GameCanvas implements Observer {
         else {
             bw_location_sprite = null;
         }
+    }
+
+    /**
+     * 
+     * @param x     X coord of mouse cursor
+     * @param y     Y coord of mouse cursor
+     */
+    public NpcData isNpcAt(int x, int y) {
+        NpcData data = null;
+        //Translate mouse coords to map coords
+        Coordinates c = this.getMapCoords();
+        c.x -= x;
+        c.y -= y;
+        c.x = Math.abs(c.x);
+        c.y = Math.abs(c.y);
+
+        //Create a box around the coords
+        Rectangle r = new Rectangle(c.x - 16, c.y - 16, 48, 48);
+
+        for(int i = 0; i < npcs.size(); i++) {
+            Npc n = npcs.get(i);
+            Coordinates npc_c = n.getCoords();
+            if(r.contains(npc_c.x, npc_c.y)) {
+                data = n.getData();
+            }
+        }
+
+        return data;
     }
 
     public void update(Observable o, Object arg) {

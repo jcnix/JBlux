@@ -54,7 +54,7 @@ public class Npc extends Sprite {
         super.draw();
         
         if(available_quests) {
-            Coordinates c = canvas.getMapCoords().clone();
+            Coordinates c = canvas.getMapCoords();
             c.x += coords.x - available_quest_icon.getWidth()/2;
             c.y += coords.y - (height + available_quest_icon.getHeight() + 3);
             available_quest_icon.draw(c.x, c.y);
@@ -67,6 +67,10 @@ public class Npc extends Sprite {
     @Override
     public void draw_name() {
         return;
+    }
+
+    public NpcData getData() {
+        return data;
     }
 
     public void update(PlayerData player) {

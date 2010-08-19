@@ -134,6 +134,12 @@ public class Player extends Sprite implements Observer {
                 if(input.isKeyDown(Input.KEY_F1)) {
                     canvas.toggle_developer_mode();
                 }
+                if(input.isMousePressed(Input.MOUSE_RIGHT_BUTTON)) {
+                    NpcData npc = canvas.isNpcAt(input.getMouseX(), input.getMouseY());
+                    if(npc != null) {
+                        //Talk to NPC
+                    }
+                }
             }
         }
     }

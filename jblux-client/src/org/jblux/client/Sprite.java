@@ -67,7 +67,7 @@ public class Sprite {
     }
 
     public void draw() {
-        Coordinates c = canvas.getMapCoords().clone();
+        Coordinates c = canvas.getMapCoords();
         c.x += coords.x;
         c.y += coords.y;
         image.draw(c.x - width/2, c.y - height);
@@ -77,7 +77,7 @@ public class Sprite {
     public void draw_name() {
         int w = nameFont.getWidth(char_data.character_name);
         int h = nameFont.getHeight(char_data.character_name);
-        Coordinates c = canvas.getMapCoords().clone();
+        Coordinates c = canvas.getMapCoords();
         c.x += coords.x;
         c.y += coords.y;
         nameFont.drawString(c.x - w/2, c.y - (height + h), char_data.character_name);
