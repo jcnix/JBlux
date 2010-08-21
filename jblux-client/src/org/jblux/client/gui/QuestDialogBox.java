@@ -50,9 +50,7 @@ public class QuestDialogBox {
         } catch(SlickException ex) {
         }
 
-        PlayerNameFontFactory pnff = PlayerNameFontFactory.getInstance();
-        ufont = pnff.getFont();
-
+        ufont = FontFactory.getDefaultFont();
         selected_quest = null;
         select_quest = false;
         display_quest = false;
