@@ -37,10 +37,8 @@ public class GameplayState extends BasicGameState {
     private int stateID = -1;
     private GameMap map;
     private Player player;
-    private PlayerData player_data;
     private GameCanvas canvas;
     private ServerCommunicator server;
-    private GUI gui;
     
     public GameplayState(int stateID, ServerCommunicator server)
     {
@@ -54,7 +52,6 @@ public class GameplayState extends BasicGameState {
     }
 
     public void setPlayer(PlayerData data) {
-        player_data = data;
         player = new Player(data, server);
         canvas.setPlayer(player);
         
@@ -69,20 +66,19 @@ public class GameplayState extends BasicGameState {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+        GUI gui = new GUI(gc, server);
         canvas = GameCanvas.getInstance();
-        gui = new GUI(gc, server);
+        canvas.setGui(gui);
     }
  
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         //The canvas renders the map and all players
         canvas.render(gc, g);
-        gui.render(g);
     }
  
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         canvas.update(gc);
-        gui.update();
     }
 }

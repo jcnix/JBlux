@@ -32,8 +32,12 @@ import org.newdawn.slick.gui.GUIContext;
 public class GUI {
     private ChatBox cb;
     private ChatInputBox inputBox;
+    private DialogBox dialog_box;
+    private GUIContext gc;
 
     public GUI(GUIContext gc, ServerCommunicator s) {
+        this.gc = gc;
+
         try {
             UnicodeFont uf = new UnicodeFont(new Font("Serif", Font.BOLD, 16));
             uf.getEffects().add(new ColorEffect(Color.WHITE));
@@ -47,11 +51,27 @@ public class GUI {
         }
     }
 
+    public void openDialogBox(String text) {
+        dialog_box = new DialogBox(this);
+        dialog_box.setText(text);
+    }
+
+    public void closeDialogbox() {
+        dialog_box = null;
+    }
+
     public void update() {
+        if(dialog_box != null) {
+            dialog_box.update(gc);
+        }
     }
     
     public void render(Graphics g) {
         cb.render(g);
         inputBox.render(g);
+
+        if(dialog_box != null) {
+            dialog_box.render();
+        }
     }
 }

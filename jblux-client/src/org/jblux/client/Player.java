@@ -137,7 +137,7 @@ public class Player extends Sprite implements Observer {
                 if(input.isMousePressed(Input.MOUSE_RIGHT_BUTTON)) {
                     NpcData npc = canvas.isNpcAt(input.getMouseX(), input.getMouseY());
                     if(npc != null) {
-                        //Talk to NPC
+                        canvas.talkToNpc(npc);
                     }
                 }
             }

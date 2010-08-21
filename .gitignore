@@ -3,6 +3,7 @@
 */lib/
 */store/
 *.class
+*.zip
 */jbluxkey
 jbluxkey
 */lib/jblux-common.jar

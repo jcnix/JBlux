@@ -34,6 +34,7 @@ import org.jblux.client.Sprite;
 import org.jblux.client.gui.observers.NewPlayerObserver;
 import org.jblux.common.client.NpcData;
 import org.jblux.common.client.PlayerData;
+import org.jblux.common.client.Quest;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -53,6 +54,7 @@ public class GameCanvas implements Observer {
     private boolean developer_mode;
     private Image bw_location_sprite;
     private NewPlayerObserver player_observer;
+    private GUI gui;
 
     private boolean new_player;
     private PlayerData new_data;
@@ -77,6 +79,10 @@ public class GameCanvas implements Observer {
             gc = new GameCanvas();
 
         return gc;
+    }
+
+    public void setGui(GUI gui) {
+        this.gui = gui;
     }
 
     public void setPlayer(Player player) {
@@ -160,6 +166,8 @@ public class GameCanvas implements Observer {
             Npc npc = npcs.get(i);
             npc.update(player.getData());
         }
+
+        gui.update();
     }
 
     public void render(GameContainer gc, Graphics g) throws SlickException {
@@ -188,6 +196,8 @@ public class GameCanvas implements Observer {
 
         map.render(map_coords.x, map_coords.y, 3); //Fringe layer
         map.render(map_coords.x, map_coords.y, 4); //Fringe layer 2
+
+        gui.render(g);
 
         if(developer_mode) {
             this.walk_area.setAlpha(0.6f);
@@ -237,6 +247,12 @@ public class GameCanvas implements Observer {
         }
 
         return data;
+    }
+
+    public void talkToNpc(NpcData npc) {
+        Quest q = npc.quests.get(0);
+        gui.openDialogBox(q.details);
+        System.out.println(q.details);
     }
 
     public void update(Observable o, Object arg) {
