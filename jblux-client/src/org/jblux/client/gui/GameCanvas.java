@@ -250,9 +250,7 @@ public class GameCanvas implements Observer {
     }
 
     public void talkToNpc(NpcData npc) {
-        Quest q = npc.quests.get(0);
-        gui.openDialogBox(q.details);
-        System.out.println(q.details);
+        gui.openQuestDialogBox(npc.quests);
     }
 
     public void update(Observable o, Object arg) {
