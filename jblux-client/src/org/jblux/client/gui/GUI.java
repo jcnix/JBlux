@@ -23,6 +23,8 @@ package org.jblux.client.gui;
 import org.jblux.client.network.ServerCommunicator;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
+import org.jblux.common.client.Quest;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
@@ -32,8 +34,12 @@ import org.newdawn.slick.gui.GUIContext;
 public class GUI {
     private ChatBox cb;
     private ChatInputBox inputBox;
+    private QuestDialogBox dialog_box;
+    private GUIContext gc;
 
     public GUI(GUIContext gc, ServerCommunicator s) {
+        this.gc = gc;
+
         try {
             UnicodeFont uf = new UnicodeFont(new Font("Serif", Font.BOLD, 16));
             uf.getEffects().add(new ColorEffect(Color.WHITE));
@@ -47,11 +53,27 @@ public class GUI {
         }
     }
 
+    public void openQuestDialogBox(ArrayList<Quest> quests) {
+        dialog_box = new QuestDialogBox(this);
+        dialog_box.setQuests(quests);
+    }
+
+    public void closeDialogbox() {
+        dialog_box = null;
+    }
+
     public void update() {
+        if(dialog_box != null) {
+            dialog_box.update(gc);
+        }
     }
     
     public void render(Graphics g) {
         cb.render(g);
         inputBox.render(g);
+
+        if(dialog_box != null) {
+            dialog_box.render();
+        }
     }
 }

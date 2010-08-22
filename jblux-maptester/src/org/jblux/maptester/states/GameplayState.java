@@ -18,14 +18,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.client.states;
+package org.jblux.maptester.states;
 
-import org.jblux.client.GameMap;
-import org.jblux.client.Player;
-import org.jblux.client.gui.GUI;
-import org.jblux.client.gui.GameCanvas;
-import org.jblux.client.network.ServerCommunicator;
-import org.jblux.common.client.PlayerData;
+import java.io.File;
+import org.jblux.maptester.GameMap;
+import org.jblux.maptester.Player;
+import org.jblux.maptester.gui.GameCanvas;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -38,12 +36,10 @@ public class GameplayState extends BasicGameState {
     private GameMap map;
     private Player player;
     private GameCanvas canvas;
-    private ServerCommunicator server;
     
-    public GameplayState(int stateID, ServerCommunicator server)
+    public GameplayState(int stateID)
     {
         this.stateID = stateID;
-        this.server = server;
     }
  
     @Override
@@ -51,24 +47,14 @@ public class GameplayState extends BasicGameState {
         return stateID;
     }
 
-    public void setPlayer(PlayerData data) {
-        player = new Player(data, server);
-        canvas.setPlayer(player);
-        
-        try {
-            map = new GameMap(data.map);
-            //Create a new Coords object, so it won't change when the player moves
-            Coordinates c = player.getCoords().clone();
-            canvas.setMap(map, c);
-        } catch (SlickException ex) {
-        }
+    public void setMap(GameMap map, int x, int y) {
+        canvas.setPlayer(new Coordinates(x, y));
+        canvas.setMap(map);
     }
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        GUI gui = new GUI(gc, server);
         canvas = GameCanvas.getInstance();
-        canvas.setGui(gui);
     }
  
     @Override

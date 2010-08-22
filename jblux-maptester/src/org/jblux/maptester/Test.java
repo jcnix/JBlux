@@ -18,54 +18,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.client;
+package org.jblux.maptester;
 
-import org.jblux.client.network.ServerCommunicator;
-import org.jblux.client.states.GameplayState;
-import org.jblux.client.states.MainMenuState;
-import org.jblux.client.states.ServerDownState;
+import org.jblux.maptester.states.GameplayState;
+import org.jblux.maptester.states.InitState;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 
-public class JBlux extends StateBasedGame{
-    public static final int MAINMENUSTATE = 0;
-    public static final int GAMEPLAYSTATE = 1;
-    public static final int SERVERDOWNSTATE = 2;
-    private ServerCommunicator server;
+public class Test extends StateBasedGame{
+    public static final int GAMEPLAYSTATE = 0;
+    public static final int INITSTATE = 1;
     
-    public JBlux() {
-        super("JBlux");
-        server = new ServerCommunicator();
-    }
-
-    public void init() {
+    public Test() {
+        super("JBlux-MapTester");
     }
 
     @Override
     public void initStatesList(GameContainer gc) throws SlickException {
-        if(!server.isConnected()) {
-            this.addState(new ServerDownState(SERVERDOWNSTATE));
-            this.enterState(SERVERDOWNSTATE);
-        }
-        else {            
-             MainMenuState mms = new MainMenuState(MAINMENUSTATE, server);
-             this.addState(mms);
-             mms.init(gc, this);
-             
-             GameplayState gps = new GameplayState(GAMEPLAYSTATE, server);
-             this.addState(gps);
-             gps.init(gc, this);
-             
-             this.enterState(MAINMENUSTATE);
-        }
+        InitState is = new InitState(INITSTATE);
+        this.addState(is);
+        is.init(gc, this);
+
+        GameplayState gps = new GameplayState(GAMEPLAYSTATE);
+        this.addState(gps);
+        gps.init(gc, this);
+
+        this.enterState(INITSTATE);
     }
 
     public static void main(String[] args) {
         try
         {
-            JBlux game = new JBlux();
+            Test game = new Test();
             AppGameContainer app = new AppGameContainer(game);
             app.setShowFPS(false);
             app.setDisplayMode(800, 600, false);

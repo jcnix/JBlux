@@ -1,3 +1,10 @@
+8-22-2010 Update
+****************
+- Draw a star over an Npc's head who has an available quest
+- Draw player names in the right places
+- Open a dialog box when talking to an NPC
+- Added some text to the Info and Help pages on the site
+
 8-15-2010 Update
 ****************
 - Three new maps.  Thanks Royce.
@@ -7,6 +14,7 @@
 - Chatbox shows sender's name again
 - Show an error on the login page if username & pass aren't correct
 - Fixed some XHTML 1.1 and CSS errors on the site
+- Change spawn area for lakeentrance to a place players won't get stuck
 
 8-8-2010 Update
 ***************

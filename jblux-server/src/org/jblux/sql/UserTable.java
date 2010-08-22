@@ -86,6 +86,14 @@ public class UserTable {
             pdata.user_id = rs.getInt("id");
             pdata.character_name = character_name;
             pdata.character_id = rs.getInt("id");
+
+            pdata.level = rs.getInt("level");
+            pdata.strength = rs.getInt("strength");
+            pdata.agility = rs.getInt("agility");
+            pdata.stamina = rs.getInt("stamina");
+            pdata.intelligence = rs.getInt("intelligence");
+            pdata.spirit = rs.getInt("spirit");
+
             pdata.coords.x = rs.getInt("x_coord");
             pdata.coords.y = rs.getInt("y_coord");
             int map_id = rs.getInt("current_map_id");

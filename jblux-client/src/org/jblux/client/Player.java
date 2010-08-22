@@ -76,6 +76,10 @@ public class Player extends Sprite implements Observer {
         server.getMapInfo(response);
     }
 
+    public PlayerData getData() {
+        return player_data;
+    }
+
     public void update(GameContainer gc) {
         Input input = gc.getInput();
 
@@ -129,6 +133,12 @@ public class Player extends Sprite implements Observer {
                 }
                 if(input.isKeyDown(Input.KEY_F1)) {
                     canvas.toggle_developer_mode();
+                }
+                if(input.isMousePressed(Input.MOUSE_RIGHT_BUTTON)) {
+                    NpcData npc = canvas.isNpcAt(input.getMouseX(), input.getMouseY());
+                    if(npc != null) {
+                        canvas.talkToNpc(npc);
+                    }
                 }
             }
         }
@@ -240,15 +250,17 @@ public class Player extends Sprite implements Observer {
     public void draw() {
         //Player must be drawn in the center of the screen
         int x = 400 - width/2;
-        int y = 300 - (height - 9);
+        int y = 300 - (height);
         image.draw(x, y);
         draw_name();
     }
 
     @Override
     public void draw_name() {
-        int x = 380;
-        int y = 280;
+        int w = nameFont.getWidth(player_data.character_name);
+        int h = nameFont.getHeight(player_data.character_name);
+        int x = 400 - (w/2);
+        int y = 300 - (height + h);
         nameFont.drawString(x, y, player_data.character_name);
     }
     

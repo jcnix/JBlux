@@ -23,9 +23,17 @@ package org.jblux.client;
 import org.jblux.common.Relation;
 import org.jblux.common.RelationUtil;
 import org.jblux.common.client.NpcData;
+import org.jblux.common.client.PlayerData;
+import org.jblux.common.client.Quest;
+import org.jblux.util.Coordinates;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 public class Npc extends Sprite {
     private NpcData data;
+
+    private boolean available_quests;
+    private Image available_quest_icon;
 
     public Npc(NpcData data) {
         super(data);
@@ -33,12 +41,45 @@ public class Npc extends Sprite {
         
         Relation r = RelationUtil.upDownRelation(data.direction);
         this.faceDirection(r);
+
+        available_quests = false;
+        try {
+            available_quest_icon = new Image("img/star.gif");
+        } catch (SlickException ex) {
+        }
+    }
+
+    @Override
+    public void draw() {
+        super.draw();
+        
+        if(available_quests) {
+            Coordinates c = canvas.getMapCoords();
+            c.x += coords.x - available_quest_icon.getWidth()/2;
+            c.y += coords.y - (height + available_quest_icon.getHeight() + 3);
+            available_quest_icon.draw(c.x, c.y);
+        }
     }
 
     /**
      * Don't draw names for Npcs
      */
+    @Override
     public void draw_name() {
         return;
+    }
+
+    public NpcData getData() {
+        return data;
+    }
+
+    public void update(PlayerData player) {
+        for(int i = 0; i < data.quests.size(); i++) {
+            Quest q = data.quests.get(i);
+            if(q.min_level <= player.level) {
+                available_quests = true;
+                break;
+            }
+        }
     }
 }

@@ -18,60 +18,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.client.gui;
+package org.jblux.maptester.gui;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Set;
-import java.util.Vector;
-import org.jblux.client.GameMap;
-import org.jblux.client.Npc;
-import org.jblux.client.Player;
-import org.jblux.client.Players;
-import org.jblux.client.Sprite;
-import org.jblux.client.gui.observers.NewPlayerObserver;
-import org.jblux.common.client.NpcData;
-import org.jblux.common.client.PlayerData;
-import org.jblux.common.client.Quest;
+import org.jblux.maptester.GameMap;
+import org.jblux.maptester.Player;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
 
-public class GameCanvas implements Observer {
+public class GameCanvas {
     private static GameCanvas gc;
     private Player player;
-    private Players players;
-    private Vector<Npc> npcs;
     private GameMap map;
     private Image walk_area;
     private Coordinates map_coords;
     private boolean developer_mode;
     private Image bw_location_sprite;
-    private NewPlayerObserver player_observer;
-    private GUI gui;
-
-    private boolean new_player;
-    private PlayerData new_data;
 
     protected GameCanvas() {
         init();
     }
 
     public void init() {
-        players = Players.getInstance();
-        npcs = new Vector<Npc>();
         map_coords = new Coordinates();
-        player_observer = NewPlayerObserver.getInstance();
-        player_observer.addObserver(this);
         developer_mode = false;
-        new_player = false;
-        new_data = null;
     }
 
     public static GameCanvas getInstance() {
@@ -81,26 +54,11 @@ public class GameCanvas implements Observer {
         return gc;
     }
 
-    public void setGui(GUI gui) {
-        this.gui = gui;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public void setNpcs(HashMap<Coordinates, NpcData> n) {
-        npcs = new Vector<Npc>();
-
-        Set<Coordinates> c_set = n.keySet();
-        Iterator<Coordinates> it = c_set.iterator();
-        while(it.hasNext()) {
-            Coordinates c = it.next();
-            NpcData data = n.get(c);
-            Npc npc = new Npc(data);
-            npc.setCoords(c);
-            npcs.add(npc);
-        }
+    public void setPlayer(Coordinates coords) {
+        player = new Player(coords.x, coords.y);
+        Coordinates c = player.getCoords();
+        map_coords.x = c.x + coords.x;
+        map_coords.y = c.y + coords.y;
     }
 
     /**
@@ -110,15 +68,14 @@ public class GameCanvas implements Observer {
      *
      * @param c     The initial coordinates when entering a map.
      */
-    public void setMap(GameMap map, Coordinates c) {
+    public void setMap(GameMap map) {
         this.map = map;
         walk_area = map.getWalkArea();
-        map_coords = c;
     }
 
-    public void setMap(String name, Coordinates c) {
+    public void setMap(String name) {
         try {
-            setMap(new GameMap(name), c);
+            setMap(new GameMap(name));
         } catch (SlickException ex) {
         }
     }
@@ -152,22 +109,7 @@ public class GameCanvas implements Observer {
     }
 
     public void update(GameContainer gc) {
-        if(new_player) {
-            new_player = false;
-            Sprite npc = new Sprite(new_data);
-            npc.setCoords(new_data.coords.x, new_data.coords.y);
-            npc.setImage(0, 0);
-            players.addPlayer(npc);
-            new_data = null;
-        }
-
         player.update(gc);
-        for(int i = 0; i < npcs.size(); i++) {
-            Npc npc = npcs.get(i);
-            npc.update(player.getData());
-        }
-
-        gui.update();
     }
 
     public void render(GameContainer gc, Graphics g) throws SlickException {
@@ -184,20 +126,9 @@ public class GameCanvas implements Observer {
         map.render(map_coords.x, map_coords.y, 2); //Objects Layer 2
 
         player.draw();
-        for(int i = 0; i < players.size(); i++) {
-            Sprite s = players.getPlayer(i);
-            s.draw();
-        }
-
-        for(int i = 0; i < npcs.size(); i++) {
-            Npc n = npcs.get(i);
-            n.draw();
-        }
 
         map.render(map_coords.x, map_coords.y, 3); //Fringe layer
         map.render(map_coords.x, map_coords.y, 4); //Fringe layer 2
-
-        gui.render(g);
 
         if(developer_mode) {
             this.walk_area.setAlpha(0.6f);
@@ -218,45 +149,6 @@ public class GameCanvas implements Observer {
         }
         else {
             bw_location_sprite = null;
-        }
-    }
-
-    /**
-     * 
-     * @param x     X coord of mouse cursor
-     * @param y     Y coord of mouse cursor
-     */
-    public NpcData isNpcAt(int x, int y) {
-        NpcData data = null;
-        //Translate mouse coords to map coords
-        Coordinates c = this.getMapCoords();
-        c.x -= x;
-        c.y -= y;
-        c.x = Math.abs(c.x);
-        c.y = Math.abs(c.y);
-
-        //Create a box around the coords
-        Rectangle r = new Rectangle(c.x - 16, c.y - 16, 48, 48);
-
-        for(int i = 0; i < npcs.size(); i++) {
-            Npc n = npcs.get(i);
-            Coordinates npc_c = n.getCoords();
-            if(r.contains(npc_c.x, npc_c.y)) {
-                data = n.getData();
-            }
-        }
-
-        return data;
-    }
-
-    public void talkToNpc(NpcData npc) {
-        gui.openQuestDialogBox(npc.quests);
-    }
-
-    public void update(Observable o, Object arg) {
-        if(arg instanceof PlayerData) {
-            new_player = true;
-            new_data = (PlayerData) arg;
         }
     }
 }

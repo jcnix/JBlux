@@ -21,7 +21,7 @@
 package org.jblux.client;
 
 import org.jblux.client.gui.GameCanvas;
-import org.jblux.client.gui.PlayerNameFontFactory;
+import org.jblux.client.gui.FontFactory;
 import org.jblux.common.Relation;
 import org.jblux.common.client.CharacterData;
 import org.jblux.util.Coordinates;
@@ -47,7 +47,6 @@ public class Sprite {
     protected CharacterData char_data;
     protected SpriteSheet spriteSheet;
     protected Image image;
-    protected PlayerNameFontFactory pnff;
     protected UnicodeFont nameFont;
     protected GameCanvas canvas;
 
@@ -59,15 +58,14 @@ public class Sprite {
         canvas = GameCanvas.getInstance();
 
         try {
-            pnff = PlayerNameFontFactory.getInstance();
-            nameFont = pnff.getFont();
+            nameFont = FontFactory.getDefaultFont();
             spriteSheet = new SpriteSheet(data.race.sprite_sheet, width, height);
         } catch (SlickException ex) {
         }
     }
 
     public void draw() {
-        Coordinates c = canvas.getMapCoords().clone();
+        Coordinates c = canvas.getMapCoords();
         c.x += coords.x;
         c.y += coords.y;
         image.draw(c.x - width/2, c.y - height);
@@ -75,10 +73,12 @@ public class Sprite {
     }
 
     public void draw_name() {
-        Coordinates c = canvas.getMapCoords().clone();
+        int w = nameFont.getWidth(char_data.character_name);
+        int h = nameFont.getHeight(char_data.character_name);
+        Coordinates c = canvas.getMapCoords();
         c.x += coords.x;
         c.y += coords.y;
-        nameFont.drawString(c.x - width/2, c.y - (height + 5), char_data.character_name);
+        nameFont.drawString(c.x - w/2, c.y - (height + h), char_data.character_name);
     }
 
     public void setImage(int x, int y) {

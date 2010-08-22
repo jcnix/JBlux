@@ -26,31 +26,24 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 
-public class PlayerNameFontFactory {
-    private static PlayerNameFontFactory pnff;
-    private UnicodeFont font;
+public class FontFactory {
+    protected FontFactory() {
+    }
 
-    protected PlayerNameFontFactory() {
-        font = new UnicodeFont(new Font("Serif", Font.PLAIN, 12));
+    public static UnicodeFont getDefaultFont() {
+        return getFont("Serif", Color.BLACK, 12);
+    }
 
+    public static UnicodeFont getFont(String font_name, Color color, int size) {
+        UnicodeFont font = new UnicodeFont(new Font(font_name, Font.PLAIN, size));
         try {
-            font.getEffects().add(new ColorEffect(Color.BLACK));
+            font.getEffects().add(new ColorEffect(color));
             font.addAsciiGlyphs();
             font.loadGlyphs();
         } catch(SlickException ex) {
             ex.printStackTrace();
         }
-    }
 
-    public static PlayerNameFontFactory getInstance() {
-        if(pnff == null) {
-            pnff = new PlayerNameFontFactory();
-        }
-
-        return pnff;
-    }
-
-    public UnicodeFont getFont() {
         return font;
     }
 }
