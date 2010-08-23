@@ -4,6 +4,7 @@
 */store/
 *.class
 *.zip
+*.swp
 */jbluxkey
 jbluxkey
 */lib/jblux-common.jar
