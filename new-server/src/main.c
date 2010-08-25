@@ -11,15 +11,26 @@
 #include <unistd.h>
 #include <netinet/in.h>
 #include <pthread.h>
+#include "types.h"
 
 #define MAXPENDING 20 
 #define BUFFSIZE 32
 
-struct thread_list
+struct player_t
 {
-    struct thread_list *next;
-    pthread_t thread;
+    int sock;
+    int authenticated;
+    struct player_data data;
+    char* encoded_player_data;
+    struct coordinates_t coords;
 };
+
+struct player_list
+{
+    struct player_list *next;
+    struct player_t *player;
+};
+struct player_list *players;
 
 void* client_thread(void* vsock)
 {
@@ -48,9 +59,8 @@ void handle_client(int* sock)
 {
     pthread_t thread;
     int t;
-    
     t = pthread_create(&thread, NULL, client_thread, (void*) sock);
-    pthread_join(t, NULL);
+    pthread_join(thread, NULL);
 }
 
 int main(int argc, char** argv)
