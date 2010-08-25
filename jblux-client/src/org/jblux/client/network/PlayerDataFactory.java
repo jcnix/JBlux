@@ -20,9 +20,8 @@
 
 package org.jblux.client.network;
 
-import java.io.ByteArrayInputStream;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import org.jblux.common.client.PlayerData;
 import org.jblux.util.Base64;
 
@@ -32,12 +31,13 @@ public class PlayerDataFactory {
 
     public static PlayerData getDataFromBase64(String p) {
         PlayerData data = null;
+        Gson gson = new Gson();
+
         try {
             byte[] bytes = Base64.decode(p);
-            ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bytes));
-            data = (PlayerData) is.readObject();
+            String s = new String(bytes);
+            data = gson.fromJson(s, PlayerData.class);
         } catch(IOException ex) {
-        } catch(ClassNotFoundException ex) {
         }
 
         return data;

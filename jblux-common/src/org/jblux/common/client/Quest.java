@@ -20,12 +20,7 @@
 
 package org.jblux.common.client;
 
-import java.io.Serializable;
-import org.jblux.common.items.Item;
-
-public class Quest implements Serializable {
-    private final long serialVersionUID = 1L;
-    
+public class Quest {    
     public Quest() {
     }
 

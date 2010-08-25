@@ -20,11 +20,7 @@
 
 package org.jblux.common.client;
 
-import java.io.Serializable;
-
-public class CharacterData implements Serializable {
-    private final long serialVersionUID = 1L;
-
+public class CharacterData {
     public String character_name;
     public int level;
     public Race race;
