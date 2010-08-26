@@ -23,24 +23,28 @@ int db_authenticate(char* username, char* password, char* character_name)
         char* cid = PQgetvalue(res, 0, id_column);
         id = atoi(cid);
         PQclear(res);
+        auth = 1;
     }
     else
     {
-        PQclear(res);
-        return 0;
+        auth = 0;
     }
 
-    q = "SELECT id FROM $1 WHERE name='$2' AND user_id=$3;";
-    nParams = 3;
-    const char* params_2[3] = { CHARACTER_TABLE, character_name, id };
-    res = db_exec(conn, q, nParams, params_2);
+    if(auth)
+    {
+        q = "SELECT id FROM $1 WHERE name='$2' AND user_id=$3;";
+        nParams = 3;
+        const char* params_2[3] = { CHARACTER_TABLE, character_name, id };
+        res = db_exec(conn, q, nParams, params_2);
 
-    if(PQntuples(res) > 0)
-        auth = 1;
-    else
-        auth = 0;
+        if(PQntuples(res) > 0)
+            auth = 1;
+        else
+            auth = 0;
+    }
 
     PQclear(res);
+    db_disconnect(conn);
     return auth;
 }
 
