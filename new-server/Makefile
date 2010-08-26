@@ -2,6 +2,7 @@ CC=gcc
 LD=ld
 CFLAGS=-Wall -g -O2
 
+BINDIR=bin
 ODIR=build
 SRCDIR=src
 
@@ -9,6 +10,9 @@ _OBJ=main.o db.o db_user_tbl.o
 OBJ=$(patsubst %, $(ODIR)/%, $(_OBJ))
 LIBS=-lpthread -lpq
 OUTPUT=bin/jblux-server
+.PHONY: default clean build-clean dist-clean
+
+default: $(ODIR) $(BINDIR) $(OUTPUT)
 
 $(OUTPUT): $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
@@ -16,7 +20,11 @@ $(OUTPUT): $(OBJ)
 $(ODIR)/%.o: $(SRCDIR)/%.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(DEBUG)
 
-.PHONY: clean build-clean dist-clean
+$(ODIR):
+	mkdir $(ODIR)
+
+$(BINDIR):
+	mkdir $(BINDIR)
 
 clean: build-clean dist-clean
 	rm -rf bin/*
