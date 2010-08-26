@@ -1,0 +1,66 @@
+/*
+ * File: db_user_tbl.c
+ * Author: Casey Jones
+ */
+
+#include "db_user_tbl.h"
+
+int db_authenticate(char* username, char* password, char* character_name)
+{
+    int auth = 0;
+    PGconn *conn = db_connect();
+    PGresult *res;
+
+    char* q = "SELECT id FROM $1 WHERE username='$2' and password='$3';";
+    int nParams = 3;
+    const char* params_1[3] = { USER_TABLE, username, character_name };
+    res = db_exec(conn, q, nParams, params_1);
+
+    int id;
+    if(PQntuples(res) > 0)
+    {
+        int id_column = PQfnumber(res, "id");
+        char* cid = PQgetvalue(res, 0, id_column);
+        id = atoi(cid);
+        PQclear(res);
+    }
+    else
+    {
+        PQclear(res);
+        return 0;
+    }
+
+    q = "SELECT id FROM $1 WHERE name='$2' AND user_id=$3;";
+    nParams = 3;
+    const char* params_2[3] = { CHARACTER_TABLE, character_name, id };
+    res = db_exec(conn, q, nParams, params_2);
+
+    if(PQntuples(res) > 0)
+        auth = 1;
+    else
+        auth = 0;
+
+    PQclear(res);
+    return auth;
+}
+
+struct player_data db_get_player(char* character_name)
+{
+}
+
+void db_set_map(int char_id, int map_id, struct coordinates_t coords)
+{
+}
+
+int get_map_for_player(char* character)
+{
+}
+
+struct race_t get_race(int id)
+{
+}
+
+struct class_t get_class(int id)
+{
+}
+

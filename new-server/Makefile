@@ -5,9 +5,9 @@ CFLAGS=-Wall -g -O2
 ODIR=build
 SRCDIR=src
 
-_OBJ=main.o
+_OBJ=main.o db.o db_user_tbl.o
 OBJ=$(patsubst %, $(ODIR)/%, $(_OBJ))
-LIBS=-lpthread
+LIBS=-lpthread -lpq
 OUTPUT=bin/jblux-server
 
 $(OUTPUT): $(OBJ)

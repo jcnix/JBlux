@@ -42,11 +42,11 @@ void* client_thread(void* vsock)
     {
         if((received = recv(*sock, buffer, BUFFSIZE, 0)) < 0)
         {
-            printf("Failed to received additional bytes from client\n");
+            printf("Failed to received data from client\n");
         }
         if(send(*sock, buffer, received, 0) != received)
         {
-            printf("Failed to send bytes to client\n");
+            printf("Failed to send data to client\n");
         }
     }
 
