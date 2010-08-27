@@ -34,7 +34,16 @@ int db_authenticate(char* username, char* password, char* character_name)
     {
         q = "SELECT id FROM $1 WHERE name='$2' AND user_id=$3;";
         nParams = 3;
-        const char* params_2[3] = { CHARACTER_TABLE, character_name, id };
+        
+        /* Lets use glibc's asprintf because it's safer than sprintf */
+        char* cid = NULL;
+        if(asprintf(&cid, "%d", id) < 0)
+        {
+            db_disconnect(conn);
+            return;
+        }
+
+        const char* params_2[3] = { CHARACTER_TABLE, character_name, cid };
         res = db_exec(conn, q, nParams, params_2);
 
         if(PQntuples(res) > 0)
@@ -57,9 +66,20 @@ void db_set_map(int char_id, int map_id, struct coordinates_t coords)
     PGconn *conn = db_connect();
     char* q = "UPDATE $1 SET current_map_id=$2, x_coord=$3, y_coord=$4, WHERE id=$5;";
     int nParams = 5;
-    const char* params_1[5] = { CHARACTER_TABLE, map_id, coords.x, coords.y, char_id };
+    char *cmap_id, *cx, *cy, *cid;
+    if( (asprintf(&cmap_id, "%d", map_id) < 0) ||
+        (asprintf(&cx, "%d", coords.x) < 0) ||
+        (asprintf(&cy, "%d", coords.y) < 0) ||
+        (asprintf(&cid, "%d", char_id) < 0))
+    {
+        /* saving the map location isn't _that_ important */
+        return;
+    }
 
-    db_exec(conn, q, nParams, params_2);
+    const char* params[5] = { CHARACTER_TABLE, cmap_id, cx,
+        cy, cid };
+
+    db_exec(conn, q, nParams, params);
     db_disconnect(conn);
 }
 
