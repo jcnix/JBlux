@@ -28,9 +28,15 @@ void db_disconnect(PGconn* conn)
 PGresult* db_exec(PGconn* conn, char* command, int nParams,
         const char* const *paramValues)
 {
-    PGresult *res = PQexecParams(conn, command, nParams, NULL, paramValues,
-            NULL, NULL, 0);
-    if(PQresultStatus(res) != PGRES_COMMAND_OK)
+    PGresult *res = PQexecParams(   conn,
+                                    command,
+                                    nParams,
+                                    NULL,
+                                    paramValues,
+                                    NULL,
+                                    NULL,
+                                    0);
+    if(PQresultStatus(res) != PGRES_TUPLES_OK)
     {
         fprintf(stderr, "Command: %s failed.  %s\n", command,
                 PQerrorMessage(conn));

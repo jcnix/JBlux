@@ -11,45 +11,41 @@ int db_authenticate(char* username, char* password, char* character_name)
     PGconn *conn = db_connect();
     PGresult *res;
 
-    char* q = "SELECT id FROM $1 WHERE username='$2' and password='$3';";
-    int nParams = 3;
-    const char* params_1[3] = { USER_TABLE, username, character_name };
+    char* q = "SELECT id FROM jblux_user WHERE username=$1 and password=$2;";
+    int nParams = 2;
+    const char* params_1[2] = { username, password };
     res = db_exec(conn, q, nParams, params_1);
 
     int id;
-    if(PQntuples(res) > 0)
+    if(PQresultStatus(res) != PGRES_TUPLES_OK)
+    {
+        auth = 0;
+    }
+    else
     {
         int id_column = PQfnumber(res, "id");
         char* cid = PQgetvalue(res, 0, id_column);
         id = atoi(cid);
         PQclear(res);
-        auth = 1;
-    }
-    else
-    {
-        auth = 0;
-    }
-
-    if(auth)
-    {
-        q = "SELECT id FROM $1 WHERE name='$2' AND user_id=$3;";
-        nParams = 3;
+        
+        q = "SELECT id FROM jblux_character WHERE name=$1 AND user_id=$2;";
+        nParams = 2;
         
         /* Lets use glibc's asprintf because it's safer than sprintf */
-        char* cid = NULL;
+        cid = NULL;
         if(asprintf(&cid, "%d", id) < 0)
         {
             db_disconnect(conn);
-            return;
+            return 0;
         }
 
-        const char* params_2[3] = { CHARACTER_TABLE, character_name, cid };
+        const char* params_2[2] = { character_name, cid };
         res = db_exec(conn, q, nParams, params_2);
 
-        if(PQntuples(res) > 0)
-            auth = 1;
-        else
+        if(PQresultStatus(res) != PGRES_TUPLES_OK)
             auth = 0;
+        else
+            auth = 1;
     }
 
     PQclear(res);
@@ -61,11 +57,11 @@ struct player_data db_get_player(char* character_name)
 {
 }
 
-void db_set_map(int char_id, int map_id, struct coordinates_t coords)
+void db_set_map_for_player(int char_id, int map_id, struct coordinates_t coords)
 {
     PGconn *conn = db_connect();
-    char* q = "UPDATE $1 SET current_map_id=$2, x_coord=$3, y_coord=$4, WHERE id=$5;";
-    int nParams = 5;
+    char* q = "UPDATE jblux_character SET current_map_id=$1, x_coord=$2, y_coord=$3, WHERE id=$4;";
+    int nParams = 4;
     char *cmap_id, *cx, *cy, *cid;
     if( (asprintf(&cmap_id, "%d", map_id) < 0) ||
         (asprintf(&cx, "%d", coords.x) < 0) ||
@@ -77,9 +73,7 @@ void db_set_map(int char_id, int map_id, struct coordinates_t coords)
         return;
     }
 
-    const char* params[5] = { CHARACTER_TABLE, cmap_id, cx,
-        cy, cid };
-
+    const char* params[4] = {cmap_id, cx, cy, cid };
     db_exec(conn, q, nParams, params);
     db_disconnect(conn);
 }
