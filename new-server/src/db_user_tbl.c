@@ -54,6 +54,13 @@ struct player_data db_get_player(char* character_name)
 
 void db_set_map(int char_id, int map_id, struct coordinates_t coords)
 {
+    PGconn *conn = db_connect();
+    char* q = "UPDATE $1 SET current_map_id=$2, x_coord=$3, y_coord=$4, WHERE id=$5;";
+    int nParams = 5;
+    const char* params_1[5] = { CHARACTER_TABLE, map_id, coords.x, coords.y, char_id };
+
+    db_exec(conn, q, nParams, params_2);
+    db_disconnect(conn);
 }
 
 int get_map_for_player(char* character)
