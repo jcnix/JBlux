@@ -73,7 +73,7 @@ void db_set_map(int char_id, int map_id, struct coordinates_t coords)
         (asprintf(&cid, "%d", char_id) < 0))
     {
         /* saving the map location isn't _that_ important */
-        db_disconnect();
+        db_disconnect(conn);
         return;
     }
 
