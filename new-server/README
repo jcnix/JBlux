@@ -1,0 +1,20 @@
+JBlux Server README
+*******************
+
+This is a replacement for the original Java based server.  It was
+created because the old server used too many resources, and C has
+a much lower overhead to run.
+
+The server requires these libraries:
+pthreads
+libpq (PostgreSQL)
+libyajl (Yet Another JSON Library)
+libcrypto (OpenSSL crypto)
+
+To build, just run make.
+
+To create the database tables, I use django (python web framework).
+Just go to the jblux_django folder and run python manage.py syncdb.
+I use django because I want to use information from the db on the site,
+and the administration of information in the db is really nice with django.
+
