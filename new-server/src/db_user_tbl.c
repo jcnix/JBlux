@@ -53,6 +53,59 @@ int db_authenticate(char* username, char* password, char* character_name)
 
 struct player_data db_get_player(char* character_name)
 {
+    struct player_data data;
+    PGconn *conn = db_connect();
+    PGresult *res;
+
+    char* q = "SELECT * FROM jblux_character WHERE name=$1;";
+    int nParams = 1;
+    const char* params[1] = { character_name };
+    res = db_exec(conn, q, nParams, params);
+    
+    int column = PQfnumber(res, "user_id");
+    data.user_id = atoi(PQgetvalue(res, 0, column));
+    
+    column = PQfnumber(res, "character_id");
+    data.character_id = atoi(PQgetvalue(res, 0, column));
+    
+    column = PQfnumber(res, "character_name");
+    data.character_name = PQgetvalue(res, 0, column);
+    
+    column = PQfnumber(res, "level");
+    data.level = atoi(PQgetvalue(res, 0, column));
+    
+    column = PQfnumber(res, "strength");
+    data.strength = atoi(PQgetvalue(res, 0, column));
+    
+    column = PQfnumber(res, "agility");
+    data.agility = atoi(PQgetvalue(res, 0, column));
+    
+    column = PQfnumber(res, "stamina");
+    data.stamina = atoi(PQgetvalue(res, 0, column));
+    
+    column = PQfnumber(res, "intelligence");
+    data.intelligence = atoi(PQgetvalue(res, 0, column));
+    
+    column = PQfnumber(res, "spirit");
+    data.spirit = atoi(PQgetvalue(res, 0, column));
+    
+    /* TODO: convert map_id to map name */
+    column = PQfnumber(res, "current_map_id");
+    int map_id = atoi(PQgetvalue(res, 0, column));
+    data.map = "";
+
+    column = PQfnumber(res, "race_id");
+    data.race = get_race(atoi(PQgetvalue(res, 0, column)));
+    column = PQfnumber(res, "class_t_id");
+    data.player_class = get_class(atoi(PQgetvalue(res, 0, column)));
+
+    /* TODO: get coords */
+    /* TODO: get inventory */
+    data.inventory.id = 0;
+
+    PQclear(res);
+    db_disconnect(conn);
+    return data;
 }
 
 void db_set_map_for_player(int char_id, int map_id, struct coordinates_t coords)
