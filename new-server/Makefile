@@ -6,9 +6,9 @@ BINDIR=bin
 ODIR=build
 SRCDIR=src
 
-_OBJ=main.o db.o db_user_tbl.o json.o
+_OBJ=main.o db.o db_user_tbl.o json.o base64.o
 OBJ=$(patsubst %, $(ODIR)/%, $(_OBJ))
-LIBS=-lpthread -lpq -lyajl
+LIBS=-lpthread -lpq -lyajl -lcrypto
 OUTPUT=bin/jblux-server
 .PHONY: default clean build-clean dist-clean
 
