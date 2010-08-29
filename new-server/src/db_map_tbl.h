@@ -17,12 +17,12 @@
 #define MAP_TABLE "jblux-map"
 
 struct map_t* db_get_all_maps();
-int db_get_adjacent_map(Relation r, int map_id);
+int db_get_adjacent_map(enum Relation r, int map_id);
 char* get_map_name_for_id(int id);
 int get_map_id_for_name(char* name);
 struct item_t* db_get_items_on_map(int map_id);
-struct npc_data_t db_get_npcs_on_map(int map_id);
-struct coordinates_t db_get_map_entrance(int map_id, Relation r);
+struct npc_data_t* db_get_npcs_on_map(int map_id);
+struct coordinates_t db_get_map_entrance(int map_id, enum Relation r);
 
 #endif
 
