@@ -12,6 +12,18 @@ struct coordinates_t
     int y;
 };
 
+struct map_t
+{
+    int id;
+    char *name;
+    struct item_t *items;
+    struct npc_data_t *npcs;
+    int map_left;
+    int map_right;
+    int map_above;
+    int map_below;
+};
+
 struct inventory_t
 {
     int id;
