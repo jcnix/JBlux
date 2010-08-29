@@ -58,10 +58,44 @@ int db_get_adjacent_map(enum Relation r, int map_id)
 
 char* get_map_name_for_id(int id)
 {
+    char* name;
+    PGconn *conn = db_connect();
+    PGresult *res;
+
+    char* q = "SELECT name FROM jblux_map WHERE id=$1;";
+    int nParams = 1;
+    char *cid;
+    
+    if(asprintf(&cid, "%d", id) < 0)
+    {
+        db_disconnect(conn);
+        return NULL;
+    }
+
+    const char* params[1] = { cid };
+    res = db_exec(conn, q, nParams, params);
+    name = PQgetvalue(res, 0, 0);
+
+    db_disconnect(conn);
+    PQclear(res);
+    return name;
 }
 
 int get_map_id_for_name(char* name)
 {
+    int id;
+    PGconn *conn = db_connect();
+    PGresult *res;
+
+    char* q = "SELECT id FROM jblux_map WHERE name=$1;";
+    int nParams = 1;
+    const char* params[1] = { name };
+    res = db_exec(conn, q, nParams, params);
+    id = atoi(PQgetvalue(res, 0, 0));
+
+    db_disconnect(conn);
+    PQclear(res);
+    return id;
 }
 
 struct item_t* db_get_items_on_map(int map_id)
