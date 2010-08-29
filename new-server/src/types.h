@@ -6,6 +6,14 @@
 #ifndef _TYPES_H
 #define _TYPES_H
 
+enum Relation
+{
+    LEFT,
+    RIGHT,
+    ABOVE,
+    BELOW
+};
+
 struct coordinates_t
 {
     int x;
