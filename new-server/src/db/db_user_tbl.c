@@ -51,9 +51,9 @@ int db_authenticate(char* username, char* password, char* character_name)
     return auth;
 }
 
-struct player_data db_get_player(char* character_name)
+struct player_data* db_get_player(char* character_name)
 {
-    struct player_data data;
+    struct player_data *data = malloc(sizeof(struct player_data));
     PGconn *conn = db_connect();
     PGresult *res;
 
@@ -63,44 +63,44 @@ struct player_data db_get_player(char* character_name)
     res = db_exec(conn, q, nParams, params);
     
     int column = PQfnumber(res, "user_id");
-    data.user_id = atoi(PQgetvalue(res, 0, column));
+    data->user_id = atoi(PQgetvalue(res, 0, column));
     
     column = PQfnumber(res, "character_id");
-    data.character_id = atoi(PQgetvalue(res, 0, column));
+    data->character_id = atoi(PQgetvalue(res, 0, column));
     
     column = PQfnumber(res, "character_name");
-    data.character_name = PQgetvalue(res, 0, column);
+    data->character_name = PQgetvalue(res, 0, column);
     
     column = PQfnumber(res, "level");
-    data.level = atoi(PQgetvalue(res, 0, column));
+    data->level = atoi(PQgetvalue(res, 0, column));
     
     column = PQfnumber(res, "strength");
-    data.strength = atoi(PQgetvalue(res, 0, column));
+    data->strength = atoi(PQgetvalue(res, 0, column));
     
     column = PQfnumber(res, "agility");
-    data.agility = atoi(PQgetvalue(res, 0, column));
+    data->agility = atoi(PQgetvalue(res, 0, column));
     
     column = PQfnumber(res, "stamina");
-    data.stamina = atoi(PQgetvalue(res, 0, column));
+    data->stamina = atoi(PQgetvalue(res, 0, column));
     
     column = PQfnumber(res, "intelligence");
-    data.intelligence = atoi(PQgetvalue(res, 0, column));
+    data->intelligence = atoi(PQgetvalue(res, 0, column));
     
     column = PQfnumber(res, "spirit");
-    data.spirit = atoi(PQgetvalue(res, 0, column));
+    data->spirit = atoi(PQgetvalue(res, 0, column));
     
     column = PQfnumber(res, "current_map_id");
     int map_id = atoi(PQgetvalue(res, 0, column));
-    data.map = get_map_name_for_id(map_id); 
+    data->map = get_map_name_for_id(map_id); 
 
     column = PQfnumber(res, "race_id");
-    data.race = get_race(atoi(PQgetvalue(res, 0, column)));
+    data->race = get_race(atoi(PQgetvalue(res, 0, column)));
     column = PQfnumber(res, "class_t_id");
-    data.player_class = get_class(atoi(PQgetvalue(res, 0, column)));
+    data->player_class = get_class(atoi(PQgetvalue(res, 0, column)));
 
     /* TODO: get coords */
     /* TODO: get inventory */
-    data.inventory.id = 0;
+    data->inventory.id = 0;
 
     PQclear(res);
     db_disconnect(conn);
