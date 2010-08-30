@@ -93,8 +93,8 @@ int get_map_id_for_name(char* name)
     res = db_exec(conn, q, nParams, params);
     id = atoi(PQgetvalue(res, 0, 0));
 
-    db_disconnect(conn);
     PQclear(res);
+    db_disconnect(conn);
     return id;
 }
 
@@ -108,5 +108,58 @@ struct npc_data_t* db_get_npcs_on_map(int map_id)
 
 struct coordinates_t db_get_map_entrance(int map_id, enum Relation r)
 {
+    struct coordinates_t coords;
+    PGconn *conn = db_connect();
+    PGresult *res;
+
+    char* q;
+    if(r == LEFT)
+        q = "SELECT entrance_left_x, entrance_left_y FROM jblux_map WHERE id=$1;";
+    else if(r == RIGHT)
+        q = "SELECT entrance_right_x, entrance_right_y FROM jblux_map WHERE id=$1;";
+    else if(r == ABOVE)
+        q = "SELECT entrance_top_x, entrance_top_y FROM jblux_map WHERE id=$1;";
+    else if(r == BELOW)
+        q = "SELECT entrance_bottom_x, entrance_bottom_y FROM jblux_map WHERE id=$1;";
+
+    int nParams = 1;
+    char* cid;
+    if(asprintf(cid, "%d", map_id) < 0)
+    {
+        db_diconnect(conn);
+    }
+    const char* params[1] = { cid };
+    res = db_exec(conn, q, nParams, params);
+
+    int x_column;
+    int y_column;
+    if(r == LEFT)
+    {
+        x_column = PQfnumber(res, "entrance_left_x");
+        y_column = PQfnumber(res, "entrance_left_y");
+    }
+    else if(r == RIGHT)
+    {
+        x_column = PQfnumber(res, "entrance_right_x");
+        y_column = PQfnumber(res, "entrance_right_y");
+    }
+    else if(r == ABOVE)
+    {
+        x_column = PQfnumber(res, "entrance_top_x");
+        y_column = PQfnumber(res, "entrance_top_y");
+    }
+    else if(r == BELOW)
+    {
+        x_column = PQfnumber(res, "entrance_bottom_x");
+        y_column = PQfnumber(res, "entrance_bottom_y");
+    }
+
+    coords.x = atoi(PQgetvalue(res, i, x_column));
+    coords.y = atoi(PQgetvalue(res, i, y_column));
+
+    free(cid);
+    PQclar(res);
+    db_disconnect();
+    return coods;
 }
 
