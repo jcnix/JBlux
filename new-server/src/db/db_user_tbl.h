@@ -13,7 +13,7 @@
 #include <postgresql/libpq-fe.h>
 #include "db.h"
 #include "db_map_tbl.h"
-#include "types.h"
+#include "../types.h"
 
 #define USER_TABLE "jblux_user"
 #define CHARACTER_TABLE "jblux_character"

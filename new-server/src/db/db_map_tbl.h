@@ -12,7 +12,7 @@
 #include <string.h>
 #include <postgresql/libpq-fe.h>
 #include "db.h"
-#include "types.h"
+#include "../types.h"
 
 #define MAP_TABLE "jblux-map"
 

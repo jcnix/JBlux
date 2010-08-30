@@ -8,11 +8,13 @@ SRCDIR=src
 
 _OBJ= main.o \
 	  client.o \
-	  db.o \
-	  db_user_tbl.o \
-	  db_map_tbl.o \
 	  json.o \
-	  base64.o
+	  base64.o \
+	  db/db.o \
+	  db/db_user_tbl.o \
+	  db/db_map_tbl.o \
+	  db/db_npc_tbl.o
+
 OBJ=$(patsubst %, $(ODIR)/%, $(_OBJ))
 LIBS=-lpthread -lpq -lyajl -lcrypto
 OUTPUT=bin/jblux-server
@@ -28,16 +30,16 @@ $(ODIR)/%.o: $(SRCDIR)/%.c
 
 $(ODIR):
 	mkdir $(ODIR)
+	mkdir $(ODIR)/db
 
 $(BINDIR):
 	mkdir $(BINDIR)
 
 clean: build-clean dist-clean
-	rm -rf bin/*
 
 build-clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
+	rm -rf $(ODIR)
 
 dist-clean:
-	rm -f $(OBJ)
+	rm -f $(OUTPUT)
 
