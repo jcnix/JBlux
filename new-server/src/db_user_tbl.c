@@ -29,7 +29,6 @@ int db_authenticate(char* username, char* password, char* character_name)
         q = "SELECT id FROM jblux_character WHERE name=$1 AND user_id=$2;";
         nParams = 2;
         
-        /* Lets use glibc's asprintf because it's safer than sprintf */
         char* cid = NULL;
         if(asprintf(&cid, "%d", id) < 0)
         {
@@ -46,6 +45,7 @@ int db_authenticate(char* username, char* password, char* character_name)
             auth = 1;
     }
 
+    free(cid);
     PQclear(res);
     db_disconnect(conn);
     return auth;
@@ -111,6 +111,8 @@ struct player_data db_get_player(char* character_name)
 void db_set_map_for_player(int char_id, int map_id, struct coordinates_t coords)
 {
     PGconn *conn = db_connect();
+    PGresult *res;
+
     char* q = "UPDATE jblux_character SET current_map_id=$1, x_coord=$2, y_coord=$3, WHERE id=$4;";
     int nParams = 4;
     char *cmap_id, *cx, *cy, *cid;
@@ -125,7 +127,13 @@ void db_set_map_for_player(int char_id, int map_id, struct coordinates_t coords)
     }
 
     const char* params[4] = {cmap_id, cx, cy, cid };
-    db_exec(conn, q, nParams, params);
+    res = db_exec(conn, q, nParams, params);
+    
+    free(cmap_id);
+    free(cx);
+    free(cy);
+    free(cid);
+    PQclear(res);
     db_disconnect(conn);
 }
 
@@ -174,6 +182,7 @@ struct race_t get_race(int id)
     column = PQfnumber(res, "sprite_sheet");
     race.sprite_height = atoi(PQgetvalue(res, 0, column));
 
+    free(cid);
     PQclear(res);
     db_disconnect(conn);
     return race;
@@ -201,6 +210,7 @@ struct class_t get_class(int id)
     int column = PQfnumber(res, "name");
     class.name = PQgetvalue(res, 0, column);
 
+    free(cid);
     PQclear(res);
     db_disconnect(conn);
     return class;

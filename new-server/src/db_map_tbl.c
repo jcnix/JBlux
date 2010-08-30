@@ -76,8 +76,9 @@ char* get_map_name_for_id(int id)
     res = db_exec(conn, q, nParams, params);
     name = PQgetvalue(res, 0, 0);
 
-    db_disconnect(conn);
+    free(cid);
     PQclear(res);
+    db_disconnect(conn);
     return name;
 }
 
