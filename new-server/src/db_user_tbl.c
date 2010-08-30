@@ -14,6 +14,7 @@ int db_authenticate(char* username, char* password, char* character_name)
     char* q = "SELECT id FROM jblux_user WHERE username=$1 and password=$2;";
     int nParams = 2;
     const char* params_1[2] = { username, password };
+    char* cid = NULL;
     res = db_exec(conn, q, nParams, params_1);
 
     int id;
@@ -29,7 +30,6 @@ int db_authenticate(char* username, char* password, char* character_name)
         q = "SELECT id FROM jblux_character WHERE name=$1 AND user_id=$2;";
         nParams = 2;
         
-        char* cid = NULL;
         if(asprintf(&cid, "%d", id) < 0)
         {
             db_disconnect(conn);

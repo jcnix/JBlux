@@ -6,10 +6,10 @@
 #ifndef _DB_MAP_TBL_H
 #define _DB_MAP_TBL_H
 
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <printf.h>
 #include <postgresql/libpq-fe.h>
 #include "db.h"
 #include "types.h"

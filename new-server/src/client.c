@@ -3,7 +3,15 @@
  * Author: Casey Jones
  */
 
-#include "command_parser.h"
+#include "client.h"
+
+void handle_client(int* sock)
+{
+    pthread_t thread;
+    int t;
+    t = pthread_create(&thread, NULL, client_thread, (void*) sock);
+    pthread_join(thread, NULL);
+}
 
 void* client_thread(void* vsock)
 {
@@ -11,7 +19,7 @@ void* client_thread(void* vsock)
     char buffer[BUFFSIZE];
     int received = -1;
 
-    client_t client;
+    struct client_t client;
     client.connected = 1;
 
     while(client.connected)

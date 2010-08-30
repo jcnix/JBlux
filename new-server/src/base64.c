@@ -5,7 +5,7 @@
 
 #include "base64.h"
 
-char* base64_encode(unsigned char *input, int length)
+char* base64_encode(char *input, int length)
 {
     BIO *bio;
     BIO *b64;
@@ -29,7 +29,7 @@ char* base64_encode(unsigned char *input, int length)
     return buf;
 }
 
-char* base64_decode(unsigned char *input, int length)
+char* base64_decode(char *input, int length)
 {
     BIO *bio;
     BIO *b64;

@@ -13,6 +13,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <netinet/in.h>
+#include <pthread.h>
+#include "base64.h"
 #include "types.h"
 
 #define BUFFSIZE 2048
@@ -34,6 +36,7 @@ struct client_list
 };
 struct client_list *clients;
 
+void handle_client(int* sock);
 void* client_thread(void* vsock);
 void parse_command(int sock, struct client_t *client, char* command);
 

@@ -10,19 +10,10 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <netinet/in.h>
-#include <pthread.h>
-#include "types.h"
 #include "client.h"
+#include "types.h"
 
 #define MAXPENDING 20 
-
-void handle_client(int* sock)
-{
-    pthread_t thread;
-    int t;
-    t = pthread_create(&thread, NULL, client_thread, (void*) sock);
-    pthread_join(thread, NULL);
-}
 
 int main(int argc, char** argv)
 {
