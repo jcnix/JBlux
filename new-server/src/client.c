@@ -1,0 +1,66 @@
+/*
+ * File: command_parser.c
+ * Author: Casey Jones
+ */
+
+#include "command_parser.h"
+
+void* client_thread(void* vsock)
+{
+    int* sock = (int*) vsock;
+    char buffer[BUFFSIZE];
+    int received = -1;
+
+    client_t client;
+    client.connected = 1;
+
+    while(client.connected)
+    {
+        if((received = recv(*sock, buffer, BUFFSIZE, 0)) < 0)
+        {
+            client.connected = 0;
+            break;
+        }
+
+        parse_command(*sock, &client, buffer);
+    }
+
+    close(*sock);
+    return 0;
+}
+
+void parse_command(int sock, struct client_t *client, char* command)
+{
+    command = base64_decode(command, strlen(command));
+
+    char* commands = strtok(command, " ");
+    if(strncmp(commands, "auth", 4))
+    {
+    }
+
+    /* Ignore all commands from client until they authenticate */
+    if(!client->authenticated)
+    {
+        return;
+    }
+
+    if(strncmp(commands, "move", 4))
+    {
+    }
+    else if(strncmp(commands, "chat", 4))
+    {
+    }
+    else if(strncmp(commands, "map", 3))
+    {
+    }
+    else if(strncmp(commands, "disconnect", 10))
+    {
+        client->connected = 0;
+    }
+
+    //if(send(sock, buffer, received, 0) != received)
+    //{
+    //    printf("Failed to send data to client\n");
+    //}
+}
+

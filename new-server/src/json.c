@@ -35,7 +35,7 @@ yajl_gen player_data_to_json(struct player_data data)
     const unsigned char* agility_field =        (unsigned char*) "agility";
     const unsigned char* stamina_field =        (unsigned char*) "stamina";
     const unsigned char* intelligence_field =   (unsigned char*) "intelligence";
-    const unsigned char* spirit_field =        (unsigned char*) "spirit";
+    const unsigned char* spirit_field =         (unsigned char*) "spirit";
     const unsigned char* map_field =            (unsigned char*) "map";
     const unsigned char* inventory_field =      (unsigned char*) "inventory";
     const unsigned char* coords_field =         (unsigned char*) "coords";
