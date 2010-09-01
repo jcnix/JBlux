@@ -29,11 +29,11 @@ $(ODIR)/%.o: $(SRCDIR)/%.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(DEBUG)
 
 $(ODIR):
-	mkdir $(ODIR)
-	mkdir $(ODIR)/db
+	mkdir -p $(ODIR)
+	mkdir -p $(ODIR)/db
 
 $(BINDIR):
-	mkdir $(BINDIR)
+	mkdir -p $(BINDIR)
 
 clean: build-clean dist-clean
 

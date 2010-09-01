@@ -1,5 +1,5 @@
 /*
- * File: command_parser.c
+ * File: client.c
  * Author: Casey Jones
  */
 
@@ -37,6 +37,20 @@ void* client_thread(void* vsock)
     return 0;
 }
 
+void send_player_data(int sock, char* char_name)
+{
+    struct player_data *data = db_get_player(char_name);
+    char* data_json = get_json_str(player_data_to_json(data));
+    char* data_enc = base64_encode(data_json, strlen(data_json));
+
+    /* TODO: the string sent needs to be part of a larger command,
+     * and base64 encoded */
+    send(sock, data_enc, 0, 0);
+
+    free(data_json);
+    free(data_enc);
+}
+
 void parse_command(int sock, struct client_t *client, char* command)
 {
     command = base64_decode(command, strlen(command));
@@ -44,6 +58,14 @@ void parse_command(int sock, struct client_t *client, char* command)
     char* commands = strtok(command, " ");
     if(strncmp(commands, "auth", 4))
     {
+        char* name = strtok(NULL, " ");
+        char* pass = strtok(NULL, " ");
+        char* char_name = strtok(NULL, " ");
+        if(db_authenticate(name, pass, char_name))
+        {
+            client->authenticated = 1;
+            send_player_data(sock, char_name);
+        }
     }
 
     /* Ignore all commands from client until they authenticate */
