@@ -5,12 +5,12 @@
 
 #include "json.h"
 
-const unsigned char* get_json_str(yajl_gen gen)
+char* get_json_str(yajl_gen gen)
 {
-    const unsigned char* json;
+    char* json;
     yajl_gen_status stat;
     unsigned int len = 0;
-    stat = yajl_gen_get_buf(gen, &json, &len);
+    stat = yajl_gen_get_buf(gen, (const unsigned char**) &json, &len);
     yajl_gen_clear(gen);
     yajl_gen_free(gen);
 

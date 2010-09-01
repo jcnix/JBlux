@@ -15,6 +15,8 @@
 #include <netinet/in.h>
 #include <pthread.h>
 #include "base64.h"
+#include "db/db_user_tbl.h"
+#include "json.h"
 #include "types.h"
 
 #define BUFFSIZE 2048

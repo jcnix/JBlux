@@ -12,7 +12,7 @@
 #include <yajl/yajl_gen.h>
 #include "types.h"
 
-const unsigned char* get_json_str(yajl_gen gen);
+char* get_json_str(yajl_gen gen);
 yajl_gen player_data_to_json(struct player_data *data);
 
 #endif
