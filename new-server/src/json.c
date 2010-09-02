@@ -56,8 +56,13 @@ yajl_gen player_data_to_json(struct player_data *data)
     stat = yajl_gen_string(gen, level_field, strlen((char*) level_field));
     stat = yajl_gen_integer(gen, data->level);
 
-    /* TODO: Get race */
-    /* TODO: Get class */
+    const char* race_json = get_json_str(race_to_json(data->race));
+    stat = yajl_gen_string(gen, race_field, strlen((char*) race_field));
+    stat = yajl_gen_string(gen, (unsigned char*) race_json, strlen(race_json));
+    
+    const char* class_json = get_json_str(class_to_json(data->player_class));
+    stat = yajl_gen_string(gen, class_field, strlen((char*) class_field));
+    stat = yajl_gen_string(gen, (unsigned char*) class_json, strlen(class_json));
     
     stat = yajl_gen_string(gen, strength_field, strlen((char*) strength_field));
     stat = yajl_gen_integer(gen, data->strength);
@@ -106,6 +111,65 @@ yajl_gen coordinates_to_json(struct coordinates_t coords)
     
     stat = yajl_gen_string(gen, y_field, strlen((char*) y_field));
     stat = yajl_gen_integer(gen, coords.y);
+    
+    yajl_gen_map_close(gen);
+
+    return gen;
+}
+
+yajl_gen race_to_json(struct race_t race)
+{
+    yajl_gen_config conf = { 0 };
+    yajl_gen gen;
+    yajl_gen_status stat;
+    gen = yajl_gen_alloc(&conf, NULL);
+
+    /* Field names */
+    const unsigned char* id_field =  (unsigned char*) "id";
+    const unsigned char* name_field =  (unsigned char*) "name";
+    const unsigned char* sprite_sheet_field =  (unsigned char*) "sprite_sheet";
+    const unsigned char* sprite_height_field =  (unsigned char*) "sprite_height";
+    
+    yajl_gen_map_open(gen);
+
+    stat = yajl_gen_string(gen, id_field, strlen((char*) id_field));
+    stat = yajl_gen_integer(gen, race.id);
+    
+    const unsigned char* name = (unsigned char*) race.name;
+    stat = yajl_gen_string(gen, name_field, strlen((char*) name_field));
+    stat = yajl_gen_string(gen, name, strlen(race.name));
+    
+    const unsigned char* sheet = (unsigned char*) race.sprite_sheet;
+    stat = yajl_gen_string(gen, sprite_sheet_field, strlen((char*) sprite_sheet_field));
+    stat = yajl_gen_string(gen, sheet, strlen(race.sprite_sheet));
+    
+    stat = yajl_gen_string(gen, sprite_height_field, strlen((char*) sprite_height_field));
+    stat = yajl_gen_integer(gen, race.sprite_height);
+    
+    yajl_gen_map_close(gen);
+
+    return gen;
+}
+
+yajl_gen class_to_json(struct class_t c)
+{
+    yajl_gen_config conf = { 0 };
+    yajl_gen gen;
+    yajl_gen_status stat;
+    gen = yajl_gen_alloc(&conf, NULL);
+
+    /* Field names */
+    const unsigned char* id_field =  (unsigned char*) "id";
+    const unsigned char* name_field =  (unsigned char*) "name";
+    
+    yajl_gen_map_open(gen);
+
+    stat = yajl_gen_string(gen, id_field, strlen((char*) id_field));
+    stat = yajl_gen_integer(gen, c.id);
+    
+    const unsigned char* name = (unsigned char*) c.name;
+    stat = yajl_gen_string(gen, name_field, strlen((char*) name_field));
+    stat = yajl_gen_string(gen, name, strlen(c.name));
     
     yajl_gen_map_close(gen);
 
