@@ -79,10 +79,36 @@ yajl_gen player_data_to_json(struct player_data *data)
     stat = yajl_gen_string(gen, map_name, strlen((char*) map_name));
   
     /* TODO: Get Inventory */
-    /* TODO: Get Coords */
+    const char* coords_json = get_json_str(coordinates_to_json(data->coords));
+    stat = yajl_gen_string(gen, coords_field, strlen((char*) coords_field));
+    stat = yajl_gen_string(gen, (unsigned char*) coords_json, strlen(coords_json));
 
     /* Close JSON structure */
     yajl_gen_map_close(gen);
+    return gen;
+}
+
+yajl_gen coordinates_to_json(struct coordinates_t coords)
+{
+    yajl_gen_config conf = { 0 };
+    yajl_gen gen;
+    yajl_gen_status stat;
+    gen = yajl_gen_alloc(&conf, NULL);
+
+    /* Field names */
+    const unsigned char* x_field =  (unsigned char*) "x";
+    const unsigned char* y_field =  (unsigned char*) "y";
+    
+    yajl_gen_map_open(gen);
+
+    stat = yajl_gen_string(gen, x_field, strlen((char*) x_field));
+    stat = yajl_gen_integer(gen, coords.x);
+    
+    stat = yajl_gen_string(gen, y_field, strlen((char*) y_field));
+    stat = yajl_gen_integer(gen, coords.y);
+    
+    yajl_gen_map_close(gen);
+
     return gen;
 }
 

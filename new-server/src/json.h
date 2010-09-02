@@ -14,6 +14,7 @@
 
 char* get_json_str(yajl_gen gen);
 yajl_gen player_data_to_json(struct player_data *data);
+yajl_gen coordinates_to_json(struct coordinates_t coords);
 
 #endif
 
