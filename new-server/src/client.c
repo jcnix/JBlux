@@ -40,7 +40,7 @@ void* client_thread(void* vsock)
 void send_player_data(int sock, char* char_name)
 {
     struct player_data *data = db_get_player(char_name);
-    char* data_json = get_json_str(player_data_to_json(data));
+    char* data_json = player_data_to_json(data);
     char* data_enc = base64_encode(data_json, strlen(data_json));
 
     /* TODO: the string sent needs to be part of a larger command,
