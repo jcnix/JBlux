@@ -14,16 +14,16 @@ int db_authenticate(char* username, char* password, char* character_name)
     char* q = "SELECT id FROM jblux_user WHERE username=$1 and password=$2;";
     int nParams = 2;
     const char* params_1[2] = { username, password };
-    char* cid = NULL;
     res = db_exec(conn, q, nParams, params_1);
 
     int id;
-    if(PQresultStatus(res) != PGRES_TUPLES_OK)
+    if(PQntuples(res) < 1)
     {
         auth = 0;
     }
     else
     {
+        char* cid = NULL;
         id = atoi(PQgetvalue(res, 0, 0));
         PQclear(res);
         
@@ -43,9 +43,10 @@ int db_authenticate(char* username, char* password, char* character_name)
             auth = 0;
         else
             auth = 1;
+
+        free(cid);
     }
 
-    free(cid);
     PQclear(res);
     db_disconnect(conn);
     return auth;

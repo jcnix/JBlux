@@ -17,6 +17,7 @@ char* player_data_to_json(struct player_data *data);
 char* coordinates_to_json(struct coordinates_t coords);
 char* race_to_json(struct race_t race);
 char* class_to_json(struct class_t c);
+char* inventory_to_json(struct inventory_t inv);
 
 #endif
 
