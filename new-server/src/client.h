@@ -3,8 +3,8 @@
  * Author: Casey Jones
  */
 
-#ifndef _COMMAND_PARSER_H
-#define _COMMAND_PARSER_H
+#ifndef _CLIENT_H
+#define _CLIENT_H
 
 #include <stdio.h>
 #include <stdlib.h>

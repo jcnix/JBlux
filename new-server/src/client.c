@@ -53,6 +53,7 @@ void send_player_data(int sock, char* char_name)
 
 void parse_command(int sock, struct client_t *client, char* command)
 {
+    printf("%s\n", command);
     command = base64_decode(command, strlen(command));
 
     char* commands = strtok(command, " ");
@@ -61,6 +62,7 @@ void parse_command(int sock, struct client_t *client, char* command)
         char* name = strtok(NULL, " ");
         char* pass = strtok(NULL, " ");
         char* char_name = strtok(NULL, " ");
+        printf("%s %s %s\n", name, pass, char_name);
         if(db_authenticate(name, pass, char_name))
         {
             client->authenticated = 1;

@@ -10,13 +10,24 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <netinet/in.h>
+#include <signal.h>
 #include "client.h"
 #include "types.h"
 
 #define MAXPENDING 20 
 
+void signal_handler(int sig)
+{
+    signal(sig, SIG_DFL);
+    raise(sig);
+}
+
 int main(int argc, char** argv)
 {
+    signal(SIGTERM, signal_handler);
+    signal(SIGINT, signal_handler);
+    signal(SIGQUIT, signal_handler);
+
     int serversock;
     int clientsock;
 
