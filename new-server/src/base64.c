@@ -42,6 +42,7 @@ char* base64_decode(char *input, int length)
     b64 = BIO_push(b64, bio);
     BIO_read(bio, buffer, length);
     BIO_free_all(bio);
+    BIO_free_all(b64);
 
     return buffer;
 }
