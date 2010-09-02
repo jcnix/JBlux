@@ -35,13 +35,13 @@ int main(int argc, char** argv)
 
     if(bind(serversock, (struct sockaddr*) &server, sizeof(server)) < 0)
     {
-        printf("Failed to bind the server socket\n");
+        fprintf(stderr, "Failed to bind the server socket\n");
         exit(1);
     }
 
     if(listen(serversock, MAXPENDING) < 0)
     {
-        printf("Failed to listen on server socket\n");
+        fprintf(stderr, "Failed to listen on server socket\n");
         exit(1);
     }
     printf("JBlux server 1.0\n");
