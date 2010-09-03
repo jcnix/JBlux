@@ -66,14 +66,13 @@ struct player_data* db_get_player(char* character_name)
     int column = PQfnumber(res, "user_id");
     data->user_id = atoi(PQgetvalue(res, 0, column));
     
-    column = PQfnumber(res, "character_id");
+    column = PQfnumber(res, "id");
     data->character_id = atoi(PQgetvalue(res, 0, column));
     
-    column = PQfnumber(res, "character_name");
+    column = PQfnumber(res, "name");
     data->character_name = PQgetvalue(res, 0, column);
     
     column = PQfnumber(res, "level");
-    data->level = atoi(PQgetvalue(res, 0, column));
     
     column = PQfnumber(res, "strength");
     data->strength = atoi(PQgetvalue(res, 0, column));
