@@ -21,8 +21,8 @@
 package org.jblux.client.network;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ import org.jblux.util.Coordinates;
  */
 public class ServerCommunicator {
     private Socket socket;
-    private ObjectOutputStream netOut;
+    private OutputStream netOut;
     private ServerListener sl;
     public Player player;
 
@@ -54,7 +54,7 @@ public class ServerCommunicator {
         try {
             socket = new Socket(ServerInfo.SERVER, ServerInfo.PORT);
             if(socket.isConnected()) {
-                netOut = new ObjectOutputStream(socket.getOutputStream());
+                netOut = socket.getOutputStream();
                 sl = new ServerListener(socket);
                 sl.start();
             }
@@ -123,7 +123,7 @@ public class ServerCommunicator {
     public void writeString(String s) {
         try {
             String command = Base64.encodeObject(s);
-            netOut.writeObject(command);
+            netOut.write(command.getBytes());
         } catch (IOException ex) {
         }
     }
@@ -134,7 +134,7 @@ public class ServerCommunicator {
  */
 class ServerListener extends Thread {
     private Socket socket;
-    private ObjectInputStream netIn;
+    private InputStream netIn;
     private Players players;
     private ChatBoxObserver cbObserver;
     public Coordinates coords;
@@ -153,13 +153,15 @@ class ServerListener extends Thread {
     @Override
     public void run() {
         try {
-            netIn = new ObjectInputStream(socket.getInputStream());
+            netIn = socket.getInputStream();
             
             String command = "";
-            while((command = (String) netIn.readObject()) != null) {
+            byte buf[] = new byte[1024];
+            while(netIn.read(buf) > 0) {
+                command = new String(buf);
                 doCommand(command);
             }
-        } catch(ClassNotFoundException ex) {
+        //} catch(ClassNotFoundException ex) {
         } catch(IOException ex) {
             ex.printStackTrace();
         }
