@@ -78,9 +78,9 @@ char* get_map_name_for_id(int id)
     const char* params[1] = { cid };
     res = db_exec(conn, q, nParams, params);
     name = PQgetvalue(res, 0, 0);
+    printf("map_name: %s\n", name);
 
     free(cid);
-    PQclear(res);
     db_disconnect(conn);
     return name;
 }
