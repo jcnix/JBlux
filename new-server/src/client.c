@@ -41,6 +41,7 @@ void send_player_data(int sock, char* char_name)
 {
     struct player_data *data = db_get_player(char_name);
     char* data_json = player_data_to_json(data);
+    printf("%s\n", data_json);
     char* data_enc = base64_encode(data_json, strlen(data_json));
 
     char* c1 = "player self";

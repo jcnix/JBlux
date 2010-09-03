@@ -89,11 +89,10 @@ char* player_data_to_json(struct player_data *data)
     const char* coords_json = coordinates_to_json(data->coords);
     stat = yajl_gen_string(gen, coords_field, strlen((char*) coords_field));
     stat = yajl_gen_string(gen, (unsigned char*) coords_json, strlen(coords_json));
-
+    
     /* Close JSON structure */
     yajl_gen_map_close(gen);
     json = get_json_str(gen);
-    yajl_gen_free(gen);
     return json;
 }
 
@@ -119,7 +118,6 @@ char* coordinates_to_json(struct coordinates_t coords)
     
     yajl_gen_map_close(gen);
     json = get_json_str(gen);
-    yajl_gen_free(gen);
     return json;
 }
 
@@ -155,7 +153,6 @@ char* race_to_json(struct race_t race)
    
     yajl_gen_map_close(gen);
     json = get_json_str(gen);
-    yajl_gen_free(gen);
     return json;
 }
 
@@ -182,7 +179,6 @@ char* class_to_json(struct class_t c)
     
     yajl_gen_map_close(gen);
     json = get_json_str(gen);
-    yajl_gen_free(gen);
     return json;
 }
 
