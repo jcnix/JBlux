@@ -34,16 +34,16 @@ char* base64_decode(char *input, int length)
     BIO *bio;
     BIO *b64;
 
-    char* buffer = malloc(length*2);
+    char* buffer = malloc(length);
     memset(buffer, 0, length);
 
     b64 = BIO_new(BIO_f_base64());
     BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
     bio = BIO_new_mem_buf(input, length);
     bio = BIO_push(b64, bio);
-    BIO_read(bio, buffer, length*2);
+    BIO_read(bio, buffer, length);
     BIO_free_all(bio);
-    //BIO_free_all(b64);
+    BIO_free_all(b64);
 
     return buffer;
 }

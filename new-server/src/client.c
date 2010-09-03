@@ -53,9 +53,7 @@ void send_player_data(int sock, char* char_name)
 
 void parse_command(int sock, struct client_t *client, char* command)
 {
-    printf("%s\n", command);
     char* c = base64_decode(command, strlen(command));
-    printf("%s\n", c);
 
     char* commands = strtok(c, " ");
     if(strncmp(commands, "auth", 4))
