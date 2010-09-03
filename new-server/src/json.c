@@ -55,13 +55,11 @@ char* player_data_to_json(struct player_data *data)
     stat = yajl_gen_string(gen, level_field, strlen((char*) level_field));
     stat = yajl_gen_integer(gen, data->level);
 
-    const char* race_json = race_to_json(data->race);
     stat = yajl_gen_string(gen, race_field, strlen((char*) race_field));
-    stat = yajl_gen_string(gen, (unsigned char*) race_json, strlen(race_json));
+    race_to_json(gen, data->race);
     
-    const char* class_json = class_to_json(data->player_class);
     stat = yajl_gen_string(gen, class_field, strlen((char*) class_field));
-    stat = yajl_gen_string(gen, (unsigned char*) class_json, strlen(class_json));
+    class_to_json(gen, data->player_class);
     
     stat = yajl_gen_string(gen, strength_field, strlen((char*) strength_field));
     stat = yajl_gen_integer(gen, data->strength);
@@ -82,13 +80,13 @@ char* player_data_to_json(struct player_data *data)
     stat = yajl_gen_string(gen, map_field, strlen((char*) map_field));
     stat = yajl_gen_string(gen, map_name, strlen((char*) map_name));
   
-    const char* inv_json = inventory_to_json(data->inventory);
+    inventory_to_json(gen, data->inventory);
     stat = yajl_gen_string(gen, inventory_field, strlen((char*) inventory_field));
-    stat = yajl_gen_string(gen, (unsigned char*) inv_json, strlen(inv_json));
-    
-    const char* coords_json = coordinates_to_json(data->coords);
+    /* TODO: implement inventory_to_json */
+    stat = yajl_gen_string(gen, "test", strlen("test"));
+
     stat = yajl_gen_string(gen, coords_field, strlen((char*) coords_field));
-    stat = yajl_gen_string(gen, (unsigned char*) coords_json, strlen(coords_json));
+    coordinates_to_json(gen, data->coords);
     
     /* Close JSON structure */
     yajl_gen_map_close(gen);
@@ -96,15 +94,10 @@ char* player_data_to_json(struct player_data *data)
     return json;
 }
 
-char* coordinates_to_json(struct coordinates_t coords)
+void coordinates_to_json(yajl_gen gen, struct coordinates_t coords)
 {
-    char* json;
-    yajl_gen_config conf = { 0 };
-    yajl_gen gen;
     yajl_gen_status stat;
-    gen = yajl_gen_alloc(&conf, NULL);
 
-    /* Field names */
     const unsigned char* x_field =  (unsigned char*) "x";
     const unsigned char* y_field =  (unsigned char*) "y";
     
@@ -117,17 +110,11 @@ char* coordinates_to_json(struct coordinates_t coords)
     stat = yajl_gen_integer(gen, coords.y);
     
     yajl_gen_map_close(gen);
-    json = get_json_str(gen);
-    return json;
 }
 
-char* race_to_json(struct race_t race)
+void race_to_json(yajl_gen gen, struct race_t race)
 {
-    char* json;
-    yajl_gen_config conf = { 0 };
-    yajl_gen gen;
     yajl_gen_status stat;
-    gen = yajl_gen_alloc(&conf, NULL);
 
     /* Field names */
     const unsigned char* id_field =  (unsigned char*) "id";
@@ -152,19 +139,12 @@ char* race_to_json(struct race_t race)
     stat = yajl_gen_integer(gen, race.sprite_height);
    
     yajl_gen_map_close(gen);
-    json = get_json_str(gen);
-    return json;
 }
 
-char* class_to_json(struct class_t c)
+void class_to_json(yajl_gen gen, struct class_t c)
 {
-    char* json;
-    yajl_gen_config conf = { 0 };
-    yajl_gen gen;
     yajl_gen_status stat;
-    gen = yajl_gen_alloc(&conf, NULL);
 
-    /* Field names */
     const unsigned char* id_field =  (unsigned char*) "id";
     const unsigned char* name_field =  (unsigned char*) "name";
     
@@ -178,12 +158,9 @@ char* class_to_json(struct class_t c)
     stat = yajl_gen_string(gen, name, strlen(c.name));
     
     yajl_gen_map_close(gen);
-    json = get_json_str(gen);
-    return json;
 }
 
-char* inventory_to_json(struct inventory_t inv)
+void inventory_to_json(yajl_gen gen, struct inventory_t inv)
 {
-    return "";
 }
 

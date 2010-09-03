@@ -14,10 +14,10 @@
 
 char* get_json_str(yajl_gen gen);
 char* player_data_to_json(struct player_data *data);
-char* coordinates_to_json(struct coordinates_t coords);
-char* race_to_json(struct race_t race);
-char* class_to_json(struct class_t c);
-char* inventory_to_json(struct inventory_t inv);
+void coordinates_to_json(yajl_gen gen, struct coordinates_t coords);
+void race_to_json(yajl_gen gen, struct race_t race);
+void class_to_json(yajl_gen gen, struct class_t c);
+void inventory_to_json(yajl_gen gen, struct inventory_t inv);
 
 #endif
 
