@@ -73,6 +73,7 @@ struct player_data* db_get_player(char* character_name)
     data->character_name = PQgetvalue(res, 0, column);
     
     column = PQfnumber(res, "level");
+    data->level = atoi(PQgetvalue(res, 0, column));
     
     column = PQfnumber(res, "strength");
     data->strength = atoi(PQgetvalue(res, 0, column));
