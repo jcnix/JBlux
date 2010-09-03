@@ -19,7 +19,7 @@
 #include "json.h"
 #include "types.h"
 
-#define BUFFSIZE 2048
+#define BUFFSIZE 1024
 
 struct client_t
 {

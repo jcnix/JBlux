@@ -28,8 +28,8 @@ int main(int argc, char** argv)
     signal(SIGINT, signal_handler);
     signal(SIGQUIT, signal_handler);
 
-    int serversock;
-    int clientsock;
+    int serversock = 0;
+    int clientsock = 0;
 
     struct sockaddr_in server;
     struct sockaddr_in client;

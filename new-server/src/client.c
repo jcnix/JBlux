@@ -8,9 +8,8 @@
 void handle_client(int* sock)
 {
     pthread_t thread;
-    int t;
-    t = pthread_create(&thread, NULL, client_thread, (void*) sock);
-    pthread_join(thread, NULL);
+    pthread_create(&thread, NULL, client_thread, (void*) sock);
+    pthread_detach(thread);
 }
 
 void* client_thread(void* vsock)
@@ -34,6 +33,7 @@ void* client_thread(void* vsock)
     }
 
     close(*sock);
+    pthread_exit(NULL);
     return 0;
 }
 
@@ -55,7 +55,7 @@ void parse_command(int sock, struct client_t *client, char* command)
 {
     printf("%s\n", command);
     char* c = base64_decode(command, strlen(command));
-    free(command);
+    printf("%s\n", c);
 
     char* commands = strtok(c, " ");
     if(strncmp(commands, "auth", 4))
@@ -92,5 +92,6 @@ void parse_command(int sock, struct client_t *client, char* command)
     }
 
     free(command);
+    free(c);
 }
 
