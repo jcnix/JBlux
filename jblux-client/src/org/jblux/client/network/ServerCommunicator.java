@@ -122,7 +122,7 @@ public class ServerCommunicator {
 
     public void writeString(String s) {
         try {
-            String command = Base64.encodeObject(s);
+            String command = Base64.encodeBytes(s.getBytes());
             netOut.write(command.getBytes());
         } catch (IOException ex) {
         }
