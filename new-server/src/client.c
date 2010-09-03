@@ -56,12 +56,11 @@ void parse_command(int sock, struct client_t *client, char* command)
     char* c = base64_decode(command, strlen(command));
 
     char* commands = strtok(c, " ");
-    if(strncmp(commands, "auth", 4))
+    if(strncmp(commands, "auth", 4) == 0)
     {
         char* name = strtok(NULL, " ");
         char* pass = strtok(NULL, " ");
         char* char_name = strtok(NULL, " ");
-        printf("%s %s %s\n", name, pass, char_name);
         if(db_authenticate(name, pass, char_name))
         {
             client->authenticated = 1;
@@ -75,16 +74,16 @@ void parse_command(int sock, struct client_t *client, char* command)
         return;
     }
 
-    if(strncmp(commands, "move", 4))
+    if(strncmp(commands, "move", 4) == 0)
     {
     }
-    else if(strncmp(commands, "chat", 4))
+    else if(strncmp(commands, "chat", 4) == 0)
     {
     }
-    else if(strncmp(commands, "map", 3))
+    else if(strncmp(commands, "map", 3) == 0)
     {
     }
-    else if(strncmp(commands, "disconnect", 10))
+    else if(strncmp(commands, "disconnect", 10) == 0)
     {
         client->connected = 0;
     }
