@@ -91,10 +91,11 @@ struct player_data* db_get_player(char* character_name)
     
     column = PQfnumber(res, "current_map_id");
     int map_id = atoi(PQgetvalue(res, 0, column));
-    data->map = get_map_name_for_id(map_id); 
+    data->map = get_map_name_for_id(map_id);
 
     column = PQfnumber(res, "race_id");
     data->race = get_race(atoi(PQgetvalue(res, 0, column)));
+
     column = PQfnumber(res, "class_t_id");
     data->player_class = get_class(atoi(PQgetvalue(res, 0, column)));
 

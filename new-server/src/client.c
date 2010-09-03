@@ -47,7 +47,7 @@ void send_player_data(int sock, char* char_name)
      * and base64 encoded */
     send(sock, data_enc, 0, 0);
 
-    free(data_json);
+    //free(data_json);
     free(data_enc);
 }
 
