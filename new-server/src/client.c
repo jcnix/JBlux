@@ -43,9 +43,10 @@ void send_player_data(int sock, char* char_name)
     char* data_json = player_data_to_json(data);
     char* data_enc = base64_encode(data_json, strlen(data_json));
 
-    /* TODO: the string sent needs to be part of a larger command,
-     * and base64 encoded */
-    send(sock, data_enc, 0, 0);
+    char* c1 = "player self";
+    char* command = malloc(strlen(c1) + strlen(data_enc) + 2);
+    sprintf(command, "%s %s", c1, data_enc);
+    send(sock, command, 0, 0);
 
     //free(data_json);
     free(data_enc);
