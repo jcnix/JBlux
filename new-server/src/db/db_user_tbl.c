@@ -180,7 +180,7 @@ struct race_t get_race(int id)
     race.name = PQgetvalue(res, 0, column);
     column = PQfnumber(res, "sprite_sheet");
     race.sprite_sheet = PQgetvalue(res, 0, column);
-    column = PQfnumber(res, "sprite_sheet");
+    column = PQfnumber(res, "sprite_height");
     race.sprite_height = atoi(PQgetvalue(res, 0, column));
 
     free(cid);

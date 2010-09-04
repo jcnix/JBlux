@@ -80,10 +80,10 @@ char* player_data_to_json(struct player_data *data)
     stat = yajl_gen_string(gen, map_field, strlen((char*) map_field));
     stat = yajl_gen_string(gen, map_name, strlen((char*) map_name));
   
+    /*
     inventory_to_json(gen, data->inventory);
     stat = yajl_gen_string(gen, inventory_field, strlen((char*) inventory_field));
-    /* TODO: implement inventory_to_json */
-    stat = yajl_gen_string(gen, "test", strlen("test"));
+    */
 
     stat = yajl_gen_string(gen, coords_field, strlen((char*) coords_field));
     coordinates_to_json(gen, data->coords);
@@ -162,5 +162,10 @@ void class_to_json(yajl_gen gen, struct class_t c)
 
 void inventory_to_json(yajl_gen gen, struct inventory_t inv)
 {
+    yajl_gen_status stat;
+    yajl_gen_map_open(gen);
+    stat = yajl_gen_array_open(gen);
+    stat = yajl_gen_array_close(gen);
+    yajl_gen_map_close(gen);
 }
 
