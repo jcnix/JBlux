@@ -41,13 +41,13 @@ void send_player_data(int sock, char* char_name)
 {
     struct player_data *data = db_get_player(char_name);
     char* data_json = player_data_to_json(data);
-    printf("%s\n", data_json);
     char* data_enc = base64_encode(data_json, strlen(data_json));
 
     char* c1 = "player self";
     char* command = malloc(strlen(c1) + strlen(data_enc) + 2);
     sprintf(command, "%s %s", c1, data_enc);
-    send(sock, command, 0, 0);
+    char* c = base64_encode(command, strlen(command));
+    send(sock, c, strlen(c), 0);
 
     //free(data_json);
     free(data_enc);
