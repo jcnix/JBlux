@@ -90,7 +90,7 @@ void parse_command(int sock, struct client_t *client, char* command)
         client->connected = 0;
     }
 
-    free(command);
+    //free(command);
     free(c);
 }
 
