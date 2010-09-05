@@ -22,6 +22,7 @@ package org.jblux.client.network;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -134,7 +135,7 @@ public class ServerCommunicator {
  */
 class ServerListener extends Thread {
     private Socket socket;
-    private InputStream netIn;
+    private InputStreamReader netIn;
     private Players players;
     private ChatBoxObserver cbObserver;
     public Coordinates coords;
@@ -153,15 +154,17 @@ class ServerListener extends Thread {
     @Override
     public void run() {
         try {
-            netIn = socket.getInputStream();
+            netIn = new InputStreamReader(socket.getInputStream(), "UTF-8");
             
             String command = "";
-            byte buf[] = new byte[1024];
-            while(netIn.read(buf) > 0) {
-                command = new String(buf);
+            char buf[] = new char[1024];
+            int n;
+            while((n = netIn.read(buf)) > 0) {
+                StringBuilder s = new StringBuilder();
+                s.append(buf, 0, n);
+                command = s.toString();
                 doCommand(command);
             }
-        //} catch(ClassNotFoundException ex) {
         } catch(IOException ex) {
             ex.printStackTrace();
         }
