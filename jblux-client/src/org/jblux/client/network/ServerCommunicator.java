@@ -189,15 +189,14 @@ class ServerListener extends Thread {
         String command = "";
         String[] c0 = null;
         try {
-            String[] c_enc = c.split("\\s");
-            command = c_enc[0];
-            command = (String) Base64.decodeToObject(command);
+            command = new String(Base64.decode(c));
             System.out.println(command);
             c0 = command.split("\\s");
         } catch (IOException ex) {
-        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return;
         }
-
+        
         if(command.startsWith(Commands.MOVE)) {
             String name = c0[1];
             int x = Integer.parseInt(c0[2]);
