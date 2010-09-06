@@ -20,12 +20,15 @@
 
 package org.jblux.server;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import org.jblux.common.ServerInfo;
+import org.jblux.common.client.PlayerData;
 import org.jblux.common.error.FatalError;
+import org.jblux.sql.UserTable;
 
 public class Server {
     private ServerSocket serv;
@@ -46,6 +49,11 @@ public class Server {
 
         m_gameworld = new GameWorld();
         m_gameworld.start();
+
+        UserTable ut = new UserTable();
+        PlayerData data = ut.getPlayer("pdude");
+        Gson gson = new Gson();
+        System.out.printf("%s\n", gson.toJson(data));
 
         while(true) {
             try {

@@ -100,7 +100,10 @@ struct player_data* db_get_player(char* character_name)
     column = PQfnumber(res, "class_t_id");
     data->player_class = get_class(atoi(PQgetvalue(res, 0, column)));
 
-    /* TODO: get coords */
+    column = PQfnumber(res, "x_coord");
+    data->coords.x = atoi(PQgetvalue(res, 0, column));
+    column = PQfnumber(res, "y_coord");
+    data->coords.y = atoi(PQgetvalue(res, 0, column));
     /* TODO: get inventory */
     data->inventory.id = 0;
 
