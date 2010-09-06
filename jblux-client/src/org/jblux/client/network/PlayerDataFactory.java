@@ -34,8 +34,7 @@ public class PlayerDataFactory {
         Gson gson = new Gson();
 
         try {
-            byte[] bytes = Base64.decode(p);
-            String s = new String(bytes);
+            String s = new String(Base64.decode(p));
             data = gson.fromJson(s, PlayerData.class);
         } catch(IOException ex) {
         }

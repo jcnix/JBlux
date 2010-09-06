@@ -185,12 +185,10 @@ class ServerListener extends Thread {
     }
 
     public synchronized void doCommand(String c) {
-        System.out.println(c);
         String command = "";
         String[] c0 = null;
         try {
             command = new String(Base64.decode(c));
-            System.out.println(command);
             c0 = command.split("\\s");
         } catch (IOException ex) {
             ex.printStackTrace();

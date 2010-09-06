@@ -51,6 +51,7 @@ void send_player_data(int sock, char* char_name)
 
     //free(data_json);
     free(data_enc);
+    free(command);
 }
 
 void parse_command(int sock, struct client_t *client, char* command)
