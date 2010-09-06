@@ -58,51 +58,53 @@ struct player_data* db_get_player(char* character_name)
     PGconn *conn = db_connect();
     PGresult *res;
 
-    char* q = "SELECT * FROM jblux_character WHERE name=$1;";
+    char* q = "SELECT user_id, id, name, level, strength, agility, stamina,"
+        "intelligence, spirit, current_map_id, race_id, class_t_id, x_coord,"
+        "y_coord, inventory_id FROM jblux_character WHERE name=$1;";
     int nParams = 1;
     const char* params[1] = { character_name };
     res = db_exec(conn, q, nParams, params);
     
-    int column = PQfnumber(res, "user_id");
+    int column = 0;
     data->user_id = atoi(PQgetvalue(res, 0, column));
     
-    column = PQfnumber(res, "id");
+    column++;
     data->character_id = atoi(PQgetvalue(res, 0, column));
     
-    column = PQfnumber(res, "name");
+    column++;
     data->character_name = PQgetvalue(res, 0, column);
-    
-    column = PQfnumber(res, "level");
+   
+    column++;
     data->level = atoi(PQgetvalue(res, 0, column));
-    
-    column = PQfnumber(res, "strength");
+   
+    column++;
     data->strength = atoi(PQgetvalue(res, 0, column));
-    
-    column = PQfnumber(res, "agility");
+   
+    column++;
     data->agility = atoi(PQgetvalue(res, 0, column));
-    
-    column = PQfnumber(res, "stamina");
+   
+    column++;
     data->stamina = atoi(PQgetvalue(res, 0, column));
-    
-    column = PQfnumber(res, "intelligence");
+   
+    column++;
     data->intelligence = atoi(PQgetvalue(res, 0, column));
-    
-    column = PQfnumber(res, "spirit");
+   
+    column++;
     data->spirit = atoi(PQgetvalue(res, 0, column));
-    
-    column = PQfnumber(res, "current_map_id");
+   
+    column++;
     int map_id = atoi(PQgetvalue(res, 0, column));
     data->map = get_map_name_for_id(map_id);
 
-    column = PQfnumber(res, "race_id");
+    column++;
     data->race = get_race(atoi(PQgetvalue(res, 0, column)));
 
-    column = PQfnumber(res, "class_t_id");
+    column++;
     data->player_class = get_class(atoi(PQgetvalue(res, 0, column)));
 
-    column = PQfnumber(res, "x_coord");
+    column++;
     data->coords.x = atoi(PQgetvalue(res, 0, column));
-    column = PQfnumber(res, "y_coord");
+    column++;
     data->coords.y = atoi(PQgetvalue(res, 0, column));
     /* TODO: get inventory */
     data->inventory.id = 0;
