@@ -23,7 +23,7 @@
 
 struct client_t
 {
-    int sock;
+    int socket;
     int connected;
     int authenticated;
     struct player_data data;
@@ -40,8 +40,8 @@ struct client_list *clients;
 
 void handle_client(int* sock);
 void* client_thread(void* vsock);
-void send_player_data(int sock, char* char_name);
-void parse_command(int sock, struct client_t *client, char* command);
+void send_player_data(struct client_t *client, char* char_name);
+void parse_command(struct client_t *client, char* command);
 
 #endif
 

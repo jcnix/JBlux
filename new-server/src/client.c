@@ -18,18 +18,19 @@ void* client_thread(void* vsock)
     char buffer[BUFFSIZE];
     int received = -1;
 
-    struct client_t client;
-    client.connected = 1;
+    struct client_t *client = malloc(sizeof(struct client_t));
+    client->connected = 1;
+    client->socket = *sock;
 
-    while(client.connected)
+    while(client->connected)
     {
         if((received = recv(*sock, buffer, BUFFSIZE, 0)) < 0)
         {
-            client.connected = 0;
+            client->connected = 0;
             break;
         }
 
-        parse_command(*sock, &client, buffer);
+        parse_command(client, buffer);
     }
 
     close(*sock);
@@ -37,24 +38,23 @@ void* client_thread(void* vsock)
     return 0;
 }
 
-void send_player_data(int sock, char* char_name)
+void send_player_data(struct client_t *client, char* char_name)
 {
     struct player_data *data = db_get_player(char_name);
     char* data_json = player_data_to_json(data);
     char* data_enc = base64_encode(data_json, strlen(data_json));
+    client->encoded_player_data = data_enc;
 
     char* c1 = "player self";
     char* command = malloc(strlen(c1) + strlen(data_enc) + 2);
     sprintf(command, "%s %s", c1, data_enc);
     char* c = base64_encode(command, strlen(command));
-    send(sock, c, strlen(c), 0);
+    send(client->socket, c, strlen(c), 0);
 
-    //free(data_json);
-    free(data_enc);
     free(command);
 }
 
-void parse_command(int sock, struct client_t *client, char* command)
+void parse_command(struct client_t *client, char* command)
 {
     char* c = base64_decode(command, strlen(command));
 
@@ -67,7 +67,7 @@ void parse_command(int sock, struct client_t *client, char* command)
         if(db_authenticate(name, pass, char_name))
         {
             client->authenticated = 1;
-            send_player_data(sock, char_name);
+            send_player_data(client, char_name);
         }
     }
 
