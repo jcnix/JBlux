@@ -52,6 +52,7 @@ void send_player_data(struct client_t *client, char* char_name)
     send(client->socket, c, strlen(c), 0);
 
     free(command);
+    free(c);
 }
 
 void parse_command(struct client_t *client, char* command)
