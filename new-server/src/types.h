@@ -64,6 +64,7 @@ struct player_data
     int stamina;
     int intelligence;
     int spirit;
+    int map_id;
     char* map;
     struct inventory_t inventory;
     struct coordinates_t coords;
