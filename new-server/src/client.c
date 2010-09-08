@@ -66,6 +66,7 @@ void add_player_to_map(struct client_t *client, char* map,
 {
     int map_id = get_map_id_for_name(map);
     db_set_map_for_player(client->data->character_id, map_id, coords);
+    client->data->map_id = map_id;
     client->data->map = map;
     client->data->coords = coords;
 
@@ -92,6 +93,7 @@ void add_player_to_map(struct client_t *client, char* map,
     }
 
     free(command);
+    free(command_enc);
 }
 
 void parse_command(struct client_t *client, char* command)

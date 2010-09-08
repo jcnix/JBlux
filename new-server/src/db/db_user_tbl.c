@@ -94,6 +94,7 @@ struct player_data* db_get_player(char* character_name)
    
     column++;
     int map_id = atoi(PQgetvalue(res, 0, column));
+    data->map_id = map_id;
     data->map = get_map_name_for_id(map_id);
 
     column++;
