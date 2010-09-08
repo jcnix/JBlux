@@ -64,6 +64,7 @@ void send_player_data_to_self(struct client_t *client, char* char_name)
 void add_player_to_map(struct client_t *client, char* map,
         struct coordinates_t coords)
 {
+    printf("coords: %d %d\n", client->data->coords.x, client->data->coords.y);
     int map_id = get_map_id_for_name(map);
     db_set_map_for_player(client->data->character_id, map_id, coords);
     client->data->map_id = map_id;

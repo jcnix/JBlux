@@ -168,7 +168,8 @@ struct race_t get_race(int id)
     PGconn *conn = db_connect();
     PGresult *res;
 
-    char* q = "SELECT * FROM jblux_race WHERE id=$1;";
+    char* q = "SELECT name, sprite_sheet, sprite_height "
+        "FROM jblux_race WHERE id=$1;";
     int nParams = 1;
     char *cid;
     if(asprintf(&cid, "%d", id) < 0)
@@ -182,11 +183,13 @@ struct race_t get_race(int id)
     const char* params[1] = { cid };
     res = db_exec(conn, q, nParams, params);
 
-    int column = PQfnumber(res, "name");
+    int column = 0;
     race.name = PQgetvalue(res, 0, column);
-    column = PQfnumber(res, "sprite_sheet");
+
+    column++;
     race.sprite_sheet = PQgetvalue(res, 0, column);
-    column = PQfnumber(res, "sprite_height");
+
+    column++;
     race.sprite_height = atoi(PQgetvalue(res, 0, column));
 
     free(cid);
@@ -202,7 +205,7 @@ struct class_t get_class(int id)
     PGconn *conn = db_connect();
     PGresult *res;
 
-    char* q = "SELECT * FROM jblux_class WHERE id=$1;";
+    char* q = "SELECT name FROM jblux_class WHERE id=$1;";
     int nParams = 1;
     char *cid;
     if(asprintf(&cid, "%d", id) < 0)
@@ -214,7 +217,7 @@ struct class_t get_class(int id)
     const char* params[1] = { cid };
     res = db_exec(conn, q, nParams, params);
 
-    int column = PQfnumber(res, "name");
+    int column = 0;
     class.name = PQgetvalue(res, 0, column);
 
     free(cid);
