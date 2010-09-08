@@ -47,6 +47,7 @@ void* client_thread(void* vsock)
 void send_player_data_to_self(struct client_t *client, char* char_name)
 {
     struct player_data *data = db_get_player(char_name);
+    client->data = data;
     char* data_json = player_data_to_json(data);
     char* data_enc = base64_encode(data_json, strlen(data_json));
     client->encoded_player_data = data_enc;
