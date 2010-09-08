@@ -120,7 +120,8 @@ void db_set_map_for_player(int char_id, int map_id, struct coordinates_t coords)
     PGconn *conn = db_connect();
     PGresult *res;
 
-    char* q = "UPDATE jblux_character SET current_map_id=$1, x_coord=$2, y_coord=$3, WHERE id=$4;";
+    char* q = "UPDATE jblux_character SET current_map_id=$1, "
+        "x_coord=$2, y_coord=$3 WHERE id=$4;";
     int nParams = 4;
     char *cmap_id, *cx, *cy, *cid;
     if( (asprintf(&cmap_id, "%d", map_id) < 0) ||
