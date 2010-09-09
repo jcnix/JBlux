@@ -101,7 +101,7 @@ void add_player_to_map(struct client_t *client, char* map,
         if(to_client->data->map_id == client->data->map_id)
         {
             /* Tell other clients about the new player */
-            send(to_client->socket, command_enc, strlen(command), 0);
+            send(to_client->socket, command_enc, strlen(command_enc), 0);
             /* TODO: Tell new player about other clients */
         }
     }
