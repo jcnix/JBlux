@@ -71,7 +71,11 @@ void move_client(struct client_t *client)
         return;
     }
 
+    char* command_enc = base64_encode(command, strlen(command));
     tell_all_players_on_map(client->data->map_id, command);
+
+    free(command);
+    free(command_enc);
 }
 
 void add_player_to_map(struct client_t *client, char* map,
