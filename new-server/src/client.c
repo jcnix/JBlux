@@ -62,6 +62,18 @@ void send_player_data_to_self(struct client_t *client, char* char_name)
     free(c);
 }
 
+void move_client(struct client_t *client)
+{
+    char* command;
+    if(!asprintf(&command, "move %s %d %d", client->data->character_name,
+                client->data->coords.x, client->data->coords.y))
+    {
+        return;
+    }
+
+    tell_all_players_on_map(client->data->map_id, command);
+}
+
 void add_player_to_map(struct client_t *client, char* map,
         struct coordinates_t coords)
 {
@@ -98,6 +110,19 @@ void add_player_to_map(struct client_t *client, char* map,
     free(command_enc);
 }
 
+void tell_all_players_on_map(int map_id, char* command)
+{
+    int i;
+    for(i = 0; i < num_clients; i++)
+    {
+        struct client_t *to_client = clients[i];
+        if(to_client->data->map_id == map_id)
+        {
+            send(to_client->socket, command, strlen(command), 0);
+        }
+    }
+}
+
 void parse_command(struct client_t *client, char* command)
 {
     char* c = base64_decode(command, strlen(command));
@@ -124,6 +149,9 @@ void parse_command(struct client_t *client, char* command)
 
     if(strncmp(commands, "move", 4) == 0)
     {
+        client->data->coords.x = atoi(strtok(NULL, ""));
+        client->data->coords.y = atoi(strtok(NULL, ""));
+        move_client(client);
     }
     else if(strncmp(commands, "chat", 4) == 0)
     {
