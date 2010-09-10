@@ -81,7 +81,6 @@ void move_client(struct client_t *client)
 void add_player_to_map(struct client_t *client, char* map,
         struct coordinates_t coords)
 {
-    printf("coords: %d %d\n", client->data->coords.x, client->data->coords.y);
     int map_id = get_map_id_for_name(map);
     db_set_map_for_player(client->data->character_id, map_id, coords);
     client->data->map_id = map_id;
@@ -168,8 +167,8 @@ void parse_command(struct client_t *client, char* command)
 
     if(strncmp(commands, "move", 4) == 0)
     {
-        client->data->coords.x = atoi(strtok(NULL, ""));
-        client->data->coords.y = atoi(strtok(NULL, ""));
+        client->data->coords.x = atoi(strtok(NULL, " "));
+        client->data->coords.y = atoi(strtok(NULL, " "));
         move_client(client);
     }
     else if(strncmp(commands, "chat", 4) == 0)
@@ -195,7 +194,6 @@ void parse_command(struct client_t *client, char* command)
         client->connected = 0;
     }
 
-    //free(command);
     free(c);
 }
 
