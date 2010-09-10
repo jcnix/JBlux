@@ -39,6 +39,7 @@ void send_player_data_to_self(struct client_t *client, char* char_name);
 void move_client(struct client_t *client);
 void add_player_to_map(struct client_t *client, char* map,
         struct coordinates_t coords);
+void send_chat_message(char* from, char* message);
 void tell_all_players_on_map(int map_id, char* command);
 void parse_command(struct client_t *client, char* command);
 

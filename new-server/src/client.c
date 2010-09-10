@@ -114,6 +114,19 @@ void add_player_to_map(struct client_t *client, char* map,
     free(command_enc);
 }
 
+void send_chat_message(struct client *from, char* message)
+{
+    char* command;
+    if(!asprintf(&command, "chat %s %s", from->data->character_name, message))
+    {
+        return;
+    }
+
+    char* command_enc = base64_encode(command, strlen(command));
+    tell_all_players_on_map(from->data->map_id, command_enc);
+    free(command);
+}
+
 void tell_all_players_on_map(int map_id, char* command)
 {
     int i;
@@ -159,6 +172,18 @@ void parse_command(struct client_t *client, char* command)
     }
     else if(strncmp(commands, "chat", 4) == 0)
     {
+        int bytes = 0;
+        char* message = malloc(150);
+        char* m;
+        while((m = strtok(NULL, "")) != NULL)
+        {
+            bytes += strlen(m) + 1;
+            strcat(message, m);
+            strcat(message, " ");
+        }
+        
+        send_chat_message(message);
+        free(client, message);
     }
     else if(strncmp(commands, "map", 3) == 0)
     {
