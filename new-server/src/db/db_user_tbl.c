@@ -133,8 +133,7 @@ void db_set_map_for_player(int char_id, int map_id, struct coordinates_t coords)
         db_disconnect(conn);
         return;
     }
-
-    const char* params[4] = {cmap_id, cx, cy, cid };
+    const char* params[4] = { cmap_id, cx, cy, cid };
     res = db_exec(conn, q, nParams, params);
     
     free(cmap_id);

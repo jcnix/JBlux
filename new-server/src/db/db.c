@@ -36,12 +36,16 @@ PGresult* db_exec(PGconn* conn, char* command, int nParams,
                                     NULL,
                                     NULL,
                                     0);
-    if(PQresultStatus(res) != PGRES_TUPLES_OK)
+    if(PQresultStatus(res) == PGRES_COMMAND_OK ||
+        PQresultStatus(res) == PGRES_TUPLES_OK)
+    {
+        return res;
+    }
+    else
     {
         fprintf(stderr, "Command: %s failed.  %s\n", command,
                 PQerrorMessage(conn));
+        return res;
     }
-
-    return res;
 }
 
