@@ -90,8 +90,8 @@ void add_player_to_map(struct client_t *client, char* map,
     /* TODO: get NPCs and Items and send to player */
     
     char* command;
-    if(asprintf(&command, "map add %s %s %d %d", map,
-                client->data->character_name, coords.x, coords.y) < 0)
+    if(asprintf(&command, "map add %s %s %d %d", client->data->character_name,
+                coords.x, coords.y) < 0)
     {
         return;
     }
