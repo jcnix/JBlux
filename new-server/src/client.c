@@ -114,7 +114,7 @@ void add_player_to_map(struct client_t *client, char* map,
     free(command_enc);
 }
 
-void send_chat_message(struct client *from, char* message)
+void send_chat_message(struct client_t *from, char* message)
 {
     char* command;
     if(!asprintf(&command, "chat %s %s", from->data->character_name, message))
@@ -184,8 +184,8 @@ void parse_command(struct client_t *client, char* command)
             strcat(message, " ");
         }
         
-        send_chat_message(message);
-        free(client, message);
+        send_chat_message(client, message);
+        free(message);
     }
     else if(strncmp(commands, "map", 3) == 0)
     {
