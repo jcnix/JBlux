@@ -124,7 +124,9 @@ void send_chat_message(struct client *from, char* message)
 
     char* command_enc = base64_encode(command, strlen(command));
     tell_all_players_on_map(from->data->map_id, command_enc);
+
     free(command);
+    free(command_enc);
 }
 
 void tell_all_players_on_map(int map_id, char* command)
