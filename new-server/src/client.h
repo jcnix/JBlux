@@ -42,5 +42,8 @@ void add_player_to_map(struct client_t *client, char* map,
 void tell_all_players_on_map(int map_id, char* command);
 void parse_command(struct client_t *client, char* command);
 
+/* this just eliminates the length param and uses strlen() */
+int esend(int socket, char* message);
+
 #endif
 

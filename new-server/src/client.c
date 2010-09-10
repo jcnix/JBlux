@@ -56,7 +56,7 @@ void send_player_data_to_self(struct client_t *client, char* char_name)
     char* command = malloc(strlen(c1) + strlen(data_enc) + 2);
     sprintf(command, "%s %s", c1, data_enc);
     char* c = base64_encode(command, strlen(command));
-    send(client->socket, c, strlen(c), 0);
+    esend(client->socket, c);
 
     free(command);
     free(c);
@@ -105,7 +105,7 @@ void add_player_to_map(struct client_t *client, char* map,
         if(to_client->data->map_id == client->data->map_id)
         {
             /* Tell other clients about the new player */
-            send(to_client->socket, command_enc, strlen(command_enc), 0);
+            esend(to_client->socket, command_enc);
             /* TODO: Tell new player about other clients */
         }
     }
@@ -122,7 +122,7 @@ void tell_all_players_on_map(int map_id, char* command)
         struct client_t *to_client = clients[i];
         if(to_client->data->map_id == map_id)
         {
-            send(to_client->socket, command, strlen(command), 0);
+            esend(to_client->socket, command);
         }
     }
 }
@@ -170,5 +170,10 @@ void parse_command(struct client_t *client, char* command)
 
     //free(command);
     free(c);
+}
+
+int esend(int socket, char* message)
+{
+    return send(socket, message, strlen(message), 0);
 }
 
