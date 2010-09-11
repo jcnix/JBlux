@@ -144,7 +144,6 @@ void parse_command(struct client_t *client, char* command)
         char* name = strtok(NULL, " ");
         char* pass = strtok(NULL, " ");
         char* char_name = strtok(NULL, " ");
-        printf("%s %s %s\n", name, pass, char_name);
         if(db_authenticate(name, pass, char_name))
         {
             client->authenticated = 1;

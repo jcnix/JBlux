@@ -1,6 +1,6 @@
 CC=gcc
 LD=ld
-CFLAGS=-Wall -g -O2
+CFLAGS=-Wall -g
 
 BINDIR=bin
 ODIR=build
