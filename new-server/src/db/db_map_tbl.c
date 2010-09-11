@@ -80,6 +80,7 @@ char* get_map_name_for_id(int id)
     name = PQgetvalue(res, 0, 0);
 
     free(cid);
+    PQclear(res);
     db_disconnect(conn);
     return name;
 }

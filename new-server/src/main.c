@@ -37,6 +37,7 @@ int main(int argc, char** argv)
     if((serversock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
     {
         printf("Failed to create socket\n");
+        exit(1);
     }
 
     memset(&server, 0, sizeof(server));         /* Clear struct */

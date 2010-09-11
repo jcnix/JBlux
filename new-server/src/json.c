@@ -91,6 +91,7 @@ char* player_data_to_json(struct player_data *data)
     /* Close JSON structure */
     yajl_gen_map_close(gen);
     json = get_json_str(gen);
+    yajl_gen_free(gen);
     return json;
 }
 
