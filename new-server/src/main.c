@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     if((serversock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
     {
         printf("Failed to create socket\n");
-        exit(1);
+        return 1;
     }
 
     memset(&server, 0, sizeof(server));         /* Clear struct */
@@ -48,13 +48,13 @@ int main(int argc, char** argv)
     if(bind(serversock, (struct sockaddr*) &server, sizeof(server)) < 0)
     {
         fprintf(stderr, "Failed to bind the server socket\n");
-        exit(1);
+        return 1;
     }
 
     if(listen(serversock, MAXPENDING) < 0)
     {
         fprintf(stderr, "Failed to listen on server socket\n");
-        exit(1);
+        return 1;
     }
     printf("JBlux server 1.0\n");
 

@@ -50,7 +50,7 @@ char* player_data_to_json(struct player_data *data)
     
     const unsigned char* char_name = (unsigned char*) data->character_name;
     stat = yajl_gen_string(gen, character_name_field, strlen((char*) character_name_field));
-    stat = yajl_gen_string(gen, char_name, 5);
+    stat = yajl_gen_string(gen, char_name, strlen((char*) char_name));
     
     stat = yajl_gen_string(gen, level_field, strlen((char*) level_field));
     stat = yajl_gen_integer(gen, data->level);
