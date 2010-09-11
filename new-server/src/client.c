@@ -37,6 +37,7 @@ void* client_thread(void* vsock)
         }
 
         parse_command(client, buffer);
+        memset(buffer, 0, BUFFSIZE);
     }
 
     close(*sock);
@@ -60,8 +61,10 @@ void send_player_data_to_self(struct client_t *client, char* char_name)
     free(command);
 }
 
-void move_client(struct client_t *client)
+void move_client(struct client_t *client, struct coordinates_t coords)
 {
+    client->data->coords.x = coords.x;
+    client->data->coords.y = coords.y;
     char* command;
     if(!asprintf(&command, "move %s %d %d", client->data->character_name,
                 client->data->coords.x, client->data->coords.y))
@@ -116,7 +119,6 @@ void send_chat_message(struct client_t *from, char* message)
     }
 
     tell_all_players_on_map(from->data->map_id, command);
-
     free(command);
 }
 
@@ -159,9 +161,10 @@ void parse_command(struct client_t *client, char* command)
 
     if(strncmp(commands, "move", 4) == 0)
     {
-        client->data->coords.x = atoi(strtok(NULL, " "));
-        client->data->coords.y = atoi(strtok(NULL, " "));
-        move_client(client);
+        struct coordinates_t coords;
+        coords.x = atoi(strtok(NULL, " "));
+        coords.y = atoi(strtok(NULL, " "));
+        move_client(client, coords);
     }
     else if(strncmp(commands, "chat", 4) == 0)
     {
