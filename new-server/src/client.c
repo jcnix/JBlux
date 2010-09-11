@@ -55,11 +55,9 @@ void send_player_data_to_self(struct client_t *client, char* char_name)
     char* c1 = "player self";
     char* command = malloc(strlen(c1) + strlen(data_enc) + 2);
     sprintf(command, "%s %s", c1, data_enc);
-    char* c = base64_encode(command, strlen(command));
-    esend(client->socket, c);
+    esend(client->socket, command);
 
     free(command);
-    free(c);
 }
 
 void move_client(struct client_t *client)
@@ -71,11 +69,9 @@ void move_client(struct client_t *client)
         return;
     }
 
-    char* command_enc = base64_encode(command, strlen(command));
     tell_all_players_on_map(client->data->map_id, command);
 
     free(command);
-    free(command_enc);
 }
 
 void add_player_to_map(struct client_t *client, char* map,
@@ -95,7 +91,6 @@ void add_player_to_map(struct client_t *client, char* map,
     {
         return;
     }
-    char* command_enc = base64_encode(command, strlen(command));
 
     int i;
     for(i = 0; i < num_clients; i++)
@@ -104,13 +99,12 @@ void add_player_to_map(struct client_t *client, char* map,
         if(to_client->data->map_id == client->data->map_id)
         {
             /* Tell other clients about the new player */
-            esend(to_client->socket, command_enc);
+            esend(to_client->socket, command);
             /* TODO: Tell new player about other clients */
         }
     }
 
     free(command);
-    free(command_enc);
 }
 
 void send_chat_message(struct client_t *from, char* message)
@@ -121,11 +115,9 @@ void send_chat_message(struct client_t *from, char* message)
         return;
     }
 
-    char* command_enc = base64_encode(command, strlen(command));
-    tell_all_players_on_map(from->data->map_id, command_enc);
+    tell_all_players_on_map(from->data->map_id, command);
 
     free(command);
-    free(command_enc);
 }
 
 void tell_all_players_on_map(int map_id, char* command)
@@ -143,14 +135,14 @@ void tell_all_players_on_map(int map_id, char* command)
 
 void parse_command(struct client_t *client, char* command)
 {
-    char* c = base64_decode(command, strlen(command));
+    char* commands = strtok(command, " ");
 
-    char* commands = strtok(c, " ");
     if(strncmp(commands, "auth", 4) == 0)
     {
         char* name = strtok(NULL, " ");
         char* pass = strtok(NULL, " ");
         char* char_name = strtok(NULL, " ");
+        printf("%s %s %s\n", name, pass, char_name);
         if(db_authenticate(name, pass, char_name))
         {
             client->authenticated = 1;
@@ -193,8 +185,6 @@ void parse_command(struct client_t *client, char* command)
     {
         client->connected = 0;
     }
-
-    free(c);
 }
 
 int esend(int socket, char* message)

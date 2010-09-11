@@ -64,7 +64,7 @@ struct player_data* db_get_player(char* character_name)
     int nParams = 1;
     const char* params[1] = { character_name };
     res = db_exec(conn, q, nParams, params);
-    
+
     int column = 0;
     data->user_id = atoi(PQgetvalue(res, 0, column));
     

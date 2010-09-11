@@ -123,8 +123,7 @@ public class ServerCommunicator {
 
     public void writeString(String s) {
         try {
-            String command = Base64.encodeBytes(s.getBytes());
-            netOut.write(command.getBytes());
+            netOut.write(s.getBytes());
         } catch (IOException ex) {
         }
     }
@@ -184,16 +183,8 @@ class ServerListener extends Thread {
         }
     }
 
-    public synchronized void doCommand(String c) {
-        String command = "";
-        String[] c0 = null;
-        try {
-            command = new String(Base64.decode(c));
-            c0 = command.split("\\s");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return;
-        }
+    public synchronized void doCommand(String command) {
+        String[] c0 = command.split("\\s");
         
         if(command.startsWith(Commands.MOVE)) {
             String name = c0[1];
