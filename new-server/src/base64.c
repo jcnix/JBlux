@@ -23,6 +23,11 @@ char* base64_encode(char *input, int length)
     BIO_get_mem_ptr(b64, &bptr);
 
     char *buf = malloc(bptr->length+1);
+    if(!buf)
+    {
+        return "";
+    }
+
     memcpy(buf, bptr->data, bptr->length);
     buf[bptr->length] = 0x0;
     BIO_free_all(b64);
@@ -36,6 +41,11 @@ char* base64_decode(char *input, int length)
     BIO *b64;
 
     char* buffer = malloc(length);
+    if(!buffer)
+    {
+        return "";
+    }
+
     memset(buffer, 0, length);
 
     b64 = BIO_new(BIO_f_base64());

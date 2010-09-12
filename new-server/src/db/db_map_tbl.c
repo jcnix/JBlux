@@ -7,16 +7,21 @@
 
 struct map_t* db_get_all_maps()
 {
-    struct map_t *maps;
+    struct map_t *maps = NULL;
 
     PGconn *conn = db_connect();
-    PGresult *res;
+    PGresult *res = NULL;
 
     char* q = "SELECT * FROM jblux_map;";
     int nParams = 0;
     res = db_exec(conn, q, nParams, NULL);
     int rows = PQntuples(res);
+    PQclear(res);
     maps = malloc(sizeof(struct map_t) * rows);
+    if(!maps)
+    {
+        return NULL;
+    }
 
     int i;
     for(i = 0; i < rows; i++)
@@ -61,13 +66,13 @@ int db_get_adjacent_map(enum Relation r, int map_id)
 
 char* get_map_name_for_id(int id)
 {
-    char* name;
+    char* name = NULL;
     PGconn *conn = db_connect();
-    PGresult *res;
+    PGresult *res = NULL;
 
     char* q = "SELECT name FROM jblux_map WHERE id=$1;";
     int nParams = 1;
-    char *cid;
+    char *cid = NULL;
     
     if(asprintf(&cid, "%d", id) < 0)
     {
@@ -89,7 +94,7 @@ int get_map_id_for_name(char* name)
 {
     int id;
     PGconn *conn = db_connect();
-    PGresult *res;
+    PGresult *res = NULL;
 
     char* q = "SELECT id FROM jblux_map WHERE name=$1;";
     int nParams = 1;
@@ -114,7 +119,7 @@ struct coordinates_t db_get_map_entrance(int map_id, enum Relation r)
 {
     struct coordinates_t coords;
     PGconn *conn = db_connect();
-    PGresult *res;
+    PGresult *res = NULL;
 
     char* q = NULL;
     if(r == LEFT)

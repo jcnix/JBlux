@@ -22,6 +22,14 @@ void* client_thread(void* vsock)
     int received = -1;
 
     struct client_t *client = malloc(sizeof(struct client_t));
+    if(!client)
+    {
+        /* We're out of memory, you can't play */
+        close(*sock);
+        pthread_exit(NULL);
+        return 0;
+    }
+
     client->connected = 1;
     client->socket = *sock;
 
@@ -169,6 +177,13 @@ void parse_command(struct client_t *client, char* command)
     {
         int bytes = 0;
         char* message = malloc(150);
+        if(!message)
+        {
+            /* chat messages aren't important enough
+             * to bring the server down */
+            return;
+        }
+
         char* m;
         while((m = strtok(NULL, "")) != NULL)
         {
