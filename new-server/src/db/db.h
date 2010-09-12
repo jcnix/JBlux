@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <postgresql/libpq-fe.h>
+#include <libpq-fe.h>
 
 PGconn* db_connect();
 void db_disconnect(PGconn* conn);

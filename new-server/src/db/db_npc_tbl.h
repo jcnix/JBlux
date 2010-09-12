@@ -9,7 +9,7 @@
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
-#include <postgresql/libpq-fe.h>
+#include <libpq-fe.h>
 #include "db.h"
 #include "db_user_tbl.h"
 #include "../types.h"

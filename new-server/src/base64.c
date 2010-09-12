@@ -5,11 +5,12 @@
 
 #include "base64.h"
 
-char* base64_encode(char *input, int length)
+char* base64_encode(char *input)
 {
-    BIO *bio;
-    BIO *b64;
-    BUF_MEM *bptr;
+    BIO *bio = NULL;
+    BIO *b64 = NULL;
+    BUF_MEM *bptr = NULL;
+    int length = strlen(input)+1;
 
     b64 = BIO_new(BIO_f_base64());
     BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
@@ -30,12 +31,13 @@ char* base64_encode(char *input, int length)
     return buf;
 }
 
-char* base64_decode(char *input, int length)
+char* base64_decode(char *input)
 {
     BIO *bio;
     BIO *b64;
 
-    char* buffer = malloc(length);
+    int length = strlen(input) + 1;
+    char* buffer = malloc(length+1);
     memset(buffer, 0, length);
 
     b64 = BIO_new(BIO_f_base64());

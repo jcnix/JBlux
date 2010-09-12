@@ -50,7 +50,7 @@ void send_player_data_to_self(struct client_t *client, char* char_name)
     struct player_data *data = db_get_player(char_name);
     client->data = data;
     char* data_json = player_data_to_json(data);
-    char* data_enc = base64_encode(data_json, strlen(data_json));
+    char* data_enc = base64_encode(data_json);
     client->encoded_player_data = data_enc;
 
     char* c1 = "player self";
@@ -59,6 +59,7 @@ void send_player_data_to_self(struct client_t *client, char* char_name)
     esend(client->socket, command);
 
     free(command);
+    free(data_json);
 }
 
 void move_client(struct client_t *client, struct coordinates_t coords)
@@ -88,13 +89,13 @@ void add_player_to_map(struct client_t *client, char* map,
 
     /* TODO: get NPCs and Items and send to player */
     
-    char* command;
+    char* command = NULL;
     if(asprintf(&command, "map add %s %d %d %s", client->data->character_name,
                 coords.x, coords.y, client->encoded_player_data) < 0)
     {
         return;
     }
-
+    
     int i;
     for(i = 0; i < num_clients; i++)
     {
@@ -139,7 +140,7 @@ void parse_command(struct client_t *client, char* command)
 {
     char* commands = strtok(command, " ");
 
-    if(strncmp(commands, "auth", 4) == 0)
+    if(strncmp(command, "auth", 4) == 0)
     {
         char* name = strtok(NULL, " ");
         char* pass = strtok(NULL, " ");
@@ -158,14 +159,14 @@ void parse_command(struct client_t *client, char* command)
         return;
     }
 
-    if(strncmp(commands, "move", 4) == 0)
+    if(strncmp(command, "move", 4) == 0)
     {
         struct coordinates_t coords;
         coords.x = atoi(strtok(NULL, " "));
         coords.y = atoi(strtok(NULL, " "));
         move_client(client, coords);
     }
-    else if(strncmp(commands, "chat", 4) == 0)
+    else if(strncmp(command, "chat", 4) == 0)
     {
         int bytes = 0;
         char* message = malloc(150);
@@ -180,10 +181,10 @@ void parse_command(struct client_t *client, char* command)
         send_chat_message(client, message);
         free(message);
     }
-    else if(strncmp(commands, "map", 3) == 0)
+    else if(strncmp(command, "map", 3) == 0)
     {
     }
-    else if(strncmp(commands, "disconnect", 10) == 0)
+    else if(strncmp(command, "disconnect", 10) == 0)
     {
         client->connected = 0;
     }

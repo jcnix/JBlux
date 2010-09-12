@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <postgresql/libpq-fe.h>
+#include <libpq-fe.h>
 #include "db.h"
 #include "db_map_tbl.h"
 #include "../types.h"
