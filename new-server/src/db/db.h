@@ -11,6 +11,7 @@
 #include <libpq-fe.h>
 
 PGconn* db_connect();
+int db_is_connected(PGconn* conn);
 void db_disconnect(PGconn* conn);
 PGresult* db_exec(PGconn* conn, char* command, int nParams,
         const char* const *paramValues);

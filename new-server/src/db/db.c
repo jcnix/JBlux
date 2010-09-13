@@ -15,9 +15,22 @@ PGconn* db_connect()
         fprintf(stderr, "Connection to DB failed: %s\n",
                 PQerrorMessage(conn));
         PQfinish(conn);
+        return NULL;
     }
 
     return conn;
+}
+
+int db_is_connected(PGconn* conn)
+{
+    if(PQstatus(conn) == CONNECTION_OK)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 void db_disconnect(PGconn* conn)

@@ -12,6 +12,7 @@
 #include <netinet/in.h>
 #include <signal.h>
 #include "client.h"
+#include "db.h"
 #include "types.h"
 
 #define MAXPENDING 20 
@@ -27,6 +28,15 @@ int main(int argc, char** argv)
     signal(SIGTERM, signal_handler);
     signal(SIGINT, signal_handler);
     signal(SIGQUIT, signal_handler);
+
+    /* Do a test connection to see if the server
+     * is even up */
+    PGconn* conn = db_connect();
+    if(!db_is_connected(conn))
+    {
+        return 1;
+    }
+    db_disconnect(conn);
 
     int serversock = 0;
     int clientsock = 0;
