@@ -6,6 +6,7 @@
 *.class
 *.zip
 *.swp
+*deploy.sh
 */jbluxkey
 jbluxkey
 */lib/jblux-common.jar
@@ -19,4 +20,5 @@ jblux_django/*.pyc
 jblux_django/static/media/lib
 jblux_django/static/media/img
 jblux_django/static/media/favicon.ico
+
 

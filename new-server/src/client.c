@@ -107,12 +107,22 @@ void add_player_to_map(struct client_t *client, char* map,
     int i;
     for(i = 0; i < num_clients; i++)
     {
-        struct client_t *to_client = clients[i];
-        if(to_client->data->map_id == client->data->map_id)
+        struct client_t *to = clients[i];
+        if(to->data->map_id == client->data->map_id)
         {
             /* Tell other clients about the new player */
-            esend(to_client->socket, command);
-            /* TODO: Tell new player about other clients */
+            esend(to->socket, command);
+            
+            /* Tell new player about other clients */
+            char* other_player = NULL;
+            if(!asprintf(&other_player, "map add %s %d %d %s\n",
+                to->data->character_name, to->data->coords.x,
+                to->data->coords.y, to->encoded_player_data))
+            {
+                continue;
+            }
+            esend(client->socket, other_player);
+            free(other_player);
         }
     }
 
