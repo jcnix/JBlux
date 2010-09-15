@@ -115,7 +115,7 @@ void add_player_to_map(struct client_t *client, char* map,
             
             /* Tell new player about other clients */
             char* other_player = NULL;
-            if(!asprintf(&other_player, "map add %s %d %d %s\n",
+            if(!asprintf(&other_player, "map add %s %d %d %s",
                 to->data->character_name, to->data->coords.x,
                 to->data->coords.y, to->encoded_player_data))
             {
@@ -129,9 +129,21 @@ void add_player_to_map(struct client_t *client, char* map,
     free(command);
 }
 
+void rm_player_from_map(struct client_t *client)
+{
+    char* command = NULL;
+    if(!asprintf(&command, "map rm %s", client->data->character_name))
+    {
+        return;
+    }
+
+    tell_all_players_on_map(client, client->data->map_id, command);
+    free(command);
+}
+
 void send_chat_message(struct client_t *from, char* message)
 {
-    char* command;
+    char* command  = NULL;
     if(!asprintf(&command, "chat %s %s", from->data->character_name, message))
     {
         return;
