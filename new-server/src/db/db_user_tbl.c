@@ -23,13 +23,13 @@ int db_authenticate(char* username, char* password, char* character_name)
     }
     else
     {
-        char* cid = NULL;
-        id = atoi(PQgetvalue(res, 0, 0));
+        id = db_get_int(res, 0, 0);
         PQclear(res);
         
         q = "SELECT id FROM jblux_character WHERE name=$1 AND user_id=$2;";
         nParams = 2;
         
+        char* cid = NULL;
         if(asprintf(&cid, "%d", id) < 0)
         {
             db_disconnect(conn);
@@ -71,47 +71,47 @@ struct player_data* db_get_player(char* character_name)
     res = db_exec(conn, q, nParams, params);
 
     int column = 0;
-    data->user_id = atoi(PQgetvalue(res, 0, column));
+    data->user_id = db_get_int(res, 0, column);
     
     column++;
-    data->character_id = atoi(PQgetvalue(res, 0, column));
+    data->character_id = db_get_int(res, 0, column);
     
     column++;
-    data->character_name = PQgetvalue(res, 0, column);
+    data->character_name = db_get_str(res, 0, column);
    
     column++;
-    data->level = atoi(PQgetvalue(res, 0, column));
+    data->level = db_get_int(res, 0, column);
    
     column++;
-    data->strength = atoi(PQgetvalue(res, 0, column));
+    data->strength = db_get_int(res, 0, column);
    
     column++;
-    data->agility = atoi(PQgetvalue(res, 0, column));
+    data->agility = db_get_int(res, 0, column);
    
     column++;
-    data->stamina = atoi(PQgetvalue(res, 0, column));
+    data->stamina = db_get_int(res, 0, column);
    
     column++;
-    data->intelligence = atoi(PQgetvalue(res, 0, column));
+    data->intelligence = db_get_int(res, 0, column);
    
     column++;
-    data->spirit = atoi(PQgetvalue(res, 0, column));
+    data->spirit = db_get_int(res, 0, column);
    
     column++;
-    int map_id = atoi(PQgetvalue(res, 0, column));
+    int map_id = db_get_int(res, 0, column);
     data->map_id = map_id;
     data->map = get_map_name_for_id(map_id);
 
     column++;
-    data->race = get_race(atoi(PQgetvalue(res, 0, column)));
+    data->race = get_race(db_get_int(res, 0, column));
 
     column++;
-    data->player_class = get_class(atoi(PQgetvalue(res, 0, column)));
+    data->player_class = get_class(db_get_int(res, 0, column));
 
     column++;
-    data->coords.x = atoi(PQgetvalue(res, 0, column));
+    data->coords.x = db_get_int(res, 0, column);
     column++;
-    data->coords.y = atoi(PQgetvalue(res, 0, column));
+    data->coords.y = db_get_int(res, 0, column);
     /* TODO: get inventory */
     data->inventory.id = 0;
 
@@ -162,7 +162,7 @@ int get_map_for_player(char* character)
     int nParams = 1;
     const char* params[1] = { character };
     res = db_exec(conn, q, nParams, params);
-    map_id = atoi(PQgetvalue(res, 0, 0));
+    map_id = db_get_int(res, 0, 0);
 
     PQclear(res);
     db_disconnect(conn);
@@ -192,13 +192,13 @@ struct race_t get_race(int id)
     res = db_exec(conn, q, nParams, params);
 
     int column = 0;
-    race.name = PQgetvalue(res, 0, column);
+    race.name = db_get_str(res, 0, column);
 
     column++;
-    race.sprite_sheet = PQgetvalue(res, 0, column);
+    race.sprite_sheet = db_get_str(res, 0, column);
 
     column++;
-    race.sprite_height = atoi(PQgetvalue(res, 0, column));
+    race.sprite_height = db_get_int(res, 0, column);
 
     free(cid);
     PQclear(res);
@@ -226,7 +226,7 @@ struct class_t get_class(int id)
     res = db_exec(conn, q, nParams, params);
 
     int column = 0;
-    class.name = PQgetvalue(res, 0, column);
+    class.name = db_get_str(res, 0, column);
 
     free(cid);
     PQclear(res);

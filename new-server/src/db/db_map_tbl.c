@@ -29,25 +29,25 @@ struct map_t* db_get_all_maps()
         struct map_t map;
         
         int column = PQfnumber(res, "id");
-        map.id = atoi(PQgetvalue(res, i, column));
+        map.id = db_get_int(res, i, column);
         
         column = PQfnumber(res, "name");
-        map.name = PQgetvalue(res, i, column);
+        map.name = db_get_str(res, i, column);
     
         column = PQfnumber(res, "map_left_id");
-        map.map_left = atoi(PQgetvalue(res, i, column));
+        map.map_left = db_get_int(res, i, column);
     
         column = PQfnumber(res, "map_right_id");
-        map.map_right = atoi(PQgetvalue(res, i, column));
+        map.map_right = db_get_int(res, i, column);
     
         column = PQfnumber(res, "map_top_id");
-        map.map_above = atoi(PQgetvalue(res, i, column));
+        map.map_above = db_get_int(res, i, column);
     
         column = PQfnumber(res, "map_below_id");
-        map.map_below = atoi(PQgetvalue(res, i, column));
+        map.map_below = db_get_int(res, i, column);
     
         column = PQfnumber(res, "entrance_left_x");
-        map.map_below = atoi(PQgetvalue(res, i, column));
+        map.map_below = db_get_int(res, i, column);
 
         /* TODO: initialize map.npcs and map.items */
         map.npcs = NULL;
@@ -82,7 +82,7 @@ char* get_map_name_for_id(int id)
 
     const char* params[1] = { cid };
     res = db_exec(conn, q, nParams, params);
-    name = PQgetvalue(res, 0, 0);
+    name = db_get_str(res, 0, 0);
 
     free(cid);
     PQclear(res);
@@ -100,7 +100,7 @@ int get_map_id_for_name(char* name)
     int nParams = 1;
     const char* params[1] = { name };
     res = db_exec(conn, q, nParams, params);
-    id = atoi(PQgetvalue(res, 0, 0));
+    id = db_get_int(res, 0, 0);
 
     PQclear(res);
     db_disconnect(conn);
@@ -168,8 +168,8 @@ struct coordinates_t db_get_map_entrance(int map_id, enum Relation r)
         y_column = PQfnumber(res, "entrance_bottom_y");
     }
 
-    coords.x = atoi(PQgetvalue(res, 0, x_column));
-    coords.y = atoi(PQgetvalue(res, 0, y_column));
+    coords.x = db_get_int(res, 0, x_column);
+    coords.y = db_get_int(res, 0, y_column);
 
     free(cid);
     PQclear(res);

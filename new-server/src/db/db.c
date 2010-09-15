@@ -62,3 +62,13 @@ PGresult* db_exec(PGconn* conn, char* command, int nParams,
     }
 }
 
+int db_get_int(PGresult* res, int row, int column)
+{
+    return atoi(PQgetvalue(res, row, column));
+}
+
+char* db_get_str(PGresult* res, int row, int column)
+{
+    return strdup(PQgetvalue(res, row, column));
+}
+
