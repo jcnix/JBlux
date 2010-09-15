@@ -221,6 +221,18 @@ void parse_command(struct client_t *client, char* command)
     }
     else if(strncmp(command, "map", 3) == 0)
     {
+        char* c = strtok(NULL, " ");
+        if(strcmp(c, "goto") == 0)
+        {
+            enum Relation rel = str_to_rel(strtok(NULL, " "));
+            char* map_name = strtok(NULL, " ");
+        }
+        else if(strcmp(c, "pickup") == 0)
+        {
+        }
+        else if(strcmp(c, "info") == 0)
+        {
+        }
     }
     else if(strncmp(command, "disconnect", 10) == 0)
     {

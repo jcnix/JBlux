@@ -10,6 +10,8 @@ _OBJ= main.o \
 	  client.o \
 	  json.o \
 	  base64.o \
+	  map.o \
+	  relation.o \
 	  db/db.o \
 	  db/db_user_tbl.o \
 	  db/db_map_tbl.o \

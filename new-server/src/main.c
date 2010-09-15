@@ -13,6 +13,7 @@
 #include <signal.h>
 #include "client.h"
 #include "db.h"
+#include "map.h"
 #include "types.h"
 
 #define MAXPENDING 20 
@@ -67,6 +68,9 @@ int main(int argc, char** argv)
         return 1;
     }
     printf("JBlux server 1.0\n");
+
+    /* Initialize and cache all maps from DB */
+    init_maps();
 
     while(1)
     {

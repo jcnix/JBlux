@@ -6,30 +6,10 @@
 #ifndef _TYPES_H
 #define _TYPES_H
 
-enum Relation
-{
-    LEFT,
-    RIGHT,
-    ABOVE,
-    BELOW
-};
-
 struct coordinates_t
 {
     int x;
     int y;
-};
-
-struct map_t
-{
-    int id;
-    char *name;
-    struct item_t *items;
-    struct npc_data_t *npcs;
-    int map_left;
-    int map_right;
-    int map_above;
-    int map_below;
 };
 
 struct inventory_t
