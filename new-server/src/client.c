@@ -81,7 +81,7 @@ void move_client(struct client_t *client, struct coordinates_t coords)
         return;
     }
 
-    tell_all_players_on_map(client->data->map_id, command);
+    tell_all_players_on_map(client, client->data->map_id, command);
 
     free(command);
 }
@@ -127,26 +127,27 @@ void send_chat_message(struct client_t *from, char* message)
         return;
     }
 
-    tell_all_players_on_map(from->data->map_id, command);
+    tell_all_players_on_map(from, from->data->map_id, command);
     free(command);
 }
 
-void tell_all_players_on_map(int map_id, char* command)
+void tell_all_players_on_map(struct client_t *from, int map_id, char* command)
 {
     int i;
     for(i = 0; i < num_clients; i++)
     {
-        struct client_t *to_client = clients[i];
-        if(to_client->data->map_id == map_id)
+        struct client_t *to = clients[i];
+        if(to->data->map_id == map_id &&
+                to->socket != from->socket)
         {
-            esend(to_client->socket, command);
+            esend(to->socket, command);
         }
     }
 }
 
 void parse_command(struct client_t *client, char* command)
 {
-    char* commands = strtok(command, " ");
+    strtok(command, " ");
 
     if(strncmp(command, "auth", 4) == 0)
     {
