@@ -25,6 +25,8 @@ struct map_t* get_map_for_id(int id)
         i++;
         *map = *(map + i);
     }
+
+    return map;
 }
 
 struct map_t* get_map_for_name(char* name)
