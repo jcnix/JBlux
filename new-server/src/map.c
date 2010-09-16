@@ -44,11 +44,11 @@ struct map_t* get_map_for_name(char* name)
     return map;
 }
 
-struct map_t* get_adjacent_map(enum Relation r, struct map_t *map)
+struct map_t* get_adjacent_map(struct map_t *map, enum Relation rel)
 {
     struct map_t *new_map = NULL;
     int id = 0;
-    switch(r)
+    switch(rel)
     {
         case LEFT:
             id = map->map_left;
@@ -72,5 +72,29 @@ struct map_t* get_adjacent_map(enum Relation r, struct map_t *map)
     }
 
     return new_map;
+}
+
+struct coordinates_t get_map_entrance(struct map_t *map, enum Relation rel)
+{
+    struct coordinates_t coords;
+    switch(rel)
+    {
+        case LEFT:
+            coords = map->left_ent;
+            break;
+        case RIGHT:
+            coords = map->right_ent;
+            break;
+        case ABOVE:
+            coords = map->top_ent;
+            break;
+        case BELOW:
+            coords = map->bottom_ent;
+            break;
+        default:
+            break;
+    }
+
+    return coords;
 }
 

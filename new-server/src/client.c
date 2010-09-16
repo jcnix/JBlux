@@ -226,6 +226,10 @@ void parse_command(struct client_t *client, char* command)
         {
             enum Relation rel = str_to_rel(strtok(NULL, " "));
             char* map_name = strtok(NULL, " ");
+            struct map_t *map = get_map_for_name(map_name);
+            map = get_adjacent_map(map, rel);
+            struct coordinates_t coords = get_map_entrance(map, rel);
+            add_player_to_map(client, map_name, coords);
         }
         else if(strcmp(c, "pickup") == 0)
         {

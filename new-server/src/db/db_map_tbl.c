@@ -45,9 +45,12 @@ struct map_t* db_get_all_maps()
     
         column = PQfnumber(res, "map_below_id");
         map.map_below = db_get_int(res, i, column);
-    
-        column = PQfnumber(res, "entrance_left_x");
-        map.map_below = db_get_int(res, i, column);
+   
+        /* Get entrances for all four sides */
+        map.left_ent    =   db_get_map_entrance(map.id, LEFT);
+        map.right_ent   =   db_get_map_entrance(map.id, RIGHT);
+        map.top_ent     =   db_get_map_entrance(map.id, ABOVE);
+        map.bottom_ent  =   db_get_map_entrance(map.id, BELOW);
 
         /* TODO: initialize map.npcs and map.items */
         map.npcs = NULL;
