@@ -233,9 +233,16 @@ void parse_command(struct client_t *client, char* command)
         }
         else if(strcmp(c, "pickup") == 0)
         {
+            /* TODO: properly implement this */
+            char* command = "item null";
+            esend(client->socket, command);
         }
         else if(strcmp(c, "info") == 0)
         {
+            /* Tell the player about the map they're on. */
+            int map_id = client->data->map_id;
+            struct map_t *map = get_map_for_id(map_id);
+            add_player_to_map(client, map->name, client->data->coords);
         }
     }
     else if(strncmp(command, "disconnect", 10) == 0)
