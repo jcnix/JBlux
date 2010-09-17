@@ -12,11 +12,12 @@ struct map_t* db_get_all_maps()
     PGconn *conn = db_connect();
     PGresult *res = NULL;
 
-    char* q = "SELECT * FROM jblux_map;";
+    char* q = "SELECT id, name, map_left_id, map_right_id, map_top_id, "
+        "map_bottom_id FROM jblux_map;";
     int nParams = 0;
     res = db_exec(conn, q, nParams, NULL);
     int rows = PQntuples(res);
-    PQclear(res);
+    
     maps = malloc(sizeof(struct map_t) * rows);
     if(!maps)
     {
@@ -28,22 +29,22 @@ struct map_t* db_get_all_maps()
     {
         struct map_t map;
         
-        int column = PQfnumber(res, "id");
+        int column = 0;
         map.id = db_get_int(res, i, column);
-        
-        column = PQfnumber(res, "name");
+       
+        column++;
         map.name = db_get_str(res, i, column);
     
-        column = PQfnumber(res, "map_left_id");
+        column++;
         map.map_left = db_get_int(res, i, column);
-    
-        column = PQfnumber(res, "map_right_id");
+        
+        column++;
         map.map_right = db_get_int(res, i, column);
-    
-        column = PQfnumber(res, "map_top_id");
+        
+        column++;
         map.map_above = db_get_int(res, i, column);
-    
-        column = PQfnumber(res, "map_below_id");
+        
+        column++;
         map.map_below = db_get_int(res, i, column);
    
         /* Get entrances for all four sides */
