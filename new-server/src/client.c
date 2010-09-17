@@ -103,8 +103,17 @@ void add_player_to_map(struct client_t *client, char* map,
     client->data->coords = coords;
 
     /* TODO: get NPCs and Items and send to player */
-    
+    char* npc_enc = base64_encode("{}");
     char* command = NULL;
+    if(!asprintf(&command, "map goto %s %d %d npcs %s", map, coords.x, coords.y,
+                npc_enc))
+    {
+        return;
+    }
+    esend(client->socket, command);
+    free(command);
+    
+    command = NULL;
     if(asprintf(&command, "map add %s %d %d %s", client->data->character_name,
                 coords.x, coords.y, client->encoded_player_data) < 0)
     {
