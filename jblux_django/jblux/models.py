@@ -165,6 +165,12 @@ class Npc(models.Model):
     class_t = models.ForeignKey('Class')
     job = models.IntegerField()
     sprite_sheet = models.CharField(max_length=50,null=True, blank=True)
+    level = models.IntegerField(default=1)
+    strength = models.IntegerField()
+    agility = models.IntegerField()
+    stamina = models.IntegerField()
+    intelligence = models.IntegerField()
+    spirit = models.IntegerField()
 
     def __unicode__(self):
         return self.name
