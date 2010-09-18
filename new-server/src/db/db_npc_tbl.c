@@ -31,13 +31,13 @@ struct npc_data* db_get_npc(int id)
     npc->npc_id = id;
     
     int column = PQfnumber(res, "job");
-    npc->job = atoi(PQgetvalue(res, 0, column));
+    npc->job = db_get_int(res, 0, column);
 
     column = PQfnumber(res, "race_id");
-    npc->race = get_race(atoi(PQgetvalue(res, 0, column)));
+    npc->race = get_race(db_get_int(res, 0, column));
 
     column = PQfnumber(res, "class_t_id");
-    npc->player_class = get_class(atoi(PQgetvalue(res, 0, column)));
+    npc->player_class = get_class(db_get_int(res, 0, column));
 
     npc->quests = NULL;
 
