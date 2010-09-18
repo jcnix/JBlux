@@ -16,7 +16,8 @@ struct npc_data* db_get_npc(int id)
     PGconn *conn = db_connect();
     PGresult *res = NULL;
 
-    char* q = "SELECT * FROM jblux_npc WHERE id=$1;";
+    char* q = "SELECT name, job. race_id, class_t_id, sprite_sheet "
+        "FROM jblux_npc WHERE id=$1;";
     int nParams = 1;
 
     char* cid = NULL;
@@ -29,14 +30,17 @@ struct npc_data* db_get_npc(int id)
     const char* params[1] = { cid };
     res = db_exec(conn, q, nParams, params);
     npc->npc_id = id;
-    
-    int column = PQfnumber(res, "job");
+   
+    int column = 0;
+    npc->character_name = db_get_str(res, 0, column);
+
+    column++;
     npc->job = db_get_int(res, 0, column);
 
-    column = PQfnumber(res, "race_id");
+    column++;
     npc->race = get_race(db_get_int(res, 0, column));
 
-    column = PQfnumber(res, "class_t_id");
+    column++;
     npc->player_class = get_class(db_get_int(res, 0, column));
 
     npc->quests = NULL;
