@@ -11,6 +11,7 @@ _OBJ= main.o \
 	  json.o \
 	  base64.o \
 	  map.o \
+	  quest.o \
 	  relation.o \
 	  db/db.o \
 	  db/db_user_tbl.o \

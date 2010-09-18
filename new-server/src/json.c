@@ -195,8 +195,3 @@ char* npc_list_to_json(struct npc_data *npcs)
     return json;
 }
 
-/*void quest_to_json(yajl_gen gen, struct quest_t quest)
-{
-}
-*/
-
