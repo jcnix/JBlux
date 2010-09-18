@@ -5,7 +5,7 @@
 
 #include "quest.h"
 
-void quest_to_json(yajl_gen gen, struct quest q)
+void quest_to_json(yajl_gen gen, struct quest *q)
 {
     const char* id_field =                      "id";
     const char* name_field =                    "name";
@@ -38,37 +38,37 @@ void quest_to_json(yajl_gen gen, struct quest q)
 
     yajl_gen_map_open(gen);
     
-    json_insert_int(gen, id_field, q.id);
-    json_insert_str(gen, name_field, q.name);
-    json_insert_str(gen, details_field, q.details);
-    json_insert_str(gen, objectives_field, q.objectives);
-    json_insert_str(gen, completion_field, q.completion_text);
-    json_insert_int(gen, min_level_field, q.min_level);
-    json_insert_int(gen, type_field, q.type);
-    json_insert_int(gen, quest_item_field, q.quest_item_id);
+    json_insert_int(gen, id_field, q->id);
+    json_insert_str(gen, name_field, q->name);
+    json_insert_str(gen, details_field, q->details);
+    json_insert_str(gen, objectives_field, q->objectives);
+    json_insert_str(gen, completion_field, q->completion_text);
+    json_insert_int(gen, min_level_field, q->min_level);
+    json_insert_int(gen, type_field, q->type);
+    json_insert_int(gen, quest_item_field, q->quest_item_id);
 
-    json_insert_int(gen, reward_xp_field, q.reward_xp);
-    json_insert_int(gen, reward_money_field, q.reward_money);
-    json_insert_int(gen, reward_item1_field, q.reward_item1_id);
-    json_insert_int(gen, reward_item2_field, q.reward_item2_id);
-    json_insert_int(gen, reward_item3_field, q.reward_item3_id);
-    json_insert_int(gen, reward_item1_count_field, q.reward_item1_count);
-    json_insert_int(gen, reward_item2_count_field, q.reward_item2_count);
-    json_insert_int(gen, reward_item3_count_field, q.reward_item3_count);
+    json_insert_int(gen, reward_xp_field, q->reward_xp);
+    json_insert_int(gen, reward_money_field, q->reward_money);
+    json_insert_int(gen, reward_item1_field, q->reward_item1_id);
+    json_insert_int(gen, reward_item2_field, q->reward_item2_id);
+    json_insert_int(gen, reward_item3_field, q->reward_item3_id);
+    json_insert_int(gen, reward_item1_count_field, q->reward_item1_count);
+    json_insert_int(gen, reward_item2_count_field, q->reward_item2_count);
+    json_insert_int(gen, reward_item3_count_field, q->reward_item3_count);
     
-    json_insert_int(gen, required_item1_field, q.required_item1_id);
-    json_insert_int(gen, required_item2_field, q.required_item2_id);
-    json_insert_int(gen, required_item3_field, q.required_item3_id);
-    json_insert_int(gen, required_item1_count_field, q.required_item1_count);
-    json_insert_int(gen, required_item2_count_field, q.required_item2_count);
-    json_insert_int(gen, required_item3_count_field, q.required_item3_count);
+    json_insert_int(gen, required_item1_field, q->required_item1_id);
+    json_insert_int(gen, required_item2_field, q->required_item2_id);
+    json_insert_int(gen, required_item3_field, q->required_item3_id);
+    json_insert_int(gen, required_item1_count_field, q->required_item1_count);
+    json_insert_int(gen, required_item2_count_field, q->required_item2_count);
+    json_insert_int(gen, required_item3_count_field, q->required_item3_count);
     
-    json_insert_int(gen, required_npc1_field, q.required_npc1_id);
-    json_insert_int(gen, required_npc2_field, q.required_npc2_id);
-    json_insert_int(gen, required_npc3_field, q.required_npc3_id);
-    json_insert_int(gen, required_npc1_count_field, q.required_npc1_count);
-    json_insert_int(gen, required_npc2_count_field, q.required_npc2_count);
-    json_insert_int(gen, required_npc3_count_field, q.required_npc3_count);
+    json_insert_int(gen, required_npc1_field, q->required_npc1_id);
+    json_insert_int(gen, required_npc2_field, q->required_npc2_id);
+    json_insert_int(gen, required_npc3_field, q->required_npc3_id);
+    json_insert_int(gen, required_npc1_count_field, q->required_npc1_count);
+    json_insert_int(gen, required_npc2_count_field, q->required_npc2_count);
+    json_insert_int(gen, required_npc3_count_field, q->required_npc3_count);
 
     yajl_gen_map_close(gen);
 }
