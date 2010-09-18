@@ -53,8 +53,8 @@ struct map_t* db_get_all_maps()
         map.top_ent     =   db_get_map_entrance(map.id, ABOVE);
         map.bottom_ent  =   db_get_map_entrance(map.id, BELOW);
 
-        /* TODO: initialize map.npcs and map.items */
-        map.npcs = NULL;
+        db_get_npcs_on_map(&map);
+        /* TODO: initialize map.items */
         map.items = NULL;
         *(maps + i) = map;
     }
@@ -62,10 +62,6 @@ struct map_t* db_get_all_maps()
     PQclear(res);
     db_disconnect(conn);
     return maps;
-}
-
-int db_get_adjacent_map(enum Relation r, int map_id)
-{
 }
 
 char* get_map_name_for_id(int id)
@@ -111,12 +107,55 @@ int get_map_id_for_name(char* name)
     return id;
 }
 
-struct item_t* db_get_items_on_map(int map_id)
+void db_get_items_on_map(struct map_t *map)
 {
+    /*PGconn *conn = db_connect();
+    PGresult *res = NULL;
+
+    PQclear(res);
+    db_disconnect(conn);*/
 }
 
-struct npc_data_t* db_get_npcs_on_map(int map_id)
+void db_get_npcs_on_map(struct map_t *map)
 {
+    PGconn *conn = db_connect();
+    PGresult *res = NULL;
+    struct npc_data *npcs = map->npcs;
+
+    char* q = "SELECT npc_id, direction, x_coord, y_coord FROM jblux_mapnpcs "
+        "WHERE map_t_id=$1;";
+    int nParams = 1;
+    char* cid = NULL;
+    if(asprintf(&cid, "%d", map->id) < 0)
+    {
+        map->npcs = NULL;
+        return;
+    }
+    const char* params[1] = { cid };
+    res = db_exec(conn, q, nParams, params);
+
+    int num_npcs = PQntuples(res);
+    int i;
+    for(i = 0; i < num_npcs; i++)
+    {
+        int column = 0;
+        int npc_id = db_get_int(res, i, column);
+        struct npc_data *data = db_get_npc(npc_id);
+        
+        column++;
+        data->direction = db_get_str(res, i, column);
+
+        column++;
+        data->coords.x = db_get_int(res, i, column);
+        column++;
+        data->coords.y = db_get_int(res, i, column);
+
+        *(npcs + i) = *data;
+    }
+
+    map->npcs = npcs;
+    PQclear(res);
+    db_disconnect(conn);
 }
 
 struct coordinates_t db_get_map_entrance(int map_id, enum Relation r)

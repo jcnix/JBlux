@@ -16,7 +16,7 @@
 
 #define NPC_TABLE "jblux_npc"
 
-struct npc_data* get_npc(int id);
+struct npc_data* db_get_npc(int id);
 
 #endif
 

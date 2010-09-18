@@ -96,14 +96,15 @@ void add_player_to_map(struct client_t *client, char* map,
         return;
     }
 
-    int map_id = get_map_id_for_name(map);
-    db_set_map_for_player(client->data->character_id, map_id, coords);
-    client->data->map_id = map_id;
-    client->data->map = map;
+    struct map_t *map_st = get_map_for_name(map);
+    db_set_map_for_player(client->data->character_id, map_st->id, coords);
+    client->data->map_id = map_st->id;
+    client->data->map = map_st->name;
     client->data->coords = coords;
 
     /* TODO: get NPCs and Items and send to player */
-    char* npc_enc = base64_encode("{}");
+    struct npc_data *npcs = map_st->npcs;
+    char* npc_enc = base64_encode(npc_list_to_json(npcs));
     char* command = NULL;
     if(!asprintf(&command, "map goto %s %d %d npcs %s", map, coords.x, coords.y,
                 npc_enc))

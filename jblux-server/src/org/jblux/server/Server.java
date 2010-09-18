@@ -28,6 +28,9 @@ import java.net.Socket;
 import org.jblux.common.ServerInfo;
 import org.jblux.common.client.PlayerData;
 import org.jblux.common.error.FatalError;
+import org.jblux.server.maps.Map;
+import org.jblux.server.maps.Maps;
+import org.jblux.sql.MapSqlTable;
 import org.jblux.sql.UserTable;
 
 public class Server {
@@ -50,10 +53,10 @@ public class Server {
         m_gameworld = new GameWorld();
         m_gameworld.start();
 
-        UserTable ut = new UserTable();
-        PlayerData data = ut.getPlayer("pdude");
+        Maps maps = Maps.getInstance();
+        Map m = maps.getMap(1);
         Gson gson = new Gson();
-        System.out.printf("%s\n", gson.toJson(data));
+        System.out.printf("%s\n", gson.toJson(m));
 
         while(true) {
             try {

@@ -56,6 +56,7 @@ struct npc_data
     int job;
     char* sprite_sheet;
     char* direction;
+    struct coordinates_t coords;
     struct quest *quests;
 
     char* character_name;

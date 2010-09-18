@@ -5,7 +5,7 @@
 
 #include "db_npc_tbl.h"
 
-struct npc_data* get_npc(int id)
+struct npc_data* db_get_npc(int id)
 {
     struct npc_data *npc = malloc(sizeof(struct npc_data));
     if(!npc)

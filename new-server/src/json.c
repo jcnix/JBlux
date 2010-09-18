@@ -171,3 +171,101 @@ void inventory_to_json(yajl_gen gen, struct inventory_t inv)
     yajl_gen_map_close(gen);
 }
 
+char* npc_list_to_json(struct npc_data *npcs)
+{
+    char* json;
+    yajl_gen_config conf = { 0 };
+    yajl_gen gen;
+    yajl_gen_status stat;
+    gen = yajl_gen_alloc(&conf, NULL);
+
+    /* Field names */
+    const unsigned char* npc_id_field =         (unsigned char*) "npc_id";
+    const unsigned char* job_field =            (unsigned char*) "job";
+    const unsigned char* character_name_field = (unsigned char*) "character_name";
+    const unsigned char* sprite_sheet_field =   (unsigned char*) "sprite_sheet";
+    const unsigned char* direction_field =      (unsigned char*) "direction";
+    const unsigned char* quests_field =         (unsigned char*) "quests";
+    const unsigned char* level_field =          (unsigned char*) "level";
+    const unsigned char* race_field =           (unsigned char*) "race";
+    const unsigned char* class_field =          (unsigned char*) "player_class";
+    const unsigned char* strength_field =       (unsigned char*) "strength";
+    const unsigned char* agility_field =        (unsigned char*) "agility";
+    const unsigned char* stamina_field =        (unsigned char*) "stamina";
+    const unsigned char* intelligence_field =   (unsigned char*) "intelligence";
+    const unsigned char* spirit_field =         (unsigned char*) "spirit";
+    const unsigned char* coords_field =         (unsigned char*) "coords";
+    
+    int i = 0;
+    struct npc_data *data = npcs;
+    yajl_gen_map_open(gen);
+    while(data != NULL)
+    {
+        stat = yajl_gen_string(gen, npc_id_field, strlen((char*) npc_id_field));
+        stat = yajl_gen_integer(gen, npcs->npc_id);
+
+        stat = yajl_gen_string(gen, job_field, strlen((char*) job_field));
+        stat = yajl_gen_integer(gen, data->job);
+        
+        const unsigned char* char_name = (unsigned char*) data->character_name;
+        stat = yajl_gen_string(gen, character_name_field, strlen((char*) character_name_field));
+        stat = yajl_gen_string(gen, char_name, strlen((char*) char_name));
+        
+        const unsigned char* sprite_sheet = (unsigned char*) data->sprite_sheet;
+        stat = yajl_gen_string(gen, sprite_sheet_field, strlen((char*) sprite_sheet_field));
+        stat = yajl_gen_string(gen, sprite_sheet, strlen((char*) sprite_sheet));
+        
+        const unsigned char* direction = (unsigned char*) data->direction;
+        stat = yajl_gen_string(gen, direction_field, strlen((char*) direction_field));
+        stat = yajl_gen_string(gen, direction, strlen((char*) direction));
+        
+        /* Quests */
+        stat = yajl_gen_string(gen, quests_field, strlen((char*) quests_field));
+        yajl_gen_array_open(gen);
+        yajl_gen_map_open(gen);
+        yajl_gen_map_close(gen);
+        yajl_gen_array_close(gen);
+
+        stat = yajl_gen_string(gen, level_field, strlen((char*) level_field));
+        stat = yajl_gen_integer(gen, data->level);
+
+        stat = yajl_gen_string(gen, race_field, strlen((char*) race_field));
+        race_to_json(gen, data->race);
+        
+        stat = yajl_gen_string(gen, class_field, strlen((char*) class_field));
+        class_to_json(gen, data->player_class);
+        
+        stat = yajl_gen_string(gen, strength_field, strlen((char*) strength_field));
+        stat = yajl_gen_integer(gen, data->strength);
+        
+        stat = yajl_gen_string(gen, agility_field, strlen((char*) agility_field));
+        stat = yajl_gen_integer(gen, data->agility);
+
+        stat = yajl_gen_string(gen, stamina_field, strlen((char*) stamina_field));
+        stat = yajl_gen_integer(gen, data->stamina);
+        
+        stat = yajl_gen_string(gen, intelligence_field, strlen((char*) intelligence_field));
+        stat = yajl_gen_integer(gen, data->intelligence);
+        
+        stat = yajl_gen_string(gen, spirit_field, strlen((char*) spirit_field));
+        stat = yajl_gen_integer(gen, data->spirit);
+        
+        stat = yajl_gen_string(gen, coords_field, strlen((char*) coords_field));
+        coordinates_to_json(gen, data->coords);
+
+        i++;
+        *data = *(npcs + i);
+    }
+    /* Close JSON structure */
+    yajl_gen_map_close(gen);
+    /* stdup string because yajl_gen_free will mess things up */
+    json = strdup(get_json_str(gen));
+    yajl_gen_free(gen);
+    return json;
+}
+
+/*void quest_to_json(yajl_gen gen, struct quest_t quest)
+{
+}
+*/
+

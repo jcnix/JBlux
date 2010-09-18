@@ -19,5 +19,8 @@ void race_to_json(yajl_gen gen, struct race_t race);
 void class_to_json(yajl_gen gen, struct class_t c);
 void inventory_to_json(yajl_gen gen, struct inventory_t inv);
 
+char* npc_list_to_json(struct npc_data *npcs);
+/* void quest_to_json(yajl_gen gen, struct quest_t quest); */
+
 #endif
 
