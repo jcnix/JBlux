@@ -14,13 +14,14 @@
 #include "db.h"
 #include "db_npc_tbl.h"
 #include "../map.h"
+#include "../npc.h"
 #include "../types.h"
 
 #define MAP_TABLE "jblux-map"
 
 struct map_t* db_get_all_maps();
-char* get_map_name_for_id(int id);
-int get_map_id_for_name(char* name);
+char* db_get_map_name_for_id(int id);
+int db_get_map_id_for_name(char* name);
 void db_get_items_on_map(struct map_t *map);
 void db_get_npcs_on_map(struct map_t *map);
 struct coordinates_t db_get_map_entrance(int map_id, enum Relation r);

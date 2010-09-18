@@ -50,6 +50,5 @@ struct player_data
     struct coordinates_t coords;
 };
 
-
 #endif
 

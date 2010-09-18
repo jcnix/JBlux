@@ -64,7 +64,7 @@ struct map_t* db_get_all_maps()
     return maps;
 }
 
-char* get_map_name_for_id(int id)
+char* db_get_map_name_for_id(int id)
 {
     char* name = NULL;
     PGconn *conn = db_connect();
@@ -90,7 +90,7 @@ char* get_map_name_for_id(int id)
     return name;
 }
 
-int get_map_id_for_name(char* name)
+int db_get_map_id_for_name(char* name)
 {
     int id;
     PGconn *conn = db_connect();

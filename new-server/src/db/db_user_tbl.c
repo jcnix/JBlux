@@ -100,7 +100,7 @@ struct player_data* db_get_player(char* character_name)
     column++;
     int map_id = db_get_int(res, 0, column);
     data->map_id = map_id;
-    data->map = get_map_name_for_id(map_id);
+    data->map = db_get_map_name_for_id(map_id);
 
     column++;
     data->race = get_race(db_get_int(res, 0, column));
