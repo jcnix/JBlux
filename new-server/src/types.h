@@ -50,25 +50,6 @@ struct player_data
     struct coordinates_t coords;
 };
 
-struct npc_data
-{
-    int npc_id;
-    int job;
-    char* sprite_sheet;
-    char* direction;
-    struct coordinates_t coords;
-    struct quest *quests;
-
-    char* character_name;
-    int level;
-    struct race_t race;
-    struct class_t player_class;
-    int strength;
-    int agility;
-    int stamina;
-    int intelligence;
-    int spirit;
-};
 
 #endif
 
