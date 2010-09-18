@@ -13,6 +13,9 @@
 #include "types.h"
 
 char* get_json_str(yajl_gen gen);
+void json_insert_str(yajl_gen gen, const char* key, char* value);
+void json_insert_int(yajl_gen gen, const char* key, int value);
+
 char* player_data_to_json(struct player_data *data);
 void coordinates_to_json(yajl_gen gen, struct coordinates_t coords);
 void race_to_json(yajl_gen gen, struct race_t race);

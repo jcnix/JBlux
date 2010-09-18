@@ -8,11 +8,22 @@
 char* get_json_str(yajl_gen gen)
 {
     char* json;
-    yajl_gen_status stat;
     unsigned int len = 0;
-    stat = yajl_gen_get_buf(gen, (const unsigned char**) &json, &len);
+    yajl_gen_get_buf(gen, (const unsigned char**) &json, &len);
 
     return json;
+}
+
+void json_insert_str(yajl_gen gen, const char* key, char* value)
+{
+    yajl_gen_string(gen, (unsigned char*) key, strlen(key));
+    yajl_gen_string(gen, (unsigned char*) value, strlen(value));
+}
+
+void json_insert_int(yajl_gen gen, const char* key, int value)
+{
+    yajl_gen_string(gen, (unsigned char*) key, strlen(key));
+    yajl_gen_integer(gen, value);
 }
 
 char* player_data_to_json(struct player_data *data)
@@ -20,72 +31,46 @@ char* player_data_to_json(struct player_data *data)
     char* json;
     yajl_gen_config conf = { 0 };
     yajl_gen gen;
-    yajl_gen_status stat;
     gen = yajl_gen_alloc(&conf, NULL);
 
     /* Field names */
-    const unsigned char* user_id_field =        (unsigned char*) "user_id";
-    const unsigned char* character_id_field =   (unsigned char*) "character_id";
-    const unsigned char* character_name_field = (unsigned char*) "character_name";
-    const unsigned char* level_field =          (unsigned char*) "level";
-    const unsigned char* race_field =           (unsigned char*) "race";
-    const unsigned char* class_field =          (unsigned char*) "player_class";
-    const unsigned char* strength_field =       (unsigned char*) "strength";
-    const unsigned char* agility_field =        (unsigned char*) "agility";
-    const unsigned char* stamina_field =        (unsigned char*) "stamina";
-    const unsigned char* intelligence_field =   (unsigned char*) "intelligence";
-    const unsigned char* spirit_field =         (unsigned char*) "spirit";
-    const unsigned char* map_field =            (unsigned char*) "map";
-    const unsigned char* inventory_field =      (unsigned char*) "inventory";
-    const unsigned char* coords_field =         (unsigned char*) "coords";
+    const char* user_id_field =        "user_id";
+    const char* character_id_field =   "character_id";
+    const char* character_name_field = "character_name";
+    const char* level_field =          "level";
+    const char* race_field =           "race";
+    const char* class_field =          "player_class";
+    const char* strength_field =       "strength";
+    const char* agility_field =        "agility";
+    const char* stamina_field =        "stamina";
+    const char* intelligence_field =   "intelligence";
+    const char* spirit_field =         "spirit";
+    const char* map_field =            "map";
+    const char* inventory_field =      "inventory";
+    const char* coords_field =         "coords";
 
     /* Open JSON structure */
     yajl_gen_map_open(gen);
     
-    stat = yajl_gen_string(gen, user_id_field, strlen((char*) user_id_field));
-    stat = yajl_gen_integer(gen, data->user_id);
+    json_insert_int(gen, user_id_field, data->user_id);
+    json_insert_int(gen, character_id_field, data->character_id);
+    json_insert_str(gen, character_name_field, data->character_name);
+    json_insert_int(gen, level_field, data->level);
 
-    stat = yajl_gen_string(gen, character_id_field, strlen((char*) character_id_field));
-    stat = yajl_gen_integer(gen, data->character_id);
-    
-    const unsigned char* char_name = (unsigned char*) data->character_name;
-    stat = yajl_gen_string(gen, character_name_field, strlen((char*) character_name_field));
-    stat = yajl_gen_string(gen, char_name, strlen((char*) char_name));
-    
-    stat = yajl_gen_string(gen, level_field, strlen((char*) level_field));
-    stat = yajl_gen_integer(gen, data->level);
-
-    stat = yajl_gen_string(gen, race_field, strlen((char*) race_field));
+    yajl_gen_string(gen, (unsigned char*) race_field, strlen(race_field));
     race_to_json(gen, data->race);
     
-    stat = yajl_gen_string(gen, class_field, strlen((char*) class_field));
+    yajl_gen_string(gen, (unsigned char*) class_field, strlen(class_field));
     class_to_json(gen, data->player_class);
     
-    stat = yajl_gen_string(gen, strength_field, strlen((char*) strength_field));
-    stat = yajl_gen_integer(gen, data->strength);
-    
-    stat = yajl_gen_string(gen, agility_field, strlen((char*) agility_field));
-    stat = yajl_gen_integer(gen, data->agility);
-
-    stat = yajl_gen_string(gen, stamina_field, strlen((char*) stamina_field));
-    stat = yajl_gen_integer(gen, data->stamina);
-    
-    stat = yajl_gen_string(gen, intelligence_field, strlen((char*) intelligence_field));
-    stat = yajl_gen_integer(gen, data->intelligence);
-    
-    stat = yajl_gen_string(gen, spirit_field, strlen((char*) spirit_field));
-    stat = yajl_gen_integer(gen, data->spirit);
-    
-    const unsigned char* map_name = (unsigned char*) data->map;
-    stat = yajl_gen_string(gen, map_field, strlen((char*) map_field));
-    stat = yajl_gen_string(gen, map_name, strlen((char*) map_name));
+    json_insert_int(gen, strength_field, data->strength);
+    json_insert_int(gen, agility_field, data->agility);
+    json_insert_int(gen, stamina_field, data->stamina);
+    json_insert_int(gen, intelligence_field, data->intelligence);
+    json_insert_int(gen, spirit_field, data->spirit);
+    json_insert_str(gen, map_field, data->map);
   
-    /*
-    inventory_to_json(gen, data->inventory);
-    stat = yajl_gen_string(gen, inventory_field, strlen((char*) inventory_field));
-    */
-
-    stat = yajl_gen_string(gen, coords_field, strlen((char*) coords_field));
+    yajl_gen_string(gen, (unsigned char*) coords_field, strlen(coords_field));
     coordinates_to_json(gen, data->coords);
     
     /* Close JSON structure */
@@ -98,76 +83,47 @@ char* player_data_to_json(struct player_data *data)
 
 void coordinates_to_json(yajl_gen gen, struct coordinates_t coords)
 {
-    yajl_gen_status stat;
-
-    const unsigned char* x_field =  (unsigned char*) "x";
-    const unsigned char* y_field =  (unsigned char*) "y";
+    const char* x_field =  "x";
+    const char* y_field =  "y";
     
     yajl_gen_map_open(gen);
-
-    stat = yajl_gen_string(gen, x_field, strlen((char*) x_field));
-    stat = yajl_gen_integer(gen, coords.x);
-    
-    stat = yajl_gen_string(gen, y_field, strlen((char*) y_field));
-    stat = yajl_gen_integer(gen, coords.y);
-    
+    json_insert_int(gen, x_field, coords.x);
+    json_insert_int(gen, y_field, coords.y);
     yajl_gen_map_close(gen);
 }
 
 void race_to_json(yajl_gen gen, struct race_t race)
 {
-    yajl_gen_status stat;
-
     /* Field names */
-    const unsigned char* id_field =  (unsigned char*) "id";
-    const unsigned char* name_field =  (unsigned char*) "name";
-    const unsigned char* sprite_sheet_field =  (unsigned char*) "sprite_sheet";
-    const unsigned char* sprite_height_field =  (unsigned char*) "sprite_height";
+    const char* id_field =              "id";
+    const char* name_field =            "name";
+    const char* sprite_sheet_field =    "sprite_sheet";
+    const char* sprite_height_field =   "sprite_height";
     
     yajl_gen_map_open(gen);
-
-    stat = yajl_gen_string(gen, id_field, strlen((char*) id_field));
-    stat = yajl_gen_integer(gen, race.id);
-    
-    const unsigned char* name = (unsigned char*) race.name;
-    stat = yajl_gen_string(gen, name_field, strlen((char*) name_field));
-    stat = yajl_gen_string(gen, name, strlen(race.name));
-    
-    const unsigned char* sheet = (unsigned char*) race.sprite_sheet;
-    stat = yajl_gen_string(gen, sprite_sheet_field, strlen((char*) sprite_sheet_field));
-    stat = yajl_gen_string(gen, sheet, strlen(race.sprite_sheet));
-    
-    stat = yajl_gen_string(gen, sprite_height_field, strlen((char*) sprite_height_field));
-    stat = yajl_gen_integer(gen, race.sprite_height);
-   
+    json_insert_int(gen, id_field, race.id);
+    json_insert_str(gen, name_field, race.name);
+    json_insert_str(gen, sprite_sheet_field, race.sprite_sheet);
+    json_insert_int(gen, sprite_height_field, race.sprite_height);
     yajl_gen_map_close(gen);
 }
 
 void class_to_json(yajl_gen gen, struct class_t c)
 {
-    yajl_gen_status stat;
-
-    const unsigned char* id_field =  (unsigned char*) "id";
-    const unsigned char* name_field =  (unsigned char*) "name";
+    const char* id_field =      "id";
+    const char* name_field =    "name";
     
     yajl_gen_map_open(gen);
-
-    stat = yajl_gen_string(gen, id_field, strlen((char*) id_field));
-    stat = yajl_gen_integer(gen, c.id);
-    
-    const unsigned char* name = (unsigned char*) c.name;
-    stat = yajl_gen_string(gen, name_field, strlen((char*) name_field));
-    stat = yajl_gen_string(gen, name, strlen(c.name));
-    
+    json_insert_int(gen, id_field, c.id);
+    json_insert_str(gen, name_field, c.name);
     yajl_gen_map_close(gen);
 }
 
 void inventory_to_json(yajl_gen gen, struct inventory_t inv)
 {
-    yajl_gen_status stat;
     yajl_gen_map_open(gen);
-    stat = yajl_gen_array_open(gen);
-    stat = yajl_gen_array_close(gen);
+    yajl_gen_array_open(gen);
+    yajl_gen_array_close(gen);
     yajl_gen_map_close(gen);
 }
 
@@ -176,89 +132,64 @@ char* npc_list_to_json(struct npc_data *npcs)
     char* json;
     yajl_gen_config conf = { 0 };
     yajl_gen gen;
-    yajl_gen_status stat;
     gen = yajl_gen_alloc(&conf, NULL);
 
     /* Field names */
-    const unsigned char* npc_id_field =         (unsigned char*) "npc_id";
-    const unsigned char* job_field =            (unsigned char*) "job";
-    const unsigned char* character_name_field = (unsigned char*) "character_name";
-    const unsigned char* sprite_sheet_field =   (unsigned char*) "sprite_sheet";
-    const unsigned char* direction_field =      (unsigned char*) "direction";
-    const unsigned char* quests_field =         (unsigned char*) "quests";
-    const unsigned char* level_field =          (unsigned char*) "level";
-    const unsigned char* race_field =           (unsigned char*) "race";
-    const unsigned char* class_field =          (unsigned char*) "player_class";
-    const unsigned char* strength_field =       (unsigned char*) "strength";
-    const unsigned char* agility_field =        (unsigned char*) "agility";
-    const unsigned char* stamina_field =        (unsigned char*) "stamina";
-    const unsigned char* intelligence_field =   (unsigned char*) "intelligence";
-    const unsigned char* spirit_field =         (unsigned char*) "spirit";
-    const unsigned char* coords_field =         (unsigned char*) "coords";
+    const char* npc_id_field =         "npc_id";
+    const char* job_field =            "job";
+    const char* character_name_field = "character_name";
+    const char* sprite_sheet_field =   "sprite_sheet";
+    const char* direction_field =      "direction";
+    const char* quests_field =         "quests";
+    const char* level_field =          "level";
+    const char* race_field =           "race";
+    const char* class_field =          "player_class";
+    const char* strength_field =       "strength";
+    const char* agility_field =        "agility";
+    const char* stamina_field =        "stamina";
+    const char* intelligence_field =   "intelligence";
+    const char* spirit_field =         "spirit";
+    const char* coords_field =         "coords";
     
     int i = 0;
     struct npc_data *data = npcs;
     yajl_gen_map_open(gen);
     while(data != NULL)
     {
-        stat = yajl_gen_string(gen, npc_id_field, strlen((char*) npc_id_field));
-        stat = yajl_gen_integer(gen, npcs->npc_id);
-
-        stat = yajl_gen_string(gen, job_field, strlen((char*) job_field));
-        stat = yajl_gen_integer(gen, data->job);
-        
-        const unsigned char* char_name = (unsigned char*) data->character_name;
-        stat = yajl_gen_string(gen, character_name_field, strlen((char*) character_name_field));
-        stat = yajl_gen_string(gen, char_name, strlen((char*) char_name));
-        
-        const unsigned char* sprite_sheet = (unsigned char*) data->sprite_sheet;
-        stat = yajl_gen_string(gen, sprite_sheet_field, strlen((char*) sprite_sheet_field));
-        stat = yajl_gen_string(gen, sprite_sheet, strlen((char*) sprite_sheet));
-        
-        const unsigned char* direction = (unsigned char*) data->direction;
-        stat = yajl_gen_string(gen, direction_field, strlen((char*) direction_field));
-        stat = yajl_gen_string(gen, direction, strlen((char*) direction));
+        json_insert_int(gen, npc_id_field, data->npc_id);
+        json_insert_int(gen, job_field, data->job);
+        json_insert_str(gen, character_name_field, data->character_name);
+        json_insert_str(gen, sprite_sheet_field, data->sprite_sheet);
+        json_insert_str(gen, direction_field, data->direction);
         
         /* Quests */
-        stat = yajl_gen_string(gen, quests_field, strlen((char*) quests_field));
+        yajl_gen_string(gen, (unsigned char*) quests_field, strlen(quests_field));
         yajl_gen_array_open(gen);
         yajl_gen_map_open(gen);
         yajl_gen_map_close(gen);
         yajl_gen_array_close(gen);
 
-        stat = yajl_gen_string(gen, level_field, strlen((char*) level_field));
-        stat = yajl_gen_integer(gen, data->level);
-
-        stat = yajl_gen_string(gen, race_field, strlen((char*) race_field));
+        json_insert_int(gen, level_field, data->level);
+        
+        yajl_gen_string(gen, (unsigned char*) race_field, strlen(race_field));
         race_to_json(gen, data->race);
         
-        stat = yajl_gen_string(gen, class_field, strlen((char*) class_field));
+        yajl_gen_string(gen, (unsigned char*) class_field, strlen(class_field));
         class_to_json(gen, data->player_class);
         
-        stat = yajl_gen_string(gen, strength_field, strlen((char*) strength_field));
-        stat = yajl_gen_integer(gen, data->strength);
+        json_insert_int(gen, strength_field, data->strength);
+        json_insert_int(gen, agility_field, data->agility);
+        json_insert_int(gen, stamina_field, data->stamina);
+        json_insert_int(gen, intelligence_field, data->intelligence);
+        json_insert_int(gen, spirit_field, data->spirit);
         
-        stat = yajl_gen_string(gen, agility_field, strlen((char*) agility_field));
-        stat = yajl_gen_integer(gen, data->agility);
-
-        stat = yajl_gen_string(gen, stamina_field, strlen((char*) stamina_field));
-        stat = yajl_gen_integer(gen, data->stamina);
-        
-        stat = yajl_gen_string(gen, intelligence_field, strlen((char*) intelligence_field));
-        stat = yajl_gen_integer(gen, data->intelligence);
-        
-        stat = yajl_gen_string(gen, spirit_field, strlen((char*) spirit_field));
-        stat = yajl_gen_integer(gen, data->spirit);
-        
-        stat = yajl_gen_string(gen, coords_field, strlen((char*) coords_field));
+        yajl_gen_string(gen, (unsigned char*) coords_field, strlen(coords_field));
         coordinates_to_json(gen, data->coords);
 
         i++;
         *data = *(npcs + i);
     }
-    /* Close JSON structure */
     yajl_gen_map_close(gen);
-    /* stdup string because yajl_gen_free will mess things up */
     json = strdup(get_json_str(gen));
     yajl_gen_free(gen);
     return json;
