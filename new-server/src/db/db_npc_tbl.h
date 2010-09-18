@@ -17,6 +17,7 @@
 #define NPC_TABLE "jblux_npc"
 
 struct npc_data* db_get_npc(int id);
+struct quest* db_get_quests_for_npc(int npc_id);
 
 #endif
 

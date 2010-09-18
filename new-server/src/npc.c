@@ -49,7 +49,7 @@ char* npc_list_to_json(struct npc_data *npcs)
         {
             quest_to_json(gen, q);
             j++;
-            *q = *(q + j);
+            *q = *(data->quests + j);
         }
         yajl_gen_array_close(gen);
 
