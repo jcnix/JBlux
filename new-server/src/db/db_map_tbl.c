@@ -120,7 +120,6 @@ void db_get_npcs_on_map(struct map_t *map)
 {
     PGconn *conn = db_connect();
     PGresult *res = NULL;
-    struct npc_data *npcs = map->npcs;
 
     char* q = "SELECT npc_id, direction, x_coord, y_coord FROM jblux_mapnpcs "
         "WHERE map_t_id=$1;";
@@ -135,6 +134,8 @@ void db_get_npcs_on_map(struct map_t *map)
     res = db_exec(conn, q, nParams, params);
 
     int num_npcs = PQntuples(res);
+    struct npc_data *npcs = malloc(sizeof(struct npc_data) + num_npcs);
+
     int i;
     for(i = 0; i < num_npcs; i++)
     {
