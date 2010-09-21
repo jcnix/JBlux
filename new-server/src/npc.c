@@ -5,7 +5,7 @@
 
 #include "npc.h"
 
-char* npc_list_to_json(struct npc_data *npcs)
+char* npc_list_to_json(struct npc_list *npcs)
 {
     char* json;
     yajl_gen_config conf = { 0 };
@@ -30,10 +30,11 @@ char* npc_list_to_json(struct npc_data *npcs)
     const char* coords_field =         "coords";
     
     int i = 0;
-    struct npc_data *data = npcs;
+    struct npc_data *data = npcs->npc;
     yajl_gen_map_open(gen);
-    while(data != NULL)
+    while(npcs)
     {
+        printf("i: %d\n", i);
         json_insert_int(gen, npc_id_field, data->npc_id);
         json_insert_int(gen, job_field, data->job);
         json_insert_str(gen, character_name_field, data->character_name);
@@ -44,13 +45,15 @@ char* npc_list_to_json(struct npc_data *npcs)
         yajl_gen_string(gen, (unsigned char*) quests_field, strlen(quests_field));
         yajl_gen_array_open(gen);
         int j = 0;
-        struct quest *q = data->quests;
-        while(q != NULL)
+        struct quest_list *quests = data->quests;
+        while(quests = NULL)
         {
-            quest_to_json(gen, q);
+            printf("j: %d %s\n", j, quests->quest->name);
+            quest_to_json(gen, quests->quest);
             j++;
-            *q = *(data->quests + j);
+            quests = data->quests->next;
         }
+        printf("done\n");
         yajl_gen_array_close(gen);
 
         json_insert_int(gen, level_field, data->level);
@@ -71,11 +74,31 @@ char* npc_list_to_json(struct npc_data *npcs)
         coordinates_to_json(gen, data->coords);
 
         i++;
-        *data = *(npcs + i);
+        npcs = npcs->next;
     }
     yajl_gen_map_close(gen);
     json = strdup(get_json_str(gen));
     yajl_gen_free(gen);
     return json;
+}
+
+void add_npc(struct npc_list **npcs, struct npc_data *npc)
+{
+    struct npc_list *new = malloc(sizeof(struct npc_list));
+    new->npc = npc;
+    new->next = *npcs;
+    *npcs = new;
+}
+
+void delete_npcs(struct npc_list **npcs)
+{
+    struct npc_list *curr = *npcs;
+    struct npc_list *next = NULL;
+    while(curr)
+    {
+        next = curr->next;
+        free(curr);
+        curr = next;
+    }
 }
 

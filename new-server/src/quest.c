@@ -73,3 +73,23 @@ void quest_to_json(yajl_gen gen, struct quest *q)
     yajl_gen_map_close(gen);
 }
 
+void add_quest(struct quest_list **quests, struct quest *quest)
+{
+    struct quest_list* new = malloc(sizeof(struct quest_list));
+    new->quest = quest;
+    new->next = *quests;
+    *quests = new;
+}
+
+void delete_quest_list(struct quest_list **quests)
+{
+    struct quest_list *curr = *quests;
+    struct quest_list *next = NULL;
+    while(curr)
+    {
+        next = curr->next;
+        free(curr);
+        curr = next;
+    }
+}
+

@@ -134,7 +134,7 @@ void db_get_npcs_on_map(struct map_t *map)
     res = db_exec(conn, q, nParams, params);
 
     int num_npcs = PQntuples(res);
-    struct npc_data *npcs = malloc(sizeof(struct npc_data) + num_npcs);
+    struct npc_list *npcs = NULL;
 
     int i;
     for(i = 0; i < num_npcs; i++)
@@ -151,7 +151,7 @@ void db_get_npcs_on_map(struct map_t *map)
         column++;
         data->coords.y = db_get_int(res, i, column);
 
-        *(npcs + i) = *data;
+        add_npc(&npcs, data);
     }
 
     map->npcs = npcs;

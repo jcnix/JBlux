@@ -46,7 +46,15 @@ struct quest
     int required_npc3_count;
 };
 
+struct quest_list
+{
+    struct quest *quest;
+    struct quest_list *next;
+};
+
 void quest_to_json(yajl_gen gen, struct quest *q);
+void add_quest(struct quest_list **quests, struct quest *quest);
+void delete_quest_list(struct quest_list **quests);
 
 #endif
 

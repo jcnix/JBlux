@@ -103,7 +103,7 @@ void add_player_to_map(struct client_t *client, char* map,
     client->data->coords = coords;
 
     /* TODO: get NPCs and Items and send to player */
-    struct npc_data *npcs = map_st->npcs;
+    struct npc_list *npcs = map_st->npcs;
     char* npc_enc = base64_encode(npc_list_to_json(npcs));
     char* command = NULL;
     if(!asprintf(&command, "map goto %s %d %d npcs %s", map, coords.x, coords.y,

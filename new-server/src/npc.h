@@ -19,7 +19,7 @@ struct npc_data
     char* sprite_sheet;
     char* direction;
     struct coordinates_t coords;
-    struct quest *quests;
+    struct quest_list *quests;
 
     char* character_name;
     int level;
@@ -32,7 +32,15 @@ struct npc_data
     int spirit;
 };
 
-char* npc_list_to_json(struct npc_data *npcs);
+struct npc_list
+{
+    struct npc_data *npc;
+    struct npc_list *next;
+};
+
+char* npc_list_to_json(struct npc_list *npcs);
+void add_npc(struct npc_list **npcs, struct npc_data *npc);
+void delete_npcs(struct npc_list **npcs);
 
 #endif
 

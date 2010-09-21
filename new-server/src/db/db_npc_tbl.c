@@ -8,11 +8,6 @@
 struct npc_data* db_get_npc(int id)
 {
     struct npc_data *npc = malloc(sizeof(struct npc_data));
-    if(!npc)
-    {
-        return NULL;
-    }
-
     PGconn *conn = db_connect();
     PGresult *res = NULL;
 
@@ -72,7 +67,7 @@ struct npc_data* db_get_npc(int id)
     return npc;
 }
 
-struct quest* db_get_quests_for_npc(int npc_id)
+struct quest_list* db_get_quests_for_npc(int npc_id)
 {
     PGconn *conn = db_connect();
     PGresult *res = NULL;
@@ -96,83 +91,83 @@ struct quest* db_get_quests_for_npc(int npc_id)
     res = db_exec(conn, q, nParams, params);
 
     int num_quests = PQntuples(res);
-    struct quest *quests = malloc(sizeof(struct quest) * num_quests);
+    struct quest_list *quests = NULL;
 
     int i = 0;
     for(i = 0; i < num_quests; i++)
     {
-        struct quest q;
+        struct quest *q = malloc(sizeof(struct quest));
 
         int column = 0;
-        q.id = db_get_int(res, i, column);
+        q->id = db_get_int(res, i, column);
 
         column++;
-        q.name = db_get_str(res, i, column);
+        q->name = db_get_str(res, i, column);
 
         column++;
-        q.details = db_get_str(res, i, column);
+        q->details = db_get_str(res, i, column);
 
         column++;
-        q.objectives = db_get_str(res, i, column);
+        q->objectives = db_get_str(res, i, column);
 
         column++;
-        q.completion_text = db_get_str(res, i, column);
+        q->completion_text = db_get_str(res, i, column);
 
         column++;
-        q.min_level = db_get_int(res, i, column);
+        q->min_level = db_get_int(res, i, column);
 
         column++;
-        q.type = db_get_int(res, i, column);
+        q->type = db_get_int(res, i, column);
 
         column++;
-        q.quest_item_id = db_get_int(res, i, column);
+        q->quest_item_id = db_get_int(res, i, column);
 
         column++;
-        q.reward_xp = db_get_int(res, i, column);
+        q->reward_xp = db_get_int(res, i, column);
 
         column++;
-        q.reward_money = db_get_int(res, i, column);
+        q->reward_money = db_get_int(res, i, column);
 
         column++;
-        q.reward_item1_id = db_get_int(res, i, column);
+        q->reward_item1_id = db_get_int(res, i, column);
         column++;
-        q.reward_item2_id = db_get_int(res, i, column);
+        q->reward_item2_id = db_get_int(res, i, column);
         column++;
-        q.reward_item3_id = db_get_int(res, i, column);
+        q->reward_item3_id = db_get_int(res, i, column);
         column++;
-        q.reward_item1_count = db_get_int(res, i, column);
+        q->reward_item1_count = db_get_int(res, i, column);
         column++;
-        q.reward_item2_count = db_get_int(res, i, column);
+        q->reward_item2_count = db_get_int(res, i, column);
         column++;
-        q.reward_item3_count = db_get_int(res, i, column);
+        q->reward_item3_count = db_get_int(res, i, column);
 
         column++;
-        q.required_item1_id = db_get_int(res, i, column);
+        q->required_item1_id = db_get_int(res, i, column);
         column++;
-        q.required_item2_id = db_get_int(res, i, column);
+        q->required_item2_id = db_get_int(res, i, column);
         column++;
-        q.required_item3_id = db_get_int(res, i, column);
+        q->required_item3_id = db_get_int(res, i, column);
         column++;
-        q.required_item1_count = db_get_int(res, i, column);
+        q->required_item1_count = db_get_int(res, i, column);
         column++;
-        q.required_item2_count = db_get_int(res, i, column);
+        q->required_item2_count = db_get_int(res, i, column);
         column++;
-        q.required_item3_count = db_get_int(res, i, column);
+        q->required_item3_count = db_get_int(res, i, column);
         
         column++;
-        q.required_npc1_id = db_get_int(res, i, column);
+        q->required_npc1_id = db_get_int(res, i, column);
         column++;
-        q.required_npc2_id = db_get_int(res, i, column);
+        q->required_npc2_id = db_get_int(res, i, column);
         column++;
-        q.required_npc3_id = db_get_int(res, i, column);
+        q->required_npc3_id = db_get_int(res, i, column);
         column++;
-        q.required_npc1_count = db_get_int(res, i, column);
+        q->required_npc1_count = db_get_int(res, i, column);
         column++;
-        q.required_npc2_count = db_get_int(res, i, column);
+        q->required_npc2_count = db_get_int(res, i, column);
         column++;
-        q.required_npc3_count = db_get_int(res, i, column);
+        q->required_npc3_count = db_get_int(res, i, column);
 
-        *(quests + i) = q;
+        add_quest(&quests, q);
     }
 
     PQclear(res);
