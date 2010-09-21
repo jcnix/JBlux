@@ -12,7 +12,6 @@
 #include <netinet/in.h>
 #include <signal.h>
 #include "client.h"
-#include "db.h"
 #include "map.h"
 #include "types.h"
 

@@ -34,7 +34,6 @@ char* npc_list_to_json(struct npc_list *npcs)
     yajl_gen_map_open(gen);
     while(npcs)
     {
-        printf("i: %d\n", i);
         json_insert_int(gen, npc_id_field, data->npc_id);
         json_insert_int(gen, job_field, data->job);
         json_insert_str(gen, character_name_field, data->character_name);
@@ -46,14 +45,12 @@ char* npc_list_to_json(struct npc_list *npcs)
         yajl_gen_array_open(gen);
         int j = 0;
         struct quest_list *quests = data->quests;
-        while(quests = NULL)
+        while(quests)
         {
-            printf("j: %d %s\n", j, quests->quest->name);
             quest_to_json(gen, quests->quest);
             j++;
             quests = data->quests->next;
         }
-        printf("done\n");
         yajl_gen_array_close(gen);
 
         json_insert_int(gen, level_field, data->level);
