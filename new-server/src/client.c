@@ -38,7 +38,7 @@ void* client_thread(void* vsock)
 
     while(client->connected)
     {
-        if((received = recv(*sock, buffer, BUFFSIZE, 0)) < 0)
+        if((received = recv(*sock, buffer, BUFFSIZE, 0)) <= 0)
         {
             client->connected = 0;
             break;
