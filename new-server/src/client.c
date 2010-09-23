@@ -273,10 +273,7 @@ int esend(int socket, char* message)
     int status = 0;
     int sent_bytes = 0;
     int message_len = strlen(message);
-    if(message_len > 1024)
-    {
-        message_len = 1024;
-    }
+    int to_send = message_len;
 
     char size_msg[16];
     sprintf(size_msg, "size %d ", message_len);
@@ -285,9 +282,19 @@ int esend(int socket, char* message)
 
     while(sent_bytes < message_len && status >= 0)
     {
-        char* m = message + sent_bytes;
+        char *m = message + sent_bytes;
         int m_len = strlen(m);
-        status = send(socket, m, m_len, 0);
+        if(m_len >= 1024)
+        {
+            to_send = 1024;
+        }
+        else
+        {
+            to_send = m_len;
+        }
+
+        status = send(socket, m, to_send, 0);
+        printf("sent: %s\n", m);
         if(status > 0)
             sent_bytes += status;
     }

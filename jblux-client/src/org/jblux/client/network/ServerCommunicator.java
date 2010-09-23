@@ -142,6 +142,7 @@ class ServerListener extends Thread {
     private int msg_size;
     private int recv_bytes;
     private String recv_command;
+    private String remaining_command;
 
     public ServerListener(Socket s) {
         socket = s;
@@ -153,6 +154,7 @@ class ServerListener extends Thread {
         msg_size = 0;
         recv_bytes = 0;
         recv_command = "";
+        remaining_command = null;
     }
 
     @Override
@@ -160,28 +162,76 @@ class ServerListener extends Thread {
         try {
             netIn = new InputStreamReader(socket.getInputStream(), "UTF-8");
             
-            String command = "";
             char buf[] = new char[1024];
             int n;
             while((n = netIn.read(buf)) > 0) {
+                recv_bytes = 0;
+                recv_command = "";
+                
                 StringBuilder s = new StringBuilder();
                 s.append(buf, 0, n);
-                command = s.toString();
-                if(command.startsWith("size")) {
-                    recv_command = command;
+                String command = s.toString();
+                
+                if(remaining_command != null) {
+                    command = remaining_command + command;
+                    remaining_command = null;
                 }
 
-                if(recv_bytes == msg_size) {
-                    msg_size = 0;
+                if(command.startsWith("size")) {
+                    String[] c0 = command.split("\\s");
+                    msg_size = Integer.parseInt(c0[1]);
+                    
+                    /* if anything else is attached to the command, chop it off */
+                    int chop_size = "size ".length() + c0[1].length() + 1;
+                    recv_command = command.substring(chop_size);
+                    recv_bytes = recv_command.length();
+                    
+                    /* continue reading in the rest of the command */
+                    while(recv_bytes < msg_size) {
+                        recv_bytes += netIn.read(buf);
+                        StringBuilder s1 = new StringBuilder();
+                        s1.append(buf, 0, n);
+                        recv_command += s1.toString();
+                    }
+
+                    int rem_bytes = recv_bytes - msg_size;
+                    if(rem_bytes > 0) {
+                        int len = recv_command.length();
+                        remaining_command = recv_command.substring(len - rem_bytes, len);
+                        recv_command = recv_command.substring(0, len - rem_bytes);
+                    }
+
                     doCommand(recv_command);
-                    recv_bytes = 0;
-                    recv_command = "";
-                }
-                else {
-                    recv_bytes += n;
-                    recv_command += command;
                 }
             }
+//                StringBuilder s = new StringBuilder();
+//                s.append(buf, 0, n);
+//                command = s.toString();
+//                if(remaining_command != null) {
+//                    command = remaining_command + command;
+//                    remaining_command = null;
+//                }
+//                System.out.println(command);
+//                if(command.startsWith("size")) {
+//                    recv_command = command;
+//                }
+//
+//                if(recv_bytes == msg_size) {
+//                    msg_size = 0;
+//                    recv_command = doCommand(recv_command);
+//                    recv_bytes = recv_command.length();
+//                }
+//                else {
+//                    int x = n;
+//                    if(recv_bytes + n > msg_size) {
+//                        x = msg_size - recv_bytes;
+//                        remaining_command = command.substring(x, command.length());
+//                    }
+//
+//                    recv_bytes += x;
+//                    recv_command += command.substring(0, x);
+//                }
+//            }
         } catch(IOException ex) {
             ex.printStackTrace();
         }
@@ -203,12 +253,18 @@ class ServerListener extends Thread {
 
     public synchronized void doCommand(String command) {
         String[] c0 = command.split("\\s");
-
-        if(command.startsWith("size")) {
-            msg_size = Integer.parseInt(c0[1]);
-            int chop_size = "size ".length() + c0[1].length() + 1;
-            command = command.substring(chop_size);
-        }
+//        if(command.startsWith("size")) {
+//            msg_size = Integer.parseInt(c0[1]);
+//            int chop_size = "size ".length() + c0[1].length() + 1;
+//            command = command.substring(chop_size);
+//            //System.out.printf("%d - %d: %s\n", msg_size, command.length(), command);
+//            if(command.length() == msg_size) {
+//                msg_size = 0;
+//            }
+//            else {
+//                return command;
+//            }
+//        }
         
         if(command.startsWith(Commands.MOVE)) {
             String name = c0[1];
@@ -250,7 +306,6 @@ class ServerListener extends Thread {
                 player_observer.receivedMessage(data);
             }
             else if(c0[1].equals("goto")) {
-                System.out.println(command);
                 String map = c0[2];
                 coords.x = Integer.parseInt(c0[3]);
                 coords.y = Integer.parseInt(c0[4]);
