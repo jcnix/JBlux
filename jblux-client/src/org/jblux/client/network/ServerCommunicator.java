@@ -204,34 +204,6 @@ class ServerListener extends Thread {
                     doCommand(recv_command);
                 }
             }
-//                StringBuilder s = new StringBuilder();
-//                s.append(buf, 0, n);
-//                command = s.toString();
-//                if(remaining_command != null) {
-//                    command = remaining_command + command;
-//                    remaining_command = null;
-//                }
-//                System.out.println(command);
-//                if(command.startsWith("size")) {
-//                    recv_command = command;
-//                }
-//
-//                if(recv_bytes == msg_size) {
-//                    msg_size = 0;
-//                    recv_command = doCommand(recv_command);
-//                    recv_bytes = recv_command.length();
-//                }
-//                else {
-//                    int x = n;
-//                    if(recv_bytes + n > msg_size) {
-//                        x = msg_size - recv_bytes;
-//                        remaining_command = command.substring(x, command.length());
-//                    }
-//
-//                    recv_bytes += x;
-//                    recv_command += command.substring(0, x);
-//                }
-//            }
         } catch(IOException ex) {
             ex.printStackTrace();
         }
@@ -253,18 +225,6 @@ class ServerListener extends Thread {
 
     public synchronized void doCommand(String command) {
         String[] c0 = command.split("\\s");
-//        if(command.startsWith("size")) {
-//            msg_size = Integer.parseInt(c0[1]);
-//            int chop_size = "size ".length() + c0[1].length() + 1;
-//            command = command.substring(chop_size);
-//            //System.out.printf("%d - %d: %s\n", msg_size, command.length(), command);
-//            if(command.length() == msg_size) {
-//                msg_size = 0;
-//            }
-//            else {
-//                return command;
-//            }
-//        }
         
         if(command.startsWith(Commands.MOVE)) {
             String name = c0[1];
