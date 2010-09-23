@@ -21,6 +21,7 @@
 package org.jblux.common.client;
 
 import java.util.ArrayList;
+import org.jblux.util.Coordinates;
 
 public class NpcData extends CharacterData {
     public int npc_id;
@@ -35,4 +36,5 @@ public class NpcData extends CharacterData {
     /* The direction the npc will face */
     public String direction;
     public ArrayList<Quest> quests;
+    public Coordinates coords;
 }

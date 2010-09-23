@@ -270,6 +270,28 @@ void parse_command(struct client_t *client, char* command)
 
 int esend(int socket, char* message)
 {
-    return send(socket, message, strlen(message), 0);
+    int status = 0;
+    int sent_bytes = 0;
+    int message_len = strlen(message);
+    if(message_len > 1024)
+    {
+        message_len = 1024;
+    }
+
+    char size_msg[16];
+    sprintf(size_msg, "size %d ", message_len);
+    int size_msg_len = strlen(size_msg);
+    send(socket, size_msg, size_msg_len, 0);
+
+    while(sent_bytes < message_len && status >= 0)
+    {
+        char* m = message + sent_bytes;
+        int m_len = strlen(m);
+        status = send(socket, m, m_len, 0);
+        if(status > 0)
+            sent_bytes += status;
+    }
+
+    return status;
 }
 

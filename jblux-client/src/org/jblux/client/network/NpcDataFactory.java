@@ -24,16 +24,16 @@ import com.google.gson.Gson;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.HashMap;
+import java.util.ArrayList;
 import org.jblux.common.client.NpcData;
 import org.jblux.util.Base64;
-import org.jblux.util.Coordinates;
 
 public class NpcDataFactory {
     private NpcDataFactory() {
     }
 
     public static NpcData getDataFromBase64(String p) {
+        System.out.println(p);
         NpcData data = null;
         Gson gson = new Gson();
         
@@ -48,12 +48,12 @@ public class NpcDataFactory {
     }
 
     //TODO: Redo this.  Have the server send seperate Base64 strings for each element of the list
-    public static HashMap<Coordinates, NpcData> getHashMapFromBase64(String p) {
-        HashMap<Coordinates, NpcData> data = null;
+    public static ArrayList<NpcData> getArrayFromBase64(String p) {
+        ArrayList<NpcData> data = null;
         try {
             byte[] bytes = Base64.decode(p);
             ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bytes));
-            data = (HashMap<Coordinates, NpcData>) is.readObject();
+            data = (ArrayList<NpcData>) is.readObject();
         } catch(IOException ex) {
         } catch(ClassNotFoundException ex) {
         }

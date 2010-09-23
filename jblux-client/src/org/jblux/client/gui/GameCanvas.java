@@ -20,12 +20,9 @@
 
 package org.jblux.client.gui;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Set;
-import java.util.Vector;
 import org.jblux.client.GameMap;
 import org.jblux.client.Npc;
 import org.jblux.client.Player;
@@ -34,7 +31,6 @@ import org.jblux.client.Sprite;
 import org.jblux.client.gui.observers.NewPlayerObserver;
 import org.jblux.common.client.NpcData;
 import org.jblux.common.client.PlayerData;
-import org.jblux.common.client.Quest;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -47,7 +43,7 @@ public class GameCanvas implements Observer {
     private static GameCanvas gc;
     private Player player;
     private Players players;
-    private Vector<Npc> npcs;
+    private ArrayList<Npc> npcs;
     private GameMap map;
     private Image walk_area;
     private Coordinates map_coords;
@@ -65,7 +61,7 @@ public class GameCanvas implements Observer {
 
     public void init() {
         players = Players.getInstance();
-        npcs = new Vector<Npc>();
+        npcs = new ArrayList<Npc>();
         map_coords = new Coordinates();
         player_observer = NewPlayerObserver.getInstance();
         player_observer.addObserver(this);
@@ -89,16 +85,12 @@ public class GameCanvas implements Observer {
         this.player = player;
     }
 
-    public void setNpcs(HashMap<Coordinates, NpcData> n) {
-        npcs = new Vector<Npc>();
-
-        Set<Coordinates> c_set = n.keySet();
-        Iterator<Coordinates> it = c_set.iterator();
-        while(it.hasNext()) {
-            Coordinates c = it.next();
-            NpcData data = n.get(c);
+    public void setNpcs(ArrayList<NpcData> n) {
+        npcs = new ArrayList<Npc>();
+        for(int i = 0; i < n.size(); i++) {
+            NpcData data = n.get(i);
             Npc npc = new Npc(data);
-            npc.setCoords(c);
+            npc.setCoords(data.coords);
             npcs.add(npc);
         }
     }

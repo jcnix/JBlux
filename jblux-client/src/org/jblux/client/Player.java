@@ -20,10 +20,10 @@
 
 package org.jblux.client;
 
+import java.util.ArrayList;
 import org.jblux.common.MapGrid;
 import java.util.Observable;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Observer;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ItemFactory;
@@ -44,7 +44,7 @@ public class Player extends Sprite implements Observer {
     private int move_size;
     private String map_name;
     private PlayerData player_data;
-    private HashMap<Coordinates, NpcData> npcs;
+    private ArrayList<NpcData> npcs;
     private ResponseWaiter response;
 
     private Calendar cal;
@@ -60,7 +60,7 @@ public class Player extends Sprite implements Observer {
         this.player_data = data;
         this.server = server;
 
-        npcs = new HashMap<Coordinates, NpcData>();
+        npcs = new ArrayList<NpcData>();
         setImage(FACE_DOWN, 0);
         move_size = 7;
         coords = data.coords;
@@ -274,7 +274,7 @@ public class Player extends Sprite implements Observer {
             c.x = Integer.parseInt(args[1]);
             c.y = Integer.parseInt(args[2]);
             setCoords(c);
-            npcs = NpcDataFactory.getHashMapFromBase64(args[3]);
+            npcs = NpcDataFactory.getArrayFromBase64(args[3]);
             execute_change = true;
         }
         if(response == o && wait_pressed_action) {

@@ -21,7 +21,6 @@
 package org.jblux.client.network;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -140,6 +139,9 @@ class ServerListener extends Thread {
     public Coordinates coords;
     private ArrayList<ResponseWaiter> observables;
     private NewPlayerObserver player_observer;
+    private int msg_size;
+    private int recv_bytes;
+    private String recv_command;
 
     public ServerListener(Socket s) {
         socket = s;
@@ -148,6 +150,9 @@ class ServerListener extends Thread {
         coords = new Coordinates();
         observables = new ArrayList<ResponseWaiter>();
         player_observer = NewPlayerObserver.getInstance();
+        msg_size = 0;
+        recv_bytes = 0;
+        recv_command = "";
     }
 
     @Override
@@ -162,7 +167,20 @@ class ServerListener extends Thread {
                 StringBuilder s = new StringBuilder();
                 s.append(buf, 0, n);
                 command = s.toString();
-                doCommand(command);
+                if(command.startsWith("size")) {
+                    recv_command = command;
+                }
+
+                if(recv_bytes == msg_size) {
+                    msg_size = 0;
+                    doCommand(recv_command);
+                    recv_bytes = 0;
+                    recv_command = "";
+                }
+                else {
+                    recv_bytes += n;
+                    recv_command += command;
+                }
             }
         } catch(IOException ex) {
             ex.printStackTrace();
@@ -185,7 +203,13 @@ class ServerListener extends Thread {
 
     public synchronized void doCommand(String command) {
         String[] c0 = command.split("\\s");
-        
+
+        System.out.println(command);
+        if(command.startsWith("size")) {
+            msg_size = Integer.parseInt(c0[1]);
+            int chop_size = "size ".length() + c0[1].length() + 1;
+        }
+
         if(command.startsWith(Commands.MOVE)) {
             String name = c0[1];
             int x = Integer.parseInt(c0[2]);
@@ -226,6 +250,7 @@ class ServerListener extends Thread {
                 player_observer.receivedMessage(data);
             }
             else if(c0[1].equals("goto")) {
+                System.out.println(command);
                 String map = c0[2];
                 coords.x = Integer.parseInt(c0[3]);
                 coords.y = Integer.parseInt(c0[4]);
