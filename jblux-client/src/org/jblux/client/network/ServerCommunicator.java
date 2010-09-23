@@ -204,12 +204,12 @@ class ServerListener extends Thread {
     public synchronized void doCommand(String command) {
         String[] c0 = command.split("\\s");
 
-        System.out.println(command);
         if(command.startsWith("size")) {
             msg_size = Integer.parseInt(c0[1]);
             int chop_size = "size ".length() + c0[1].length() + 1;
+            command = command.substring(chop_size);
         }
-
+        
         if(command.startsWith(Commands.MOVE)) {
             String name = c0[1];
             int x = Integer.parseInt(c0[2]);
