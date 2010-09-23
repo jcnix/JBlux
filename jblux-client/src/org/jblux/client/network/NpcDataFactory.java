@@ -25,6 +25,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import org.jblux.common.client.NpcData;
 import org.jblux.util.Base64;
 
@@ -33,10 +34,8 @@ public class NpcDataFactory {
     }
 
     public static NpcData getDataFromBase64(String p) {
-        System.out.println(p);
         NpcData data = null;
         Gson gson = new Gson();
-        
         try {
             byte[] bytes = Base64.decode(p);
             String s = new String(bytes);
@@ -49,15 +48,21 @@ public class NpcDataFactory {
 
     //TODO: Redo this.  Have the server send seperate Base64 strings for each element of the list
     public static ArrayList<NpcData> getArrayFromBase64(String p) {
-        ArrayList<NpcData> data = null;
+        ArrayList<NpcData> data = new ArrayList<NpcData>();
+        Gson gson = new Gson();
+        NpcList list = new NpcList();
         try {
             byte[] bytes = Base64.decode(p);
-            ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bytes));
-            data = (ArrayList<NpcData>) is.readObject();
+            String json = new String(bytes);
+            list = gson.fromJson(json, NpcList.class);
         } catch(IOException ex) {
-        } catch(ClassNotFoundException ex) {
         }
-
+        
+        data.addAll(Arrays.asList(list.npcs));
         return data;
     }
+}
+
+class NpcList {
+    public NpcData npcs[];
 }
