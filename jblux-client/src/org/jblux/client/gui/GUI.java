@@ -24,6 +24,7 @@ import org.jblux.client.network.ServerCommunicator;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import org.jblux.common.client.Quest;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -53,7 +54,7 @@ public class GUI {
         }
     }
 
-    public void openQuestDialogBox(ArrayList<Quest> quests) {
+    public void openQuestDialogBox(LinkedList<Quest> quests) {
         dialog_box = new QuestDialogBox(this);
         dialog_box.setQuests(quests);
     }

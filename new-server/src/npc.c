@@ -33,8 +33,6 @@ char* npc_list_to_json(struct npc_list *npcs)
     int i = 0;
     struct npc_data *data = npcs->npc;
     
-    yajl_gen_map_open(gen);
-    yajl_gen_string(gen, (unsigned char*) npcs_field, strlen(npcs_field));
     yajl_gen_array_open(gen);
     while(npcs)
     {
@@ -80,7 +78,6 @@ char* npc_list_to_json(struct npc_list *npcs)
         npcs = npcs->next;
     }
     yajl_gen_array_close(gen);
-    yajl_gen_map_close(gen);
 
     json = strdup(get_json_str(gen));
     yajl_gen_free(gen);

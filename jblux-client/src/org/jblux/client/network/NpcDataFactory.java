@@ -21,9 +21,7 @@
 package org.jblux.client.network;
 
 import com.google.gson.Gson;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.jblux.common.client.NpcData;
@@ -50,19 +48,14 @@ public class NpcDataFactory {
     public static ArrayList<NpcData> getArrayFromBase64(String p) {
         ArrayList<NpcData> data = new ArrayList<NpcData>();
         Gson gson = new Gson();
-        NpcList list = new NpcList();
         try {
             byte[] bytes = Base64.decode(p);
             String json = new String(bytes);
-            list = gson.fromJson(json, NpcList.class);
+            NpcData[] d = gson.fromJson(json, NpcData[].class);
+            data.addAll(Arrays.asList(d));
         } catch(IOException ex) {
         }
-        
-        data.addAll(Arrays.asList(list.npcs));
+
         return data;
     }
-}
-
-class NpcList {
-    public NpcData npcs[];
 }

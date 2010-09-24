@@ -21,6 +21,7 @@
 package org.jblux.client.gui;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import org.jblux.common.client.Quest;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -31,7 +32,7 @@ import org.newdawn.slick.gui.GUIContext;
 
 public class QuestDialogBox {
     private Image boxImage;
-    private ArrayList<Quest> quests;
+    private LinkedList<Quest> quests;
     private UnicodeFont ufont;
     private GUI gui;
     private Image closeButton;
@@ -56,7 +57,7 @@ public class QuestDialogBox {
         display_quest = false;
     }
 
-    public void setQuests(ArrayList<Quest> quests) {
+    public void setQuests(LinkedList<Quest> quests) {
         this.quests = quests;
         select_quest = true;
         quest_boxes = new ArrayList<Rectangle>();
