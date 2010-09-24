@@ -20,12 +20,18 @@
 
 package org.jblux.server;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import org.jblux.common.ServerInfo;
+import org.jblux.common.client.PlayerData;
 import org.jblux.common.error.FatalError;
+import org.jblux.server.maps.Map;
+import org.jblux.server.maps.Maps;
+import org.jblux.sql.MapSqlTable;
+import org.jblux.sql.UserTable;
 
 public class Server {
     private ServerSocket serv;
@@ -46,6 +52,11 @@ public class Server {
 
         m_gameworld = new GameWorld();
         m_gameworld.start();
+
+        Maps maps = Maps.getInstance();
+        Map m = maps.getMap(1);
+        Gson gson = new Gson();
+        System.out.printf("%s\n", gson.toJson(m));
 
         while(true) {
             try {

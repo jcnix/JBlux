@@ -20,11 +20,7 @@
 
 package org.jblux.common.client;
 
-import java.io.Serializable;
-
-public class PlayerClass implements Serializable {
-    private final long serialVersionUID = 1L;
-
+public class PlayerClass {
     public int id;
     public String name;
 }

@@ -20,11 +20,7 @@
 
 package org.jblux.common.client;
 
-import java.io.Serializable;
-
-public class Race implements Serializable {
-    private final long serialVersionUID = 1L;
-
+public class Race {
     public int id;
     public String name;
     public String sprite_sheet;

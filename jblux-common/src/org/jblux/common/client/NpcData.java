@@ -20,12 +20,11 @@
 
 package org.jblux.common.client;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import org.jblux.util.Coordinates;
 
-public class NpcData extends CharacterData implements Serializable {
-    private final long serialVersionUID = 1L;
-
+public class NpcData extends CharacterData {
     public int npc_id;
     
     /* Job will be things like Vendor or Enemy */
@@ -37,5 +36,6 @@ public class NpcData extends CharacterData implements Serializable {
     
     /* The direction the npc will face */
     public String direction;
-    public ArrayList<Quest> quests;
+    public LinkedList<Quest> quests;
+    public Coordinates coords;
 }

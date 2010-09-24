@@ -86,10 +86,10 @@ public class ClientThread {
 
     public void setPlayerData(PlayerData pd) {
         player_data = pd;
-        try {
+        /*try {
             enc_player_data = Base64.encodeObject(pd);
         } catch(IOException ex) {
-        }
+        }*/
     }
 
     public int getMap() {

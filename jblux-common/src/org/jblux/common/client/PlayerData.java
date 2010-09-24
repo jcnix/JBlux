@@ -20,13 +20,10 @@
 
 package org.jblux.common.client;
 
-import java.io.Serializable;
 import org.jblux.common.items.Inventory;
 import org.jblux.util.Coordinates;
 
-public class PlayerData extends CharacterData implements Serializable {
-    private final long serialVersionUID = 1L;
-
+public class PlayerData extends CharacterData {
     public String map;
     public int user_id;
     public int character_id;

@@ -21,8 +21,8 @@
 package org.jblux.client.network;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ import org.jblux.util.Coordinates;
  */
 public class ServerCommunicator {
     private Socket socket;
-    private ObjectOutputStream netOut;
+    private OutputStream netOut;
     private ServerListener sl;
     public Player player;
 
@@ -54,7 +54,7 @@ public class ServerCommunicator {
         try {
             socket = new Socket(ServerInfo.SERVER, ServerInfo.PORT);
             if(socket.isConnected()) {
-                netOut = new ObjectOutputStream(socket.getOutputStream());
+                netOut = socket.getOutputStream();
                 sl = new ServerListener(socket);
                 sl.start();
             }
@@ -122,8 +122,7 @@ public class ServerCommunicator {
 
     public void writeString(String s) {
         try {
-            String command = Base64.encodeObject(s);
-            netOut.writeObject(command);
+            netOut.write(s.getBytes());
         } catch (IOException ex) {
         }
     }
@@ -134,12 +133,16 @@ public class ServerCommunicator {
  */
 class ServerListener extends Thread {
     private Socket socket;
-    private ObjectInputStream netIn;
+    private InputStreamReader netIn;
     private Players players;
     private ChatBoxObserver cbObserver;
     public Coordinates coords;
     private ArrayList<ResponseWaiter> observables;
     private NewPlayerObserver player_observer;
+    private int msg_size;
+    private int recv_bytes;
+    private String recv_command;
+    private String remaining_command;
 
     public ServerListener(Socket s) {
         socket = s;
@@ -148,18 +151,59 @@ class ServerListener extends Thread {
         coords = new Coordinates();
         observables = new ArrayList<ResponseWaiter>();
         player_observer = NewPlayerObserver.getInstance();
+        msg_size = 0;
+        recv_bytes = 0;
+        recv_command = "";
+        remaining_command = null;
     }
 
     @Override
     public void run() {
         try {
-            netIn = new ObjectInputStream(socket.getInputStream());
+            netIn = new InputStreamReader(socket.getInputStream(), "UTF-8");
             
-            String command = "";
-            while((command = (String) netIn.readObject()) != null) {
-                doCommand(command);
+            char buf[] = new char[1024];
+            int n;
+            while((n = netIn.read(buf)) > 0) {
+                recv_bytes = 0;
+                recv_command = "";
+                
+                StringBuilder s = new StringBuilder();
+                s.append(buf, 0, n);
+                String command = s.toString();
+                
+                if(remaining_command != null) {
+                    command = remaining_command + command;
+                    remaining_command = null;
+                }
+
+                if(command.startsWith("size")) {
+                    String[] c0 = command.split("\\s");
+                    msg_size = Integer.parseInt(c0[1]);
+                    
+                    /* if anything else is attached to the command, chop it off */
+                    int chop_size = "size ".length() + c0[1].length() + 1;
+                    recv_command = command.substring(chop_size);
+                    recv_bytes = recv_command.length();
+                    
+                    /* continue reading in the rest of the command */
+                    while(recv_bytes < msg_size) {
+                        recv_bytes += netIn.read(buf);
+                        StringBuilder s1 = new StringBuilder();
+                        s1.append(buf, 0, n);
+                        recv_command += s1.toString();
+                    }
+
+                    int rem_bytes = recv_bytes - msg_size;
+                    if(rem_bytes > 0) {
+                        int len = recv_command.length();
+                        remaining_command = recv_command.substring(len - rem_bytes, len);
+                        recv_command = recv_command.substring(0, len - rem_bytes);
+                    }
+
+                    doCommand(recv_command);
+                }
             }
-        } catch(ClassNotFoundException ex) {
         } catch(IOException ex) {
             ex.printStackTrace();
         }
@@ -179,18 +223,9 @@ class ServerListener extends Thread {
         }
     }
 
-    public synchronized void doCommand(String c) {
-        String command = "";
-        String[] c0 = null;
-        try {
-            String[] c_enc = c.split("\\s");
-            command = c_enc[0];
-            command = (String) Base64.decodeToObject(command);
-            c0 = command.split("\\s");
-        } catch (IOException ex) {
-        } catch (ClassNotFoundException ex) {
-        }
-
+    public synchronized void doCommand(String command) {
+        String[] c0 = command.split("\\s");
+        
         if(command.startsWith(Commands.MOVE)) {
             String name = c0[1];
             int x = Integer.parseInt(c0[2]);

@@ -20,13 +20,12 @@
 
 package org.jblux.client.network;
 
-import java.io.ByteArrayInputStream;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
 import org.jblux.common.client.NpcData;
 import org.jblux.util.Base64;
-import org.jblux.util.Coordinates;
 
 public class NpcDataFactory {
     private NpcDataFactory() {
@@ -34,25 +33,27 @@ public class NpcDataFactory {
 
     public static NpcData getDataFromBase64(String p) {
         NpcData data = null;
+        Gson gson = new Gson();
         try {
             byte[] bytes = Base64.decode(p);
-            ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bytes));
-            data = (NpcData) is.readObject();
+            String s = new String(bytes);
+            data = gson.fromJson(s, NpcData.class);
         } catch(IOException ex) {
-        } catch(ClassNotFoundException ex) {
         }
 
         return data;
     }
 
-    public static HashMap<Coordinates, NpcData> getHashMapFromBase64(String p) {
-        HashMap<Coordinates, NpcData> data = null;
+    //TODO: Redo this.  Have the server send seperate Base64 strings for each element of the list
+    public static ArrayList<NpcData> getArrayFromBase64(String p) {
+        ArrayList<NpcData> data = new ArrayList<NpcData>();
+        Gson gson = new Gson();
         try {
             byte[] bytes = Base64.decode(p);
-            ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bytes));
-            data = (HashMap<Coordinates, NpcData>) is.readObject();
+            String json = new String(bytes);
+            NpcData[] d = gson.fromJson(json, NpcData[].class);
+            data.addAll(Arrays.asList(d));
         } catch(IOException ex) {
-        } catch(ClassNotFoundException ex) {
         }
 
         return data;

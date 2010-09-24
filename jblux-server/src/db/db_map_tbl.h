@@ -1,0 +1,30 @@
+/*
+ * File: db_map_tbl.h
+ * Author: Casey Jones
+ */
+
+#ifndef _DB_MAP_TBL_H
+#define _DB_MAP_TBL_H
+
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <libpq-fe.h>
+#include "db.h"
+#include "db_npc_tbl.h"
+#include "../map.h"
+#include "../npc.h"
+#include "../types.h"
+
+#define MAP_TABLE "jblux-map"
+
+struct map_t* db_get_all_maps();
+char* db_get_map_name_for_id(int id);
+int db_get_map_id_for_name(char* name);
+void db_get_items_on_map(struct map_t *map);
+void db_get_npcs_on_map(struct map_t *map);
+struct coordinates_t db_get_map_entrance(int map_id, enum Relation r);
+
+#endif
+
