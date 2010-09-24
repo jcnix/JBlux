@@ -294,7 +294,6 @@ int esend(int socket, char* message)
         }
 
         status = send(socket, m, to_send, 0);
-        printf("sent: %s\n", m);
         if(status > 0)
             sent_bytes += status;
     }
