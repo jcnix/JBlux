@@ -81,6 +81,7 @@ void move_client(struct client_t *client, struct coordinates_t coords)
         return;
     }
 
+    printf("%s\n", command);
     tell_all_players_on_map(client, client->data->map_id, command);
 
     free(command);

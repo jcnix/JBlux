@@ -13,7 +13,6 @@ char* npc_list_to_json(struct npc_list *npcs)
     gen = yajl_gen_alloc(&conf, NULL);
 
     /* Field names */
-    const char* npcs_field =            "npcs";
     const char* npc_id_field =          "npc_id";
     const char* job_field =             "job";
     const char* character_name_field =  "character_name";
