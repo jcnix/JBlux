@@ -125,7 +125,9 @@ void add_player_to_map(struct client_t *client, char* map,
     for(i = 0; i < num_clients; i++)
     {
         struct client_t *to = clients[i];
-        if(to->data->map_id == client->data->map_id)
+        printf("%d - %d\n", to->socket, client->socket);
+        if(to->data->map_id == client->data->map_id &&
+                to->socket != client->socket)
         {
             /* Tell other clients about the new player */
             esend(to->socket, command);
