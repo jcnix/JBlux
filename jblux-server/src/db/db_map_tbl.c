@@ -5,10 +5,8 @@
 
 #include "db_map_tbl.h"
 
-struct map_t* db_get_all_maps()
+void db_get_all_maps(struct map_list **maps)
 {
-    struct map_t *maps = NULL;
-
     PGconn *conn = db_connect();
     PGresult *res = NULL;
 
@@ -18,50 +16,43 @@ struct map_t* db_get_all_maps()
     res = db_exec(conn, q, nParams, NULL);
     int rows = PQntuples(res);
     
-    maps = malloc(sizeof(struct map_t) * rows);
-    if(!maps)
-    {
-        return NULL;
-    }
-
     int i;
     for(i = 0; i < rows; i++)
     {
-        struct map_t map;
+        struct map_t *map = malloc(sizeof(struct map_t));
         
         int column = 0;
-        map.id = db_get_int(res, i, column);
+        map->id = db_get_int(res, i, column);
        
         column++;
-        map.name = db_get_str(res, i, column);
+        map->name = db_get_str(res, i, column);
     
         column++;
-        map.map_left = db_get_int(res, i, column);
+        map->map_left = db_get_int(res, i, column);
         
         column++;
-        map.map_right = db_get_int(res, i, column);
+        map->map_right = db_get_int(res, i, column);
         
         column++;
-        map.map_above = db_get_int(res, i, column);
+        map->map_above = db_get_int(res, i, column);
         
         column++;
-        map.map_below = db_get_int(res, i, column);
+        map->map_below = db_get_int(res, i, column);
    
         /* Get entrances for all four sides */
-        map.left_ent    =   db_get_map_entrance(map.id, LEFT);
-        map.right_ent   =   db_get_map_entrance(map.id, RIGHT);
-        map.top_ent     =   db_get_map_entrance(map.id, ABOVE);
-        map.bottom_ent  =   db_get_map_entrance(map.id, BELOW);
+        map->left_ent    =   db_get_map_entrance(map->id, LEFT);
+        map->right_ent   =   db_get_map_entrance(map->id, RIGHT);
+        map->top_ent     =   db_get_map_entrance(map->id, ABOVE);
+        map->bottom_ent  =   db_get_map_entrance(map->id, BELOW);
 
-        db_get_npcs_on_map(&map);
-        /* TODO: initialize map.items */
-        map.items = NULL;
-        *(maps + i) = map;
+        db_get_npcs_on_map(map);
+        /* TODO: initialize map->items */
+        map->items = NULL;
+        add_map(maps, map);
     }
 
     PQclear(res);
     db_disconnect(conn);
-    return maps;
 }
 
 char* db_get_map_name_for_id(int id)
