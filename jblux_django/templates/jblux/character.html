@@ -1,0 +1,17 @@
+{% extends "jblux/base.html" %}
+
+{% block title %}{{ char.name }}{% endblock %}
+
+{% block content %}
+<p>Name: {{ char.name }}</p>
+<p>Level: {{ char.level }}</p>
+<p>Race: {{ char.race.name }}</p>
+<p>Class: {{ char.class_t.name }}</p>
+<p>Strength: {{ char.strength }}</p>
+<p>Agility: {{ char.agility }}</p>
+<p>Stamina: {{ char.stamina }}</p>
+<p>Intelligence: {{ char.intelligence }}</p>
+<p>Spirit: {{ char.spririt }}</p>
+<p>Current Map: {{ char.current_map.name }}</p>
+{% endblock %}
+
