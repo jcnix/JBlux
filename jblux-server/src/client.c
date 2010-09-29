@@ -250,7 +250,7 @@ void parse_command(struct client_t *client, char* command)
             struct map_t *map = get_map_for_name(map_name);
             map = get_adjacent_map(map, rel);
             struct coordinates_t coords = get_map_entrance(map, rel);
-            add_player_to_map(client, map_name, coords);
+            add_player_to_map(client, map->name, coords);
         }
         else if(strcmp(c, "pickup") == 0)
         {
