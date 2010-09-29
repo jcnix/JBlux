@@ -1,6 +1,6 @@
 {% extends "jblux/base.html" %}
 
-{% block title %}{{ user.name }}{% endblock %}
+{% block title %}{{ user.username }}{% endblock %}
 
 {% block content %}
 <p>Name: {{ user.username }}</p>
@@ -9,6 +9,7 @@
 {% endif %}
 <p>Status: {% if user.is_active %}Active{% else %}Banned{% endif %}
 
+<p>Characters</p>
 {% for c in chars %}
     <p><a href="/jblux/character/{{c.id}}">{{c.name}}</a></p>
 {% endfor %}
