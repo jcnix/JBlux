@@ -141,7 +141,10 @@ def help(request):
     return render_to_response('jblux/help.html',
             context_instance=RequestContext(request))
 
-def view_profile(request, account_id):
+def view_profile(request, account_id=0):
+    if account_id == 0:
+        account_id = request.session['user'].id
+
     user = get_object_or_404(User, pk=account_id)
     characters = Character.objects.filter(user=account_id)
 
