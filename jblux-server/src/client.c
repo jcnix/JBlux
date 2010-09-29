@@ -261,9 +261,9 @@ void parse_command(struct client_t *client, char* command)
         else if(strcmp(c, "info") == 0)
         {
             /* Tell the player about the map they're on. */
-            int map_id = client->data->map_id;
+            /*int map_id = client->data->map_id;
             struct map_t *map = get_map_for_id(map_id);
-            add_player_to_map(client, map->name, client->data->coords);
+            add_player_to_map(client, map->name, client->data->coords);*/
         }
     }
     else if(strncmp(command, "disconnect", 10) == 0)
@@ -274,6 +274,7 @@ void parse_command(struct client_t *client, char* command)
 
 int esend(int socket, char* message)
 {
+    printf("%s\n", message);
     int status = 0;
     int sent_bytes = 0;
     int message_len = strlen(message);
