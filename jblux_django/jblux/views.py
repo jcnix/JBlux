@@ -24,7 +24,7 @@ def login(request):
     if user is not None:
         request.session['user'] = user
         if user.is_active:
-            return HttpResponseRedirect('/jblux/index')
+            return HttpResponseRedirect('/jblux/profile/'+str(user.id))
         else:
             return HttpResponse("Disabled")
     else:
