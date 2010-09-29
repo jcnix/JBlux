@@ -78,22 +78,25 @@ struct map_t* get_adjacent_map(struct map_t *map, enum Relation rel)
     return new_map;
 }
 
+/* The Relation argument tells the function which direction the
+ * player is coming from.  So if we're coming from the left, we
+ * really want the right entrance coords */
 struct coordinates_t get_map_entrance(struct map_t *map, enum Relation rel)
 {
     struct coordinates_t coords;
     switch(rel)
     {
         case LEFT:
-            coords = map->left_ent;
-            break;
-        case RIGHT:
             coords = map->right_ent;
             break;
+        case RIGHT:
+            coords = map->left_ent;
+            break;
         case ABOVE:
-            coords = map->top_ent;
+            coords = map->bottom_ent;
             break;
         case BELOW:
-            coords = map->bottom_ent;
+            coords = map->top_ent;
             break;
         default:
             break;

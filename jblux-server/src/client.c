@@ -274,7 +274,6 @@ void parse_command(struct client_t *client, char* command)
 
 int esend(int socket, char* message)
 {
-    printf("%s\n", message);
     int status = 0;
     int sent_bytes = 0;
     int message_len = strlen(message);

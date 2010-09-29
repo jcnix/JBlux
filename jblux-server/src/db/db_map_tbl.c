@@ -181,28 +181,8 @@ struct coordinates_t db_get_map_entrance(int map_id, enum Relation r)
     res = db_exec(conn, q, nParams, params);
 
     int x_column = 0;
-    int y_column = 0;
-    if(r == LEFT)
-    {
-        x_column = PQfnumber(res, "entrance_left_x");
-        y_column = PQfnumber(res, "entrance_left_y");
-    }
-    else if(r == RIGHT)
-    {
-        x_column = PQfnumber(res, "entrance_right_x");
-        y_column = PQfnumber(res, "entrance_right_y");
-    }
-    else if(r == ABOVE)
-    {
-        x_column = PQfnumber(res, "entrance_top_x");
-        y_column = PQfnumber(res, "entrance_top_y");
-    }
-    else if(r == BELOW)
-    {
-        x_column = PQfnumber(res, "entrance_bottom_x");
-        y_column = PQfnumber(res, "entrance_bottom_y");
-    }
-
+    int y_column = 1;
+    
     coords.x = db_get_int(res, 0, x_column);
     coords.y = db_get_int(res, 0, y_column);
 
