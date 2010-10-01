@@ -50,6 +50,7 @@ void* client_thread(void* vsock)
 
     close(*sock);
     remove_client_from_list(&clients, client);
+    printf("exiting\n");
     pthread_exit(NULL);
     return 0;
 }
@@ -83,7 +84,6 @@ void move_client(struct client_t *client, struct coordinates_t coords)
     }
 
     tell_all_players_on_map(client, client->data->map_id, command);
-
     free(command);
 }
 
@@ -303,6 +303,20 @@ int esend(int socket, char* message)
     }
 
     return status;
+}
+
+/* Called by signal handler if admin does a SIGINT or whatever.
+ * Just sets all clients as being unconnected.  The threads
+ * will see this and terminate themselves. */
+void kill_all_clients()
+{
+    struct client_list *curr = clients;
+    while(curr)
+    {
+        curr->client->connected = 0;
+        curr = curr->next;
+    }
+    delete_client_list(&clients);
 }
 
 void add_client(struct client_list **clients, struct client_t *client)

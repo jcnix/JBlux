@@ -53,6 +53,7 @@ void parse_command(struct client_t *client, char* command);
 
 /* Easy way of sending messages */
 int esend(int socket, char* message);
+void kill_all_clients();
 
 void add_client(struct client_list **clients, struct client_t *client);
 void delete_client_list(struct client_list **clients);
