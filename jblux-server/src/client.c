@@ -205,6 +205,11 @@ void parse_command(struct client_t *client, char* command)
             send_player_data_to_self(client, char_name);
             add_player_to_map(client, client->data->map, client->data->coords);
         }
+        else
+        {
+            /* client_thread() will take care of cleaning up */
+            client->connected = 0;
+        }
     }
 
     /* Ignore all commands from client until they authenticate */
