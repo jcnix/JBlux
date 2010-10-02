@@ -48,12 +48,9 @@ public class JBlux extends StateBasedGame{
         }
         else {            
              MainMenuState mms = new MainMenuState(MAINMENUSTATE, server);
-             this.addState(mms);
-             
              GameplayState gps = new GameplayState(GAMEPLAYSTATE, server);
              this.addState(gps);
-             gps.init(gc, this);
-             
+             this.addState(mms);            
              this.enterState(MAINMENUSTATE);
         }
     }

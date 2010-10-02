@@ -20,6 +20,7 @@
 
 package org.jblux.client;
 
+import org.jblux.client.gui.GameCanvas;
 import org.jblux.common.Relation;
 import org.jblux.common.RelationUtil;
 import org.jblux.common.client.NpcData;
@@ -35,8 +36,8 @@ public class Npc extends Sprite {
     private boolean available_quests;
     private Image available_quest_icon;
 
-    public Npc(NpcData data) {
-        super(data);
+    public Npc(NpcData data, GameCanvas gc) {
+        super(data, gc);
         this.data = data;
         
         Relation r = RelationUtil.upDownRelation(data.direction);

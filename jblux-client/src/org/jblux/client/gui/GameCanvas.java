@@ -29,6 +29,10 @@ import org.jblux.client.Player;
 import org.jblux.client.Players;
 import org.jblux.client.Sprite;
 import org.jblux.client.gui.observers.NewPlayerObserver;
+import org.jblux.client.network.NpcDataFactory;
+import org.jblux.client.network.ResponseWaiter;
+import org.jblux.client.network.ServerCommunicator;
+import org.jblux.common.Relation;
 import org.jblux.common.client.NpcData;
 import org.jblux.common.client.PlayerData;
 import org.jblux.util.Coordinates;
@@ -40,7 +44,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
 public class GameCanvas implements Observer {
-    private static GameCanvas gc;
+    private ServerCommunicator server;
     private Player player;
     private Players players;
     private ArrayList<Npc> npcs;
@@ -52,29 +56,37 @@ public class GameCanvas implements Observer {
     private NewPlayerObserver player_observer;
     private GUI gui;
 
+    private boolean wait_new_map;
+    private ResponseWaiter response;
+    private String map_name;
+    private ArrayList<NpcData> npc_data;
+
     private boolean new_player;
     private PlayerData new_data;
 
-    protected GameCanvas() {
+    public GameCanvas(ServerCommunicator s) {
+        server = s;
         init();
     }
 
     public void init() {
+        System.out.println("init");
         players = Players.getInstance();
         npcs = new ArrayList<Npc>();
+        npc_data = new ArrayList<NpcData>();
         map_coords = new Coordinates();
         player_observer = NewPlayerObserver.getInstance();
         player_observer.addObserver(this);
         developer_mode = false;
         new_player = false;
         new_data = null;
-    }
 
-    public static GameCanvas getInstance() {
-        if(gc == null)
-            gc = new GameCanvas();
-
-        return gc;
+        if(server.isConnected()) {
+            /* We'll be receiving the map from the server on initilization */
+            wait_new_map = true;
+            response = ResponseWaiter.get_new_waiter(this);
+            server.add_observable(response);
+        }
     }
 
     public void setGui(GUI gui) {
@@ -89,7 +101,7 @@ public class GameCanvas implements Observer {
         npcs = new ArrayList<Npc>();
         for(int i = 0; i < n.size(); i++) {
             NpcData data = n.get(i);
-            Npc npc = new Npc(data);
+            Npc npc = new Npc(data, this);
             npc.setCoords(data.coords);
             npcs.add(npc);
         }
@@ -113,6 +125,12 @@ public class GameCanvas implements Observer {
             setMap(new GameMap(name), c);
         } catch (SlickException ex) {
         }
+    }
+
+    public void getNewMap(Relation relation, String map_name) {
+        wait_new_map = true;
+        response = ResponseWaiter.get_new_waiter(this);
+        server.goto_map(response, relation, map_name);
     }
 
     public GameMap getMap() {
@@ -146,11 +164,17 @@ public class GameCanvas implements Observer {
     public void update(GameContainer gc) {
         if(new_player) {
             new_player = false;
-            Sprite npc = new Sprite(new_data);
+            Sprite npc = new Sprite(new_data, this);
             npc.setCoords(new_data.coords.x, new_data.coords.y);
             npc.setImage(0, 0);
             players.addPlayer(npc);
             new_data = null;
+        }
+
+        if(npc_data.size() > 0) {
+            setMap(map_name, map_coords);
+            setNpcs(npc_data);
+            npc_data = new ArrayList<NpcData>();
         }
 
         player.update(gc);
@@ -246,6 +270,28 @@ public class GameCanvas implements Observer {
     }
 
     public void update(Observable o, Object arg) {
+        if(arg instanceof String && wait_new_map) {
+            String sarg = (String) arg;
+            if(sarg.startsWith("map")) {
+                server.rm_observable(o);
+                String[] args = sarg.split("\\s");
+
+                map_name = args[1];
+
+                Coordinates c = new Coordinates();
+                c.x = Integer.parseInt(args[2]);
+                c.y = Integer.parseInt(args[3]);
+
+                if(player != null) {
+                    player.setMapName(map_name);
+                    player.setCoords(c);
+                }
+
+                map_coords = c;
+                npc_data = NpcDataFactory.getArrayFromBase64(args[4]);
+            }
+        }
+
         if(arg instanceof PlayerData) {
             new_player = true;
             new_data = (PlayerData) arg;

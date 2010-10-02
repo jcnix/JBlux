@@ -20,14 +20,12 @@
 
 package org.jblux.client;
 
-import java.util.ArrayList;
 import org.jblux.common.MapGrid;
 import java.util.Observable;
 import java.util.Calendar;
 import java.util.Observer;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ItemFactory;
-import org.jblux.client.network.NpcDataFactory;
 import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.common.Relation;
@@ -44,23 +42,18 @@ public class Player extends Sprite implements Observer {
     private int move_size;
     private String map_name;
     private PlayerData player_data;
-    private ArrayList<NpcData> npcs;
     private ResponseWaiter response;
 
     private Calendar cal;
     private long lastMove;
-    private boolean execute_change;
-
-    private boolean wait_new_map;
     private boolean wait_pressed_action;
 
-    public Player(PlayerData data, ServerCommunicator server) {
-        super(data);
+    public Player(PlayerData data, ServerCommunicator server, GameCanvas gc) {
+        super(data, gc);
 
         this.player_data = data;
         this.server = server;
-
-        npcs = new ArrayList<NpcData>();
+        
         setImage(FACE_DOWN, 0);
         move_size = 7;
         coords = data.coords;
@@ -69,15 +62,14 @@ public class Player extends Sprite implements Observer {
 
         cal = Calendar.getInstance();
         lastMove = cal.getTimeInMillis();
-
-        //Ask for map info
-        wait_new_map = true;
-        response = ResponseWaiter.get_new_waiter(this);
-        server.getMapInfo(response);
     }
 
     public PlayerData getData() {
         return player_data;
+    }
+    
+    public void setMapName(String map) {
+        map_name = map;
     }
 
     public void update(GameContainer gc) {
@@ -233,16 +225,7 @@ public class Player extends Sprite implements Observer {
         }
 
         if(change) {
-            wait_new_map = true;
-            response = ResponseWaiter.get_new_waiter(this);
-            server.goto_map(response, relation, map_name);
-        }
-
-        if(execute_change) {
-            execute_change = false;
-            GameCanvas gc = GameCanvas.getInstance();
-            gc.setMap(map_name, coords);
-            gc.setNpcs(npcs);
+            canvas.getNewMap(relation, map_name);
         }
     }
 
@@ -265,18 +248,6 @@ public class Player extends Sprite implements Observer {
     }
     
     public void update(Observable o, Object arg) {
-        if(response == o && wait_new_map) {
-            server.rm_observable(o);
-            String sarg = (String) arg;
-            String[] args = sarg.split("\\s");
-            map_name = args[0];
-            Coordinates c = new Coordinates();
-            c.x = Integer.parseInt(args[1]);
-            c.y = Integer.parseInt(args[2]);
-            setCoords(c);
-            npcs = NpcDataFactory.getArrayFromBase64(args[3]);
-            execute_change = true;
-        }
         if(response == o && wait_pressed_action) {
             server.rm_observable(o);
             String sarg = (String) arg;

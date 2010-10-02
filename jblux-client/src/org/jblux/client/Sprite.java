@@ -50,12 +50,12 @@ public class Sprite {
     protected UnicodeFont nameFont;
     protected GameCanvas canvas;
 
-    public Sprite(CharacterData data) {
+    public Sprite(CharacterData data, GameCanvas gc) {
         char_data = data;
         width = 32;
         height = data.race.sprite_height;
         coords = new Coordinates();
-        canvas = GameCanvas.getInstance();
+        canvas = gc;
 
         try {
             nameFont = FontFactory.getDefaultFont();
