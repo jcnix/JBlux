@@ -71,6 +71,10 @@ public class ServerCommunicator {
         }
     }
 
+    public void add_observable(ResponseWaiter ro) {
+        sl.add_observable(ro);
+    }
+    
     public void rm_observable(Observable o) {
         sl.rm_observable((ResponseWaiter) o);
     }
@@ -164,36 +168,45 @@ class ServerListener extends Thread {
             
             char buf[] = new char[1024];
             int n;
-            while((n = netIn.read(buf)) > 0) {
+            while(true) {
+                String command = "";
                 recv_bytes = 0;
                 recv_command = "";
                 
-                StringBuilder s = new StringBuilder();
-                s.append(buf, 0, n);
-                String command = s.toString();
-                
                 if(remaining_command != null) {
-                    command = remaining_command + command;
+                    command = remaining_command;
                     remaining_command = null;
+                }
+                else {
+                    if((n = netIn.read(buf)) > 0) {
+                        StringBuilder s = new StringBuilder();
+                        s.append(buf, 0, n);
+                        command = s.toString();
+                    }
+                    else {
+                        break;
+                    }
                 }
 
                 if(command.startsWith("size")) {
                     String[] c0 = command.split("\\s");
                     msg_size = Integer.parseInt(c0[1]);
-                    
+
                     /* if anything else is attached to the command, chop it off */
                     int chop_size = "size ".length() + c0[1].length() + 1;
                     recv_command = command.substring(chop_size);
                     recv_bytes = recv_command.length();
-                    
+
                     /* continue reading in the rest of the command */
                     while(recv_bytes < msg_size) {
-                        recv_bytes += netIn.read(buf);
+                        int n1 = netIn.read(buf);
+                        recv_bytes += n1;
                         StringBuilder s1 = new StringBuilder();
-                        s1.append(buf, 0, n);
+                        s1.append(buf, 0, n1);
                         recv_command += s1.toString();
                     }
 
+                    /* if we got more than we need, leave the rest for the next command */
                     int rem_bytes = recv_bytes - msg_size;
                     if(rem_bytes > 0) {
                         int len = recv_command.length();
@@ -201,6 +214,7 @@ class ServerListener extends Thread {
                         recv_command = recv_command.substring(0, len - rem_bytes);
                     }
 
+                    System.out.println(recv_command);
                     doCommand(recv_command);
                 }
             }
@@ -224,7 +238,6 @@ class ServerListener extends Thread {
     }
 
     public synchronized void doCommand(String command) {
-        System.out.println(command);
         String[] c0 = command.split("\\s");
         
         if(command.startsWith(Commands.MOVE)) {
@@ -272,7 +285,7 @@ class ServerListener extends Thread {
                 coords.y = Integer.parseInt(c0[4]);
                 String npcs = c0[6];
                 System.out.printf("response: %s @ %s\n", map, coords);
-                String response = String.format("%s %s %s", map, coords, npcs);
+                String response = String.format("map %s %s %s", map, coords, npcs);
                 this.notify_observers(response);
             }
             else if(c0[1].equals("stay")) {

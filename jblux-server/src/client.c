@@ -203,7 +203,14 @@ void parse_command(struct client_t *client, char* command)
         {
             client->authenticated = 1;
             send_player_data_to_self(client, char_name);
+            /* TODO: lame way of working around a timing bug in client */
+            sleep(1);
             add_player_to_map(client, client->data->map, client->data->coords);
+        }
+        else
+        {
+            /* client_thread() will take care of cleaning up */
+            client->connected = 0;
         }
     }
 
