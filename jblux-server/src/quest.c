@@ -87,7 +87,13 @@ void delete_quest_list(struct quest_list **quests)
     struct quest_list *next = NULL;
     while(curr)
     {
+        struct quest *quest = curr->quest;
         next = curr->next;
+        free(quest->name);
+        free(quest->details);
+        free(quest->objectives);
+        free(quest->completion_text);
+        free(quest);
         free(curr);
         curr = next;
     }

@@ -99,7 +99,16 @@ void delete_npcs(struct npc_list **npcs)
     struct npc_list *next = NULL;
     while(curr)
     {
+        struct npc_data *npc = curr->npc;
         next = curr->next;
+        free(npc->sprite_sheet);
+        free(npc->direction);
+        delete_quest_list(&npc->quests);
+        free(npc->character_name);
+        free(npc->race.name);
+        free(npc->race.sprite_sheet);
+        free(npc->player_class.name);
+        free(npc);
         free(curr);
         curr = next;
     }

@@ -105,6 +105,11 @@ struct coordinates_t get_map_entrance(struct map_t *map, enum Relation rel)
     return coords;
 }
 
+void cleanup_maps()
+{
+    delete_map_list(&maps);
+}
+
 void add_map(struct map_list **maps, struct map_t *map)
 {
     struct map_list* new = malloc(sizeof(struct map_list));
@@ -119,7 +124,11 @@ void delete_map_list(struct map_list **maps)
     struct map_list *next = NULL;
     while(curr)
     {
+        struct map_t *map = curr->map;
         next = curr->next;
+        free(map->name);
+        delete_npcs(&map->npcs);
+        free(map);
         free(curr);
         curr = next;
     }
