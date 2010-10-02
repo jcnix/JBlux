@@ -43,6 +43,7 @@ struct map_t* get_map_for_name(char* name);
 struct map_t* get_adjacent_map(struct map_t *map, enum Relation rel);
 struct coordinates_t get_map_entrance(struct map_t *map, enum Relation rel);
 
+void cleanup_maps();
 void add_map(struct map_list **maps, struct map_t *map);
 void delete_map_list(struct map_list **maps);
 

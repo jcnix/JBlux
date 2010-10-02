@@ -319,6 +319,12 @@ void kill_all_clients()
     delete_client_list(&clients);
 }
 
+/* Cleans up all cached data */
+void cleanup()
+{
+    cleanup_maps();
+}
+
 void add_client(struct client_list **clients, struct client_t *client)
 {
     struct client_list* new = malloc(sizeof(struct client_list));
