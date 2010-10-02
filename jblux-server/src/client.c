@@ -5,7 +5,7 @@
 
 #include "client.h"
 
-static struct client_t *clients[MAX_CLIENTS]; 
+static struct client_list *clients; 
 static int num_clients = 0;
 
 void handle_client(int* sock)
@@ -33,7 +33,7 @@ void* client_thread(void* vsock)
     client->connected = 1;
     client->socket = *sock;
 
-    clients[num_clients] = client;
+    add_client(&clients, client);
     num_clients++;
 
     while(client->connected)
@@ -49,6 +49,8 @@ void* client_thread(void* vsock)
     }
 
     close(*sock);
+    remove_client_from_list(&clients, client);
+    printf("exiting\n");
     pthread_exit(NULL);
     return 0;
 }
@@ -81,9 +83,7 @@ void move_client(struct client_t *client, struct coordinates_t coords)
         return;
     }
 
-    printf("%s\n", command);
     tell_all_players_on_map(client, client->data->map_id, command);
-
     free(command);
 }
 
@@ -114,34 +114,36 @@ void add_player_to_map(struct client_t *client, char* map,
     }
     esend(client->socket, command);
     free(command);
-    
+
     command = NULL;
     if(asprintf(&command, "map add %s %d %d %s", client->data->character_name,
                 coords.x, coords.y, client->encoded_player_data) < 0)
     {
         return;
     }
-    
-    int i;
-    for(i = 0; i < num_clients; i++)
+
+    struct client_list *cl = clients;
+    while(cl)
     {
-        struct client_t *to = clients[i];
-        if(to->data->map_id == client->data->map_id)
+        struct client_t *to = cl->client;
+        if(to->data->map_id == client->data->map_id &&
+                to->socket != client->socket)
         {
             /* Tell other clients about the new player */
             esend(to->socket, command);
-            
+
             /* Tell new player about other clients */
             char* other_player = NULL;
             if(!asprintf(&other_player, "map add %s %d %d %s",
-                to->data->character_name, to->data->coords.x,
-                to->data->coords.y, to->encoded_player_data))
+                        to->data->character_name, to->data->coords.x,
+                        to->data->coords.y, to->encoded_player_data))
             {
                 continue;
             }
             esend(client->socket, other_player);
             free(other_player);
         }
+        cl = cl->next;
     }
 
     free(command);
@@ -173,15 +175,16 @@ void send_chat_message(struct client_t *from, char* message)
 
 void tell_all_players_on_map(struct client_t *from, int map_id, char* command)
 {
-    int i;
-    for(i = 0; i < num_clients; i++)
+    struct client_list *cl = clients;
+    while(cl)
     {
-        struct client_t *to = clients[i];
+        struct client_t *to = cl->client;
         if(to->data->map_id == map_id &&
                 to->socket != from->socket)
         {
             esend(to->socket, command);
         }
+        cl = cl->next;
     }
 }
 
@@ -233,7 +236,7 @@ void parse_command(struct client_t *client, char* command)
             strcat(message, m);
             strcat(message, " ");
         }
-        
+
         send_chat_message(client, message);
         free(message);
     }
@@ -247,7 +250,7 @@ void parse_command(struct client_t *client, char* command)
             struct map_t *map = get_map_for_name(map_name);
             map = get_adjacent_map(map, rel);
             struct coordinates_t coords = get_map_entrance(map, rel);
-            add_player_to_map(client, map_name, coords);
+            add_player_to_map(client, map->name, coords);
         }
         else if(strcmp(c, "pickup") == 0)
         {
@@ -258,9 +261,9 @@ void parse_command(struct client_t *client, char* command)
         else if(strcmp(c, "info") == 0)
         {
             /* Tell the player about the map they're on. */
-            int map_id = client->data->map_id;
+            /*int map_id = client->data->map_id;
             struct map_t *map = get_map_for_id(map_id);
-            add_player_to_map(client, map->name, client->data->coords);
+            add_player_to_map(client, map->name, client->data->coords);*/
         }
     }
     else if(strncmp(command, "disconnect", 10) == 0)
@@ -300,5 +303,80 @@ int esend(int socket, char* message)
     }
 
     return status;
+}
+
+/* Called by signal handler if admin does a SIGINT or whatever.
+ * Just sets all clients as being unconnected.  The threads
+ * will see this and terminate themselves. */
+void kill_all_clients()
+{
+    struct client_list *curr = clients;
+    while(curr)
+    {
+        curr->client->connected = 0;
+        curr = curr->next;
+    }
+    delete_client_list(&clients);
+}
+
+void add_client(struct client_list **clients, struct client_t *client)
+{
+    struct client_list* new = malloc(sizeof(struct client_list));
+    new->client = client;
+    new->next = *clients;
+    *clients = new;
+}
+
+void delete_client_list(struct client_list **clients)
+{
+    struct client_list *curr = *clients;
+    struct client_list *next = NULL;
+    while(curr)
+    {
+        next = curr->next;
+        free(curr);
+        curr = next;
+    }
+}
+
+void remove_client_from_list(struct client_list **clients, struct client_t *client)
+{
+    struct client_list *curr = *clients;
+    struct client_list *prev = NULL;
+    while(curr)
+    {
+        /* We're only going to determine equality by socket */
+        if(curr->client->socket == client->socket)
+        {
+            if(prev == NULL)
+            {
+                /* We're at the head of the list */
+                *clients = curr->next;
+            }
+            else
+            {
+                prev->next = curr->next;
+            }
+
+            free(curr);
+            return;
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+}
+
+int client_list_size(struct client_list *clients)
+{
+    struct client_list *curr = clients;
+    int size = 0;
+
+    while(curr)
+    {
+        size++;
+        curr = curr->next;
+    }
+
+    return size;
 }
 

@@ -29,8 +29,11 @@ char* npc_list_to_json(struct npc_list *npcs)
     const char* spirit_field =          "spirit";
     const char* coords_field =          "coords";
     
-    int i = 0;
-    struct npc_data *data = npcs->npc;
+    struct npc_data *data = NULL;
+    if(npcs)
+    {
+        data = npcs->npc;
+    }
     
     yajl_gen_array_open(gen);
     while(npcs)
@@ -73,7 +76,6 @@ char* npc_list_to_json(struct npc_list *npcs)
         coordinates_to_json(gen, data->coords);
         yajl_gen_map_close(gen);
 
-        i++;
         npcs = npcs->next;
     }
     yajl_gen_array_close(gen);

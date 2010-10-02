@@ -24,7 +24,7 @@ def login(request):
     if user is not None:
         request.session['user'] = user
         if user.is_active:
-            return HttpResponseRedirect('/jblux/index')
+            return HttpResponseRedirect('/jblux/profile/'+str(user.id))
         else:
             return HttpResponse("Disabled")
     else:
@@ -139,6 +139,21 @@ def screens(request):
 
 def help(request):
     return render_to_response('jblux/help.html',
+            context_instance=RequestContext(request))
+
+def view_profile(request, account_id=0):
+    if account_id == 0:
+        account_id = request.session['user'].id
+
+    user = get_object_or_404(User, pk=account_id)
+    characters = Character.objects.filter(user=account_id)
+
+    return render_to_response('jblux/account_profile.html', {'user': user,
+            'chars': characters}, context_instance=RequestContext(request))
+
+def view_char(request, char_id):
+    character = get_object_or_404(Character, pk=char_id)
+    return render_to_response('jblux/character.html', {'char': character},
             context_instance=RequestContext(request))
 
 def select_character(request):

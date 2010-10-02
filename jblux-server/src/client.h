@@ -34,6 +34,12 @@ struct client_t
     struct coordinates_t coords;
 };
 
+struct client_list
+{
+    struct client_t *client;
+    struct client_list *next;
+};
+
 void handle_client(int* sock);
 void* client_thread(void* vsock);
 void send_player_data_to_self(struct client_t *client, char* char_name);
@@ -45,8 +51,14 @@ void send_chat_message(struct client_t *from, char* message);
 void tell_all_players_on_map(struct client_t *from, int map_id, char* command);
 void parse_command(struct client_t *client, char* command);
 
-/* this just eliminates the length param and uses strlen() */
+/* Easy way of sending messages */
 int esend(int socket, char* message);
+void kill_all_clients();
+
+void add_client(struct client_list **clients, struct client_t *client);
+void delete_client_list(struct client_list **clients);
+void remove_client_from_list(struct client_list **clients, struct client_t *client);
+int client_list_size(struct client_list *clients);
 
 #endif
 
