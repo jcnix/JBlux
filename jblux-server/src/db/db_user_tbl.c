@@ -98,9 +98,9 @@ struct player_data* db_get_player(char* character_name)
     data->spirit = db_get_int(res, 0, column);
    
     column++;
-    int map_id = db_get_int(res, 0, column);
-    data->map_id = map_id;
-    data->map = db_get_map_name_for_id(map_id);
+    data->map_id = db_get_int(res, 0, column);
+    struct map_t *map = get_map_for_id(data->map_id);
+    data->map = map->name;
 
     column++;
     data->race = get_race(db_get_int(res, 0, column));

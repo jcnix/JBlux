@@ -123,6 +123,7 @@ void db_get_npcs_on_map(struct map_t *map)
     }
     const char* params[1] = { cid };
     res = db_exec(conn, q, nParams, params);
+    free(cid);
 
     int num_npcs = PQntuples(res);
     struct npc_list *npcs = NULL;

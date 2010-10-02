@@ -26,6 +26,7 @@ struct npc_data* db_get_npc(int id)
     const char* params[1] = { cid };
     res = db_exec(conn, q, nParams, params);
     npc->npc_id = id;
+    free(cid);
    
     int column = 0;
     npc->character_name = db_get_str(res, 0, column);
@@ -89,6 +90,7 @@ struct quest_list* db_get_quests_for_npc(int npc_id)
     }
     const char* params[1] = { cid };
     res = db_exec(conn, q, nParams, params);
+    free(cid);
 
     int num_quests = PQntuples(res);
     struct quest_list *quests = NULL;

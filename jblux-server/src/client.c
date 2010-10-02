@@ -50,7 +50,6 @@ void* client_thread(void* vsock)
 
     close(*sock);
     remove_client_from_list(&clients, client);
-    printf("exiting\n");
     pthread_exit(NULL);
     return 0;
 }
@@ -105,7 +104,8 @@ void add_player_to_map(struct client_t *client, char* map,
 
     /* TODO: get NPCs and Items and send to player */
     struct npc_list *npcs = map_st->npcs;
-    char* npc_enc = base64_encode(npc_list_to_json(npcs));
+    char* npc_json = npc_list_to_json(npcs);
+    char* npc_enc = base64_encode(npc_json);
     char* command = NULL;
     if(!asprintf(&command, "map goto %s %d %d npcs %s", map, coords.x, coords.y,
                 npc_enc))
@@ -114,6 +114,8 @@ void add_player_to_map(struct client_t *client, char* map,
     }
     esend(client->socket, command);
     free(command);
+    free(npc_json);
+    free(npc_enc);
 
     command = NULL;
     if(asprintf(&command, "map add %s %d %d %s", client->data->character_name,
@@ -345,6 +347,7 @@ void delete_client_list(struct client_list **clients)
     }
 }
 
+/* Removes client from list and frees all it's memory */
 void remove_client_from_list(struct client_list **clients, struct client_t *client)
 {
     struct client_list *curr = *clients;
@@ -363,7 +366,14 @@ void remove_client_from_list(struct client_list **clients, struct client_t *clie
             {
                 prev->next = curr->next;
             }
-
+            struct player_data *player = curr->client->data;
+            free(player->character_name);
+            free(player->race.name);
+            free(player->race.sprite_sheet);
+            free(player->player_class.name);
+            free(player);
+            free(curr->client->encoded_player_data);
+            free(curr->client);
             free(curr);
             return;
         }

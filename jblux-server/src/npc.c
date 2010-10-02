@@ -105,6 +105,9 @@ void delete_npcs(struct npc_list **npcs)
         free(npc->direction);
         delete_quest_list(&npc->quests);
         free(npc->character_name);
+        free(npc->race.name);
+        free(npc->race.sprite_sheet);
+        free(npc->player_class.name);
         free(npc);
         free(curr);
         curr = next;
