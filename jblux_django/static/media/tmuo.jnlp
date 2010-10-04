@@ -1,0 +1,24 @@
+<!-- JNLP File for TMUO --> 
+<jnlp spec="1.0+" codebase="http://tmuo.casey-jones.org/tmuo_media/" 
+    href="tmuo.jnlp"> 
+    <information> 
+        <title>The Mushroom Univerise Online</title> 
+        <vendor>Casey Jones</vendor> 
+        <homepage href="http://tmuo.casey-jones.org"/> 
+        <description>MMORPG based on Mario Universe</description> 
+        <description kind="short">MMORPG</description> 
+        <icon kind="splash" href="logo.png" />
+    </information>
+    <security> 
+        <all-permissions/> 
+    </security>
+    <resources> 
+        <j2se version="1.6+"/> 
+        <jar href="lib/jblux.jar"/>
+        <jar href="lib/slick.jar"/>
+        <jar href="lib/gson-1.5.jar"/>
+        <extension name="lwjgl" href="http://tmuo.casey-jones.org/tmuo_media/extension.jnlp" />
+    </resources> 
+    <application-desc main-class="org.jblux.client.JBlux">
+    </application-desc>
+</jnlp>
