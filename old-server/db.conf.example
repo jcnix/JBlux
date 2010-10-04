@@ -1,7 +1,0 @@
-# After compiling the server, put a file named db.conf into
-# the same directory as the jar.  Wherever you choose to put
-# it.  Adjust these settings to match your server.
-
-server=127.0.0.1
-user=postgres
-password=mypassword1
