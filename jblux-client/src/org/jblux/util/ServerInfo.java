@@ -1,5 +1,5 @@
 /**
- * File: Race.java
+ * File: ServerInfo.java
  *
  * @author Casey Jones
  *
@@ -18,11 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common.client;
+package org.jblux.util;
 
-public class Race {
-    public int id;
-    public String name;
-    public String sprite_sheet;
-    public int sprite_height;
+/* This file will not include DB info, since this file is included
+ * in both the client and the server, and we don't want DB
+ * passwords sitting in the client jar.
+ */
+public class ServerInfo {
+    public static final String SERVER = "192.168.1.186";
+    public static final String LOCAL_IP = "192.168.1.186";
+    public static final int PORT = 4000;
 }

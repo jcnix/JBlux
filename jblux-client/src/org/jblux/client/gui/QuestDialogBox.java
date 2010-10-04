@@ -22,7 +22,7 @@ package org.jblux.client.gui;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import org.jblux.common.client.Quest;
+import org.jblux.client.data.Quest;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;

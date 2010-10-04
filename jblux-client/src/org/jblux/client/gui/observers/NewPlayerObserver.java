@@ -21,7 +21,7 @@
 package org.jblux.client.gui.observers;
 
 import java.util.Observable;
-import org.jblux.common.client.PlayerData;
+import org.jblux.client.data.PlayerData;
 
 public class NewPlayerObserver extends Observable {
     private static NewPlayerObserver npo;

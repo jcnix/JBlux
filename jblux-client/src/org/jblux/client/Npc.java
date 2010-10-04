@@ -21,11 +21,11 @@
 package org.jblux.client;
 
 import org.jblux.client.gui.GameCanvas;
-import org.jblux.common.Relation;
-import org.jblux.common.RelationUtil;
-import org.jblux.common.client.NpcData;
-import org.jblux.common.client.PlayerData;
-import org.jblux.common.client.Quest;
+import org.jblux.util.Relation;
+import org.jblux.util.RelationUtil;
+import org.jblux.client.data.NpcData;
+import org.jblux.client.data.PlayerData;
+import org.jblux.client.data.Quest;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;

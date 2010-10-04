@@ -1,5 +1,5 @@
 /**
- * File: NPCData.java
+ * File: MapGrid.java
  *
  * @author Casey Jones
  *
@@ -18,24 +18,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common.client;
+package org.jblux.util;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import org.jblux.util.Coordinates;
 
-public class NpcData extends CharacterData {
-    public int npc_id;
-    
-    /* Job will be things like Vendor or Enemy */
-    public int job;
-    
-    /* Custom sprite sheet.  If not set, use the
-     * default race sprite sheet. */
-    public String sprite_sheet;
-    
-    /* The direction the npc will face */
-    public String direction;
-    public LinkedList<Quest> quests;
-    public Coordinates coords;
+/**
+ * Given a set of Coordinates, find which tile that point is in.
+ *
+ * @author casey
+ */
+public class MapGrid {
+    private MapGrid() {
+    }
+
+    public static Coordinates getTile(int x, int y) {
+        return getTile(new Coordinates(x, y));
+    }
+
+    public static Coordinates getTile(Coordinates coords) {
+        Coordinates tile_coords = new Coordinates();
+
+        int diff_x = coords.x % 32;
+        int diff_y = coords.y % 32;
+        tile_coords.x = coords.x - diff_x;
+        tile_coords.y = coords.y - diff_y;
+        
+        return tile_coords;
+    }
 }

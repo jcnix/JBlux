@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common.client;
+package org.jblux.client.data;
 
 import org.jblux.common.items.Inventory;
 import org.jblux.util.Coordinates;

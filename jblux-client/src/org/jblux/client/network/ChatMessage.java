@@ -1,5 +1,5 @@
 /**
- * File: ServerInfo.java
+ * File: ChatMessage.java
  *
  * @author Casey Jones
  *
@@ -18,14 +18,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common;
+package org.jblux.client.network;
 
-/* This file will not include DB info, since this file is included
- * in both the client and the server, and we don't want DB
- * passwords sitting in the client jar.
+/*
+ * Combines a username and a message together
  */
-public class ServerInfo {
-    public static final String SERVER = "192.168.1.186";
-    public static final String LOCAL_IP = "192.168.1.186";
-    public static final int PORT = 4000;
+
+public class ChatMessage {
+    private String username;
+    private String message;
+
+    public ChatMessage(String username, String message) {
+        this.username = username;
+        this.message = message;
+    }
+
+    public String getChatBoxString() {
+        return String.format("%s: %s\n", username, message);
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }

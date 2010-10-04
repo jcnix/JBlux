@@ -20,7 +20,7 @@
 
 package org.jblux.client;
 
-import org.jblux.common.MapGrid;
+import org.jblux.util.MapGrid;
 import java.util.Observable;
 import java.util.Calendar;
 import java.util.Observer;
@@ -28,9 +28,9 @@ import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ItemFactory;
 import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
-import org.jblux.common.Relation;
-import org.jblux.common.client.NpcData;
-import org.jblux.common.client.PlayerData;
+import org.jblux.util.Relation;
+import org.jblux.client.data.NpcData;
+import org.jblux.client.data.PlayerData;
 import org.jblux.common.items.Item;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.GameContainer;

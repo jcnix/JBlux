@@ -1,5 +1,5 @@
 /**
- * File: ChatMessage.java
+ * File: FatalError.java
  *
  * @author Casey Jones
  *
@@ -18,30 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.util;
+package org.jblux.client.error;
 
-/*
- * Combines a username and a message together
- */
-
-public class ChatMessage {
-    private String username;
-    private String message;
-
-    public ChatMessage(String username, String message) {
-        this.username = username;
-        this.message = message;
-    }
-
-    public String getChatBoxString() {
-        return String.format("%s: %s\n", username, message);
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getMessage() {
-        return message;
+public class FatalError {
+    /* Print an error message and end the process */
+    public static void die(Exception ex) {
+        System.err.println(ex.getMessage());
+        System.out.println("Fatal Error. Exiting.");
+        ex.printStackTrace();
+        System.exit(1);
     }
 }

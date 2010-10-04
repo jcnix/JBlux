@@ -25,7 +25,7 @@ import org.jblux.client.Player;
 import org.jblux.client.gui.GUI;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ServerCommunicator;
-import org.jblux.common.client.PlayerData;
+import org.jblux.client.data.PlayerData;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;

@@ -1,5 +1,5 @@
 /**
- * File: FatalError.java
+ * File: Relations.java
  *
  * @author Casey Jones
  *
@@ -18,14 +18,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common.error;
+package org.jblux.util;
 
-public class FatalError {
-    /* Print an error message and end the process */
-    public static void die(Exception ex) {
-        System.err.println(ex.getMessage());
-        System.out.println("Fatal Error. Exiting.");
-        ex.printStackTrace();
-        System.exit(1);
+public enum Relation {
+    LEFT("left"),
+    RIGHT("right"),
+    TOP("top"),
+    BOTTOM("bottom");
+    
+    private final String str;
+    private Relation(String s) {
+        str = s;
+    }
+
+    @Override
+    public String toString() {
+        return str;
     }
 }

@@ -24,7 +24,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.jblux.common.client.NpcData;
+import org.jblux.client.data.NpcData;
 import org.jblux.util.Base64;
 
 public class NpcDataFactory {

@@ -1,5 +1,5 @@
 /**
- * File: PlayerData.java
+ * File: PlayerClass.java
  *
  * @author Casey Jones
  *
@@ -18,17 +18,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common.client;
+package org.jblux.client.data;
 
-public class CharacterData {
-    public String character_name;
-    public int level;
-    public Race race;
-    public PlayerClass player_class;
-
-    public int strength;
-    public int agility;
-    public int stamina;
-    public int intelligence;
-    public int spirit;
+public class PlayerClass {
+    public int id;
+    public String name;
 }

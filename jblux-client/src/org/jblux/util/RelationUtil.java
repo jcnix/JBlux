@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common;
+package org.jblux.util;
 
 public class RelationUtil {
     public static Relation fromString(String r) {

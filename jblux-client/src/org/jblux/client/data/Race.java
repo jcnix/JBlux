@@ -1,5 +1,5 @@
 /**
- * File: MapGrid.java
+ * File: Race.java
  *
  * @author Casey Jones
  *
@@ -18,31 +18,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common;
+package org.jblux.client.data;
 
-import org.jblux.util.Coordinates;
-
-/**
- * Given a set of Coordinates, find which tile that point is in.
- *
- * @author casey
- */
-public class MapGrid {
-    private MapGrid() {
-    }
-
-    public static Coordinates getTile(int x, int y) {
-        return getTile(new Coordinates(x, y));
-    }
-
-    public static Coordinates getTile(Coordinates coords) {
-        Coordinates tile_coords = new Coordinates();
-
-        int diff_x = coords.x % 32;
-        int diff_y = coords.y % 32;
-        tile_coords.x = coords.x - diff_x;
-        tile_coords.y = coords.y - diff_y;
-        
-        return tile_coords;
-    }
+public class Race {
+    public int id;
+    public String name;
+    public String sprite_sheet;
+    public int sprite_height;
 }

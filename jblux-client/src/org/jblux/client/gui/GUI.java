@@ -25,7 +25,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import org.jblux.common.client.Quest;
+import org.jblux.client.data.Quest;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
