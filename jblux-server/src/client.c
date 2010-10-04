@@ -49,7 +49,13 @@ void* client_thread(void* vsock)
     }
 
     close(*sock);
-    remove_client_from_list(&clients, client);
+    
+    /* if client didn't get authenticated, they aren't in the list
+     * and the server will crash */
+    if(client->authenticated)
+    {
+        remove_client_from_list(&clients, client);
+    }
     pthread_exit(NULL);
     return 0;
 }
@@ -210,6 +216,7 @@ void parse_command(struct client_t *client, char* command)
         else
         {
             /* client_thread() will take care of cleaning up */
+            client->authenticated = 0;
             client->connected = 0;
         }
     }
