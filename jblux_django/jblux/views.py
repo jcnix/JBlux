@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
-from django.template import RequestContext
+from django.template import RequestContext, loader, Context
 from jblux_django.jblux.models import User, Character, Map
 from jblux_django.jblux.forms import LoginForm, RegisterForm, CharacterForm
 from jblux_django.jblux.forms import SelectCharacterForm
@@ -128,6 +128,20 @@ def game(request):
 
     return render_to_response('jblux/game.html', {'character': character},
             context_instance=RequestContext(request))
+
+def jnlp(request):
+    try:
+        user = request.session['user']
+        character = request.session['character']
+    except KeyError:
+        return HttpResponseRedirect('/jblux')
+
+    template = loader.get_template('jblux/tmuo.jnlp')
+    context = Context({'username': user.username, 'password': user.password,
+        'charname': character})
+    jnlp = template.render(context)
+    response = HttpResponse(jnlp, mimetype='application/x-java-jnlp-file')
+    return response
 
 def info(request):
     return render_to_response('jblux/info.html',

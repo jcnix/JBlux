@@ -47,6 +47,7 @@ public class MainMenuState extends BasicGameState implements Observer {
     private Image background;
     private Image loginButton;
     private TextField txtUsername;
+    private TextField txtPassword;
     private ResponseWaiter response;
     private boolean received_data;
     private PlayerData player_data;
@@ -104,9 +105,11 @@ public class MainMenuState extends BasicGameState implements Observer {
         font.addAsciiGlyphs();
         font.loadGlyphs();
         
-        txtUsername = new TextField(gc, font, 333, 225, 150, 25);
+        txtUsername = new TextField(gc, font, 333, 225, 150, 20);
         txtUsername.setCursorVisible(true);
-        txtUsername.setText("Testing");
+        
+        txtPassword = new TextField(gc, font, 333, 255, 150, 20);
+        txtPassword.setCursorVisible(true);
     }
     
     @Override
@@ -114,6 +117,7 @@ public class MainMenuState extends BasicGameState implements Observer {
         background.draw(0, 0);
         loginButton.draw(375, 300, startGameScale);
         txtUsername.render(gc, g);
+        txtPassword.render(gc, g);
     }
  
     @Override
@@ -139,8 +143,10 @@ public class MainMenuState extends BasicGameState implements Observer {
         }
         
         if(insideStartGame){
-            if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON))
+            if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
+                server.authenticate(response, txtUsername.getText(), txtPassword.getText(), "");
                 sbg.enterState(JBlux.GAMEPLAYSTATE);
+            }
         }
     }
 

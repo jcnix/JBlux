@@ -15,9 +15,6 @@
     </path>
 
     <target name="init">
-        <copy file="../jblux-common/dist/jblux-common.jar"
-            toFile="${lib}/jblux-common.jar"/>
-
         <!-- Create time stamp -->
         <tstamp/>
         <mkdir dir="${build}"/>

@@ -20,5 +20,8 @@
         <extension name="lwjgl" href="http://tmuo.casey-jones.org/tmuo_media/extension.jnlp" />
     </resources> 
     <application-desc main-class="org.jblux.client.JBlux">
+        <argument>{{username}}</argument>
+        <argument>{{password}}</argument>
+        <argument>{{charname}}</agrument>
     </application-desc>
 </jnlp>
