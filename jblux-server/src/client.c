@@ -276,8 +276,21 @@ void parse_command(struct client_t *client, char* command)
             char* map_name = strtok(NULL, " ");
             struct map_t *map = get_map_for_name(map_name);
             map = get_adjacent_map(map, rel);
-            struct coordinates_t coords = get_map_entrance(map, rel);
-            add_player_to_map(client, map->name, coords);
+            
+            /* If there no map adjacent on that side
+             * of the current map */
+            if(!map)
+            {
+                struct coordinates_t coords;
+                coords.x = 0;
+                coords.y = 0;
+                add_player_to_map(client, NULL, coords);
+            }
+            else
+            {
+                struct coordinates_t coords = get_map_entrance(map, rel);
+                add_player_to_map(client, map->name, coords);
+            }
         }
         else if(strcmp(c, "pickup") == 0)
         {

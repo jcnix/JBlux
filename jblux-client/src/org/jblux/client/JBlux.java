@@ -66,9 +66,9 @@ public class JBlux extends StateBasedGame{
             app.setDisplayMode(800, 600, false);
             app.start();
         }
-        catch ( SlickException e )
+        catch(SlickException ex)
         {
-            e.printStackTrace();
+            ex.printStackTrace();
         }
     }
 }
