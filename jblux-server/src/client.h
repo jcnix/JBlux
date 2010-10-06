@@ -42,7 +42,7 @@ struct client_list
 
 void handle_client(int* sock);
 void* client_thread(void* vsock);
-void send_player_data_to_self(struct client_t *client, char* char_name);
+int send_player_data_to_self(struct client_t *client, char* char_name);
 void move_client(struct client_t *client, struct coordinates_t coords);
 void add_player_to_map(struct client_t *client, char* map,
         struct coordinates_t coords);
