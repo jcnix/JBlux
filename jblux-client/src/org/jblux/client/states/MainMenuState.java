@@ -56,10 +56,12 @@ public class MainMenuState extends BasicGameState implements Observer {
     private float exitScale = 1;
     private int stateID = -1;
     private ServerCommunicator server;
+    private String[] args;
     
-    public MainMenuState(int stateID, ServerCommunicator server) {
+    public MainMenuState(int stateID, ServerCommunicator server, String[] args) {
         this.stateID = stateID;
         this.server = server;
+        this.args = args;
     }
     
     @Override
@@ -75,13 +77,10 @@ public class MainMenuState extends BasicGameState implements Observer {
             String character_name = "";
 
             boolean authorized = false;
-            if (gc instanceof AppletGameContainer.Container) {
-                // get the parameters by casting container and getting the applet instance
-                Applet applet = ((AppletGameContainer.Container) gc).getApplet();
-                username = applet.getParameter("user");
-                password = applet.getParameter("password");
-                character_name = applet.getParameter("character");
-
+            if (args.length > 0) {
+                username = args[0];
+                password = args[1];
+                character_name = args[2];
                 response = ResponseWaiter.get_new_waiter(this);
                 server.authenticate(response, username, password, character_name);
             }
@@ -91,7 +90,7 @@ public class MainMenuState extends BasicGameState implements Observer {
 //                character_name = "mychar";
                 username = "casey";
                 password = "81b2f040df6152242feb966d071fe58977dab12e";
-                character_name = "pdude";
+                character_name = "pdude2";
                 response = ResponseWaiter.get_new_waiter(this);
                 server.authenticate(response, username, password, character_name);
             }
