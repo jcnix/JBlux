@@ -141,6 +141,7 @@ def jnlp(request):
         'charname': character})
     jnlp = template.render(context)
     response = HttpResponse(jnlp, mimetype='application/x-java-jnlp-file')
+    response['Content-Disposition'] = 'attachement; filename=tmuo.jnlp'
     return response
 
 def info(request):
