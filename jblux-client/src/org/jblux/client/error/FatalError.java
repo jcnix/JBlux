@@ -1,5 +1,5 @@
 /**
- * File: ChatBoxObserver.java
+ * File: FatalError.java
  *
  * @author Casey Jones
  *
@@ -18,27 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.client.gui.observers;
+package org.jblux.client.error;
 
-import java.util.Observable;
-import org.jblux.client.network.ChatMessage;
-
-public class ChatBoxObserver extends Observable {
-    private static ChatBoxObserver cbo;
-
-    protected ChatBoxObserver() {
-    }
-
-    public static ChatBoxObserver getInstance() {
-        if(cbo == null) {
-            cbo = new ChatBoxObserver();
-        }
-
-        return cbo;
-    }
-
-    public void receivedMessage(ChatMessage cm) {
-        setChanged();
-        this.notifyObservers(cm);
+public class FatalError {
+    /* Print an error message and end the process */
+    public static void die(Exception ex) {
+        System.err.println(ex.getMessage());
+        System.out.println("Fatal Error. Exiting.");
+        ex.printStackTrace();
+        System.exit(1);
     }
 }

@@ -1,5 +1,5 @@
 /**
- * File: ChatBoxObserver.java
+ * File: MapGrid.java
  *
  * @author Casey Jones
  *
@@ -18,27 +18,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.client.gui.observers;
+package org.jblux.util;
 
-import java.util.Observable;
-import org.jblux.client.network.ChatMessage;
+import org.jblux.util.Coordinates;
 
-public class ChatBoxObserver extends Observable {
-    private static ChatBoxObserver cbo;
-
-    protected ChatBoxObserver() {
+/**
+ * Given a set of Coordinates, find which tile that point is in.
+ *
+ * @author casey
+ */
+public class MapGrid {
+    private MapGrid() {
     }
 
-    public static ChatBoxObserver getInstance() {
-        if(cbo == null) {
-            cbo = new ChatBoxObserver();
-        }
-
-        return cbo;
+    public static Coordinates getTile(int x, int y) {
+        return getTile(new Coordinates(x, y));
     }
 
-    public void receivedMessage(ChatMessage cm) {
-        setChanged();
-        this.notifyObservers(cm);
+    public static Coordinates getTile(Coordinates coords) {
+        Coordinates tile_coords = new Coordinates();
+
+        int diff_x = coords.x % 32;
+        int diff_y = coords.y % 32;
+        tile_coords.x = coords.x - diff_x;
+        tile_coords.y = coords.y - diff_y;
+        
+        return tile_coords;
     }
 }

@@ -1,5 +1,5 @@
 /**
- * File: ChatBoxObserver.java
+ * File: PlayerData.java
  *
  * @author Casey Jones
  *
@@ -18,27 +18,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.client.gui.observers;
+package org.jblux.client.data;
 
-import java.util.Observable;
-import org.jblux.client.network.ChatMessage;
+public class CharacterData {
+    public String character_name;
+    public int level;
+    public Race race;
+    public PlayerClass player_class;
 
-public class ChatBoxObserver extends Observable {
-    private static ChatBoxObserver cbo;
-
-    protected ChatBoxObserver() {
-    }
-
-    public static ChatBoxObserver getInstance() {
-        if(cbo == null) {
-            cbo = new ChatBoxObserver();
-        }
-
-        return cbo;
-    }
-
-    public void receivedMessage(ChatMessage cm) {
-        setChanged();
-        this.notifyObservers(cm);
-    }
+    public int strength;
+    public int agility;
+    public int stamina;
+    public int intelligence;
+    public int spirit;
 }

@@ -49,14 +49,28 @@ void* client_thread(void* vsock)
     }
 
     close(*sock);
-    remove_client_from_list(&clients, client);
+    
+    /* if client didn't get authenticated, they aren't in the list
+     * and the server will crash */
+    if(client->authenticated)
+    {
+        remove_client_from_list(&clients, client);
+    }
     pthread_exit(NULL);
     return 0;
 }
 
-void send_player_data_to_self(struct client_t *client, char* char_name)
+int send_player_data_to_self(struct client_t *client, char* char_name)
 {
     struct player_data *data = db_get_player(char_name);
+    
+    if(!data)
+    {
+        client->connected = 0;
+        client->data = NULL;
+        return 0;
+    }
+
     client->data = data;
     char* data_json = player_data_to_json(data);
     char* data_enc = base64_encode(data_json);
@@ -69,6 +83,7 @@ void send_player_data_to_self(struct client_t *client, char* char_name)
 
     free(command);
     free(data_json);
+    return 1;
 }
 
 void move_client(struct client_t *client, struct coordinates_t coords)
@@ -202,14 +217,17 @@ void parse_command(struct client_t *client, char* command)
         if(db_authenticate(name, pass, char_name))
         {
             client->authenticated = 1;
-            send_player_data_to_self(client, char_name);
-            /* TODO: lame way of working around a timing bug in client */
-            sleep(1);
-            add_player_to_map(client, client->data->map, client->data->coords);
+            if(send_player_data_to_self(client, char_name))
+            {
+                /* TODO: lame way of working around a timing bug in client */
+                sleep(1);
+                add_player_to_map(client, client->data->map, client->data->coords);
+            }
         }
         else
         {
             /* client_thread() will take care of cleaning up */
+            client->authenticated = 0;
             client->connected = 0;
         }
     }
@@ -258,8 +276,22 @@ void parse_command(struct client_t *client, char* command)
             char* map_name = strtok(NULL, " ");
             struct map_t *map = get_map_for_name(map_name);
             map = get_adjacent_map(map, rel);
-            struct coordinates_t coords = get_map_entrance(map, rel);
-            add_player_to_map(client, map->name, coords);
+            
+            /* If there no map adjacent on that side
+             * of the current map */
+            if(!map)
+            {
+                struct coordinates_t coords;
+                coords.x = 0;
+                coords.y = 0;
+                add_player_to_map(client, NULL, coords);
+            }
+            else
+            {
+                struct coordinates_t coords = get_map_entrance(map, rel);
+                rm_player_from_map(client); //Remove from current/old map
+                add_player_to_map(client, map->name, coords);
+            }
         }
         else if(strcmp(c, "pickup") == 0)
         {
@@ -373,13 +405,17 @@ void remove_client_from_list(struct client_list **clients, struct client_t *clie
             {
                 prev->next = curr->next;
             }
-            struct player_data *player = curr->client->data;
-            free(player->character_name);
-            free(player->race.name);
-            free(player->race.sprite_sheet);
-            free(player->player_class.name);
-            free(player);
-            free(curr->client->encoded_player_data);
+            
+            if(curr->client->data)
+            {
+                struct player_data *player = curr->client->data;
+                free(player->character_name);
+                free(player->race.name);
+                free(player->race.sprite_sheet);
+                free(player->player_class.name);
+                free(player);
+                free(curr->client->encoded_player_data);
+            }
             free(curr->client);
             free(curr);
             return;

@@ -1,5 +1,5 @@
 /**
- * File: ChatBoxObserver.java
+ * File: NPCData.java
  *
  * @author Casey Jones
  *
@@ -18,27 +18,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.client.gui.observers;
+package org.jblux.client.data;
 
-import java.util.Observable;
-import org.jblux.client.network.ChatMessage;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import org.jblux.util.Coordinates;
 
-public class ChatBoxObserver extends Observable {
-    private static ChatBoxObserver cbo;
-
-    protected ChatBoxObserver() {
-    }
-
-    public static ChatBoxObserver getInstance() {
-        if(cbo == null) {
-            cbo = new ChatBoxObserver();
-        }
-
-        return cbo;
-    }
-
-    public void receivedMessage(ChatMessage cm) {
-        setChanged();
-        this.notifyObservers(cm);
-    }
+public class NpcData extends CharacterData {
+    public int npc_id;
+    
+    /* Job will be things like Vendor or Enemy */
+    public int job;
+    
+    /* Custom sprite sheet.  If not set, use the
+     * default race sprite sheet. */
+    public String sprite_sheet;
+    
+    /* The direction the npc will face */
+    public String direction;
+    public LinkedList<Quest> quests;
+    public Coordinates coords;
 }

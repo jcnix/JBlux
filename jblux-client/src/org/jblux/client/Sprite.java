@@ -22,8 +22,8 @@ package org.jblux.client;
 
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.gui.FontFactory;
-import org.jblux.common.Relation;
-import org.jblux.common.client.CharacterData;
+import org.jblux.util.Relation;
+import org.jblux.client.data.CharacterData;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;

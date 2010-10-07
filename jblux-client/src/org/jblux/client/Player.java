@@ -20,7 +20,7 @@
 
 package org.jblux.client;
 
-import org.jblux.common.MapGrid;
+import org.jblux.util.MapGrid;
 import java.util.Observable;
 import java.util.Calendar;
 import java.util.Observer;
@@ -28,16 +28,16 @@ import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ItemFactory;
 import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
-import org.jblux.common.Relation;
-import org.jblux.common.client.NpcData;
-import org.jblux.common.client.PlayerData;
+import org.jblux.util.Relation;
+import org.jblux.client.data.NpcData;
+import org.jblux.client.data.PlayerData;
 import org.jblux.common.items.Item;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 
 public class Player extends Sprite implements Observer {
-    private boolean switch_walk;  //Just means switch to other walk sprite
+    private int switch_walk;  //Just means switch to other walk sprite
     private ServerCommunicator server;
     private int move_size;
     private String map_name;
@@ -46,6 +46,7 @@ public class Player extends Sprite implements Observer {
 
     private Calendar cal;
     private long lastMove;
+    private boolean left_foot;
     private boolean wait_pressed_action;
 
     public Player(PlayerData data, ServerCommunicator server, GameCanvas gc) {
@@ -58,7 +59,8 @@ public class Player extends Sprite implements Observer {
         move_size = 7;
         coords = data.coords;
         map_name = data.map;
-        switch_walk = false;
+        switch_walk = 0;
+        left_foot = false;
 
         cal = Calendar.getInstance();
         lastMove = cal.getTimeInMillis();
@@ -74,46 +76,51 @@ public class Player extends Sprite implements Observer {
 
     public void update(GameContainer gc) {
         Input input = gc.getInput();
+        boolean moved = false;
 
         if(gc.hasFocus()) {
             //Can only move once every 100ms
             if(can_perform_action(100)) {
                 if(input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A)) {
-                    if(switch_walk)
-                        image = spriteSheet.getSprite(Sprite.FACE_LEFT-1, 0);
-                    else
-                        image = spriteSheet.getSprite(Sprite.FACE_LEFT+1, 0);
-
-                    switch_walk = !switch_walk;
+                    image = spriteSheet.getSprite(Sprite.FACE_LEFT+switch_walk, 0);
+                    moved = true;
                     move(-move_size, 0);
                 }
                 if(input.isKeyDown(Input.KEY_RIGHT) || input.isKeyDown(Input.KEY_D)) {
-                    if(switch_walk)
-                        image = spriteSheet.getSprite(Sprite.FACE_RIGHT-1, 0);
-                    else
-                        image = spriteSheet.getSprite(Sprite.FACE_RIGHT+1, 0);
-
-                    switch_walk = !switch_walk;
+                    image = spriteSheet.getSprite(Sprite.FACE_RIGHT+switch_walk, 0);
+                    moved = true;
                     move(move_size, 0);
                 }
                 if(input.isKeyDown(Input.KEY_UP) || input.isKeyDown(Input.KEY_W)) {
-                    if(switch_walk)
-                        image = spriteSheet.getSprite(Sprite.FACE_UP-1, 0);
-                    else
-                        image = spriteSheet.getSprite(Sprite.FACE_UP+1, 0);
-
-                    switch_walk = !switch_walk;
+                    image = spriteSheet.getSprite(Sprite.FACE_UP+switch_walk, 0);
+                    moved = true;
                     move(0, -move_size);
                 }
                 if(input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)) {
-                    if(switch_walk)
-                        image = spriteSheet.getSprite(Sprite.FACE_DOWN-1, 0);
-                    else
-                        image = spriteSheet.getSprite(Sprite.FACE_DOWN+1, 0);
-
-                    switch_walk = !switch_walk;
+                    image = spriteSheet.getSprite(Sprite.FACE_DOWN+switch_walk, 0);
+                    moved = true;
                     move(0, move_size);
                 }
+                /* Animate player's walking */
+                if(moved) {
+                    if(switch_walk == 1) {
+                        switch_walk = 0;
+                    }
+                    else if(switch_walk == -1) {
+                        switch_walk = 0;
+                    }
+                    else if(left_foot)
+                    {
+                        left_foot = false;
+                        switch_walk = 1;
+                    }
+                    else
+                    {
+                        left_foot = true;
+                        switch_walk = -1;
+                    }
+                }
+
                 //Action key
                 if(input.isKeyDown(Input.KEY_SPACE)) {
                     //TODO: Check in front of the player

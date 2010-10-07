@@ -34,9 +34,11 @@ public class JBlux extends StateBasedGame{
     public static final int GAMEPLAYSTATE = 1;
     public static final int SERVERDOWNSTATE = 2;
     private ServerCommunicator server;
+    private String[] args;
     
-    public JBlux() {
+    public JBlux(String[] args) {
         super("JBlux");
+        this.args = args;
         server = new ServerCommunicator();
     }
 
@@ -47,7 +49,7 @@ public class JBlux extends StateBasedGame{
             this.enterState(SERVERDOWNSTATE);
         }
         else {            
-             MainMenuState mms = new MainMenuState(MAINMENUSTATE, server);
+             MainMenuState mms = new MainMenuState(MAINMENUSTATE, server, args);
              GameplayState gps = new GameplayState(GAMEPLAYSTATE, server);
              this.addState(gps);
              this.addState(mms);            
@@ -58,15 +60,15 @@ public class JBlux extends StateBasedGame{
     public static void main(String[] args) {
         try
         {
-            JBlux game = new JBlux();
+            JBlux game = new JBlux(args);
             AppGameContainer app = new AppGameContainer(game);
             app.setShowFPS(false);
             app.setDisplayMode(800, 600, false);
             app.start();
         }
-        catch ( SlickException e )
+        catch(SlickException ex)
         {
-            e.printStackTrace();
+            ex.printStackTrace();
         }
     }
 }

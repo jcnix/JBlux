@@ -32,13 +32,12 @@ import org.jblux.client.Players;
 import org.jblux.client.Sprite;
 import org.jblux.client.gui.observers.ChatBoxObserver;
 import org.jblux.client.gui.observers.NewPlayerObserver;
-import org.jblux.common.Commands;
-import org.jblux.common.Relation;
-import org.jblux.common.ServerInfo;
-import org.jblux.common.client.PlayerData;
+import org.jblux.util.Commands;
+import org.jblux.util.Relation;
+import org.jblux.util.ServerInfo;
+import org.jblux.client.data.PlayerData;
 import org.jblux.common.items.Item;
 import org.jblux.util.Base64;
-import org.jblux.util.ChatMessage;
 import org.jblux.util.Coordinates;
 
 /*
@@ -213,8 +212,7 @@ class ServerListener extends Thread {
                         remaining_command = recv_command.substring(len - rem_bytes, len);
                         recv_command = recv_command.substring(0, len - rem_bytes);
                     }
-
-                    System.out.println(recv_command);
+                    
                     doCommand(recv_command);
                 }
             }

@@ -1,5 +1,5 @@
 /**
- * File: ChatBoxObserver.java
+ * File: ServerInfo.java
  *
  * @author Casey Jones
  *
@@ -18,27 +18,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.client.gui.observers;
+package org.jblux.util;
 
-import java.util.Observable;
-import org.jblux.client.network.ChatMessage;
-
-public class ChatBoxObserver extends Observable {
-    private static ChatBoxObserver cbo;
-
-    protected ChatBoxObserver() {
-    }
-
-    public static ChatBoxObserver getInstance() {
-        if(cbo == null) {
-            cbo = new ChatBoxObserver();
-        }
-
-        return cbo;
-    }
-
-    public void receivedMessage(ChatMessage cm) {
-        setChanged();
-        this.notifyObservers(cm);
-    }
+/* This file will not include DB info, since this file is included
+ * in both the client and the server, and we don't want DB
+ * passwords sitting in the client jar.
+ */
+public class ServerInfo {
+    public static final String SERVER = "tmuo.casey-jones.org";
+    public static final int PORT = 4000;
 }

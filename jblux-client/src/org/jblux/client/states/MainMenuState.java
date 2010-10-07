@@ -29,8 +29,8 @@ import java.util.Observer;
 import org.jblux.client.network.PlayerDataFactory;
 import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
-import org.jblux.common.Commands;
-import org.jblux.common.client.PlayerData;
+import org.jblux.util.Commands;
+import org.jblux.client.data.PlayerData;
 import org.newdawn.slick.AppletGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -47,6 +47,7 @@ public class MainMenuState extends BasicGameState implements Observer {
     private Image background;
     private Image loginButton;
     private TextField txtUsername;
+    private TextField txtPassword;
     private ResponseWaiter response;
     private boolean received_data;
     private PlayerData player_data;
@@ -55,10 +56,12 @@ public class MainMenuState extends BasicGameState implements Observer {
     private float exitScale = 1;
     private int stateID = -1;
     private ServerCommunicator server;
+    private String[] args;
     
-    public MainMenuState(int stateID, ServerCommunicator server) {
+    public MainMenuState(int stateID, ServerCommunicator server, String[] args) {
         this.stateID = stateID;
         this.server = server;
+        this.args = args;
     }
     
     @Override
@@ -74,13 +77,10 @@ public class MainMenuState extends BasicGameState implements Observer {
             String character_name = "";
 
             boolean authorized = false;
-            if (gc instanceof AppletGameContainer.Container) {
-                // get the parameters by casting container and getting the applet instance
-                Applet applet = ((AppletGameContainer.Container) gc).getApplet();
-                username = applet.getParameter("user");
-                password = applet.getParameter("password");
-                character_name = applet.getParameter("character");
-
+            if (args.length > 0) {
+                username = args[0];
+                password = args[1];
+                character_name = args[2];
                 response = ResponseWaiter.get_new_waiter(this);
                 server.authenticate(response, username, password, character_name);
             }
@@ -104,9 +104,11 @@ public class MainMenuState extends BasicGameState implements Observer {
         font.addAsciiGlyphs();
         font.loadGlyphs();
         
-        txtUsername = new TextField(gc, font, 333, 225, 150, 25);
+        txtUsername = new TextField(gc, font, 333, 225, 150, 20);
         txtUsername.setCursorVisible(true);
-        txtUsername.setText("Testing");
+        
+        txtPassword = new TextField(gc, font, 333, 255, 150, 20);
+        txtPassword.setCursorVisible(true);
     }
     
     @Override
@@ -114,6 +116,7 @@ public class MainMenuState extends BasicGameState implements Observer {
         background.draw(0, 0);
         loginButton.draw(375, 300, startGameScale);
         txtUsername.render(gc, g);
+        txtPassword.render(gc, g);
     }
  
     @Override
@@ -139,8 +142,10 @@ public class MainMenuState extends BasicGameState implements Observer {
         }
         
         if(insideStartGame){
-            if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON))
+            if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
+                server.authenticate(response, txtUsername.getText(), txtPassword.getText(), "");
                 sbg.enterState(JBlux.GAMEPLAYSTATE);
+            }
         }
     }
 

@@ -69,51 +69,58 @@ struct player_data* db_get_player(char* character_name)
     int nParams = 1;
     const char* params[1] = { character_name };
     res = db_exec(conn, q, nParams, params);
-
-    int column = 0;
-    data->user_id = db_get_int(res, 0, column);
     
-    column++;
-    data->character_id = db_get_int(res, 0, column);
+    if(PQntuples(res) > 0)
+    {
+        int column = 0;
+        data->user_id = db_get_int(res, 0, column);
+        
+        column++;
+        data->character_id = db_get_int(res, 0, column);
+        
+        column++;
+        data->character_name = db_get_str(res, 0, column);
     
-    column++;
-    data->character_name = db_get_str(res, 0, column);
-   
-    column++;
-    data->level = db_get_int(res, 0, column);
-   
-    column++;
-    data->strength = db_get_int(res, 0, column);
-   
-    column++;
-    data->agility = db_get_int(res, 0, column);
-   
-    column++;
-    data->stamina = db_get_int(res, 0, column);
-   
-    column++;
-    data->intelligence = db_get_int(res, 0, column);
-   
-    column++;
-    data->spirit = db_get_int(res, 0, column);
-   
-    column++;
-    data->map_id = db_get_int(res, 0, column);
-    struct map_t *map = get_map_for_id(data->map_id);
-    data->map = map->name;
+        column++;
+        data->level = db_get_int(res, 0, column);
+    
+        column++;
+        data->strength = db_get_int(res, 0, column);
+    
+        column++;
+        data->agility = db_get_int(res, 0, column);
+    
+        column++;
+        data->stamina = db_get_int(res, 0, column);
+    
+        column++;
+        data->intelligence = db_get_int(res, 0, column);
+    
+        column++;
+        data->spirit = db_get_int(res, 0, column);
+    
+        column++;
+        data->map_id = db_get_int(res, 0, column);
+        struct map_t *map = get_map_for_id(data->map_id);
+        data->map = map->name;
 
-    column++;
-    data->race = get_race(db_get_int(res, 0, column));
+        column++;
+        data->race = get_race(db_get_int(res, 0, column));
 
-    column++;
-    data->player_class = get_class(db_get_int(res, 0, column));
+        column++;
+        data->player_class = get_class(db_get_int(res, 0, column));
 
-    column++;
-    data->coords.x = db_get_int(res, 0, column);
-    column++;
-    data->coords.y = db_get_int(res, 0, column);
-    /* TODO: get inventory */
-    data->inventory.id = 0;
+        column++;
+        data->coords.x = db_get_int(res, 0, column);
+        column++;
+        data->coords.y = db_get_int(res, 0, column);
+        /* TODO: get inventory */
+        data->inventory.id = 0;
+    }
+    else
+    {
+        data = NULL;
+    }
 
     PQclear(res);
     db_disconnect(conn);

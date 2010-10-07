@@ -1,5 +1,5 @@
 /**
- * File: ChatBoxObserver.java
+ * Commands.java
  *
  * @author Casey Jones
  *
@@ -18,27 +18,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.client.gui.observers;
+package org.jblux.util;
 
-import java.util.Observable;
-import org.jblux.client.network.ChatMessage;
-
-public class ChatBoxObserver extends Observable {
-    private static ChatBoxObserver cbo;
-
-    protected ChatBoxObserver() {
-    }
-
-    public static ChatBoxObserver getInstance() {
-        if(cbo == null) {
-            cbo = new ChatBoxObserver();
-        }
-
-        return cbo;
-    }
-
-    public void receivedMessage(ChatMessage cm) {
-        setChanged();
-        this.notifyObservers(cm);
-    }
+public class Commands {
+    public static final String MOVE = "move";
+    public static final String AUTH = "auth";
+    public static final String CONNECT = "connect";
+    public static final String DISCONNECT = "disconnect";
+    public static final String CHAT = "chat";
+    public static final String MAP = "map";
+    public static final String ITEM = "item";
+    public static final String DROP = "drop";
+    public static final String PICKUP = "pickup";
+    public static final String PLAYER = "player";
 }

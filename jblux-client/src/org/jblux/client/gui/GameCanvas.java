@@ -32,9 +32,9 @@ import org.jblux.client.gui.observers.NewPlayerObserver;
 import org.jblux.client.network.NpcDataFactory;
 import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
-import org.jblux.common.Relation;
-import org.jblux.common.client.NpcData;
-import org.jblux.common.client.PlayerData;
+import org.jblux.util.Relation;
+import org.jblux.client.data.NpcData;
+import org.jblux.client.data.PlayerData;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -57,6 +57,7 @@ public class GameCanvas implements Observer {
     private GUI gui;
 
     private boolean wait_new_map;
+    private boolean update_map;
     private ResponseWaiter response;
     private String map_name;
     private ArrayList<NpcData> npc_data;
@@ -171,7 +172,8 @@ public class GameCanvas implements Observer {
             new_data = null;
         }
 
-        if(npc_data.size() > 0) {
+        if(update_map) {
+            update_map = false;
             setMap(map_name, map_coords);
             setNpcs(npc_data);
             npc_data = new ArrayList<NpcData>();
@@ -289,6 +291,7 @@ public class GameCanvas implements Observer {
 
                 map_coords = c;
                 npc_data = NpcDataFactory.getArrayFromBase64(args[4]);
+                update_map = true;
             }
         }
 

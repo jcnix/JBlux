@@ -1,5 +1,5 @@
 /**
- * File: ChatBoxObserver.java
+ * File: ChatMessage.java
  *
  * @author Casey Jones
  *
@@ -18,27 +18,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.client.gui.observers;
+package org.jblux.client.network;
 
-import java.util.Observable;
-import org.jblux.client.network.ChatMessage;
+/*
+ * Combines a username and a message together
+ */
 
-public class ChatBoxObserver extends Observable {
-    private static ChatBoxObserver cbo;
+public class ChatMessage {
+    private String username;
+    private String message;
 
-    protected ChatBoxObserver() {
+    public ChatMessage(String username, String message) {
+        this.username = username;
+        this.message = message;
     }
 
-    public static ChatBoxObserver getInstance() {
-        if(cbo == null) {
-            cbo = new ChatBoxObserver();
-        }
-
-        return cbo;
+    public String getChatBoxString() {
+        return String.format("%s: %s\n", username, message);
     }
 
-    public void receivedMessage(ChatMessage cm) {
-        setChanged();
-        this.notifyObservers(cm);
+    public String getUsername() {
+        return username;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }
