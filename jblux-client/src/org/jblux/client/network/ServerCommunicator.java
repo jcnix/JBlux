@@ -212,8 +212,7 @@ class ServerListener extends Thread {
                         remaining_command = recv_command.substring(len - rem_bytes, len);
                         recv_command = recv_command.substring(0, len - rem_bytes);
                     }
-
-                    System.out.println(recv_command);
+                    
                     doCommand(recv_command);
                 }
             }

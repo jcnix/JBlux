@@ -289,6 +289,7 @@ void parse_command(struct client_t *client, char* command)
             else
             {
                 struct coordinates_t coords = get_map_entrance(map, rel);
+                rm_player_from_map(client); //Remove from current/old map
                 add_player_to_map(client, map->name, coords);
             }
         }
