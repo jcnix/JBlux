@@ -5,6 +5,8 @@ from django.contrib import admin
 
 class UserAdmin(admin.ModelAdmin):
     search_fields = ['username']
+    list_display = ('__unicode__', 'is_active')
+    list_filter = ('is_admin', 'is_active')
 
 class InventoryInline(admin.StackedInline):
     model = Inventory
@@ -19,16 +21,23 @@ class InventoryInline(admin.StackedInline):
 
 class CharacterAdmin(admin.ModelAdmin):
     search_fields = ['name']
+    list_display = ('__unicode__', 'level', 'race', 'class_t')
+    list_filter = ('race', 'class_t')
     inlines = [InventoryInline]
 
 class NpcAdmin(admin.ModelAdmin):
     search_fields = ['name']
+    list_display = ('__unicode__', 'level', 'race', 'class_t')
+    list_filter = ('race', 'class_t')
 
 class QuestAdmin(admin.ModelAdmin):
     search_fields = ['name', 'npc__name']
+    list_display = ('__unicode__', 'min_level', 'flag', 'npc')
+    list_filter = ('flag',)
 
 class ItemAdmin(admin.ModelAdmin):
     search_fields = ['name']
+    list_display = ('__unicode__', 'itemlevel')
 
 class MapItemInline(admin.TabularInline):
     model = MapItems
@@ -53,7 +62,6 @@ class PollAdmin(admin.ModelAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Character, CharacterAdmin)
-#admin.site.register(Inventory)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Map, MapAdmin)
 admin.site.register(Npc, NpcAdmin)
