@@ -6,8 +6,20 @@ from django.contrib import admin
 class UserAdmin(admin.ModelAdmin):
     search_fields = ['username']
 
+class InventoryInline(admin.StackedInline):
+    model = Inventory
+    extra = 0
+    max_num = 1
+    fields = Inventory._meta.get_all_field_names()
+    #Remove non foreign keys
+    fields.remove("id")
+    fields.remove("character")
+    fields.remove("items")
+    raw_id_fields = fields
+
 class CharacterAdmin(admin.ModelAdmin):
     search_fields = ['name']
+    inlines = [InventoryInline]
 
 class NpcAdmin(admin.ModelAdmin):
     search_fields = ['name']
@@ -41,7 +53,7 @@ class PollAdmin(admin.ModelAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Character, CharacterAdmin)
-admin.site.register(Inventory)
+#admin.site.register(Inventory)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Map, MapAdmin)
 admin.site.register(Npc, NpcAdmin)
