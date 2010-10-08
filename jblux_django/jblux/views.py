@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext, loader, Context
-from jblux_django.jblux.models import User, Character, Map
+from jblux_django.jblux.models import User, Character, Map, Inventory
 from jblux_django.jblux.forms import LoginForm, RegisterForm, CharacterForm
 from jblux_django.jblux.forms import SelectCharacterForm
 import hashlib
@@ -100,6 +100,10 @@ def new_character(request):
                     x_coord = 352,
                     y_coord = 384,
                     )
+            inventory = Inventory.objects.create(character=character)
+            character.inventory = inventory
+            character.save()
+
             return HttpResponseRedirect("/jblux/index")
 
     try:

@@ -46,7 +46,7 @@ class Class(models.Model):
         return self.name
 
 class Inventory(models.Model):
-    character = models.ForeignKey('Character', blank=True, null=True, related_name='player')
+    character = models.ForeignKey('Character', related_name='player')
     head = models.ForeignKey('Item', blank=True, null=True, related_name='helmet')
     neck = models.ForeignKey('Item', blank=True, null=True, related_name='necklace')
     chest = models.ForeignKey('Item', blank=True, null=True, related_name='chest_armor')
@@ -86,7 +86,7 @@ class Inventory(models.Model):
     slot25 = models.ForeignKey('Item', blank=True, null=True, related_name='s25')
 
     def __unicode__(self):
-        return self.character
+        return self.character.name
 
 class QuestLog(models.Model):
     character = models.ForeignKey('Character')

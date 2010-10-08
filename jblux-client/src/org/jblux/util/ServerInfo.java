@@ -25,6 +25,6 @@ package org.jblux.util;
  * passwords sitting in the client jar.
  */
 public class ServerInfo {
-    public static final String SERVER = "tmuo.casey-jones.org";
+    public static final String SERVER = "192.168.1.186";
     public static final int PORT = 4000;
 }
