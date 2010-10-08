@@ -77,7 +77,7 @@ def new_character(request):
             #verify the user has an open slot
             user = request.session['user']
             chars = Character.objects.filter(user=user).count()
-            if (chars) >= 2:
+            if (chars) >= 1:
                 return HttpResponse("No open character slots.")
 
             name = form.cleaned_data['name']
