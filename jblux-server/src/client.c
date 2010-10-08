@@ -7,6 +7,7 @@
 
 static struct client_list *clients; 
 static int num_clients = 0;
+static pthread_mutex_t clients_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void handle_client(int* sock)
 {
@@ -370,20 +371,26 @@ void add_client(struct client_list **clients, struct client_t *client)
 {
     struct client_list* new = malloc(sizeof(struct client_list));
     new->client = client;
+
+    pthread_mutex_lock(&clients_mutex);
     new->next = *clients;
     *clients = new;
+    pthread_mutex_unlock(&clients_mutex);
 }
 
 void delete_client_list(struct client_list **clients)
 {
     struct client_list *curr = *clients;
     struct client_list *next = NULL;
+    
+    pthread_mutex_lock(&clients_mutex);
     while(curr)
     {
         next = curr->next;
         free(curr);
         curr = next;
     }
+    pthread_mutex_unlock(&clients_mutex);
 }
 
 /* Removes client from list and frees all it's memory */
@@ -396,6 +403,7 @@ void remove_client_from_list(struct client_list **clients, struct client_t *clie
         /* We're only going to determine equality by socket */
         if(curr->client->socket == client->socket)
         {
+            pthread_mutex_lock(&clients_mutex);
             if(prev == NULL)
             {
                 /* We're at the head of the list */
@@ -418,6 +426,7 @@ void remove_client_from_list(struct client_list **clients, struct client_t *clie
             }
             free(curr->client);
             free(curr);
+            pthread_mutex_unlock(&clients_mutex);
             return;
         }
         prev = curr;
