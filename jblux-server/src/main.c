@@ -19,7 +19,6 @@
 
 void signal_handler(int sig)
 {
-    kill_all_clients();
     cleanup();
     signal(sig, SIG_DFL);
     raise(sig);

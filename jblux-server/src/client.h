@@ -51,14 +51,7 @@ void send_chat_message(struct client_t *from, char* message);
 void tell_all_players_on_map(struct client_t *from, int map_id, char* command);
 void parse_command(struct client_t *client, char* command);
 
-/* Easy way of sending messages */
-int esend(int socket, char* message);
-void kill_all_clients();
 void cleanup();
-
-void add_client(struct client_list **clients, struct client_t *client);
-void delete_client_list(struct client_list **clients);
-void remove_client_from_list(struct client_list **clients, struct client_t *client);
 int client_list_size(struct client_list *clients);
 
 #endif
