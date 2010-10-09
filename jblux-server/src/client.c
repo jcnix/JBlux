@@ -106,7 +106,7 @@ void move_client(struct client_t *client, struct coordinates_t coords)
         return;
     }
 
-    tell_all_players_on_map(client, client->data->map_id, command);
+    tell_all_players_on_map(client->socket, client->data->map_id, command);
     free(command);
 }
 
@@ -183,7 +183,7 @@ void rm_player_from_map(struct client_t *client)
         return;
     }
 
-    tell_all_players_on_map(client, client->data->map_id, command);
+    tell_all_players_on_map(client->socket, client->data->map_id, command);
     free(command);
 }
 
@@ -195,18 +195,18 @@ void send_chat_message(struct client_t *from, char* message)
         return;
     }
 
-    tell_all_players_on_map(from, from->data->map_id, command);
+    tell_all_players_on_map(from->socket, from->data->map_id, command);
     free(command);
 }
 
-void tell_all_players_on_map(struct client_t *from, int map_id, char* command)
+void tell_all_players_on_map(int from_socket, int map_id, char* command)
 {
     struct client_list *cl = clients;
     while(cl)
     {
         struct client_t *to = cl->client;
         if(to->data->map_id == map_id &&
-                to->socket != from->socket)
+                to->socket != from_socket)
         {
             esend(to->socket, command);
         }
