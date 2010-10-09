@@ -31,4 +31,5 @@ public class Commands {
     public static final String DROP = "drop";
     public static final String PICKUP = "pickup";
     public static final String PLAYER = "player";
+    public static final String QUEST = "quest";
 }

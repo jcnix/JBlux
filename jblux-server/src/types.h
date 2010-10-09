@@ -31,24 +31,5 @@ struct class_t
     char* name;
 };
 
-struct player_data
-{
-    int user_id;
-    int character_id;
-    char* character_name;
-    int level;
-    struct race_t race;
-    struct class_t player_class;
-    int strength;
-    int agility;
-    int stamina;
-    int intelligence;
-    int spirit;
-    int map_id;
-    char* map;
-    struct inventory_t inventory;
-    struct coordinates_t coords;
-};
-
 #endif
 

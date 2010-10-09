@@ -91,7 +91,13 @@ class Inventory(models.Model):
 class QuestLog(models.Model):
     character = models.ForeignKey('Character')
     quest = models.ForeignKey('Quest')
-    status = models.IntegerField()
+    active = models.BooleanField()
+    reqitem1_count = models.IntegerField(null=True, blank=True, default=0)
+    reqitem2_count = models.IntegerField(null=True, blank=True, default=0)
+    reqitem3_count = models.IntegerField(null=True, blank=True, default=0)
+    reqnpc1_count = models.IntegerField(null=True, blank=True, default=0)
+    reqnpc2_count = models.IntegerField(null=True, blank=True, default=0)
+    reqnpc3_count = models.IntegerField(null=True, blank=True, default=0)
 
 class Item(models.Model):
     types = models.IntegerField()
@@ -181,6 +187,7 @@ class Quest(models.Model):
     objectives = models.CharField(max_length=100)
     completion_text = models.CharField(max_length=500)
     npc = models.ForeignKey('Npc', related_name='quest_giver')
+    end_npc = models.ForeignKey('Npc', related_name='quest_end')
     min_level = models.IntegerField()
     flag = models.IntegerField()
     next_quest = models.ForeignKey('Quest', null=True, blank=True)

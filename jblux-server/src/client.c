@@ -316,6 +316,15 @@ void parse_command(struct client_t *client, char* command)
             add_player_to_map(client, map->name, client->data->coords);*/
         }
     }
+    else if(strncmp(command, "quest", 5) == 0)
+    {
+        char* action = strtok(NULL, " ");
+        if(strcmp(action, "accept") == 0)
+        {
+            int quest_id = atoi(strtok(NULL, " "));
+            player_accept_quest(client->data, quest_id);
+        }
+    }
     else if(strncmp(command, "disconnect", 10) == 0)
     {
         client->connected = 0;

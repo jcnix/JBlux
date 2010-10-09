@@ -20,11 +20,14 @@
 
 package org.jblux.client.data;
 
+import java.util.ArrayList;
+
 public class CharacterData {
     public String character_name;
     public int level;
     public Race race;
     public PlayerClass player_class;
+    public ArrayList<Quest> quests;
 
     public int strength;
     public int agility;

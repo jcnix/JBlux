@@ -36,6 +36,7 @@ import org.jblux.util.Commands;
 import org.jblux.util.Relation;
 import org.jblux.util.ServerInfo;
 import org.jblux.client.data.PlayerData;
+import org.jblux.client.data.Quest;
 import org.jblux.client.items.Item;
 import org.jblux.util.Base64;
 import org.jblux.util.Coordinates;
@@ -112,6 +113,11 @@ public class ServerCommunicator {
     public void pickup_item(Coordinates coords, ResponseWaiter response) {
         String command = String.format("%s %s %s", Commands.MAP, Commands.PICKUP, coords);
         sl.add_observable(response);
+        writeString(command);
+    }
+
+    public void acceptQuest(Quest quest) {
+        String command = String.format("%s accept %d", Commands.QUEST, quest.id);
         writeString(command);
     }
 

@@ -33,9 +33,11 @@ public class GUI {
     private ChatInputBox inputBox;
     private QuestDialogBox dialog_box;
     private GUIContext gc;
+    private ServerCommunicator server;
 
     public GUI(GUIContext gc, ServerCommunicator s) {
         this.gc = gc;
+        server = s;
 
         UnicodeFont uf = FontFactory.getFont("Serif", Color.WHITE, 16);
         cb = new ChatBox(gc, uf);
@@ -44,7 +46,7 @@ public class GUI {
     }
 
     public void openQuestDialogBox(LinkedList<Quest> quests) {
-        dialog_box = new QuestDialogBox(this);
+        dialog_box = new QuestDialogBox(this, server);
         dialog_box.setQuests(quests);
     }
 

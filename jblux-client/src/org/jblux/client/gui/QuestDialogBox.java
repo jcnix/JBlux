@@ -23,6 +23,7 @@ package org.jblux.client.gui;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import org.jblux.client.data.Quest;
+import org.jblux.client.network.ServerCommunicator;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -45,9 +46,11 @@ public class QuestDialogBox {
     private Rectangle acceptButton;
     private Rectangle declineButton;
     private Quest selected_quest;
+    private ServerCommunicator server;
 
-    public QuestDialogBox(GUI gui) {
+    public QuestDialogBox(GUI gui, ServerCommunicator s) {
         this.gui = gui;
+        server = s;
         
         try {
             boxImage = new Image("img/dialogbox.png");
@@ -115,6 +118,8 @@ public class QuestDialogBox {
 
             else if(display_quest) {
                 if(acceptButton.contains(x, y)) {
+                    server.acceptQuest(selected_quest);
+                    gui.closeDialogbox();
                 }
                 else if(declineButton.contains(x, y)) {
                     select_quest = true;
