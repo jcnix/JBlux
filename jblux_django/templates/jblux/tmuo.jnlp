@@ -1,6 +1,5 @@
 <!-- JNLP File for TMUO --> 
-<jnlp spec="1.0+" codebase="http://tmuo.casey-jones.org/tmuo_media/" 
-    href="tmuo.jnlp"> 
+<jnlp spec="1.0+" codebase="http://tmuo.casey-jones.org/tmuo_media/"> 
     <information> 
         <title>The Mushroom Univerise Online</title> 
         <vendor>Casey Jones</vendor> 
