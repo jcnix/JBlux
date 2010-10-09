@@ -36,7 +36,7 @@ import org.jblux.util.Commands;
 import org.jblux.util.Relation;
 import org.jblux.util.ServerInfo;
 import org.jblux.client.data.PlayerData;
-import org.jblux.common.items.Item;
+import org.jblux.client.items.Item;
 import org.jblux.util.Base64;
 import org.jblux.util.Coordinates;
 

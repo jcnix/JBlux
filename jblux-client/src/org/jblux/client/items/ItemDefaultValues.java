@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common.items;
+package org.jblux.client.items;
 
 public class ItemDefaultValues {
     public static final short m_class = 0;

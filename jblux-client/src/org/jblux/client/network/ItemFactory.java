@@ -22,7 +22,7 @@ package org.jblux.client.network;
 
 import com.google.gson.Gson;
 import java.io.IOException;
-import org.jblux.common.items.Item;
+import org.jblux.client.items.Item;
 import org.jblux.util.Base64;
 
 public class ItemFactory {

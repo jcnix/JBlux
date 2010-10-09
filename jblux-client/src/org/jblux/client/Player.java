@@ -31,7 +31,7 @@ import org.jblux.client.network.ServerCommunicator;
 import org.jblux.util.Relation;
 import org.jblux.client.data.NpcData;
 import org.jblux.client.data.PlayerData;
-import org.jblux.common.items.Item;
+import org.jblux.client.items.Item;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;

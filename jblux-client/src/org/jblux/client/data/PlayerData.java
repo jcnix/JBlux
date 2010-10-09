@@ -20,7 +20,7 @@
 
 package org.jblux.client.data;
 
-import org.jblux.common.items.Inventory;
+import org.jblux.client.items.Inventory;
 import org.jblux.util.Coordinates;
 
 public class PlayerData extends CharacterData {

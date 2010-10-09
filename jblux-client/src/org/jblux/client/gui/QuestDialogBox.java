@@ -36,10 +36,14 @@ public class QuestDialogBox {
     private UnicodeFont ufont;
     private GUI gui;
     private Image closeButton;
+    private Image acceptImage;
+    private Image declineImage;
 
     private boolean select_quest;
     private boolean display_quest;
     private ArrayList<Rectangle> quest_boxes;
+    private Rectangle acceptButton;
+    private Rectangle declineButton;
     private Quest selected_quest;
 
     public QuestDialogBox(GUI gui) {
@@ -48,6 +52,8 @@ public class QuestDialogBox {
         try {
             boxImage = new Image("img/dialogbox.png");
             closeButton = new Image("img/closebutton.png");
+            acceptImage = new Image("img/accept.png");
+            declineImage = new Image("img/decline.png");
         } catch(SlickException ex) {
         }
 
@@ -55,6 +61,9 @@ public class QuestDialogBox {
         selected_quest = null;
         select_quest = false;
         display_quest = false;
+
+        acceptButton = new Rectangle(0,0,0,0);
+        declineButton = new Rectangle(0,0,0,0);
     }
 
     public void setQuests(LinkedList<Quest> quests) {
@@ -94,8 +103,22 @@ public class QuestDialogBox {
                         selected_quest = quests.get(i);
                         select_quest = false;
                         display_quest = true;
+
+                        acceptButton = new Rectangle(250, 450, acceptImage.getWidth(),
+                                acceptImage.getHeight());
+                        declineButton = new Rectangle(450, 450, declineImage.getWidth(),
+                                acceptImage.getHeight());
                         break;
                     }
+                }
+            }
+
+            else if(display_quest) {
+                if(acceptButton.contains(x, y)) {
+                }
+                else if(declineButton.contains(x, y)) {
+                    select_quest = true;
+                    display_quest = false;
                 }
             }
         }
@@ -119,6 +142,8 @@ public class QuestDialogBox {
             ufont.drawString(x, y, selected_quest.name);
             ufont.drawString(x, y+25, selected_quest.details);
             ufont.drawString(x, y+50, selected_quest.objectives);
+            acceptImage.draw(250, 450);
+            declineImage.draw(450, 450);
         }
     }
 }

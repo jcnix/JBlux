@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.common.items;
+package org.jblux.client.items;
 
 public enum ItemType {
     MELEE_WEAPON,
