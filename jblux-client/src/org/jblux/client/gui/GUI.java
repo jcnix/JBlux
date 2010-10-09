@@ -22,14 +22,10 @@ package org.jblux.client.gui;
 
 import org.jblux.client.network.ServerCommunicator;
 import java.awt.Color;
-import java.awt.Font;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import org.jblux.client.data.Quest;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
-import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.gui.GUIContext;
 
 public class GUI {
@@ -41,17 +37,10 @@ public class GUI {
     public GUI(GUIContext gc, ServerCommunicator s) {
         this.gc = gc;
 
-        try {
-            UnicodeFont uf = new UnicodeFont(new Font("Serif", Font.BOLD, 16));
-            uf.getEffects().add(new ColorEffect(Color.WHITE));
-            uf.addAsciiGlyphs();
-            uf.loadGlyphs();
-
-            cb = new ChatBox(gc, uf);
-            inputBox = new ChatInputBox(gc, uf, s);
-            inputBox.setCursorVisible(true);
-        } catch(SlickException ex) {
-        }
+        UnicodeFont uf = FontFactory.getFont("Serif", Color.WHITE, 16);
+        cb = new ChatBox(gc, uf);
+        inputBox = new ChatInputBox(gc, uf, s);
+        inputBox.setCursorVisible(true);
     }
 
     public void openQuestDialogBox(LinkedList<Quest> quests) {
