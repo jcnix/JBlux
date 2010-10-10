@@ -26,6 +26,14 @@ void signal_handler(int sig)
 
 int main(int argc, char** argv)
 {
+    if(argc > 0)
+    {
+        if(strcmp(argv[0], "-d"))
+        {
+            daemon(1,1);
+        }
+    }
+    
     signal(SIGTERM, signal_handler);
     signal(SIGINT, signal_handler);
     signal(SIGQUIT, signal_handler);
