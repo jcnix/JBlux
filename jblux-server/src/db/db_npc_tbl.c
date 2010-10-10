@@ -97,7 +97,7 @@ struct quest_list* db_get_quests_for_npc(int npc_id, struct player_data *player)
         int id = db_get_int(res, 0,0);
         struct quest *q = db_get_quest(id);
         if(q->min_level <= player->level &&
-                !does_player_have_quest(player->character_id, q->id))
+                !have_quest(player->character_id, q->id))
         {
             add_quest(&quests, q);
         }

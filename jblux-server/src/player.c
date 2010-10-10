@@ -65,7 +65,7 @@ int player_accept_quest(struct player_data *player, int quest_id)
     /* Find out if we're below the quest log limit */
     int num_quests = db_get_num_active_quests(player->character_id);
     if(num_quests == MAX_QUESTS || num_quests == -1 ||
-            does_player_have_quest(player->character_id, quest_id))
+            have_quest(player->character_id, quest_id))
     {
         return 0;
     }
