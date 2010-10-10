@@ -30,8 +30,8 @@ class RegisterForm(forms.Form):
         super(forms.Form,self).clean()
         if 'password' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password'] != self.cleaned_data['password2']:
-                self._errors['password'] = 'Passwords must match'
-                self._errors['password2'] = 'Passwords must match'
+                self._errors['password'] = [u'Passwords must match']
+                self._errors['password2'] = [u'Passwords must match']
 
         return self.cleaned_data
 

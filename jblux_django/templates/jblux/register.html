@@ -3,15 +3,10 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<center>
 <form method="post" action="{% url jblux_django.jblux.views.register_new_user %}">
     {% csrf_token %}
-    {% for field in form.visible_fields %}
-    <p><font color="red">{{ field.errors }}</font></p>
-    <p>{{ field.label_tag }}: {{ field }}</p>
-    {% endfor %}
+    {% include "jblux/base_form.html" %}
     <p><input type="submit" value="Register" /></p>
 </form>
-</center>
 {% endblock %}
 

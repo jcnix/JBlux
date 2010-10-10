@@ -102,6 +102,10 @@ p
     left: 50px;
 }
 
+.field_error input[type="text"], .field_error input[type="password"] {
+    background-color: #FFFF99;
+}
+
 .screenshots {
     margin: 0 0 0px 55px;
     border: 2px solid #2D98AF;
