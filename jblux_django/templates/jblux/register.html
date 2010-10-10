@@ -4,16 +4,12 @@
 
 {% block content %}
 <center>
-{% if form.errors %}
-<p>Your passwords didn't match.  Please try again.</p>
-{% endif %}
-
 <form method="post" action="{% url jblux_django.jblux.views.register_new_user %}">
     {% csrf_token %}
-        {% for field in form.visible_fields %}
-        <p>{{ field.errors }}</p>
-        <p>{{ field.label_tag }}: {{ field }}</p>
-        {% endfor %}
+    {% for field in form.visible_fields %}
+    <p><font color="red">{{ field.errors }}</font></p>
+    <p>{{ field.label_tag }}: {{ field }}</p>
+    {% endfor %}
     <p><input type="submit" value="Register" /></p>
 </form>
 </center>

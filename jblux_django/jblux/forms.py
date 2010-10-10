@@ -26,6 +26,15 @@ class RegisterForm(forms.Form):
     password = forms.CharField(max_length=50, validators=[min_pass], widget=forms.PasswordInput(render_value=False))
     password2 = forms.CharField(max_length=50, validators=[min_pass], widget=forms.PasswordInput(render_value=False))
 
+    def clean(self):
+        super(forms.Form,self).clean()
+        if 'password' in self.cleaned_data and 'password2' in self.cleaned_data:
+            if self.cleaned_data['password'] != self.cleaned_data['password2']:
+                self._errors['password'] = 'Passwords must match'
+                self._errors['password2'] = 'Passwords must match'
+
+        return self.cleaned_data
+
 class CharacterForm(forms.Form):
     min_name = MinLengthValidator(3)
 

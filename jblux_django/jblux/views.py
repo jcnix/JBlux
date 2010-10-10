@@ -45,30 +45,22 @@ def register_new_user(request):
             email = form.cleaned_data['email']
             pass_for_email = form.cleaned_data['password']
 
-            #Hash passwords
+            #Hash password
             password = hashlib.sha1(form.cleaned_data['password']).hexdigest()
-            password2 = hashlib.sha1(form.cleaned_data['password2']).hexdigest()
 
-            if password != password2:
-                #passwords don't match
-                form = RegisterForm()
-                return render_to_response('jblux/register.html', {'form': form},
-                        context_instance=RequestContext(request))
-            else:
-                #successful
-                user = User.objects.create(
-                    username=username,
-                    email=email,
-                    password=password,
-                    is_admin=False,
-                    is_active=True,
-                    )
+            user = User.objects.create(
+                username=username,
+                email=email,
+                password=password,
+                is_admin=False,
+                is_active=True,
+                )
 
-                #send an email
-                activation_email(username, pass_for_email, email)
+            #send an email
+            activation_email(username, pass_for_email, email)
 
-                form = LoginForm()
-                return HttpResponseRedirect('/jblux/login')
+            form = LoginForm()
+            return HttpResponseRedirect('/jblux/login')
         else:
             return render_to_response('jblux/register.html', {'form': form},
                     context_instance=RequestContext(request))
