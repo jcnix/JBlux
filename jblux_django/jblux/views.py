@@ -4,6 +4,7 @@ from django.template import RequestContext, loader, Context
 from jblux_django.jblux.models import User, Character, Map, Inventory
 from jblux_django.jblux.forms import LoginForm, RegisterForm, CharacterForm
 from jblux_django.jblux.forms import SelectCharacterForm
+from jblux_django.jblux.email import activation_email
 import hashlib
 
 def index(request):
@@ -42,7 +43,9 @@ def register_new_user(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
-            #Hash passwords immediately
+            pass_for_email = form.cleaned_data['password']
+
+            #Hash passwords
             password = hashlib.sha1(form.cleaned_data['password']).hexdigest()
             password2 = hashlib.sha1(form.cleaned_data['password2']).hexdigest()
 
@@ -60,6 +63,9 @@ def register_new_user(request):
                     is_admin=False,
                     is_active=True,
                     )
+
+                #send an email
+                activation_email(username, pass_for_email, email)
 
                 form = LoginForm()
                 return HttpResponseRedirect('/jblux/login')
