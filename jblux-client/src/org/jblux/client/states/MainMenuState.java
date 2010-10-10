@@ -20,7 +20,6 @@
 
 package org.jblux.client.states;
 
-import java.applet.Applet;
 import java.util.Observable;
 import org.jblux.client.JBlux;
 import java.awt.Color;
@@ -31,7 +30,6 @@ import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.util.Commands;
 import org.jblux.client.data.PlayerData;
-import org.newdawn.slick.AppletGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -143,8 +141,8 @@ public class MainMenuState extends BasicGameState implements Observer {
         
         if(insideStartGame){
             if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
+                response = ResponseWaiter.get_new_waiter(this);
                 server.authenticate(response, txtUsername.getText(), txtPassword.getText(), "");
-                sbg.enterState(JBlux.GAMEPLAYSTATE);
             }
         }
     }

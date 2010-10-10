@@ -39,20 +39,22 @@ public class JBlux extends StateBasedGame{
     public JBlux(String[] args) {
         super("JBlux");
         this.args = args;
-        server = new ServerCommunicator();
     }
 
     @Override
     public void initStatesList(GameContainer gc) throws SlickException {
+        server = new ServerCommunicator(this);
+
+        MainMenuState mms = new MainMenuState(MAINMENUSTATE, server, args);
+        GameplayState gps = new GameplayState(GAMEPLAYSTATE, server);
+        ServerDownState sds = new ServerDownState(SERVERDOWNSTATE);
+        this.addState(gps);
+        this.addState(mms);
+        this.addState(sds);
         if(!server.isConnected()) {
-            this.addState(new ServerDownState(SERVERDOWNSTATE));
             this.enterState(SERVERDOWNSTATE);
         }
-        else {            
-             MainMenuState mms = new MainMenuState(MAINMENUSTATE, server, args);
-             GameplayState gps = new GameplayState(GAMEPLAYSTATE, server);
-             this.addState(gps);
-             this.addState(mms);            
+        else {  
              this.enterState(MAINMENUSTATE);
         }
     }

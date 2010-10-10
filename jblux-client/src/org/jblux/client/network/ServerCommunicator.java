@@ -27,6 +27,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Observable;
+import org.jblux.client.JBlux;
 import org.jblux.client.Player;
 import org.jblux.client.Players;
 import org.jblux.client.Sprite;
@@ -40,6 +41,7 @@ import org.jblux.client.data.Quest;
 import org.jblux.client.items.Item;
 import org.jblux.util.Base64;
 import org.jblux.util.Coordinates;
+import org.newdawn.slick.state.StateBasedGame;
 
 /*
  * Sends data to the server.
@@ -48,14 +50,13 @@ public class ServerCommunicator {
     private Socket socket;
     private OutputStream netOut;
     private ServerListener sl;
-    public Player player;
 
-    public ServerCommunicator() {
+    public ServerCommunicator(StateBasedGame sbg) {
         try {
             socket = new Socket(ServerInfo.SERVER, ServerInfo.PORT);
             if(socket.isConnected()) {
                 netOut = socket.getOutputStream();
-                sl = new ServerListener(socket);
+                sl = new ServerListener(socket, sbg);
                 sl.start();
             }
         } catch (UnknownHostException ex) {
@@ -148,13 +149,15 @@ class ServerListener extends Thread {
     public Coordinates coords;
     private ArrayList<ResponseWaiter> observables;
     private NewPlayerObserver player_observer;
+    private StateBasedGame sbg;
     private int msg_size;
     private int recv_bytes;
     private String recv_command;
     private String remaining_command;
 
-    public ServerListener(Socket s) {
+    public ServerListener(Socket s, StateBasedGame sbg) {
         socket = s;
+        this.sbg = sbg;
         players = Players.getInstance();
         cbObserver = ChatBoxObserver.getInstance();
         coords = new Coordinates();
@@ -189,6 +192,7 @@ class ServerListener extends Thread {
                         command = s.toString();
                     }
                     else {
+                        sbg.enterState(JBlux.SERVERDOWNSTATE);
                         break;
                     }
                 }
