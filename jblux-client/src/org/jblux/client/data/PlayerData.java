@@ -20,6 +20,7 @@
 
 package org.jblux.client.data;
 
+import java.util.ArrayList;
 import org.jblux.client.items.Inventory;
 import org.jblux.util.Coordinates;
 
@@ -28,6 +29,7 @@ public class PlayerData extends CharacterData {
     public int user_id;
     public int character_id;
     public Inventory inventory;
+    public ArrayList<Quest> quests;
     public Coordinates coords;
 
     public PlayerData() {
