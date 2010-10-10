@@ -45,7 +45,6 @@ void db_get_all_maps(struct map_list **maps)
         map->top_ent     =   db_get_map_entrance(map->id, ABOVE);
         map->bottom_ent  =   db_get_map_entrance(map->id, BELOW);
 
-        db_get_npcs_on_map(map);
         /* TODO: initialize map->items */
         map->items = NULL;
         add_map(maps, map);
@@ -107,7 +106,7 @@ void db_get_items_on_map(struct map_t *map)
     db_disconnect(conn);*/
 }
 
-void db_get_npcs_on_map(struct map_t *map)
+struct npc_list* db_get_npcs_on_map(int map_id, struct player_data *player)
 {
     PGconn *conn = db_connect();
     PGresult *res = NULL;
@@ -116,10 +115,9 @@ void db_get_npcs_on_map(struct map_t *map)
         "WHERE map_t_id=$1;";
     int nParams = 1;
     char* cid = NULL;
-    if(asprintf(&cid, "%d", map->id) < 0)
+    if(asprintf(&cid, "%d", map_id) < 0)
     {
-        map->npcs = NULL;
-        return;
+        return NULL;
     }
     const char* params[1] = { cid };
     res = db_exec(conn, q, nParams, params);
@@ -133,7 +131,7 @@ void db_get_npcs_on_map(struct map_t *map)
     {
         int column = 0;
         int npc_id = db_get_int(res, i, column);
-        struct npc_data *data = db_get_npc(npc_id);
+        struct npc_data *data = db_get_npc(npc_id, player);
         
         column++;
         data->direction = db_get_str(res, i, column);
@@ -146,9 +144,9 @@ void db_get_npcs_on_map(struct map_t *map)
         add_npc(&npcs, data);
     }
 
-    map->npcs = npcs;
     PQclear(res);
     db_disconnect(conn);
+    return npcs;
 }
 
 struct coordinates_t db_get_map_entrance(int map_id, enum Relation r)

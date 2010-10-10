@@ -18,7 +18,6 @@ struct map_t
     int id;
     char *name;
     struct item_t *items;
-    struct npc_list *npcs;
 
     int map_left;
     int map_right;

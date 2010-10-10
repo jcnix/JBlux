@@ -45,16 +45,19 @@ char* npc_list_to_json(struct npc_list *npcs)
         json_insert_str(gen, sprite_sheet_field, data->sprite_sheet);
         json_insert_str(gen, direction_field, data->direction);
         
-        /* Quests */
         yajl_gen_string(gen, (unsigned char*) quests_field, strlen(quests_field));
         yajl_gen_array_open(gen);
-        int j = 0;
-        struct quest_list *quests = data->quests;
-        while(quests)
+       
+        if(data->quests)
         {
-            quest_to_json(gen, quests->quest);
-            j++;
-            quests = data->quests->next;
+            int j = 0;
+            struct quest_list *quests = data->quests;
+            while(quests)
+            {
+                quest_to_json(gen, quests->quest);
+                j++;
+                quests = data->quests->next;
+            }
         }
         yajl_gen_array_close(gen);
 

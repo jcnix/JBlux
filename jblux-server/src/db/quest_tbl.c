@@ -137,6 +137,12 @@ void db_add_quest_to_log(int player_id, int quest_id)
     PGconn *conn = db_connect();
     PGresult *res = NULL;
 
+    /* Don't allow players to accept the same quest twice. */
+    if(does_player_have_quest(player_id, quest_id))
+    {
+        return;
+    }
+
     char *q = "INSERT INTO jblux_questlog(character_id, quest_id, active) "
         "VALUES($1, $2, TRUE);";
     int nParams = 2;
@@ -154,5 +160,38 @@ void db_add_quest_to_log(int player_id, int quest_id)
     free(qid);
     PQclear(res);
     db_disconnect(conn);
+}
+
+int does_player_have_quest(int player_id, int quest_id)
+{
+    int have_quest = 1;
+    PGconn *conn = db_connect();
+    PGresult *res = NULL;
+
+    char *q = "SELECT id FROM jblux_questlog WHERE character_id=$1 AND "
+        "quest_id=$2;";
+    int nParams = 2;
+    char* pid = NULL;
+    char* qid = NULL;
+    if( asprintf(&pid, "%d", player_id) < 0 ||
+        asprintf(&qid, "%d", quest_id) < 0)
+    {
+        db_disconnect(conn);
+        return 1;
+    }
+    const char* params[2] = { pid, qid };
+    res = db_exec(conn, q, nParams, params);
+    free(pid);
+    free(qid);
+    
+    if(PQntuples(res) == 0)
+    {
+        have_quest = 0;
+    }
+
+    PQclear(res);
+    db_disconnect(conn);
+
+    return have_quest;
 }
 

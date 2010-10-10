@@ -127,7 +127,6 @@ void delete_map_list(struct map_list **maps)
         struct map_t *map = curr->map;
         next = curr->next;
         free(map->name);
-        delete_npcs(&map->npcs);
         free(map);
         free(curr);
         curr = next;

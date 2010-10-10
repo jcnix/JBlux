@@ -39,6 +39,7 @@ struct npc_list
 };
 
 char* npc_list_to_json(struct npc_list *npcs);
+void add_quests_to_npcs(struct npc_list **npcs);
 void add_npc(struct npc_list **npcs, struct npc_data *npc);
 void delete_npcs(struct npc_list **npcs);
 

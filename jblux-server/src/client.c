@@ -126,8 +126,8 @@ void add_player_to_map(struct client_t *client, char* map,
     client->data->map = map_st->name;
     client->data->coords = coords;
 
-    /* TODO: get NPCs and Items and send to player */
-    struct npc_list *npcs = map_st->npcs;
+    /* TODO: get Items and send to player */
+    struct npc_list *npcs = db_get_npcs_on_map(map_st->id, client->data);
     char* npc_json = npc_list_to_json(npcs);
     char* npc_enc = base64_encode(npc_json);
     char* command = NULL;
@@ -140,6 +140,7 @@ void add_player_to_map(struct client_t *client, char* map,
     free(command);
     free(npc_json);
     free(npc_enc);
+    delete_npcs(&npcs);
 
     command = NULL;
     if(asprintf(&command, "map add %s %d %d %s", client->data->character_name,
