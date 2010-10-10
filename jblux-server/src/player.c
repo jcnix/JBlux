@@ -64,14 +64,19 @@ int player_accept_quest(struct player_data *player, int quest_id)
 {
     /* Find out if we're below the quest log limit */
     int num_quests = db_get_num_active_quests(player->character_id);
-    if(num_quests == MAX_QUESTS ||
-            num_quests == -1)
+    if(num_quests == MAX_QUESTS || num_quests == -1 ||
+            does_player_have_quest(player->character_id, quest_id))
+    {
+        return 0;
+    }
+
+    struct quest *quest = db_get_quest(quest_id);
+    if(quest->min_level > player->level)
     {
         return 0;
     }
 
     /* Add quest to log and save to Database */
-    struct quest *quest = db_get_quest(quest_id);
     add_quest(&player->quest_log, quest);
     db_add_quest_to_log(player->character_id, quest->id);
 
