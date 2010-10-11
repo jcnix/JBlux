@@ -35,7 +35,7 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.GUIContext;
 
-public class QuestDialogBox implements Observer {
+public class NpcDialogBox implements Observer {
     private Image boxImage;
     private LinkedList<Quest> quests;
     private UnicodeFont ufont;
@@ -55,7 +55,7 @@ public class QuestDialogBox implements Observer {
     private boolean wait_map_info;
     private ArrayList<NpcData> npc_data;
 
-    public QuestDialogBox(GUI gui, ServerCommunicator s) {
+    public NpcDialogBox(GUI gui, ServerCommunicator s) {
         this.gui = gui;
         server = s;
         
