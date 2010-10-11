@@ -1,5 +1,5 @@
 /**
- * File: PlayerData.java
+ * File: DialogBox.java
  *
  * @author Casey Jones
  *
@@ -18,22 +18,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.client.data;
+package org.jblux.client.gui;
 
-import java.util.LinkedList;
-import org.jblux.client.items.Inventory;
-import org.jblux.util.Coordinates;
+import org.newdawn.slick.gui.GUIContext;
 
-public class PlayerData extends CharacterData {
-    public String map;
-    public int user_id;
-    public int character_id;
-    public Inventory inventory;
-    public LinkedList<Quest> quests;
-    public Coordinates coords;
-
-    public PlayerData() {
-        coords = new Coordinates();
-        quests = new LinkedList<Quest>();
-    }
+public interface DialogBox {
+    public void update(GUIContext gc);
+    public void render();
 }

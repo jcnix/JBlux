@@ -22,6 +22,7 @@ package org.jblux.client.gui;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import org.jblux.client.data.NpcData;
 import org.jblux.client.data.Quest;
 import org.jblux.client.network.ServerCommunicator;
 import org.newdawn.slick.Image;
@@ -31,32 +32,33 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.GUIContext;
 
-public class NpcDialogBox implements DialogBox {
+public class QuestDialogBox implements DialogBox {
     private Image boxImage;
     private LinkedList<Quest> quests;
     private UnicodeFont ufont;
     private GUI gui;
     private Image closeButton;
-    private Image acceptImage;
-    private Image declineImage;
+    private Image backImage;
+    private Image abandonImage;
 
     private boolean select_quest;
     private boolean display_quest;
     private ArrayList<Rectangle> quest_boxes;
-    private Rectangle acceptButton;
-    private Rectangle declineButton;
+    private Rectangle backButton;
+    private Rectangle abandonButton;
     private Quest selected_quest;
     private ServerCommunicator server;
+    private ArrayList<NpcData> npc_data;
 
-    public NpcDialogBox(GUI gui, ServerCommunicator s, LinkedList<Quest> quests) {
+    public QuestDialogBox(GUI gui, ServerCommunicator s, LinkedList<Quest> quests) {
         this.gui = gui;
         server = s;
-        
+
         try {
             boxImage = new Image("img/dialogbox.png");
             closeButton = new Image("img/closebutton.png");
-            acceptImage = new Image("img/accept.png");
-            declineImage = new Image("img/decline.png");
+            backImage = new Image("img/back.png");
+            abandonImage = new Image("img/abandon.png");
         } catch(SlickException ex) {
         }
 
@@ -65,8 +67,9 @@ public class NpcDialogBox implements DialogBox {
         select_quest = false;
         display_quest = false;
 
-        acceptButton = new Rectangle(0,0,0,0);
-        declineButton = new Rectangle(0,0,0,0);
+        backButton = new Rectangle(0,0,0,0);
+        abandonButton = new Rectangle(0,0,0,0);
+
         setQuests(quests);
     }
 
@@ -108,23 +111,23 @@ public class NpcDialogBox implements DialogBox {
                         select_quest = false;
                         display_quest = true;
 
-                        acceptButton = new Rectangle(250, 450, acceptImage.getWidth(),
-                                acceptImage.getHeight());
-                        declineButton = new Rectangle(450, 450, declineImage.getWidth(),
-                                acceptImage.getHeight());
+                        backButton = new Rectangle(450, 450, backImage.getWidth(),
+                                backImage.getHeight());
+                        abandonButton = new Rectangle(250, 450, abandonImage.getWidth(),
+                                abandonImage.getHeight());
                         break;
                     }
                 }
             }
 
             else if(display_quest) {
-                if(acceptButton.contains(x, y)) {
-                    server.acceptQuest(selected_quest);
-                    gui.closeDialogbox();
-                }
-                else if(declineButton.contains(x, y)) {
+                if(backButton.contains(x, y)) {
                     select_quest = true;
                     display_quest = false;
+                }
+                else if(abandonButton.contains(x, y)) {
+                    //server.acceptQuest(selected_quest);
+                    gui.closeDialogbox();
                 }
             }
         }
@@ -148,8 +151,8 @@ public class NpcDialogBox implements DialogBox {
             ufont.drawString(x, y, selected_quest.name);
             ufont.drawString(x, y+25, selected_quest.details);
             ufont.drawString(x, y+50, selected_quest.objectives);
-            acceptImage.draw(250, 450);
-            declineImage.draw(450, 450);
+            abandonImage.draw(250, 450);
+            backImage.draw(450, 450);
         }
     }
 }

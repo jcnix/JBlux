@@ -131,6 +131,9 @@ public class Player extends Sprite implements Observer {
                     Coordinates tile = MapGrid.getTile(coords);
                     server.pickup_item(tile);
                 }
+                if(input.isKeyDown(Input.KEY_L)) {
+                    canvas.openQuestLog(this.player_data);
+                }
                 if(input.isKeyDown(Input.KEY_F1)) {
                     canvas.toggle_developer_mode();
                 }

@@ -31,7 +31,7 @@ import org.newdawn.slick.gui.GUIContext;
 public class GUI {
     private ChatBox cb;
     private ChatInputBox inputBox;
-    private NpcDialogBox dialog_box;
+    private DialogBox dialog_box;
     private GUIContext gc;
     private ServerCommunicator server;
 
@@ -45,9 +45,12 @@ public class GUI {
         inputBox.setCursorVisible(true);
     }
 
-    public void openQuestDialogBox(LinkedList<Quest> quests) {
-        dialog_box = new NpcDialogBox(this, server);
-        dialog_box.setQuests(quests);
+    public void openNpcDialogbox(LinkedList<Quest> quests) {
+        dialog_box = new NpcDialogBox(this, server, quests);
+    }
+
+    public void openQuestDialogox(LinkedList<Quest> quests) {
+        dialog_box = new QuestDialogBox(this, server, quests);
     }
 
     public void closeDialogbox() {
