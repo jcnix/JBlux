@@ -143,6 +143,13 @@ void add_player_to_map(struct client_t *client, char* map,
     send_map_info(client, map_st);
     
     char* command = NULL;
+    if(asprintf(&command, "map goto %s %d %d", map, coords.x, coords.y))
+    {
+        esend(client->socket, command);
+        free(command);
+    }
+
+    command = NULL;
     if(asprintf(&command, "map add %s %d %d %s", client->data->character_name,
                 coords.x, coords.y, client->encoded_player_data) < 0)
     {
