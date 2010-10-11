@@ -21,29 +21,24 @@
 package org.jblux.client.network;
 
 import java.util.Observable;
-import java.util.Observer;
 
 public class ResponseWaiter extends Observable {
-    public ResponseWaiter() {
+    private static ResponseWaiter rw;
+
+    protected ResponseWaiter() {
         super();
     }
 
-    public void responseReceived(Object o) {
-        this.setChanged();
-        this.notifyObservers(o);
+    public static ResponseWaiter getInstance() {
+        if(rw == null) {
+            rw = new ResponseWaiter();
+        }
+
+        return rw;
     }
 
-    /**
-     * Factory method that takes an observer
-     * Sometimes I forget to do rw.addObserver(), so this
-     * should help me not have to remember.
-     *
-     * @param ob    Observer
-     * @return      ResponseWaiter
-     */
-    public static ResponseWaiter get_new_waiter(Observer ob) {
-        ResponseWaiter rw = new ResponseWaiter();
-        rw.addObserver(ob);
-        return rw;
+    public void responseReceived(String response) {
+        setChanged();
+        notifyObservers(response);
     }
 }

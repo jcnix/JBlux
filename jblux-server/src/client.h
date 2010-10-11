@@ -43,6 +43,7 @@ struct client_list
 void handle_client(int* sock);
 void* client_thread(void* vsock);
 int send_player_data_to_self(struct client_t *client, char* char_name);
+void send_map_info(struct client_t *client, struct map_t *map_st);
 void move_client(struct client_t *client, struct coordinates_t coords);
 void add_player_to_map(struct client_t *client, char* map,
         struct coordinates_t coords);

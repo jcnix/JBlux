@@ -27,6 +27,7 @@ public class NewPlayerObserver extends Observable {
     private static NewPlayerObserver npo;
 
     protected NewPlayerObserver() {
+        super();
     }
 
     public static NewPlayerObserver getInstance() {

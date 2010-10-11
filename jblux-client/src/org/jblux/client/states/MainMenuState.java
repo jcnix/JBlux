@@ -60,6 +60,8 @@ public class MainMenuState extends BasicGameState implements Observer {
         this.stateID = stateID;
         this.server = server;
         this.args = args;
+        response = ResponseWaiter.getInstance();
+        response.addObserver(this);
     }
     
     @Override
@@ -79,8 +81,7 @@ public class MainMenuState extends BasicGameState implements Observer {
                 username = args[0];
                 password = args[1];
                 character_name = args[2];
-                response = ResponseWaiter.get_new_waiter(this);
-                server.authenticate(response, username, password, character_name);
+                server.authenticate(username, password, character_name);
             }
             else {
 //                username = "casey-test";
@@ -89,8 +90,7 @@ public class MainMenuState extends BasicGameState implements Observer {
                 username = "casey";
                 password = "81b2f040df6152242feb966d071fe58977dab12e";
                 character_name = "pdude";
-                response = ResponseWaiter.get_new_waiter(this);
-                server.authenticate(response, username, password, character_name);
+                server.authenticate(username, password, character_name);
             }
         }
 
@@ -141,8 +141,7 @@ public class MainMenuState extends BasicGameState implements Observer {
         
         if(insideStartGame){
             if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
-                response = ResponseWaiter.get_new_waiter(this);
-                server.authenticate(response, txtUsername.getText(), txtPassword.getText(), "");
+                server.authenticate(txtUsername.getText(), txtPassword.getText(), "");
             }
         }
     }
@@ -150,7 +149,6 @@ public class MainMenuState extends BasicGameState implements Observer {
     public void update(Observable o, Object arg) {
         System.out.println("Received response");
         if(o == response) {
-            server.rm_observable(o);
             String c = (String) arg;
             String[] command = c.split(" ");
             if(command[0].equals(Commands.PLAYER)) {

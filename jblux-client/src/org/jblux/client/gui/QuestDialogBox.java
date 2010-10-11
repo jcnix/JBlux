@@ -22,7 +22,11 @@ package org.jblux.client.gui;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Observable;
+import java.util.Observer;
+import org.jblux.client.data.NpcData;
 import org.jblux.client.data.Quest;
+import org.jblux.client.network.NpcDataFactory;
 import org.jblux.client.network.ServerCommunicator;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -31,7 +35,7 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.GUIContext;
 
-public class QuestDialogBox {
+public class QuestDialogBox implements Observer {
     private Image boxImage;
     private LinkedList<Quest> quests;
     private UnicodeFont ufont;
@@ -47,6 +51,9 @@ public class QuestDialogBox {
     private Rectangle declineButton;
     private Quest selected_quest;
     private ServerCommunicator server;
+
+    private boolean wait_map_info;
+    private ArrayList<NpcData> npc_data;
 
     public QuestDialogBox(GUI gui, ServerCommunicator s) {
         this.gui = gui;
@@ -67,6 +74,8 @@ public class QuestDialogBox {
 
         acceptButton = new Rectangle(0,0,0,0);
         declineButton = new Rectangle(0,0,0,0);
+
+        wait_map_info = false;
     }
 
     public void setQuests(LinkedList<Quest> quests) {
@@ -119,6 +128,7 @@ public class QuestDialogBox {
             else if(display_quest) {
                 if(acceptButton.contains(x, y)) {
                     server.acceptQuest(selected_quest);
+                    wait_map_info = true;
                     gui.closeDialogbox();
                 }
                 else if(declineButton.contains(x, y)) {
@@ -149,6 +159,16 @@ public class QuestDialogBox {
             ufont.drawString(x, y+50, selected_quest.objectives);
             acceptImage.draw(250, 450);
             declineImage.draw(450, 450);
+        }
+    }
+
+    public void update(Observable o, Object arg) {
+        if(arg instanceof String && wait_map_info) {
+            String sarg = (String) arg;
+            if(sarg.startsWith("npcs")) {
+                String[] args = sarg.split("\\s");
+                npc_data = NpcDataFactory.getArrayFromBase64(args[1]);
+            }
         }
     }
 }

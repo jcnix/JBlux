@@ -95,19 +95,34 @@ int send_player_data_to_self(struct client_t *client, char* char_name)
     return 1;
 }
 
+void send_map_info(struct client_t *client, struct map_t *map_st)
+{
+    /* TODO: get Items and send to player */
+    struct npc_list *npcs = db_get_npcs_on_map(map_st->id, client->data);
+    char* npc_json = npc_list_to_json(npcs);
+    char* npc_enc = base64_encode(npc_json);
+    char* command = NULL;
+    if(asprintf(&command, "map info npcs %s", npc_enc))
+    {
+        esend(client->socket, command);
+        free(command);
+    }
+    free(npc_json);
+    free(npc_enc);
+    delete_npcs(&npcs);
+}
+
 void move_client(struct client_t *client, struct coordinates_t coords)
 {
     client->data->coords.x = coords.x;
     client->data->coords.y = coords.y;
     char* command;
-    if(!asprintf(&command, "move %s %d %d", client->data->character_name,
+    if(asprintf(&command, "move %s %d %d", client->data->character_name,
                 client->data->coords.x, client->data->coords.y))
     {
-        return;
+        tell_all_players_on_map(client->socket, client->data->map_id, command);
+        free(command);
     }
-
-    tell_all_players_on_map(client->socket, client->data->map_id, command);
-    free(command);
 }
 
 void add_player_to_map(struct client_t *client, char* map,
@@ -125,24 +140,9 @@ void add_player_to_map(struct client_t *client, char* map,
     client->data->map_id = map_st->id;
     client->data->map = map_st->name;
     client->data->coords = coords;
-
-    /* TODO: get Items and send to player */
-    struct npc_list *npcs = db_get_npcs_on_map(map_st->id, client->data);
-    char* npc_json = npc_list_to_json(npcs);
-    char* npc_enc = base64_encode(npc_json);
+    send_map_info(client, map_st);
+    
     char* command = NULL;
-    if(!asprintf(&command, "map goto %s %d %d npcs %s", map, coords.x, coords.y,
-                npc_enc))
-    {
-        return;
-    }
-    esend(client->socket, command);
-    free(command);
-    free(npc_json);
-    free(npc_enc);
-    delete_npcs(&npcs);
-
-    command = NULL;
     if(asprintf(&command, "map add %s %d %d %s", client->data->character_name,
                 coords.x, coords.y, client->encoded_player_data) < 0)
     {
@@ -324,6 +324,8 @@ void parse_command(struct client_t *client, char* command)
         {
             int quest_id = atoi(strtok(NULL, " "));
             player_accept_quest(client->data, quest_id);
+            struct map_t *map = get_map_for_id(client->data->map_id);
+            send_map_info(client, map);
         }
     }
     else if(strncmp(command, "disconnect", 10) == 0)

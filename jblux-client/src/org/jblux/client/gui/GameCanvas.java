@@ -29,12 +29,12 @@ import org.jblux.client.Player;
 import org.jblux.client.Players;
 import org.jblux.client.Sprite;
 import org.jblux.client.gui.observers.NewPlayerObserver;
-import org.jblux.client.network.NpcDataFactory;
 import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.util.Relation;
 import org.jblux.client.data.NpcData;
 import org.jblux.client.data.PlayerData;
+import org.jblux.client.network.NpcDataFactory;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -56,8 +56,8 @@ public class GameCanvas implements Observer {
     private NewPlayerObserver player_observer;
     private GUI gui;
 
-    private boolean wait_new_map;
     private boolean update_map;
+    private boolean update_info;
     private ResponseWaiter response;
     private String map_name;
     private ArrayList<NpcData> npc_data;
@@ -71,23 +71,17 @@ public class GameCanvas implements Observer {
     }
 
     public void init() {
-        System.out.println("init");
         players = Players.getInstance();
         npcs = new ArrayList<Npc>();
         npc_data = new ArrayList<NpcData>();
         map_coords = new Coordinates();
         player_observer = NewPlayerObserver.getInstance();
         player_observer.addObserver(this);
+        response = ResponseWaiter.getInstance();
+        response.addObserver(this);
         developer_mode = false;
         new_player = false;
         new_data = null;
-
-        if(server.isConnected()) {
-            /* We'll be receiving the map from the server on initilization */
-            wait_new_map = true;
-            response = ResponseWaiter.get_new_waiter(this);
-            server.add_observable(response);
-        }
     }
 
     public void setGui(GUI gui) {
@@ -129,9 +123,7 @@ public class GameCanvas implements Observer {
     }
 
     public void getNewMap(Relation relation, String map_name) {
-        wait_new_map = true;
-        response = ResponseWaiter.get_new_waiter(this);
-        server.goto_map(response, relation, map_name);
+        server.goto_map(relation, map_name);
     }
 
     public GameMap getMap() {
@@ -171,12 +163,13 @@ public class GameCanvas implements Observer {
             players.addPlayer(npc);
             new_data = null;
         }
-
         if(update_map) {
             update_map = false;
             setMap(map_name, map_coords);
+        }
+        if(update_info) {
+            update_info = false;
             setNpcs(npc_data);
-            npc_data = new ArrayList<NpcData>();
         }
 
         player.update(gc);
@@ -272,12 +265,10 @@ public class GameCanvas implements Observer {
     }
 
     public void update(Observable o, Object arg) {
-        if(arg instanceof String && wait_new_map) {
+        if(arg instanceof String) {
             String sarg = (String) arg;
+            String[] args = sarg.split("\\s");
             if(sarg.startsWith("map")) {
-                server.rm_observable(o);
-                String[] args = sarg.split("\\s");
-
                 map_name = args[1];
 
                 Coordinates c = new Coordinates();
@@ -290,12 +281,14 @@ public class GameCanvas implements Observer {
                 }
 
                 map_coords = c;
-                npc_data = NpcDataFactory.getArrayFromBase64(args[4]);
                 update_map = true;
             }
+            if(sarg.startsWith("info")) {
+                npc_data = NpcDataFactory.getArrayFromBase64(args[2]);
+                update_info = true;
+            }
         }
-
-        if(arg instanceof PlayerData) {
+        else if(arg instanceof PlayerData) {
             new_player = true;
             new_data = (PlayerData) arg;
         }

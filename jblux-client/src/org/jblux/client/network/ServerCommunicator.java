@@ -25,10 +25,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Observable;
 import org.jblux.client.JBlux;
-import org.jblux.client.Player;
 import org.jblux.client.Players;
 import org.jblux.client.Sprite;
 import org.jblux.client.gui.observers.ChatBoxObserver;
@@ -71,15 +68,7 @@ public class ServerCommunicator {
             return false;
         }
     }
-
-    public void add_observable(ResponseWaiter ro) {
-        sl.add_observable(ro);
-    }
     
-    public void rm_observable(Observable o) {
-        sl.rm_observable((ResponseWaiter) o);
-    }
-
     public void move(int x, int y) {
         String command = String.format("%s %d %d", Commands.MOVE, x, y);
         writeString(command);
@@ -90,30 +79,26 @@ public class ServerCommunicator {
         writeString(command);
     }
 
-    public void goto_map(ResponseWaiter ro, Relation r, String map_name) {
+    public void goto_map(Relation r, String map_name) {
         String map = "";
         String command = String.format("%s goto %s %s", Commands.MAP, r, map_name);
-        sl.add_observable(ro);
         writeString(command);
     }
 
-    public void getMapInfo(ResponseWaiter ro) {
+    public void getMapInfo() {
         String command = String.format("%s info", Commands.MAP);
-        sl.add_observable(ro);
         writeString(command);
     }
 
-    public void authenticate(ResponseWaiter ro, String username, String password, String character_name) {
+    public void authenticate(String username, String password, String character_name) {
         String command = String.format("%s %s %s %s", Commands.AUTH, username, password,
                 character_name);
         System.out.println(command);
-        sl.add_observable(ro);
         writeString(command);
     }
 
-    public void pickup_item(Coordinates coords, ResponseWaiter response) {
+    public void pickup_item(Coordinates coords) {
         String command = String.format("%s %s %s", Commands.MAP, Commands.PICKUP, coords);
-        sl.add_observable(response);
         writeString(command);
     }
 
@@ -147,8 +132,8 @@ class ServerListener extends Thread {
     private Players players;
     private ChatBoxObserver cbObserver;
     public Coordinates coords;
-    private ArrayList<ResponseWaiter> observables;
     private NewPlayerObserver player_observer;
+    private ResponseWaiter response;
     private StateBasedGame sbg;
     private int msg_size;
     private int recv_bytes;
@@ -161,8 +146,8 @@ class ServerListener extends Thread {
         players = Players.getInstance();
         cbObserver = ChatBoxObserver.getInstance();
         coords = new Coordinates();
-        observables = new ArrayList<ResponseWaiter>();
         player_observer = NewPlayerObserver.getInstance();
+        response = ResponseWaiter.getInstance();
         msg_size = 0;
         recv_bytes = 0;
         recv_command = "";
@@ -231,18 +216,8 @@ class ServerListener extends Thread {
         }
     }
 
-    public void add_observable(ResponseWaiter o) {
-        observables.add(o);
-    }
-
-    public void rm_observable(ResponseWaiter o) {
-        observables.remove(o);
-    }
-
-    private void notify_observers(Object o) {
-        for(int i = 0; i < observables.size(); i++) {
-            observables.get(i).responseReceived(o);
-        }
+    private void notify_observers(String s) {
+        response.responseReceived(s);
     }
 
     public synchronized void doCommand(String command) {
@@ -291,10 +266,12 @@ class ServerListener extends Thread {
                 String map = c0[2];
                 coords.x = Integer.parseInt(c0[3]);
                 coords.y = Integer.parseInt(c0[4]);
-                String npcs = c0[6];
-                System.out.printf("response: %s @ %s\n", map, coords);
-                String response = String.format("map %s %s %s", map, coords, npcs);
-                this.notify_observers(response);
+                String r = String.format("map %s %s", map, coords);
+                this.notify_observers(r);
+            }
+            else if(c0[1].equals("info")) {
+                String npcs = c0[3];
+                this.notify_observers(String.format("info npcs %s", npcs));
             }
             else if(c0[1].equals("stay")) {
                 //Don't do anything

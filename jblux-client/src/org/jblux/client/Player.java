@@ -54,7 +54,9 @@ public class Player extends Sprite implements Observer {
 
         this.player_data = data;
         this.server = server;
-        
+        response = ResponseWaiter.getInstance();
+        response.addObserver(this);
+
         setImage(FACE_DOWN, 0);
         move_size = 7;
         coords = data.coords;
@@ -126,9 +128,8 @@ public class Player extends Sprite implements Observer {
                     //TODO: Check in front of the player
                     //Only checking below the player for now
                     wait_pressed_action = true;
-                    response = ResponseWaiter.get_new_waiter(this);
                     Coordinates tile = MapGrid.getTile(coords);
-                    server.pickup_item(tile, response);
+                    server.pickup_item(tile);
                 }
                 if(input.isKeyDown(Input.KEY_F1)) {
                     canvas.toggle_developer_mode();
@@ -256,7 +257,6 @@ public class Player extends Sprite implements Observer {
     
     public void update(Observable o, Object arg) {
         if(response == o && wait_pressed_action) {
-            server.rm_observable(o);
             String sarg = (String) arg;
             String[] args = sarg.split("\\s");
             if(!args[1].equals("null")) {
