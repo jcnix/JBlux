@@ -30,7 +30,7 @@ public class GameMap extends TiledMap {
     private TiledMap map;
 
     public GameMap(String name) throws SlickException {
-        super("maps/" + name + "/" + name +".tmx", "maps/" + name);
+        super("maps/" + name + "/" + name +".tmx", "maps");
         this.name = name;
         walk_area = new Image("maps/" + name + "/" + name + "bw.png");
     }
