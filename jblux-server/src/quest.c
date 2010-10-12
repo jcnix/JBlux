@@ -35,6 +35,12 @@ void quest_to_json(yajl_gen gen, struct quest *q)
     const char* required_npc1_count_field =     "required_npc1_count";
     const char* required_npc2_count_field =     "required_npc2_count";
     const char* required_npc3_count_field =     "required_npc3_count";
+    const char* current_item1_count_field =     "current_item1_count";
+    const char* current_item2_count_field =     "current_item2_count";
+    const char* current_item3_count_field =     "current_item3_count";
+    const char* current_npc1_count_field =      "current_npc1_count";
+    const char* current_npc2_count_field =      "current_npc2_count";
+    const char* current_npc3_count_field =      "current_npc3_count";
 
     yajl_gen_map_open(gen);
     
@@ -70,7 +76,35 @@ void quest_to_json(yajl_gen gen, struct quest *q)
     json_insert_int(gen, required_npc2_count_field, q->required_npc2_count);
     json_insert_int(gen, required_npc3_count_field, q->required_npc3_count);
 
+    json_insert_int(gen, current_item1_count_field, q->current_item1_count);
+    json_insert_int(gen, current_item2_count_field, q->current_item2_count);
+    json_insert_int(gen, current_item3_count_field, q->current_item3_count);
+    json_insert_int(gen, current_npc1_count_field, q->current_npc1_count);
+    json_insert_int(gen, current_npc2_count_field, q->current_npc2_count);
+    json_insert_int(gen, current_npc3_count_field, q->current_npc3_count);
+
     yajl_gen_map_close(gen);
+}
+
+void quest_list_to_json(yajl_gen gen, struct quest_list *quests)
+{
+    const char* quests_field = "quests";
+
+    yajl_gen_string(gen, (unsigned char*) quests_field, strlen(quests_field));
+    yajl_gen_array_open(gen);
+    
+    if(quests)
+    {
+        int j = 0;
+        struct quest_list *curr = quests;
+        while(curr)
+        {
+            quest_to_json(gen, curr->quest);
+            j++;
+            curr = curr->next;
+        }
+    }
+    yajl_gen_array_close(gen);
 }
 
 void add_quest(struct quest_list **quests, struct quest *quest)

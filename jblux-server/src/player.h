@@ -30,7 +30,7 @@ struct player_data
     int spirit;
     int map_id;
     char* map;
-    struct quest_list *quest_log;
+    struct quest_list *quests;
     struct inventory_t inventory;
     struct coordinates_t coords;
 };

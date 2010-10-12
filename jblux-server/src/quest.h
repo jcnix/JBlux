@@ -44,6 +44,13 @@ struct quest
     int required_npc1_count;
     int required_npc2_count;
     int required_npc3_count;
+
+    int current_item1_count;
+    int current_item2_count;
+    int current_item3_count;
+    int current_npc1_count;
+    int current_npc2_count;
+    int current_npc3_count;
 };
 
 struct quest_list
@@ -53,6 +60,7 @@ struct quest_list
 };
 
 void quest_to_json(yajl_gen gen, struct quest *q);
+void quest_list_to_json(yajl_gen gen, struct quest_list *quests);
 void add_quest(struct quest_list **quests, struct quest *quest);
 void delete_quest_list(struct quest_list **quests);
 

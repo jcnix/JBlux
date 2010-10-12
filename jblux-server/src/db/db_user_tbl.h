@@ -24,6 +24,7 @@ int db_authenticate(char* username, char* password, char* character_name);
 struct player_data* db_get_player(char* character_name);
 void db_set_map_for_player(int char_id, int map_id, struct coordinates_t coords);
 int get_map_for_player(char* character);
+struct quest_list* db_get_quests_for_player(int character_id);
 struct race_t get_race(int id);
 struct class_t get_class(int id);
 

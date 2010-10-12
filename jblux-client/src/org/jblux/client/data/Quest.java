@@ -53,4 +53,11 @@ public class Quest {
     public int required_npc1_count;
     public int required_npc2_count;
     public int required_npc3_count;
+
+    public int current_item1_count;
+    public int current_item2_count;
+    public int current_item3_count;
+    public int current_npc1_count;
+    public int current_npc2_count;
+    public int current_npc3_count;
 }

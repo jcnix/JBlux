@@ -116,6 +116,7 @@ struct player_data* db_get_player(char* character_name)
         data->coords.y = db_get_int(res, 0, column);
         /* TODO: get inventory */
         data->inventory.id = 0;
+        data->quests = db_get_quests_for_player(data->character_id);
     }
     else
     {
@@ -174,6 +175,45 @@ int get_map_for_player(char* character)
     PQclear(res);
     db_disconnect(conn);
     return map_id;
+}
+
+struct quest_list* db_get_quests_for_player(int character_id)
+{
+    struct quest_list *quests = NULL;
+    PGconn *conn = db_connect();
+    PGresult *res = NULL;
+
+    char* q = "SELECT quest_id, reqitem1_count, reqitem2_count, "
+        "reqitem3_count, reqnpc1_count, reqnpc2_count, reqnpc3_count "
+        "FROM jblux_questlog WHERE character_id=$1 AND active;";
+    int nParams = 1;
+    char* cid = NULL;
+    if(!asprintf(&cid, "%d", character_id))
+    {
+        db_disconnect(conn);
+        return NULL;
+    }
+    const char* params[1] = { cid };
+    res = db_exec(conn, q, nParams, params);
+    int num_quests = PQntuples(res);
+
+    int i;
+    for(i = 0; i < num_quests; i++)
+    {
+        int quest_id = db_get_int(res, i, 0);
+        struct quest *q = db_get_quest(quest_id);
+        q->current_item1_count = db_get_int(res, i, 1);
+        q->current_item2_count = db_get_int(res, i, 2);
+        q->current_item3_count = db_get_int(res, i, 3);
+        q->current_npc1_count = db_get_int(res, i, 4);
+        q->current_npc1_count = db_get_int(res, i, 5);
+        q->current_npc1_count = db_get_int(res, i, 6);
+        add_quest(&quests, q);
+    }
+
+    PQclear(res);
+    db_disconnect(conn);
+    return quests;
 }
 
 struct race_t get_race(int id)
