@@ -3,8 +3,8 @@ import hashlib
 import random
 import string
 
-def activation_email(username, password, email):
-    reg_url = "http://tmuo.casey-jones.org/jblux/register/"+reg_num
+def activation_email(username, password, email, reg_num):
+    reg_url = "http://tmuo.casey-jones.org/register/"+reg_num
 
     subject = "Welcome to The Mushroom Universe!"
     message = "Welcome to The Mushroom Universe Online!\n"
@@ -25,8 +25,7 @@ def activation_email(username, password, email):
 
     msg = EmailMessage(subject, message, from_email, to_email)
     msg.content_subtype = "html"
-    #msg.send()
-    print msg
+    msg.send()
 
 def get_reg_num(username):
     random.seed(2)
