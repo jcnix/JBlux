@@ -11,7 +11,7 @@ int db_authenticate(char* username, char* password, char* character_name)
     PGconn *conn = db_connect();
     PGresult *res = NULL;
 
-    char* q = "SELECT id FROM jblux_user WHERE username=$1 and password=$2;";
+    char* q = "SELECT id FROM jblux_user WHERE username=$1 and password=$2 AND is_active;";
     int nParams = 2;
     const char* params_1[2] = { username, password };
     res = db_exec(conn, q, nParams, params_1);
