@@ -4,7 +4,7 @@ from django.template import RequestContext, loader, Context
 from jblux_django.jblux.models import User, Character, Map, Inventory
 from jblux_django.jblux.forms import LoginForm, RegisterForm, CharacterForm
 from jblux_django.jblux.forms import SelectCharacterForm
-from jblux_django.jblux.email import activation_email
+from jblux_django.jblux.email import activation_email, get_reg_num
 import hashlib
 
 def index(request):
@@ -37,6 +37,16 @@ def register(request):
     return render_to_response('jblux/register.html', {'form': form},
             context_instance=RequestContext(request))
 
+def activate_account(request, reg_num):
+    try:
+        user = User.objects.get(reg_num=reg_num)
+    except User.DoesNotExist:
+        return HttpResponse("Invalid registration")
+
+    user.is_active = True
+    user.save()
+    return HttpResponse("Thank you for registering")
+
 def register_new_user(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -47,17 +57,18 @@ def register_new_user(request):
 
             #Hash password
             password = hashlib.sha1(form.cleaned_data['password']).hexdigest()
-
+            reg_num = get_reg_num(username)
             user = User.objects.create(
                 username=username,
                 email=email,
                 password=password,
                 is_admin=False,
-                is_active=True,
+                is_active=False,
+                reg_num=reg_num
                 )
 
             #send an email
-            activation_email(username, pass_for_email, email)
+            activation_email(username, pass_for_email, email, reg_num)
 
             form = LoginForm()
             return HttpResponseRedirect('/jblux/login')

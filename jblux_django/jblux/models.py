@@ -8,6 +8,7 @@ class User(models.Model):
     email = models.CharField(max_length=75, unique=True)
     is_admin = models.BooleanField()
     is_active = models.BooleanField()
+    reg_num = models.CharField(max_length=40, unique=True, null=True)
 
     def __unicode__(self):
         return self.username
