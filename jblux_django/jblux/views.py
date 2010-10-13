@@ -70,8 +70,7 @@ def register_new_user(request):
             #send an email
             activation_email(username, pass_for_email, email, reg_num)
 
-            form = LoginForm()
-            return HttpResponseRedirect('/login')
+            return HttpResponse('Confirmation email sent to '+email)
         else:
             return render_to_response('jblux/register.html', {'form': form},
                     context_instance=RequestContext(request))
