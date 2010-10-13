@@ -25,7 +25,7 @@ def login(request):
     if user is not None:
         request.session['user'] = user
         if user.is_active:
-            return HttpResponseRedirect('/jblux/profile/'+str(user.id))
+            return HttpResponseRedirect('/profile/'+str(user.id))
         else:
             return HttpResponse("Disabled")
     else:
@@ -71,7 +71,7 @@ def register_new_user(request):
             activation_email(username, pass_for_email, email, reg_num)
 
             form = LoginForm()
-            return HttpResponseRedirect('/jblux/login')
+            return HttpResponseRedirect('/login')
         else:
             return render_to_response('jblux/register.html', {'form': form},
                     context_instance=RequestContext(request))
@@ -113,12 +113,12 @@ def new_character(request):
             character.inventory = inventory
             character.save()
 
-            return HttpResponseRedirect("/jblux/index")
+            return HttpResponseRedirect("/index")
 
     try:
         user = request.session['user']
     except KeyError:
-        return HttpResponseRedirect('/jblux/login')
+        return HttpResponseRedirect('/login')
 
     form = CharacterForm()
     return render_to_response('jblux/character_edit.html', {'form': form},
@@ -126,18 +126,18 @@ def new_character(request):
 
 def logout(request):
     request.session.flush()
-    return HttpResponseRedirect('/jblux/login')
+    return HttpResponseRedirect('/login')
 
 def game(request):
     try:
         user = request.session['user']
     except KeyError:
-        return HttpResponseRedirect('/jblux/login')
+        return HttpResponseRedirect('/login')
 
     try:
         character = request.session['character']
     except KeyError:
-        return HttpResponseRedirect('/jblux/character/select')
+        return HttpResponseRedirect('/character/select')
 
     return render_to_response('jblux/game.html', {'character': character},
             context_instance=RequestContext(request))
@@ -147,7 +147,7 @@ def jnlp(request):
         user = request.session['user']
         character = request.session['character']
     except KeyError:
-        return HttpResponseRedirect('/jblux')
+        return HttpResponseRedirect('/')
 
     template = loader.get_template('jblux/tmuo.jnlp')
     context = Context({'username': user.username, 'password': user.password,
@@ -188,7 +188,7 @@ def select_character(request):
     if request.method == 'POST':
         character = Character.objects.get(id=request.POST['character'])
         request.session['character'] = character
-        return HttpResponseRedirect('/jblux/game')
+        return HttpResponseRedirect('/game')
     else:
         try:
             user = request.session['user']
@@ -196,7 +196,7 @@ def select_character(request):
             return render_to_response('jblux/character_select.html', {'form': form},
                     context_instance=RequestContext(request))
         except KeyError:
-            return HttpResponseRedirect('/jblux/login')
+            return HttpResponseRedirect('/login')
 
 #Recieves hashed password
 def auth(username, password):

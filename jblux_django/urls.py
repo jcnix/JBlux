@@ -6,7 +6,27 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     (r'^$', 'jblux_django.jblux.views.index'),
-    (r'^jblux/', include('jblux_django.jblux.urls')),
+    (r'^index/$', 'jblux_django.jblux.views.index'),
+    (r'^game/$', 'jblux_django.jblux.views.game'),
+    (r'^jnlp/$', 'jblux_django.jblux.views.jnlp'),
+    (r'^login/$', 'jblux_django.jblux.views.login'),
+    (r'^logout/$', 'jblux_django.jblux.views.logout'),
+    (r'^profile/$', 'jblux_django.jblux.views.view_profile'),
+    (r'^profile/(?P<account_id>\d+)/$', 'jblux_django.jblux.views.view_profile'),
+    (r'^character/(?P<char_id>\d+)/$', 'jblux_django.jblux.views.view_char'),
+    (r'^register/$', 'jblux_django.jblux.views.register'),
+    (r'^register/(?P<reg_num>\w{40})/$', 'jblux_django.jblux.views.activate_account'),
+    (r'^register/new/$', 'jblux_django.jblux.views.register_new_user'),
+    (r'^character/new/$', 'jblux_django.jblux.views.new_character'),
+    (r'^character/select/$', 'jblux_django.jblux.views.select_character'),
+    (r'^info/$', 'jblux_django.jblux.views.info'),
+    (r'^screens/$', 'jblux_django.jblux.views.screens'),
+    (r'^help/$', 'jblux_django.jblux.views.help'),
+
+    (r'^polls/$', 'jblux_django.jblux.polls.polls'),
+    (r'^polls/(?P<poll_id>\d+)/$', 'jblux_django.jblux.polls.detail'),
+    (r'^polls/(?P<poll_id>\d+)/results/$', 'jblux_django.jblux.polls.results'),
+
     (r'^admin/', include(admin.site.urls)),
     (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/tmuo_media/favicon.ico'}),
 )
