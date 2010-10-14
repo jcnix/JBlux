@@ -1,7 +1,7 @@
 /**
- * File:   ServerDownState.java
+ * File: InvalidLoginState.java
  *
- * @author: Casey Jones
+ * @author Casey Jones
  *
  * This file is part of JBlux
  * JBlux is free software: you can redistribute it and/or modify
@@ -25,18 +25,18 @@ import java.awt.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class ServerDownState extends BasicGameState {
+public class InvalidLoginState extends BasicGameState {
     private Image background;
     private UnicodeFont font;
     private int stateID = -1;
 
-    public ServerDownState(int stateID) {
+    public InvalidLoginState(int stateID) {
         this.stateID = stateID;
     }
 
@@ -57,8 +57,8 @@ public class ServerDownState extends BasicGameState {
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         background.draw(0, 0);
-        font.drawString(175, 300, "Sorry, the server appears to be down.");
-        
+        font.drawString(175, 350, "Login Appears to be invalid");
+
     }
 
     @Override

@@ -22,6 +22,7 @@ package org.jblux.client;
 
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.client.states.GameplayState;
+import org.jblux.client.states.InvalidLoginState;
 import org.jblux.client.states.MainMenuState;
 import org.jblux.client.states.ServerDownState;
 import org.newdawn.slick.AppGameContainer;
@@ -33,6 +34,7 @@ public class JBlux extends StateBasedGame{
     public static final int MAINMENUSTATE = 0;
     public static final int GAMEPLAYSTATE = 1;
     public static final int SERVERDOWNSTATE = 2;
+    public static final int INVALIDLOGINSTATE = 3;
     private ServerCommunicator server;
     private String[] args;
     
@@ -48,9 +50,11 @@ public class JBlux extends StateBasedGame{
         MainMenuState mms = new MainMenuState(MAINMENUSTATE, server, args);
         GameplayState gps = new GameplayState(GAMEPLAYSTATE, server);
         ServerDownState sds = new ServerDownState(SERVERDOWNSTATE);
+        InvalidLoginState ils = new InvalidLoginState(INVALIDLOGINSTATE);
         this.addState(gps);
         this.addState(mms);
         this.addState(sds);
+        this.addState(ils);
         if(!server.isConnected()) {
             this.enterState(SERVERDOWNSTATE);
         }

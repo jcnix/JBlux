@@ -75,6 +75,7 @@ int send_player_data_to_self(struct client_t *client, char* char_name)
     
     if(!data)
     {
+        esend(client->socket, "auth no");
         client->connected = 0;
         client->data = NULL;
         return 0;
@@ -243,6 +244,7 @@ void parse_command(struct client_t *client, char* command)
         }
         else
         {
+            esend(client->socket, "auth no");
             /* client_thread() will take care of cleaning up */
             client->authenticated = 0;
             client->connected = 0;

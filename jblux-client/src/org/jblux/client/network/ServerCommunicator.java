@@ -140,6 +140,8 @@ class ServerListener extends Thread {
     private String recv_command;
     private String remaining_command;
 
+    private boolean invalid_login;
+
     public ServerListener(Socket s, StateBasedGame sbg) {
         socket = s;
         this.sbg = sbg;
@@ -152,6 +154,7 @@ class ServerListener extends Thread {
         recv_bytes = 0;
         recv_command = "";
         remaining_command = null;
+        invalid_login = false;
     }
 
     @Override
@@ -177,7 +180,8 @@ class ServerListener extends Thread {
                         command = s.toString();
                     }
                     else {
-                        sbg.enterState(JBlux.SERVERDOWNSTATE);
+                        if(!invalid_login)
+                            sbg.enterState(JBlux.SERVERDOWNSTATE);
                         break;
                     }
                 }
@@ -222,8 +226,12 @@ class ServerListener extends Thread {
 
     public synchronized void doCommand(String command) {
         String[] c0 = command.split("\\s");
-        
-        if(command.startsWith(Commands.MOVE)) {
+
+        if(command.startsWith(Commands.AUTH)) {
+            invalid_login = true;
+            sbg.enterState(JBlux.INVALIDLOGINSTATE);
+        }
+        else if(command.startsWith(Commands.MOVE)) {
             String name = c0[1];
             int x = Integer.parseInt(c0[2]);
             int y = Integer.parseInt(c0[3]);
