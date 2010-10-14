@@ -31,7 +31,7 @@ import org.newdawn.slick.gui.GUIContext;
 public class GUI {
     private ChatBox cb;
     private ChatInputBox inputBox;
-    private DialogBox dialog_box;
+    private BaseDialogBox dialog_box;
     private GUIContext gc;
     private ServerCommunicator server;
 

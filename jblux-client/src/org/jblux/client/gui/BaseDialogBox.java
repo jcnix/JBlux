@@ -22,8 +22,9 @@ package org.jblux.client.gui;
 
 import java.util.ArrayList;
 import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.gui.GUIContext;
 
-public class BaseDialogBox {
+public abstract class BaseDialogBox {
     protected int width;
     protected int height;
 
@@ -76,4 +77,7 @@ public class BaseDialogBox {
 
         return lines;
     }
+
+    public abstract void update(GUIContext gc);
+    public abstract void render();
 }
