@@ -32,7 +32,7 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.GUIContext;
 
-public class QuestDialogBox implements DialogBox {
+public class QuestDialogBox extends BaseDialogBox {
     private Image boxImage;
     private LinkedList<Quest> quests;
     private UnicodeFont ufont;
@@ -51,6 +51,7 @@ public class QuestDialogBox implements DialogBox {
     private ArrayList<NpcData> npc_data;
 
     public QuestDialogBox(GUI gui, ServerCommunicator s, LinkedList<Quest> quests) {
+        super();
         this.gui = gui;
         server = s;
 
@@ -61,6 +62,9 @@ public class QuestDialogBox implements DialogBox {
             abandonImage = new Image("img/abandon.png");
         } catch(SlickException ex) {
         }
+
+        width = boxImage.getWidth();
+        height = boxImage.getHeight();
 
         ufont = FontFactory.getDefaultFont();
         selected_quest = null;
@@ -89,6 +93,14 @@ public class QuestDialogBox implements DialogBox {
         }
         //int width = ufont.getWidth(text);
         //text_lines = width / 300;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     public void update(GUIContext gc) {
@@ -148,8 +160,14 @@ public class QuestDialogBox implements DialogBox {
             }
         }
         else if(display_quest) {
+            ArrayList<String> details_lines = getLines(selected_quest.details, ufont);
+
+            int details_height = 0;
             ufont.drawString(x, y, selected_quest.name);
-            ufont.drawString(x, y+25, selected_quest.details);
+            for(int i = 0; i < details_lines.size(); i++) {
+                ufont.drawString(x, y+15, details_lines.get(i));
+                y += 15;
+            }
             ufont.drawString(x, y+50, selected_quest.objectives);
             abandonImage.draw(250, 450);
             backImage.draw(450, 450);

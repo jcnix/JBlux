@@ -31,7 +31,7 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.GUIContext;
 
-public class NpcDialogBox implements DialogBox {
+public class NpcDialogBox extends BaseDialogBox {
     private Image boxImage;
     private LinkedList<Quest> quests;
     private UnicodeFont ufont;
@@ -49,6 +49,7 @@ public class NpcDialogBox implements DialogBox {
     private ServerCommunicator server;
 
     public NpcDialogBox(GUI gui, ServerCommunicator s, LinkedList<Quest> quests) {
+        super();
         this.gui = gui;
         server = s;
         
@@ -59,6 +60,9 @@ public class NpcDialogBox implements DialogBox {
             declineImage = new Image("img/decline.png");
         } catch(SlickException ex) {
         }
+
+        width = boxImage.getWidth();
+        height = boxImage.getHeight();
 
         ufont = FontFactory.getDefaultFont();
         selected_quest = null;
@@ -86,6 +90,14 @@ public class NpcDialogBox implements DialogBox {
         }
         //int width = ufont.getWidth(text);
         //text_lines = width / 300;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     public void update(GUIContext gc) {

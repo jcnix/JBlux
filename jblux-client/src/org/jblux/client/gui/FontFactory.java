@@ -31,7 +31,7 @@ public class FontFactory {
     }
 
     public static UnicodeFont getDefaultFont() {
-        return getFont("Serif", Color.BLACK, 12);
+        return getFont("Monospace", Color.BLACK, 12);
     }
 
     public static UnicodeFont getFont(String font_name, Color color, int size) {
