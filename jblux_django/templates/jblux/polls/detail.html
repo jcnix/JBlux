@@ -10,7 +10,7 @@
 <p><strong>{{ error_message }}</strong></p>
 {% endif %}
 
-<form action="/jblux/polls/{{ poll.id }}/vote/" method="post">
+<form action="/polls/{{ poll.id }}/vote/" method="post">
     {% csrf_token %}
     {% for choice in poll.choice_set.all %}
     <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
@@ -20,7 +20,7 @@
     <input type="submit" value="Vote" />
 </form>
 <br />
-<a href="/jblux/polls/{{ poll.id }}/results/">View Results</a>
+<a href="/polls/{{ poll.id }}/results/">View Results</a>
 
 {% endblock %}
 
