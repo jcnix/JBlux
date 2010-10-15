@@ -11,26 +11,27 @@ int db_authenticate(char* username, char* password, char* character_name)
     PGconn *conn = db_connect();
     PGresult *res = NULL;
 
-    char* q = "SELECT id FROM jblux_user WHERE username=$1 and password=$2 AND is_active;";
+    char* q = "SELECT id FROM jblux_user WHERE username=$1 and password=$2"
+        "AND is_active AND NOT online;";
     int nParams = 2;
     const char* params_1[2] = { username, password };
     res = db_exec(conn, q, nParams, params_1);
 
-    int id = 0;
+    int user_id = 0;
     if(PQntuples(res) < 1)
     {
         auth = 0;
     }
     else
     {
-        id = db_get_int(res, 0, 0);
+        user_id = db_get_int(res, 0, 0);
         PQclear(res);
         
         q = "SELECT id FROM jblux_character WHERE name=$1 AND user_id=$2;";
         nParams = 2;
         
         char* cid = NULL;
-        if(asprintf(&cid, "%d", id) < 0)
+        if(asprintf(&cid, "%d", user_id) < 0)
         {
             db_disconnect(conn);
             return 0;
@@ -39,17 +40,63 @@ int db_authenticate(char* username, char* password, char* character_name)
         const char* params_2[2] = { character_name, cid };
         res = db_exec(conn, q, nParams, params_2);
 
-        if(PQresultStatus(res) != PGRES_TUPLES_OK)
+        if(PQntuples(res) < 1)
             auth = 0;
         else
             auth = 1;
 
         free(cid);
+        PQclear(res);
     }
 
-    PQclear(res);
+    if(auth)
+    {
+        q = "UPDATE jblux_user SET online=true WHERE id=$1;";
+        nParams = 1;
+        char* cid = NULL;
+        if(asprintf(&cid, "%d", user_id) < 0)
+        {
+            db_disconnect(conn);
+            return 0;
+        }
+        const char* params_3[1] = { cid };
+        res = db_exec(conn, q, nParams, params_3);
+        PQclear(res);
+    }
+
     db_disconnect(conn);
     return auth;
+}
+
+void db_set_user_offline(int user_id)
+{
+    PGconn *conn = db_connect();
+    PGresult *res = NULL;
+
+    char* q = "UPDATE jblux_user SET online=false WHERE id=$1;";
+    int nParams = 1;
+    char* cid = NULL;
+    if(asprintf(&cid, "%d", user_id) < 0)
+    {
+        db_disconnect(conn);
+        return;
+    }
+    const char* params[1] = { cid };
+    res = db_exec(conn, q, nParams, params);
+    PQclear(res);
+    db_disconnect(conn);
+}
+
+void db_set_all_users_offline()
+{
+    PGconn *conn = db_connect();
+    PGresult *res = NULL;
+
+    char* q = "UPDATE jblux_user SET online=false;";
+    int nParams = 0;
+    res = db_exec(conn, q, nParams, NULL);
+    PQclear(res);
+    db_disconnect(conn);
 }
 
 struct player_data* db_get_player(char* character_name)

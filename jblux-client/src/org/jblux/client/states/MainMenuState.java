@@ -89,7 +89,7 @@ public class MainMenuState extends BasicGameState implements Observer {
 //                character_name = "mychar";
                 username = "casey";
                 password = "81b2f040df6152242feb966d071fe58977dab12e";
-                character_name = "pdude1";
+                character_name = "pdude";
                 server.authenticate(username, password, character_name);
             }
         }

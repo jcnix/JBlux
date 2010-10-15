@@ -47,6 +47,10 @@ int main(int argc, char** argv)
     }
     db_disconnect(conn);
 
+    /* Incase the server crashed with users online
+     * set all users to offline so they can reconnect */
+    db_set_all_users_offline();
+
     int serversock = 0;
     int clientsock = 0;
 

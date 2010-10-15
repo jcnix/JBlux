@@ -21,6 +21,8 @@
 #define CLASS_TABLE "jblux_class"
 
 int db_authenticate(char* username, char* password, char* character_name);
+void db_set_user_offline(int user_id);
+void db_set_all_users_offline();
 struct player_data* db_get_player(char* character_name);
 void db_set_map_for_player(int char_id, int map_id, struct coordinates_t coords);
 int get_map_for_player(char* character);

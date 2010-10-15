@@ -447,6 +447,7 @@ void remove_client_from_list(struct client_list **clients, struct client_t *clie
             if(curr->client->data)
             {
                 struct player_data *player = curr->client->data;
+                db_set_user_offline(player->user_id);
                 free(player->character_name);
                 free(player->race.name);
                 free(player->race.sprite_sheet);

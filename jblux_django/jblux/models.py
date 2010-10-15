@@ -9,6 +9,7 @@ class User(models.Model):
     is_admin = models.BooleanField()
     is_active = models.BooleanField()
     reg_num = models.CharField(max_length=40, unique=True, null=True)
+    online = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.username
