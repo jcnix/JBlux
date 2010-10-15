@@ -6,7 +6,6 @@
 #include "client.h"
 
 static struct client_list *clients; 
-static int num_clients = 0;
 static pthread_mutex_t clients_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /* Easy way of sending messages */
@@ -41,9 +40,6 @@ void* client_thread(void* vsock)
 
     client->connected = 1;
     client->socket = *sock;
-
-    add_client(&clients, client);
-    num_clients++;
 
     while(client->connected)
     {
@@ -235,6 +231,8 @@ void parse_command(struct client_t *client, char* command)
         if(db_authenticate(name, pass, char_name))
         {
             client->authenticated = 1;
+            printf("adding client\n");
+            add_client(&clients, client);
             if(send_player_data_to_self(client, char_name))
             {
                 /* TODO: lame way of working around a timing bug in client */
