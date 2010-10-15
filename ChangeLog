@@ -1,3 +1,15 @@
+10-17-2010 Update
+*****************
+- L key shows Player's Quest Log
+- Split long quest texts into multiple lines that fit in the dialog box
+- Client will tell the user if the login failed
+- New accounts must be activated via email
+- Server checks if account is active before allowing player in
+- Urls no longer contains jblux/
+- Update all forms to use the new standard form layout.
+- Spaces can't be used in User or Character names
+- Ensure that character names are only used once
+
 10-10-2010 Update
 *****************
 - If server goes down, connected players are notified

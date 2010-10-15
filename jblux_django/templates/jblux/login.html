@@ -7,24 +7,12 @@
 {% if error %}
 <p><font color="red">Your username and password didn't match.  Please try again.</font></p>
 {% endif %}
-<center>
 <form method="post" action="">
     {% csrf_token %}
-    <table>
-        <tr>
-            <td>{{ form.username.label_tag }}</td>
-            <td>{{ form.username }}</td>
-        </tr>
-        <tr>
-            <td>{{ form.password.label_tag }}</td>
-            <td>{{ form.password }}</td>
-        </tr>
-    </table>
-
+    {% include "jblux/base_form.html" %}
     <p><input type="submit" value="login" /></p>
 </form>
 <br />
 <a href="{% url jblux_django.jblux.views.register %}">Register a new Account</a>
-</center>
 {% endblock %}
 
