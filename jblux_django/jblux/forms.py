@@ -13,6 +13,11 @@ class NewEmailField(forms.EmailField):
         super(NewEmailField, self).validate(value)
         validate_new_email(value)
 
+class NewCharacterField(forms.CharField):
+    def validate(self, value):
+        super(NewCharacterField, self).validate(value)
+        validate_character(value)
+
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=50)
     password = forms.CharField(max_length=50, widget=forms.PasswordInput(render_value=False))
@@ -38,7 +43,7 @@ class RegisterForm(forms.Form):
 class CharacterForm(forms.Form):
     min_name = MinLengthValidator(3)
 
-    name = forms.CharField(max_length=50, validators=[min_name])
+    name = NewCharacterField(max_length=50, validators=[min_name])
     race = forms.ModelChoiceField(Race.objects.all(), empty_label=None)
     class_t = forms.ModelChoiceField(Class.objects.all(), empty_label=None)
 
@@ -65,4 +70,12 @@ def validate_new_email(value):
         return
 
     raise ValidationError('Email is in use')
+
+def validate_character(value):
+    try:
+        char = Character.objects.get(name=value)
+    except Character.DoesNotExist:
+        return
+
+    raise ValidationError('Character name is in use')
 
