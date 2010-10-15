@@ -5,10 +5,12 @@
 - Client will tell the user if the login failed
 - New accounts must be activated via email
 - Server checks if account is active before allowing player in
+- Server prevents players from logging in twice at the same time.
 - Urls no longer contains jblux/
 - Update all forms to use the new standard form layout.
 - Spaces can't be used in User or Character names
 - Ensure that character names are only used once
+- Moving between maps works again
 
 10-10-2010 Update
 *****************

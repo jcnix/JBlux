@@ -231,7 +231,6 @@ void parse_command(struct client_t *client, char* command)
         if(db_authenticate(name, pass, char_name))
         {
             client->authenticated = 1;
-            printf("adding client\n");
             add_client(&clients, client);
             if(send_player_data_to_self(client, char_name))
             {
