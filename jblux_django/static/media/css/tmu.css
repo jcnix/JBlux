@@ -60,9 +60,9 @@ p
 #content {
     float: right;
     position:relative;
-    top: -60px;
+    top: -50px;
     bottom:0px;
-    left:0px;
+    left:10px;
     right:0px;
     width: 843px;
     text-align: left;
