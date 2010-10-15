@@ -7,6 +7,7 @@ class NewUserNameField(forms.CharField):
     def validate(self, value):
         super(NewUserNameField, self).validate(value)
         validate_name(value)
+        validate_no_spaces(value)
 
 class NewEmailField(forms.EmailField):
     def validate(self, value):
@@ -17,6 +18,7 @@ class NewCharacterField(forms.CharField):
     def validate(self, value):
         super(NewCharacterField, self).validate(value)
         validate_character(value)
+        validate_no_spaces(value)
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=50)
@@ -78,4 +80,8 @@ def validate_character(value):
         return
 
     raise ValidationError('Character name is in use')
+
+def validate_no_spaces(value):
+    if ' ' in value:
+        raise ValidationError('Field cannot contain spaces')
 
