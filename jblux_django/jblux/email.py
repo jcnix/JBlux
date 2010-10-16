@@ -3,6 +3,8 @@ import hashlib
 import random
 import string
 
+from_email = "tmuo-admin@casey-jones.org"
+
 def activation_email(username, password, email, reg_num):
     reg_url = "http://tmuo.casey-jones.org/register/"+reg_num
 
@@ -19,12 +21,19 @@ def activation_email(username, password, email, reg_num):
     message += "-------------------------------<br />"
     message += "Username: "+username+"<br />"
     message += "Password: "+password+"<br />"
-
-    from_email = "tmuo-admin@casey-jones.org"
     to_email = [email,]
 
     msg = EmailMessage(subject, message, from_email, to_email)
     msg.content_subtype = "html"
+    msg.send()
+
+def email_new_pass(email, password):
+    subject = "TMUO Password Reset"
+    message = "A password reset has been requested.\n"
+    message += "Your new password is: "+password
+    to_email = [email,]
+
+    msg = EmailMessage(subject, message, from_email, to_email)
     msg.send()
 
 def get_reg_num(username):

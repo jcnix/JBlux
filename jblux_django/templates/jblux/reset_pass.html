@@ -1,0 +1,12 @@
+{% extends "jblux/base.html" %}
+
+{% block title %}Reset Password{% endblock %}
+
+{% block content %}
+<form method="post" action="{% url jblux_django.jblux.views.reset_pass %}">
+    {% csrf_token %}
+    {% include "jblux/base_form.html" %}
+    <p><input type="submit" value="Submit" /></p>
+</form>
+{% endblock %}
+

@@ -13,6 +13,8 @@
     <p><input type="submit" value="login" /></p>
 </form>
 <br />
-<a href="{% url jblux_django.jblux.views.register %}">Register a new Account</a>
+<p><a href="{% url jblux_django.jblux.views.register %}">Register a new Account</a></p>
+<p>Forgot your password? <a href="{% url jblux_django.jblux.views.reset_pass %}">Click here</a></p>
+
 {% endblock %}
 

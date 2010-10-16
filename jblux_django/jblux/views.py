@@ -3,8 +3,9 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext, loader, Context
 from jblux_django.jblux.models import User, Character, Map, Inventory
 from jblux_django.jblux.forms import LoginForm, RegisterForm, CharacterForm
-from jblux_django.jblux.forms import SelectCharacterForm
-from jblux_django.jblux.email import activation_email, get_reg_num
+from jblux_django.jblux.forms import SelectCharacterForm, ResetPasswordForm
+from jblux_django.jblux.email import activation_email, get_reg_num, email_new_pass
+from jblux_django.jblux import util
 import hashlib
 
 def index(request):
@@ -199,6 +200,23 @@ def select_character(request):
                     context_instance=RequestContext(request))
         except KeyError:
             return HttpResponseRedirect('/login')
+
+def reset_pass(request):
+    form = ResetPasswordForm()
+    if request.method == 'POST':
+        form = ResetPasswordForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            user = User.objects.get(email=email)
+            password = util.gen_new_password()
+            user.password = hashlib.sha1(password).hexdigest()
+            user.save()
+            email_new_pass(email, password)
+            return HttpResponseRedirect('New password sent to '+email)
+
+    return render_to_response('jblux/reset_pass.html', {'form': form},
+        context_instance=RequestContext(request))
+
 
 #Recieves hashed password
 def auth(username, password):

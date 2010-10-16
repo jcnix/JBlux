@@ -57,6 +57,20 @@ class SelectCharacterForm(forms.Form):
         super(SelectCharacterForm, self).__init__(*args, **kwargs)
         self.fields["character"].queryset = Character.objects.filter(user=user)
 
+class ResetPasswordForm(forms.Form):
+    email = forms.EmailField()
+
+    #Make sure email is a valid user account
+    def clean(self):
+        super(forms.Form,self).clean()
+        email = self.cleaned_data.get("email")
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            self._errors['email'] = [u'User with specified email does not exist.']
+
+        return self.cleaned_data
+
 def validate_name(value):
     try:
         user = User.objects.get(username=value)
