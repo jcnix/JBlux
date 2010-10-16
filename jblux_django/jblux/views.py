@@ -4,6 +4,7 @@ from django.template import RequestContext, loader, Context
 from jblux_django.jblux.models import User, Character, Map, Inventory
 from jblux_django.jblux.forms import LoginForm, RegisterForm, CharacterForm
 from jblux_django.jblux.forms import SelectCharacterForm, ResetPasswordForm
+from jblux_django.jblux.forms import AccountSettingsForm
 from jblux_django.jblux.email import activation_email, get_reg_num, email_new_pass
 from jblux_django.jblux import util
 import hashlib
@@ -200,6 +201,31 @@ def select_character(request):
                     context_instance=RequestContext(request))
         except KeyError:
             return HttpResponseRedirect('/login')
+
+def profile_settings(request, account_id):
+    # First make sure the logged inuser is allowed to 
+    # change this user's settings
+    user = get_object_or_404(User, pk=account_id)
+    try:
+        logged_in_user = request.session['user']
+    except KeyError:
+        return HttpResponseRedirect('/login')
+
+    if logged_in_user != user:
+        return HttpResponse('Not Authenticated')
+
+    form = AccountSettingsForm()
+    if request.method == 'POST':
+        form = AccountSettingsForm(request.POST)
+        if form.is_valid():
+            password = form.cleaned_data['password']
+            user.password = hashlib.sha1(password).hexdigest()
+            user.save()
+            return HttpResponseRedirect('/profile')
+
+    return render_to_response('jblux/settings.html', {'user': user, 'form': form},
+        context_instance=RequestContext(request))
+
 
 def reset_pass(request):
     form = ResetPasswordForm()

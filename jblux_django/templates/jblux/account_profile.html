@@ -4,6 +4,7 @@
 
 {% block content %}
 <p>Name: {{ user.username }}</p>
+<p><a href="/profile/{{ user.id }}/settings">Settings</a></p>
 {% if user.is_admin %}
     <p><font color="red">Admin</font>
 {% endif %}

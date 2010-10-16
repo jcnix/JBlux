@@ -1,0 +1,12 @@
+{% extends "jblux/base.html" %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<form method="post" action="/profile/{{ user.id }}/settings/">
+    {% csrf_token %}
+    {% include "jblux/base_form.html" %}
+    <p><input type="submit" value="Submit" /></p>
+</form>
+{% endblock %}
+
