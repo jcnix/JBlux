@@ -48,6 +48,8 @@ public class NpcDialogBox extends BaseDialogBox {
     private Quest selected_quest;
     private ServerCommunicator server;
 
+    private ArrayList<String> details_lines;
+
     public NpcDialogBox(GUI gui, ServerCommunicator s, LinkedList<Quest> quests) {
         super();
         this.gui = gui;
@@ -90,6 +92,9 @@ public class NpcDialogBox extends BaseDialogBox {
         }
         //int width = ufont.getWidth(text);
         //text_lines = width / 300;
+
+        //Split text into lines
+        details_lines = getLines(selected_quest.details, ufont);
     }
 
     public int getWidth() {
@@ -158,7 +163,10 @@ public class NpcDialogBox extends BaseDialogBox {
         }
         else if(display_quest) {
             ufont.drawString(x, y, selected_quest.name);
-            ufont.drawString(x, y+25, selected_quest.details);
+            for(int i = 0; i < details_lines.size(); i++) {
+                ufont.drawString(x, y+15, details_lines.get(i));
+                y += 15;
+            }
             ufont.drawString(x, y+50, selected_quest.objectives);
             acceptImage.draw(250, 450);
             declineImage.draw(450, 450);

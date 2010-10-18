@@ -48,7 +48,8 @@ public class QuestDialogBox extends BaseDialogBox {
     private Rectangle abandonButton;
     private Quest selected_quest;
     private ServerCommunicator server;
-    private ArrayList<NpcData> npc_data;
+
+    private ArrayList<String> details_lines;
 
     public QuestDialogBox(GUI gui, ServerCommunicator s, LinkedList<Quest> quests) {
         super();
@@ -93,6 +94,9 @@ public class QuestDialogBox extends BaseDialogBox {
         }
         //int width = ufont.getWidth(text);
         //text_lines = width / 300;
+
+        //Split text into lines
+        details_lines = getLines(selected_quest.details, ufont);
     }
 
     public int getWidth() {
@@ -160,8 +164,6 @@ public class QuestDialogBox extends BaseDialogBox {
             }
         }
         else if(display_quest) {
-            ArrayList<String> details_lines = getLines(selected_quest.details, ufont);
-
             int details_height = 0;
             ufont.drawString(x, y, selected_quest.name);
             for(int i = 0; i < details_lines.size(); i++) {
