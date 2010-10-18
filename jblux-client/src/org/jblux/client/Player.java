@@ -23,6 +23,7 @@ package org.jblux.client;
 import org.jblux.util.MapGrid;
 import java.util.Observable;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.Observer;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.client.network.ItemFactory;
@@ -31,6 +32,7 @@ import org.jblux.client.network.ServerCommunicator;
 import org.jblux.util.Relation;
 import org.jblux.client.data.NpcData;
 import org.jblux.client.data.PlayerData;
+import org.jblux.client.data.Quest;
 import org.jblux.client.items.Item;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.GameContainer;
@@ -53,6 +55,9 @@ public class Player extends Sprite implements Observer {
         super(data, gc);
 
         this.player_data = data;
+        if(player_data.quests == null)
+            player_data.quests = new LinkedList<Quest>();
+
         this.server = server;
         response = ResponseWaiter.getInstance();
         response.addObserver(this);
@@ -72,6 +77,10 @@ public class Player extends Sprite implements Observer {
         return player_data;
     }
     
+    public LinkedList<Quest> getQuests() {
+        return player_data.quests;
+    }
+
     public void setMapName(String map) {
         map_name = map;
     }

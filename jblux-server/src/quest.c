@@ -12,6 +12,7 @@ void quest_to_json(yajl_gen gen, struct quest *q)
     const char* details_field =                 "details";
     const char* objectives_field =              "objectives";
     const char* completion_field =              "completion_text";
+    const char* end_npc_id_field =              "end_npc_id";
     const char* min_level_field =               "min_level";
     const char* type_field =                    "type";
     const char* quest_item_field =              "quest_item_id";
@@ -49,6 +50,7 @@ void quest_to_json(yajl_gen gen, struct quest *q)
     json_insert_str(gen, details_field, q->details);
     json_insert_str(gen, objectives_field, q->objectives);
     json_insert_str(gen, completion_field, q->completion_text);
+    json_insert_int(gen, end_npc_id_field, q->end_npc_id);
     json_insert_int(gen, min_level_field, q->min_level);
     json_insert_int(gen, type_field, q->type);
     json_insert_int(gen, quest_item_field, q->quest_item_id);

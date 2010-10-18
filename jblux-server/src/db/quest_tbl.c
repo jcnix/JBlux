@@ -11,7 +11,7 @@ struct quest* db_get_quest(int id)
     PGresult *res = NULL;
 
     char *q = "SELECT id, name, details, objectives, completion_text, "
-         "min_level, flag, quest_item_id, reward_xp, reward_money, "
+         "end_npc_id, min_level, flag, quest_item_id, reward_xp, reward_money, "
          "rewardItem1_id, rewardItem2_id, rewardItem3_id, rewardItem1_count, "
          "rewardItem2_count, rewardItem3_count, reqItem1_id, reqItem2_id, "
          "reqItem3_id, reqItem1_count, reqItem2_count, reqItem3_count, "
@@ -45,6 +45,9 @@ struct quest* db_get_quest(int id)
 
     column++;
     quest->completion_text = db_get_str(res, 0, column);
+    
+    column++;
+    quest->end_npc_id = db_get_int(res, 0, column);
 
     column++;
     quest->min_level = db_get_int(res, 0, column);

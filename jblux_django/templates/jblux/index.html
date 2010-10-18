@@ -3,5 +3,10 @@
 {% block title %}The Mushroom Universe Online{% endblock %}
 
 {% block content %}
+    {% if latest_posts %}
+        {% for post in latest_posts %}
+            {% include "news/post.html" %}
+        {% endfor %}
+    {% endif %}
 {% endblock %}
 

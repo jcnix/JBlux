@@ -20,7 +20,6 @@
 
 package org.jblux.client.data;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import org.jblux.util.Coordinates;
 

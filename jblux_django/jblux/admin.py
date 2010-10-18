@@ -1,6 +1,6 @@
 from jblux_django.jblux.models import User, Character, Inventory, Item, Map
 from jblux_django.jblux.models import MapItems, MapNpcs, Npc, Quest
-from jblux_django.jblux.models import Race, Class, Poll, Choice
+from jblux_django.jblux.models import Race, Class, Poll, Choice, NewsPost
 from django.contrib import admin
 
 class UserAdmin(admin.ModelAdmin):
@@ -69,4 +69,5 @@ admin.site.register(Quest, QuestAdmin)
 admin.site.register(Race)
 admin.site.register(Class)
 admin.site.register(Poll, PollAdmin)
+admin.site.register(NewsPost)
 

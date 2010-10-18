@@ -96,7 +96,7 @@ public class GameCanvas implements Observer {
         npcs = new ArrayList<Npc>();
         for(int i = 0; i < n.size(); i++) {
             NpcData data = n.get(i);
-            Npc npc = new Npc(data, this);
+            Npc npc = new Npc(data, this, player.getQuests());
             npc.setCoords(data.coords);
             npcs.add(npc);
         }

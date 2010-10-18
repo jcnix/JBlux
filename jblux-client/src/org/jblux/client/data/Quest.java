@@ -29,10 +29,11 @@ public class Quest {
     public String details;
     public String objectives;
     public String completion_text;
+    public int end_npc_id;
     public int min_level;
     public int type;
     public int quest_item_id;
-
+    
     public int reward_xp;
     public int reward_money;
     public int reward_item1_id;

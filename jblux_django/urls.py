@@ -29,6 +29,7 @@ urlpatterns = patterns('',
     (r'^polls/(?P<poll_id>\d+)/$', 'jblux_django.jblux.polls.detail'),
     (r'^polls/(?P<poll_id>\d+)/results/$', 'jblux_django.jblux.polls.results'),
     (r'^polls/(?P<poll_id>\d+)/vote/$', 'jblux_django.jblux.polls.vote'),
+    (r'^news/(?P<news_id>\d+)/$', 'jblux_django.jblux.news.view'),
     (r'^admin/', include(admin.site.urls)),
     (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/tmuo_media/favicon.ico'}),
 )

@@ -272,3 +272,11 @@ class Choice(models.Model):
     def __unicode__(self):
         return self.choice
 
+class NewsPost(models.Model):
+    pub_date = models.DateTimeField('date_published')
+    author = models.CharField(max_length=50)
+    title = models.CharField(max_length=100)
+    text = models.TextField()
+
+    def __unicode__(self):
+        return self.title

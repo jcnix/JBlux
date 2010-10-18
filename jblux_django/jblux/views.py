@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext, loader, Context
-from jblux_django.jblux.models import User, Character, Map, Inventory
+from jblux_django.jblux.models import User, Character, Map, Inventory, NewsPost
 from jblux_django.jblux.forms import LoginForm, RegisterForm, CharacterForm
 from jblux_django.jblux.forms import SelectCharacterForm, ResetPasswordForm
 from jblux_django.jblux.forms import AccountSettingsForm
@@ -10,12 +10,12 @@ from jblux_django.jblux import util
 import hashlib
 
 def index(request):
-    return render_to_response('jblux/index.html',
+    latest_posts = NewsPost.objects.all().order_by('-pub_date')
+    return render_to_response('jblux/index.html', {'latest_posts': latest_posts},
             context_instance=RequestContext(request))
 
 def login(request):
     form = LoginForm()
-
     try:
         username = request.POST['username']
         password = hashlib.sha1(request.POST['password']).hexdigest()

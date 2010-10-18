@@ -18,6 +18,7 @@ struct quest
     char* details;
     char* objectives;
     char* completion_text;
+    int end_npc_id;
     int min_level;
     int type;
     int quest_item_id;
