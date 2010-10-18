@@ -24,6 +24,7 @@ class CharacterAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'level', 'race', 'class_t')
     list_filter = ('race', 'class_t')
     inlines = [InventoryInline]
+    raw_id_fields = ['user', 'inventory']
 
 class NpcAdmin(admin.ModelAdmin):
     search_fields = ['name']
@@ -34,6 +35,10 @@ class QuestAdmin(admin.ModelAdmin):
     search_fields = ['name', 'npc__name']
     list_display = ('__unicode__', 'min_level', 'flag', 'npc')
     list_filter = ('flag',)
+    raw_id_fields = ['npc', 'end_npc', 'next_quest', 'quest_item',
+            'rewarditem1', 'rewarditem2', 'rewarditem3',
+            'reqitem1', 'reqitem2', 'reqitem3', 'reqnpc1', 'reqnpc2',
+            'reqnpc3',]
 
 class ItemAdmin(admin.ModelAdmin):
     search_fields = ['name']
