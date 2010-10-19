@@ -94,9 +94,6 @@ public class QuestDialogBox extends BaseDialogBox {
         }
         //int width = ufont.getWidth(text);
         //text_lines = width / 300;
-
-        //Split text into lines
-        details_lines = getLines(selected_quest.details, ufont);
     }
 
     public int getWidth() {
@@ -126,6 +123,9 @@ public class QuestDialogBox extends BaseDialogBox {
                         selected_quest = quests.get(i);
                         select_quest = false;
                         display_quest = true;
+
+                        //Split text into lines
+                        details_lines = getLines(selected_quest.details, ufont);
 
                         backButton = new Rectangle(450, 450, backImage.getWidth(),
                                 backImage.getHeight());

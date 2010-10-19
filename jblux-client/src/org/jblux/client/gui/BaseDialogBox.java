@@ -47,7 +47,8 @@ public abstract class BaseDialogBox {
         int curr_index = 0;
         int line_length = text.length() / num_lines;
         for(int i = 1; i <= num_lines; i++) {
-            curr_index = line_length * i;
+            curr_index = line_length * i - 1;
+            System.out.println(curr_index);
             char curr_char = text.charAt(curr_index);
 
             /* if the string is in the middle of a word attempt to check the preceding
@@ -55,20 +56,18 @@ public abstract class BaseDialogBox {
              */
             if(curr_char != ' ') {
                 for(int j = 1; j < 15; j++) {
-                    char c = text.charAt(curr_index - i);
-                    if(curr_char == ' ') {
-                        curr_index = curr_index - i;
+                    char c = text.charAt(curr_index - j);
+                    if(c == ' ') {
+                        curr_index = curr_index - j;
                         break;
                     }
                 }
             }
 
-            /* curr_index - 1 is because this method finds the ' ', we want
-             * the character after the space.
-             */
-            String sub = text.substring(prev_index, curr_index-1);
-            prev_index = curr_index+1;
+            String sub = text.substring(prev_index, curr_index);
+            prev_index = curr_index;
             lines.add(sub);
+            System.out.println(sub);
         }
 
         if(curr_index != text.length()) {
