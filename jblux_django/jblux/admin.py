@@ -57,7 +57,7 @@ class MapAdmin(admin.ModelAdmin):
     inlines = [MapItemInline, MapNpcInline]
 
 class ChoiceInline(admin.TabularInline):
-    fields = ['choice']
+    fields = ['choice', 'votes']
     model = Choice
     extra = 2
 
