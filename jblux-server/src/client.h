@@ -29,6 +29,7 @@ struct client_t
     int socket;
     int connected;
     int authenticated;
+    int user_id;
     struct player_data *data;
     char* encoded_player_data;
     struct coordinates_t coords;

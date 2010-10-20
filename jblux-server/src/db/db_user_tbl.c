@@ -7,7 +7,7 @@
 
 int db_authenticate(char* username, char* password, char* character_name)
 {
-    int auth = 0;
+    int user_id = 0;
     PGconn *conn = db_connect();
     PGresult *res = NULL;
 
@@ -17,55 +17,47 @@ int db_authenticate(char* username, char* password, char* character_name)
     const char* params_1[2] = { username, password };
     res = db_exec(conn, q, nParams, params_1);
 
-    int user_id = 0;
     if(PQntuples(res) < 1)
     {
-        auth = 0;
+        return 0;
     }
-    else
+    user_id = db_get_int(res, 0, 0);
+    PQclear(res);
+
+    q = "SELECT id FROM jblux_character WHERE name=$1 AND user_id=$2;";
+    nParams = 2;
+
+    char* cid = NULL;
+    if(asprintf(&cid, "%d", user_id) < 0)
     {
-        user_id = db_get_int(res, 0, 0);
-        PQclear(res);
-        
-        q = "SELECT id FROM jblux_character WHERE name=$1 AND user_id=$2;";
-        nParams = 2;
-        
-        char* cid = NULL;
-        if(asprintf(&cid, "%d", user_id) < 0)
-        {
-            db_disconnect(conn);
-            return 0;
-        }
-
-        const char* params_2[2] = { character_name, cid };
-        res = db_exec(conn, q, nParams, params_2);
-
-        if(PQntuples(res) < 1)
-            auth = 0;
-        else
-            auth = 1;
-
-        free(cid);
-        PQclear(res);
+        db_disconnect(conn);
+        return 0;
     }
 
-    if(auth)
+    const char* params_2[2] = { character_name, cid };
+    res = db_exec(conn, q, nParams, params_2);
+
+    if(PQntuples(res) < 1)
+        return 0;
+
+    free(cid);
+    PQclear(res);
+
+    q = "UPDATE jblux_user SET online=true WHERE id=$1;";
+    nParams = 1;
+    cid = NULL;
+    if(asprintf(&cid, "%d", user_id) < 0)
     {
-        q = "UPDATE jblux_user SET online=true WHERE id=$1;";
-        nParams = 1;
-        char* cid = NULL;
-        if(asprintf(&cid, "%d", user_id) < 0)
-        {
-            db_disconnect(conn);
-            return 0;
-        }
-        const char* params_3[1] = { cid };
-        res = db_exec(conn, q, nParams, params_3);
-        PQclear(res);
+        db_disconnect(conn);
+        return 0;
     }
+    const char* params_3[1] = { cid };
+    res = db_exec(conn, q, nParams, params_3);
+    free(cid);
+    PQclear(res);
 
     db_disconnect(conn);
-    return auth;
+    return user_id;
 }
 
 void db_set_user_offline(int user_id)
@@ -116,36 +108,36 @@ struct player_data* db_get_player(char* character_name)
     int nParams = 1;
     const char* params[1] = { character_name };
     res = db_exec(conn, q, nParams, params);
-    
+
     if(PQntuples(res) > 0)
     {
         int column = 0;
         data->user_id = db_get_int(res, 0, column);
-        
+
         column++;
         data->character_id = db_get_int(res, 0, column);
-        
+
         column++;
         data->character_name = db_get_str(res, 0, column);
-    
+
         column++;
         data->level = db_get_int(res, 0, column);
-    
+
         column++;
         data->strength = db_get_int(res, 0, column);
-    
+
         column++;
         data->agility = db_get_int(res, 0, column);
-    
+
         column++;
         data->stamina = db_get_int(res, 0, column);
-    
+
         column++;
         data->intelligence = db_get_int(res, 0, column);
-    
+
         column++;
         data->spirit = db_get_int(res, 0, column);
-    
+
         column++;
         data->map_id = db_get_int(res, 0, column);
         struct map_t *map = get_map_for_id(data->map_id);
@@ -188,9 +180,9 @@ void db_set_map_for_player(int char_id, int map_id, struct coordinates_t coords)
     char *cy = NULL;
     char *cid = NULL;
     if( (asprintf(&cmap_id, "%d", map_id) < 0) ||
-        (asprintf(&cx, "%d", coords.x) < 0) ||
-        (asprintf(&cy, "%d", coords.y) < 0) ||
-        (asprintf(&cid, "%d", char_id) < 0))
+            (asprintf(&cx, "%d", coords.x) < 0) ||
+            (asprintf(&cy, "%d", coords.y) < 0) ||
+            (asprintf(&cid, "%d", char_id) < 0))
     {
         /* saving the map location isn't _that_ important */
         db_disconnect(conn);
@@ -198,7 +190,7 @@ void db_set_map_for_player(int char_id, int map_id, struct coordinates_t coords)
     }
     const char* params[4] = { cmap_id, cx, cy, cid };
     res = db_exec(conn, q, nParams, params);
-    
+
     free(cmap_id);
     free(cx);
     free(cy);

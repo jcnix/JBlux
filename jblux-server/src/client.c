@@ -59,6 +59,7 @@ void* client_thread(void* vsock)
      * and the server will crash */
     if(client->authenticated)
     {
+        db_set_user_offline(client->user_id);
         remove_client_from_list(&clients, client);
     }
     pthread_exit(NULL);
@@ -228,7 +229,8 @@ void parse_command(struct client_t *client, char* command)
         char* name = strtok(NULL, " ");
         char* pass = strtok(NULL, " ");
         char* char_name = strtok(NULL, " ");
-        if(db_authenticate(name, pass, char_name))
+        client->user_id = db_authenticate(name, pass, char_name);
+        if(client->user_id)
         {
             client->authenticated = 1;
             add_client(&clients, client);
@@ -444,7 +446,6 @@ void remove_client_from_list(struct client_list **clients, struct client_t *clie
             if(curr->client->data)
             {
                 struct player_data *player = curr->client->data;
-                db_set_user_offline(player->user_id);
                 free(player->character_name);
                 free(player->race.name);
                 free(player->race.sprite_sheet);
