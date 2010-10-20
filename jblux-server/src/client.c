@@ -334,6 +334,7 @@ void parse_command(struct client_t *client, char* command)
             player_accept_quest(client->data, quest_id);
             struct map_t *map = get_map_for_id(client->data->map_id);
             send_map_info(client, map);
+            send_player_data_to_self(client, client->data->character_name);
         }
     }
     else if(strncmp(command, "disconnect", 10) == 0)

@@ -144,15 +144,12 @@ public class MainMenuState extends BasicGameState implements Observer {
     }
 
     public void update(Observable o, Object arg) {
-        System.out.println("Received response");
-        if(o == response) {
-            String c = (String) arg;
-            String[] command = c.split(" ");
-            if(command[0].equals(Commands.PLAYER)) {
-                if(command[1].equals("self")) {
-                    player_data = PlayerDataFactory.getDataFromBase64(command[2]);
-                    received_data = true;
-                }
+        String c = (String) arg;
+        String[] command = c.split(" ");
+        if(command[0].equals(Commands.PLAYER)) {
+            if(command[1].equals("self")) {
+                player_data = PlayerDataFactory.getDataFromBase64(command[2]);
+                received_data = true;
             }
         }
     }

@@ -34,6 +34,7 @@ import org.jblux.client.data.NpcData;
 import org.jblux.client.data.PlayerData;
 import org.jblux.client.data.Quest;
 import org.jblux.client.items.Item;
+import org.jblux.client.network.PlayerDataFactory;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
@@ -216,7 +217,7 @@ public class Player extends Sprite implements Observer {
 
     /**
      * Since this is checked before moving the player and whether or not
-     * they can move, we're going to giv this function the location of
+     * they can move, we're going to give this function the location of
      * where the player would be assuming they are able to move.
      *
      * @param c     Where the player would be
@@ -268,11 +269,18 @@ public class Player extends Sprite implements Observer {
     }
     
     public void update(Observable o, Object arg) {
-        if(response == o && wait_pressed_action) {
-            String sarg = (String) arg;
-            String[] args = sarg.split("\\s");
-            if(!args[1].equals("null")) {
-                Item item = ItemFactory.getItemFromBase64(args[1]);
+        String sarg = (String) arg;
+        String[] args = sarg.split("\\s");
+        if(wait_pressed_action) {
+            if(args[0].equals("item")) {
+                if(!args[1].equals("null")) {
+                    Item item = ItemFactory.getItemFromBase64(args[1]);
+                }
+            }
+        }
+        if(args[0].equals("player")) {
+            if(args[1].equals("self")) {
+                this.player_data = PlayerDataFactory.getDataFromBase64(args[2]);
             }
         }
     }
