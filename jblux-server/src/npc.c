@@ -28,15 +28,10 @@ char* npc_list_to_json(struct npc_list *npcs)
     const char* spirit_field =          "spirit";
     const char* coords_field =          "coords";
     
-    struct npc_data *data = NULL;
-    if(npcs)
-    {
-        data = npcs->npc;
-    }
-    
     yajl_gen_array_open(gen);
     while(npcs)
     {
+        struct npc_data *data = npcs->npc;
         yajl_gen_map_open(gen);
         json_insert_int(gen, npc_id_field, data->npc_id);
         json_insert_int(gen, job_field, data->job);
@@ -69,6 +64,7 @@ char* npc_list_to_json(struct npc_list *npcs)
 
     json = strdup(get_json_str(gen));
     yajl_gen_free(gen);
+    printf("%s\n", json);
     return json;
 }
 
