@@ -88,7 +88,7 @@ public class Npc extends Sprite {
         //Check if the player has any quests to turn in here
         for(int i = 0; i < player_quests.size(); i++) {
             Quest q = player_quests.get(i);
-            if(q.end_npc_id == data.npc_id) {
+            if(q.complete == 1 && q.end_npc_id == data.npc_id) {
                 available_quests = true;
                 break;
             }

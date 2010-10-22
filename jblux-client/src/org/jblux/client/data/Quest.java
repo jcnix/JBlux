@@ -29,6 +29,7 @@ public class Quest {
     public String details;
     public String objectives;
     public String completion_text;
+    public int complete;
     public int end_npc_id;
     public int min_level;
     public int type;

@@ -18,6 +18,7 @@ struct quest
     char* details;
     char* objectives;
     char* completion_text;
+    int complete;
     int end_npc_id;
     int min_level;
     int type;
@@ -60,6 +61,7 @@ struct quest_list
     struct quest_list *next;
 };
 
+int is_quest_complete(struct quest *q);
 void quest_to_json(yajl_gen gen, struct quest *q);
 void quest_list_to_json(yajl_gen gen, struct quest_list *quests);
 void add_quest(struct quest_list **quests, struct quest *quest);

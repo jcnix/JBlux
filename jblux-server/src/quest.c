@@ -12,6 +12,7 @@ void quest_to_json(yajl_gen gen, struct quest *q)
     const char* details_field =                 "details";
     const char* objectives_field =              "objectives";
     const char* completion_field =              "completion_text";
+    const char* complete_field =                "complete";
     const char* end_npc_id_field =              "end_npc_id";
     const char* min_level_field =               "min_level";
     const char* type_field =                    "type";
@@ -50,6 +51,7 @@ void quest_to_json(yajl_gen gen, struct quest *q)
     json_insert_str(gen, details_field, q->details);
     json_insert_str(gen, objectives_field, q->objectives);
     json_insert_str(gen, completion_field, q->completion_text);
+    json_insert_int(gen, complete_field, q->complete);
     json_insert_int(gen, end_npc_id_field, q->end_npc_id);
     json_insert_int(gen, min_level_field, q->min_level);
     json_insert_int(gen, type_field, q->type);
@@ -86,6 +88,21 @@ void quest_to_json(yajl_gen gen, struct quest *q)
     json_insert_int(gen, current_npc3_count_field, q->current_npc3_count);
 
     yajl_gen_map_close(gen);
+}
+
+int is_quest_complete(struct quest *q)
+{
+    if( q->current_item1_count == q->required_item1_count &&
+        q->current_item2_count == q->required_item2_count &&
+        q->current_item3_count == q->required_item3_count &&
+        q->current_npc1_count == q->required_npc1_count &&
+        q->current_npc2_count == q->required_npc2_count &&
+        q->current_npc3_count == q->required_npc3_count)
+    {
+        return 1;
+    }
+
+    return 0;
 }
 
 void quest_list_to_json(yajl_gen gen, struct quest_list *quests)

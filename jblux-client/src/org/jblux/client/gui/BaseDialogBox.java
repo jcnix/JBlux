@@ -48,7 +48,6 @@ public abstract class BaseDialogBox {
         int line_length = text.length() / num_lines;
         for(int i = 1; i <= num_lines; i++) {
             curr_index = line_length * i - 1;
-            System.out.println(curr_index);
             char curr_char = text.charAt(curr_index);
 
             /* if the string is in the middle of a word attempt to check the preceding
@@ -67,7 +66,6 @@ public abstract class BaseDialogBox {
             String sub = text.substring(prev_index, curr_index);
             prev_index = curr_index;
             lines.add(sub);
-            System.out.println(sub);
         }
 
         if(curr_index != text.length()) {

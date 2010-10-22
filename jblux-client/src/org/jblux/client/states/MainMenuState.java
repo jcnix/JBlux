@@ -30,6 +30,7 @@ import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.util.Commands;
 import org.jblux.client.data.PlayerData;
+import org.jblux.client.gui.FontFactory;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -93,11 +94,7 @@ public class MainMenuState extends BasicGameState implements Observer {
 
         background = new Image("img/menu.png");
         loginButton = new Image("img/login.png");
-
-        UnicodeFont font = new UnicodeFont(new Font("Serif", Font.PLAIN, 12));
-        font.getEffects().add(new ColorEffect(Color.GREEN));
-        font.addAsciiGlyphs();
-        font.loadGlyphs();
+        UnicodeFont font = FontFactory.getFont("Serif", Color.WHITE, 12);
         
         txtUsername = new TextField(gc, font, 333, 225, 150, 20);
         txtUsername.setCursorVisible(true);

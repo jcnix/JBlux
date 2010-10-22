@@ -247,6 +247,8 @@ struct quest_list* db_get_quests_for_player(int character_id)
         q->current_npc1_count = db_get_int(res, i, 4);
         q->current_npc1_count = db_get_int(res, i, 5);
         q->current_npc1_count = db_get_int(res, i, 6);
+        q->complete = is_quest_complete(q);
+
         add_quest(&quests, q);
     }
 

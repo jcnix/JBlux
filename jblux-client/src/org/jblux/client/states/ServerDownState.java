@@ -22,6 +22,7 @@ package org.jblux.client.states;
 
 import java.awt.Color;
 import java.awt.Font;
+import org.jblux.client.gui.FontFactory;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -48,10 +49,7 @@ public class ServerDownState extends BasicGameState {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         background = new Image("img/menu.png");
-        font = new UnicodeFont(new Font("Serif", Font.PLAIN, 24));
-        font.getEffects().add(new ColorEffect(Color.WHITE));
-        font.addAsciiGlyphs();
-        font.loadGlyphs();
+        font = FontFactory.getFont("Serif", Color.WHITE, 24);
     }
 
     @Override

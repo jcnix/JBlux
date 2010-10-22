@@ -35,6 +35,7 @@ import org.jblux.client.data.PlayerData;
 import org.jblux.client.data.Quest;
 import org.jblux.client.items.Item;
 import org.jblux.client.network.PlayerDataFactory;
+import org.jblux.util.Commands;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
@@ -62,7 +63,7 @@ public class Player extends Sprite implements Observer {
         this.server = server;
         response = ResponseWaiter.getInstance();
         response.addObserver(this);
-
+        
         setImage(FACE_DOWN, 0);
         move_size = 7;
         coords = data.coords;
@@ -81,7 +82,7 @@ public class Player extends Sprite implements Observer {
     public LinkedList<Quest> getQuests() {
         return player_data.quests;
     }
-
+    
     public void setMapName(String map) {
         map_name = map;
     }
