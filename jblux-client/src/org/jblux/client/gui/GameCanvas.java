@@ -96,7 +96,7 @@ public class GameCanvas implements Observer {
         npcs = new ArrayList<Npc>();
         for(int i = 0; i < n.size(); i++) {
             NpcData data = n.get(i);
-            Npc npc = new Npc(data, this, player.getQuests());
+            Npc npc = new Npc(data, this, player.getData());
             npc.setCoords(data.coords);
             npcs.add(npc);
         }
@@ -175,7 +175,7 @@ public class GameCanvas implements Observer {
         player.update(gc);
         for(int i = 0; i < npcs.size(); i++) {
             Npc npc = npcs.get(i);
-            npc.update(player.getData());
+            npc.update();
         }
 
         gui.update();
@@ -261,7 +261,7 @@ public class GameCanvas implements Observer {
     }
 
     public void talkToNpc(NpcData npc) {
-        gui.openNpcDialogbox(npc.quests);
+        gui.openNpcDialogbox(npc.quests, player.getQuests(), npc.npc_id);
     }
 
     public void openQuestLog(PlayerData p) {

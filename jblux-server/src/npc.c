@@ -64,7 +64,6 @@ char* npc_list_to_json(struct npc_list *npcs)
 
     json = strdup(get_json_str(gen));
     yajl_gen_free(gen);
-    printf("%s\n", json);
     return json;
 }
 

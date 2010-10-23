@@ -101,7 +101,7 @@ int is_quest_complete(struct quest *q)
     {
         return 1;
     }
-
+        
     return 0;
 }
 

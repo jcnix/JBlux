@@ -20,7 +20,6 @@
 
 package org.jblux.client;
 
-import java.util.LinkedList;
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.util.Relation;
 import org.jblux.util.RelationUtil;
@@ -33,15 +32,13 @@ import org.newdawn.slick.SlickException;
 
 public class Npc extends Sprite {
     private NpcData data;
-    private LinkedList<Quest> player_quests;
 
     private boolean available_quests;
     private Image available_quest_icon;
 
-    public Npc(NpcData data, GameCanvas gc, LinkedList<Quest> player_quests) {
+    public Npc(NpcData data, GameCanvas gc, PlayerData player) {
         super(data, gc);
         this.data = data;
-        this.player_quests = player_quests;
         
         Relation r = RelationUtil.upDownRelation(data.direction);
         this.faceDirection(r);
@@ -50,6 +47,22 @@ public class Npc extends Sprite {
         try {
             available_quest_icon = new Image("img/star.gif");
         } catch (SlickException ex) {
+        }
+
+        for(int i = 0; i < data.quests.size(); i++) {
+            Quest q = data.quests.get(i);
+            if(q.min_level <= player.level) {
+                available_quests = true;
+                break;
+            }
+        }
+        //Check if the player has any quests to turn in here
+        for(int i = 0; i < player.quests.size(); i++) {
+            Quest q = player.quests.get(i);
+            if(q.complete == 1 && q.end_npc_id == data.npc_id) {
+                available_quests = true;
+                break;
+            }
         }
     }
 
@@ -77,21 +90,6 @@ public class Npc extends Sprite {
         return data;
     }
 
-    public void update(PlayerData player) {
-        for(int i = 0; i < data.quests.size(); i++) {
-            Quest q = data.quests.get(i);
-            if(q.min_level <= player.level) {
-                available_quests = true;
-                break;
-            }
-        }
-        //Check if the player has any quests to turn in here
-        for(int i = 0; i < player_quests.size(); i++) {
-            Quest q = player_quests.get(i);
-            if(q.complete == 1 && q.end_npc_id == data.npc_id) {
-                available_quests = true;
-                break;
-            }
-        }
+    public void update() {
     }
 }

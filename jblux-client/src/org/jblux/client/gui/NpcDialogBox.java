@@ -32,8 +32,10 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.GUIContext;
 
 public class NpcDialogBox extends BaseDialogBox {
+    private int npc_id;
     private Image boxImage;
     private LinkedList<Quest> quests;
+    private LinkedList<Quest> player_quests;
     private UnicodeFont ufont;
     private GUI gui;
     private Image closeButton;
@@ -50,7 +52,8 @@ public class NpcDialogBox extends BaseDialogBox {
 
     private ArrayList<String> details_lines;
 
-    public NpcDialogBox(GUI gui, ServerCommunicator s, LinkedList<Quest> quests) {
+    public NpcDialogBox(GUI gui, ServerCommunicator s, LinkedList<Quest> quests,
+            LinkedList<Quest> player_quests, int npc_id) {
         super();
         this.gui = gui;
         server = s;
@@ -73,16 +76,25 @@ public class NpcDialogBox extends BaseDialogBox {
 
         acceptButton = new Rectangle(0,0,0,0);
         declineButton = new Rectangle(0,0,0,0);
-        setQuests(quests);
+        setQuests(quests, player_quests, npc_id);
     }
 
-    public void setQuests(LinkedList<Quest> quests) {
+    public void setQuests(LinkedList<Quest> quests, LinkedList<Quest> player_quests, int npc_id) {
         this.quests = quests;
+        this.player_quests = player_quests;
+        this.npc_id = npc_id;
         select_quest = true;
         quest_boxes = new ArrayList<Rectangle>();
 
         int x = 260;
         int y = 125;
+        for(int i = 0; i < player_quests.size(); i++) {
+            Quest q  = player_quests.get(i);
+            System.err.printf("%s: %d\n", q.name, q.complete);
+            if(q.complete == 1 && q.end_npc_id == npc_id) {
+                quests.add(q);
+            }
+        }
         for(int i = 0; i < quests.size(); i++) {
             Quest q = quests.get(i);
             String quest_name = q.name;
@@ -90,6 +102,7 @@ public class NpcDialogBox extends BaseDialogBox {
             quest_boxes.add(r);
             y += ufont.getHeight(quest_name) + 15;
         }
+
         //int width = ufont.getWidth(text);
         //text_lines = width / 300;
     }
