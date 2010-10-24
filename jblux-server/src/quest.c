@@ -126,6 +126,20 @@ void quest_list_to_json(yajl_gen gen, struct quest_list *quests)
     yajl_gen_array_close(gen);
 }
 
+struct quest* get_quest(struct quest_list *quests, int quest_id)
+{
+    struct quest_list *curr = quests;
+    while(curr)
+    {
+        if(curr->quest->id == quest_id)
+        {
+            return curr->quest;
+        }
+        curr = curr->next;
+    }
+    return NULL;
+}
+
 void add_quest(struct quest_list **quests, struct quest *quest)
 {
     struct quest_list* new = malloc(sizeof(struct quest_list));
@@ -134,20 +148,45 @@ void add_quest(struct quest_list **quests, struct quest *quest)
     *quests = new;
 }
 
+void rm_quest(struct quest_list **quests, struct quest *quest)
+{
+    struct quest_list *curr = *quests;
+    struct quest_list *prev = NULL;
+    while(curr)
+    {
+        if(curr->quest->id == quest->id)
+        {
+            if(prev == NULL)
+            {
+                /* We're at the head of the list */
+                *quests = curr->next;
+            }
+            else
+            {
+                prev->next = curr->next;
+            }
+
+            struct quest *quest = curr->quest;
+            free(quest->name);
+            free(quest->details);
+            free(quest->objectives);
+            free(quest->completion_text);
+            free(quest);
+            free(curr);
+            return;
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+}
+
 void delete_quest_list(struct quest_list **quests)
 {
     struct quest_list *curr = *quests;
     struct quest_list *next = NULL;
     while(curr)
     {
-        struct quest *quest = curr->quest;
-        next = curr->next;
-        free(quest->name);
-        free(quest->details);
-        free(quest->objectives);
-        free(quest->completion_text);
-        free(quest);
-        free(curr);
+        rm_quest(quests, curr->quest);
         curr = next;
     }
 }

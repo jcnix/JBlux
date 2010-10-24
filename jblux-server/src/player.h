@@ -37,6 +37,7 @@ struct player_data
 
 char* player_data_to_json(struct player_data *data);
 int player_accept_quest(struct player_data *player, int quest_id);
+int player_complete_quest(struct player_data *player, int quest_id);
 
 #endif
 

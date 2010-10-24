@@ -40,6 +40,7 @@ public class NpcDialogBox extends BaseDialogBox {
     private GUI gui;
     private Image closeButton;
     private Image acceptImage;
+    private Image completeImage;
     private Image declineImage;
 
     private boolean select_quest;
@@ -62,6 +63,7 @@ public class NpcDialogBox extends BaseDialogBox {
             boxImage = new Image("img/dialogbox.png");
             closeButton = new Image("img/closebutton.png");
             acceptImage = new Image("img/accept.png");
+            completeImage = new Image("img/complete.png");
             declineImage = new Image("img/decline.png");
         } catch(SlickException ex) {
         }
@@ -149,8 +151,14 @@ public class NpcDialogBox extends BaseDialogBox {
 
             else if(display_quest) {
                 if(acceptButton.contains(x, y)) {
-                    server.acceptQuest(selected_quest);
-                    gui.closeDialogbox();
+                    if(selected_quest.complete == 1) {
+                        server.completeQuest(selected_quest);
+                        gui.closeDialogbox();
+                    }
+                    else {
+                        server.acceptQuest(selected_quest);
+                        gui.closeDialogbox();
+                    }
                 }
                 else if(declineButton.contains(x, y)) {
                     select_quest = true;
@@ -181,7 +189,10 @@ public class NpcDialogBox extends BaseDialogBox {
                 y += 15;
             }
             ufont.drawString(x, y+50, selected_quest.objectives);
-            acceptImage.draw(250, 450);
+            if(selected_quest.complete == 1)
+                completeImage.draw(250, 450);
+            else
+                acceptImage.draw(250, 450);
             declineImage.draw(450, 450);
         }
     }

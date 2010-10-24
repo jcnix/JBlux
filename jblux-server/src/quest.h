@@ -64,7 +64,9 @@ struct quest_list
 int is_quest_complete(struct quest *q);
 void quest_to_json(yajl_gen gen, struct quest *q);
 void quest_list_to_json(yajl_gen gen, struct quest_list *quests);
+struct quest* get_quest(struct quest_list *quests, int quest_id);
 void add_quest(struct quest_list **quests, struct quest *quest);
+void rm_quest(struct quest_list **quests, struct quest *quest);
 void delete_quest_list(struct quest_list **quests);
 
 #endif

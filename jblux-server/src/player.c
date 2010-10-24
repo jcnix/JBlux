@@ -84,3 +84,16 @@ int player_accept_quest(struct player_data *player, int quest_id)
     return 1;
 }
 
+int player_complete_quest(struct player_data *player, int quest_id)
+{
+    struct quest *quest = get_quest(player->quests, quest_id);
+    if(is_quest_complete(quest))
+    {
+        rm_quest(&player->quests, quest);
+        db_complete_quest_in_log(player->character_id, quest->id);
+        return 1;
+    }
+
+    return 0;
+}
+

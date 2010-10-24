@@ -93,7 +93,6 @@ public class ServerCommunicator {
     public void authenticate(String username, String password, String character_name) {
         String command = String.format("%s %s %s %s", Commands.AUTH, username, password,
                 character_name);
-        System.out.println(command);
         writeString(command);
     }
 
@@ -104,6 +103,11 @@ public class ServerCommunicator {
 
     public void acceptQuest(Quest quest) {
         String command = String.format("%s accept %d", Commands.QUEST, quest.id);
+        writeString(command);
+    }
+
+    public void completeQuest(Quest quest) {
+        String command = String.format("%s complete %d", Commands.QUEST, quest.id);
         writeString(command);
     }
 
