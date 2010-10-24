@@ -102,7 +102,7 @@ struct player_data* db_get_player(char* character_name)
     PGconn *conn = db_connect();
     PGresult *res = NULL;
 
-    char* q = "SELECT user_id, id, name, level, strength, agility, stamina,"
+    char* q = "SELECT user_id, id, name, level, xp, money, strength, agility, stamina,"
         "intelligence, spirit, current_map_id, race_id, class_t_id, x_coord,"
         "y_coord, inventory_id FROM jblux_character WHERE name=$1;";
     int nParams = 1;
@@ -122,6 +122,12 @@ struct player_data* db_get_player(char* character_name)
 
         column++;
         data->level = db_get_int(res, 0, column);
+        
+        column++;
+        data->xp = db_get_int(res, 0, column);
+        
+        column++;
+        data->money = db_get_int(res, 0, column);
 
         column++;
         data->strength = db_get_int(res, 0, column);
@@ -195,6 +201,34 @@ void db_set_map_for_player(int char_id, int map_id, struct coordinates_t coords)
     free(cx);
     free(cy);
     free(cid);
+    PQclear(res);
+    db_disconnect(conn);
+}
+
+void db_save_quest_reward(struct player_data *player)
+{
+    PGconn *conn = db_connect();
+    PGresult *res = NULL;
+
+    char* q = "UPDATE jblux_character SET xp=$1, money=$2 WHERE id=$3;";
+    int nParams = 3;
+    char *cid = NULL;
+    char *cxp = NULL;
+    char *cmoney = NULL;
+    if( (asprintf(&cid, "%d", player->character_id) < 0) ||
+        (asprintf(&cxp, "%d", player->xp) < 0) ||
+        (asprintf(&cmoney, "%d", player->money) < 0))
+    {
+        /* saving the map location isn't _that_ important */
+        db_disconnect(conn);
+        return;
+    }
+    const char* params[3] = { cxp, cmoney, cid };
+    res = db_exec(conn, q, nParams, params);
+
+    free(cid);
+    free(cxp);
+    free(cmoney);
     PQclear(res);
     db_disconnect(conn);
 }

@@ -8,10 +8,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "json.h"
 #include "quest.h"
+#include "json.h"
 #include "types.h"
 #include "db/quest_tbl.h"
+#include "db/db_user_tbl.h"
 
 #define MAX_QUESTS 25
 
@@ -21,6 +22,8 @@ struct player_data
     int character_id;
     char* character_name;
     int level;
+    int xp;
+    int money;
     struct race_t race;
     struct class_t player_class;
     int strength;
@@ -38,6 +41,7 @@ struct player_data
 char* player_data_to_json(struct player_data *data);
 int player_accept_quest(struct player_data *player, int quest_id);
 int player_complete_quest(struct player_data *player, int quest_id);
+void give_quest_reward(struct player_data **player, struct quest *quest);
 
 #endif
 

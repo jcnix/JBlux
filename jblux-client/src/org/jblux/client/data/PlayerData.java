@@ -28,6 +28,8 @@ public class PlayerData extends CharacterData {
     public String map;
     public int user_id;
     public int character_id;
+    int xp;
+    int money;
     public Inventory inventory;
     public LinkedList<Quest> quests;
     public Coordinates coords;

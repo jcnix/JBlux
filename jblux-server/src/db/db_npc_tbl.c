@@ -8,7 +8,7 @@
 /**
  * The player parameter is only for figuring out which quests the
  * npc should have */
-struct npc_data* db_get_npc(int id, struct player_data *player)
+struct npc_data* db_get_npc(int id)
 {
     struct npc_data *npc = malloc(sizeof(struct npc_data));
     PGconn *conn = db_connect();
@@ -64,14 +64,14 @@ struct npc_data* db_get_npc(int id, struct player_data *player)
     column++;
     npc->spirit = db_get_int(res, 0, column);
 
-    npc->quests = db_get_quests_for_npc(id, player);
+    npc->quests = db_get_quests_for_npc(id);
 
     PQclear(res);
     db_disconnect(conn);
     return npc;
 }
 
-struct quest_list* db_get_quests_for_npc(int npc_id, struct player_data *player)
+struct quest_list* db_get_quests_for_npc(int npc_id)
 {
     PGconn *conn = db_connect();
     PGresult *res = NULL;
@@ -96,11 +96,7 @@ struct quest_list* db_get_quests_for_npc(int npc_id, struct player_data *player)
     {
         int id = db_get_int(res, 0,0);
         struct quest *q = db_get_quest(id);
-        if(q->min_level <= player->level &&
-                !have_quest(player->character_id, q->id))
-        {
-            add_quest(&quests, q);
-        }
+        add_quest(&quests, q);
     }
 
     PQclear(res);

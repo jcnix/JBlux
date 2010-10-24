@@ -17,6 +17,8 @@ char* player_data_to_json(struct player_data *data)
     const char* character_id_field =    "character_id";
     const char* character_name_field =  "character_name";
     const char* level_field =           "level";
+    const char* xp_field =              "xp";
+    const char* money_field =           "money";
     const char* race_field =            "race";
     const char* class_field =           "player_class";
     const char* strength_field =        "strength";
@@ -35,6 +37,8 @@ char* player_data_to_json(struct player_data *data)
     json_insert_int(gen, character_id_field, data->character_id);
     json_insert_str(gen, character_name_field, data->character_name);
     json_insert_int(gen, level_field, data->level);
+    json_insert_int(gen, xp_field, data->xp);
+    json_insert_int(gen, money_field, data->money);
 
     yajl_gen_string(gen, (unsigned char*) race_field, strlen(race_field));
     race_to_json(gen, data->race);
@@ -86,14 +90,28 @@ int player_accept_quest(struct player_data *player, int quest_id)
 
 int player_complete_quest(struct player_data *player, int quest_id)
 {
+    printf("completing quest\n");
     struct quest *quest = get_quest(player->quests, quest_id);
     if(is_quest_complete(quest))
     {
-        rm_quest(&player->quests, quest);
-        db_complete_quest_in_log(player->character_id, quest->id);
+        printf("give reward\n");
+        //rm_quest(&player->quests, quest);
+        //db_complete_quest_in_log(player->character_id, quest->id);
+        give_quest_reward(&player, quest);
         return 1;
     }
 
     return 0;
+}
+
+void give_quest_reward(struct player_data **player, struct quest *quest)
+{
+    int xp = quest->reward_xp;
+    int money = quest->reward_money;
+    printf("money: %d\n", money);
+    (*player)->xp += xp;
+    (*player)->money += money;
+    printf("reward: %d xp %d money\n", (*player)->xp, (*player)->money);
+    db_save_quest_reward(*player);
 }
 

@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <yajl/yajl_gen.h>
-#include "player.h"
 #include "types.h"
 
 char* get_json_str(yajl_gen gen);

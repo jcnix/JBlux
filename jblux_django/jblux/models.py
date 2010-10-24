@@ -20,6 +20,8 @@ class Character(models.Model):
     race = models.ForeignKey('Race')
     class_t = models.ForeignKey('Class')
     level = models.IntegerField(default=1)
+    xp = models.IntegerField(default=0)
+    money = models.IntegerField(default=0)
     inventory = models.ForeignKey('Inventory', blank=True, null=True, related_name='items')
     strength = models.IntegerField()
     agility = models.IntegerField()

@@ -142,7 +142,6 @@ void db_add_quest_to_log(int player_id, int quest_id)
 
     char *q = "INSERT INTO jblux_questlog(character_id, quest_id, active) "
         "VALUES($1, $2, TRUE);";
-    printf("%s\n", q);
     int nParams = 2;
     char* pid = NULL;
     char* qid = NULL;
@@ -167,7 +166,6 @@ void db_complete_quest_in_log(int player_id, int quest_id)
 
     char *q = "UPDATE jblux_questlog SET active=false WHERE character_id=$1 "
         "AND quest_id=$2;";
-    printf("%s\n", q);
     int nParams = 2;
     char* pid = NULL;
     char* qid = NULL;

@@ -96,7 +96,7 @@ int send_player_data_to_self(struct client_t *client, char* char_name)
 void send_map_info(struct client_t *client, struct map_t *map_st)
 {
     /* TODO: get Items and send to player */
-    struct npc_list *npcs = db_get_npcs_on_map(map_st->id, client->data);
+    struct npc_list *npcs = db_get_npcs_on_map(map_st->id);
     char* npc_json = npc_list_to_json(npcs);
     char* npc_enc = base64_encode(npc_json);
     char* command = NULL;
