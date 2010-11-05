@@ -45,8 +45,8 @@ public class GUI {
         inputBox.setCursorVisible(true);
     }
 
-    public void openNpcDialogbox(LinkedList<Quest> quests, LinkedList<Quest> player_quests, int npc_id) {
-        dialog_box = new NpcDialogBox(this, server, quests, player_quests, npc_id);
+    public void openNpcDialogbox(LinkedList<Quest> quests) {
+        dialog_box = new NpcDialogBox(this, server, quests);
     }
 
     public void openQuestDialogox(LinkedList<Quest> quests) {

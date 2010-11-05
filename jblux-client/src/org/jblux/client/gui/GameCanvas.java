@@ -21,6 +21,7 @@
 package org.jblux.client.gui;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 import org.jblux.client.GameMap;
@@ -34,6 +35,7 @@ import org.jblux.client.network.ServerCommunicator;
 import org.jblux.util.Relation;
 import org.jblux.client.data.NpcData;
 import org.jblux.client.data.PlayerData;
+import org.jblux.client.data.Quest;
 import org.jblux.client.network.NpcDataFactory;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.Color;
@@ -261,7 +263,16 @@ public class GameCanvas implements Observer {
     }
 
     public void talkToNpc(NpcData npc) {
-        gui.openNpcDialogbox(npc.quests, player.getQuests(), npc.npc_id);
+        LinkedList<Quest> quests = new LinkedList<Quest>();
+        quests.addAll(npc.quests);
+        LinkedList<Quest> pq = player.getQuests();
+        for(int i = 0; i < pq.size(); i++) {
+            Quest q  = pq.get(i);
+            if(q.complete == 1 && q.end_npc_id == npc.npc_id) {
+                quests.add(q);
+            }
+        }
+        gui.openNpcDialogbox(quests);
     }
 
     public void openQuestLog(PlayerData p) {
