@@ -90,13 +90,11 @@ int player_accept_quest(struct player_data *player, int quest_id)
 
 int player_complete_quest(struct player_data *player, int quest_id)
 {
-    printf("completing quest\n");
     struct quest *quest = get_quest(player->quests, quest_id);
     if(is_quest_complete(quest))
     {
-        printf("give reward\n");
-        //rm_quest(&player->quests, quest);
-        //db_complete_quest_in_log(player->character_id, quest->id);
+        rm_quest(&player->quests, quest);
+        db_complete_quest_in_log(player->character_id, quest->id);
         give_quest_reward(&player, quest);
         return 1;
     }
@@ -108,10 +106,8 @@ void give_quest_reward(struct player_data **player, struct quest *quest)
 {
     int xp = quest->reward_xp;
     int money = quest->reward_money;
-    printf("money: %d\n", money);
     (*player)->xp += xp;
     (*player)->money += money;
-    printf("reward: %d xp %d money\n", (*player)->xp, (*player)->money);
     db_save_quest_reward(*player);
 }
 
