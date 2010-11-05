@@ -18,6 +18,7 @@
 #include "base64.h"
 #include "db/db_user_tbl.h"
 #include "json.h"
+#include "player.h"
 #include "relation.h"
 #include "types.h"
 

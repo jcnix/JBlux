@@ -17,19 +17,5 @@ struct inventory_t
     int id;
 };
 
-struct race_t
-{
-    int id;
-    char* name;
-    char* sprite_sheet;
-    int sprite_height;
-};
-
-struct class_t
-{
-    int id;
-    char* name;
-};
-
 #endif
 

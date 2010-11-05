@@ -64,14 +64,12 @@ struct npc_data* db_get_npc(int id)
     column++;
     npc->spirit = db_get_int(res, 0, column);
 
-    npc->quests = db_get_quests_for_npc(id);
-
     PQclear(res);
     db_disconnect(conn);
     return npc;
 }
 
-struct quest_list* db_get_quests_for_npc(int npc_id)
+struct quest_list* db_get_quests_for_npc(int npc_id, struct player_data* player)
 {
     PGconn *conn = db_connect();
     PGresult *res = NULL;
@@ -96,7 +94,11 @@ struct quest_list* db_get_quests_for_npc(int npc_id)
     {
         int id = db_get_int(res, 0,0);
         struct quest *q = db_get_quest(id);
-        add_quest(&quests, q);
+        if(q->min_level <= player->level &&
+                !have_quest(player->character_id, q->id))
+        {
+            add_quest(&quests, q);
+        }
     }
 
     PQclear(res);

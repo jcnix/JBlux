@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <yajl/yajl_gen.h>
+#include "character.h"
 #include "json.h"
 #include "quest.h"
 

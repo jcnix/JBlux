@@ -13,6 +13,7 @@ _OBJ= 	main.o \
 	 	map.o \
 	  	npc.o \
 		player.o \
+		character.o \
 	  	quest.o \
 	  	relation.o \
 	  	db/db.o \

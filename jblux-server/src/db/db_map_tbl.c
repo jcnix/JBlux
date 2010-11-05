@@ -106,7 +106,7 @@ void db_get_items_on_map(struct map_t *map)
     db_disconnect(conn);*/
 }
 
-struct npc_list* db_get_npcs_on_map(int map_id)
+struct npc_list* db_get_npcs_on_map(int map_id, struct player_data *player)
 {
     PGconn *conn = db_connect();
     PGresult *res = NULL;
@@ -132,6 +132,7 @@ struct npc_list* db_get_npcs_on_map(int map_id)
         int column = 0;
         int npc_id = db_get_int(res, i, column);
         struct npc_data *data = db_get_npc(npc_id);
+        data->quests = db_get_quests_for_npc(npc_id, player);
         
         column++;
         data->direction = db_get_str(res, i, column);
