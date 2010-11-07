@@ -32,13 +32,14 @@ import org.newdawn.slick.SlickException;
 
 public class Npc extends Sprite {
     private NpcData data;
-
     private boolean available_quests;
     private Image available_quest_icon;
+    private PlayerData player;
 
     public Npc(NpcData data, GameCanvas gc, PlayerData player) {
         super(data, gc);
         this.data = data;
+        this.player = player;
         
         Relation r = RelationUtil.upDownRelation(data.direction);
         this.faceDirection(r);
@@ -56,14 +57,8 @@ public class Npc extends Sprite {
                 break;
             }
         }
-        //Check if the player has any quests to turn in here
-        for(int i = 0; i < player.quests.size(); i++) {
-            Quest q = player.quests.get(i);
-            if(q.complete == 1 && q.end_npc_id == data.npc_id) {
-                available_quests = true;
-                break;
-            }
-        }
+
+        check_quests(player);
     }
 
     @Override
@@ -84,6 +79,19 @@ public class Npc extends Sprite {
     @Override
     public void draw_name() {
         return;
+    }
+
+    /**
+     * Check if the player has any quests to turn in here
+     */
+    public void check_quests(PlayerData p) {
+        for(int i = 0; i < p.quests.size(); i++) {
+            Quest q = p.quests.get(i);
+            if(q.complete == 1 && q.end_npc_id == data.npc_id) {
+                available_quests = true;
+                break;
+            }
+        }
     }
 
     public NpcData getData() {

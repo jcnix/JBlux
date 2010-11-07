@@ -36,7 +36,16 @@
                     <target>clean</target>
                     <target>jar</target>
                 </action>
+                <action name="debug">
+                    <script>nbproject/ide-targets.xml</script>
+                    <target>debug-nb</target>
+                </action>
             </ide-actions>
+            <export>
+                <type>folder</type>
+                <location>debug</location>
+                <build-target>jar</build-target>
+            </export>
             <view>
                 <items>
                     <source-folder style="packages">
@@ -52,6 +61,7 @@
                     <ide-action name="rebuild"/>
                     <ide-action name="clean"/>
                     <ide-action name="run"/>
+                    <ide-action name="debug"/>
                 </context-menu>
             </view>
             <subprojects/>
@@ -60,6 +70,7 @@
             <compilation-unit>
                 <package-root>src</package-root>
                 <classpath mode="compile">lib/slick.jar:lib/jblux-common.jar:lib/gson-1.5.jar</classpath>
+                <built-to>debug</built-to>
                 <source-level>1.5</source-level>
             </compilation-unit>
         </java-data>

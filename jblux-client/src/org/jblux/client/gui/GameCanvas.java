@@ -46,6 +46,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
 public class GameCanvas implements Observer {
+    private static GameCanvas gc;
     private ServerCommunicator server;
     private Player player;
     private Players players;
@@ -60,6 +61,7 @@ public class GameCanvas implements Observer {
 
     private boolean update_map;
     private boolean update_info;
+    private boolean update_npcs;
     private ResponseWaiter response;
     private String map_name;
     private ArrayList<NpcData> npc_data;
@@ -67,12 +69,8 @@ public class GameCanvas implements Observer {
     private boolean new_player;
     private PlayerData new_data;
 
-    public GameCanvas(ServerCommunicator s) {
+    protected GameCanvas(ServerCommunicator s) {
         server = s;
-        init();
-    }
-
-    public void init() {
         players = Players.getInstance();
         npcs = new ArrayList<Npc>();
         npc_data = new ArrayList<NpcData>();
@@ -84,6 +82,13 @@ public class GameCanvas implements Observer {
         developer_mode = false;
         new_player = false;
         new_data = null;
+    }
+
+    public static GameCanvas getInstance(ServerCommunicator s) {
+        if(gc == null) {
+            gc = new GameCanvas(s);
+        }
+        return gc;
     }
 
     public void setGui(GUI gui) {
@@ -175,9 +180,12 @@ public class GameCanvas implements Observer {
         }
 
         player.update(gc);
-        for(int i = 0; i < npcs.size(); i++) {
-            Npc npc = npcs.get(i);
-            npc.update();
+        if(update_npcs) {
+            for(int i = 0; i < npcs.size(); i++) {
+                Npc n = npcs.get(i);
+                n.check_quests(this.player.getData());
+            }
+            update_npcs = false;
         }
 
         gui.update();
@@ -277,6 +285,10 @@ public class GameCanvas implements Observer {
 
     public void openQuestLog(PlayerData p) {
         gui.openQuestDialogox(p.quests);
+    }
+
+    public void updateNpcs() {
+        update_npcs = true;
     }
 
     public void update(Observable o, Object arg) {

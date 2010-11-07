@@ -67,7 +67,7 @@ public class GameplayState extends BasicGameState {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         GUI gui = new GUI(gc, server);
-        canvas = new GameCanvas(server);
+        canvas = GameCanvas.getInstance(server);
         canvas.setGui(gui);
     }
  

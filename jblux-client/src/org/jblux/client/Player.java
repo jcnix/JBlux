@@ -35,7 +35,6 @@ import org.jblux.client.data.PlayerData;
 import org.jblux.client.data.Quest;
 import org.jblux.client.items.Item;
 import org.jblux.client.network.PlayerDataFactory;
-import org.jblux.util.Commands;
 import org.jblux.util.Coordinates;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
@@ -282,6 +281,8 @@ public class Player extends Sprite implements Observer {
         if(args[0].equals("player")) {
             if(args[1].equals("self")) {
                 this.player_data = PlayerDataFactory.getDataFromBase64(args[2]);
+                canvas = GameCanvas.getInstance(server);
+                canvas.updateNpcs();
             }
         }
     }
