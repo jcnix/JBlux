@@ -1,5 +1,5 @@
 /**
- * Commands.java
+ * File: NpcJob.java
  *
  * @author Casey Jones
  *
@@ -18,19 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jblux.util;
+package org.jblux.client.data;
 
-public class Commands {
-    public static final String MOVE = "move";
-    public static final String AUTH = "auth";
-    public static final String CONNECT = "connect";
-    public static final String DISCONNECT = "disconnect";
-    public static final String CHAT = "chat";
-    public static final String MAP = "map";
-    public static final String ITEM = "item";
-    public static final String DROP = "drop";
-    public static final String PICKUP = "pickup";
-    public static final String PLAYER = "player";
-    public static final String QUEST = "quest";
-    public static final String ATTACK = "attack";
+public class NpcJob {
+    public static final int HOSTILE = -1;
 }

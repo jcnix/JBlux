@@ -105,6 +105,24 @@ struct coordinates_t get_map_entrance(struct map_t *map, enum Relation rel)
     return coords;
 }
 
+struct npc_data* get_enemy_on_map(int npc_id, struct map_t *map)
+{
+    struct npc_list *en = map->enemies;
+    struct npc_data *npc = NULL;
+
+    while(en)
+    {
+        npc = en->npc;
+        if(npc->map_id == npc_id)
+        {
+            break;
+        }
+        en = en->next;
+    }
+
+    return npc;
+}
+
 void cleanup_maps()
 {
     delete_map_list(&maps);

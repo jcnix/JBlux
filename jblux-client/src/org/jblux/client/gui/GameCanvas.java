@@ -270,6 +270,10 @@ public class GameCanvas implements Observer {
         return data;
     }
 
+    public void attackNpc(NpcData npc) {
+        server.attackNpc(npc);
+    }
+
     public void talkToNpc(NpcData npc) {
         LinkedList<Quest> quests = new LinkedList<Quest>();
         quests.addAll(npc.quests);

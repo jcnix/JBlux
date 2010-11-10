@@ -31,6 +31,7 @@ import org.jblux.client.network.ResponseWaiter;
 import org.jblux.client.network.ServerCommunicator;
 import org.jblux.util.Relation;
 import org.jblux.client.data.NpcData;
+import org.jblux.client.data.NpcJob;
 import org.jblux.client.data.PlayerData;
 import org.jblux.client.data.Quest;
 import org.jblux.client.items.Item;
@@ -150,7 +151,13 @@ public class Player extends Sprite implements Observer {
                 if(input.isMousePressed(Input.MOUSE_RIGHT_BUTTON)) {
                     NpcData npc = canvas.isNpcAt(input.getMouseX(), input.getMouseY());
                     if(npc != null) {
-                        canvas.talkToNpc(npc);
+                        if(npc.job == NpcJob.HOSTILE)
+                        {
+                            canvas.attackNpc(npc);
+                        }
+                        else {
+                            canvas.talkToNpc(npc);
+                        }
                     }
                 }
             }

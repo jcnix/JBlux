@@ -23,7 +23,7 @@ void db_get_all_maps(struct map_list **maps)
         
         int column = 0;
         map->id = db_get_int(res, i, column);
-       
+
         column++;
         map->name = db_get_str(res, i, column);
     
@@ -45,6 +45,7 @@ void db_get_all_maps(struct map_list **maps)
         map->top_ent     =   db_get_map_entrance(map->id, ABOVE);
         map->bottom_ent  =   db_get_map_entrance(map->id, BELOW);
 
+        map->enemies = db_get_enemies_on_map(map->id);
         /* TODO: initialize map->items */
         map->items = NULL;
         add_map(maps, map);
@@ -111,7 +112,7 @@ struct npc_list* db_get_npcs_on_map(int map_id, struct player_data *player)
     PGconn *conn = db_connect();
     PGresult *res = NULL;
 
-    char* q = "SELECT npc_id, direction, x_coord, y_coord FROM jblux_mapnpcs "
+    char* q = "SELECT id, npc_id, direction, x_coord, y_coord FROM jblux_mapnpcs "
         "WHERE map_t_id=$1;";
     int nParams = 1;
     char* cid = NULL;
@@ -130,8 +131,12 @@ struct npc_list* db_get_npcs_on_map(int map_id, struct player_data *player)
     for(i = 0; i < num_npcs; i++)
     {
         int column = 0;
+        int map_id = db_get_int(res, i, column);
+
+        column++;
         int npc_id = db_get_int(res, i, column);
         struct npc_data *data = db_get_npc(npc_id);
+        data->map_id = map_id;
         data->quests = db_get_quests_for_npc(npc_id, player);
         
         column++;
@@ -148,6 +153,55 @@ struct npc_list* db_get_npcs_on_map(int map_id, struct player_data *player)
     PQclear(res);
     db_disconnect(conn);
     return npcs;
+}
+
+struct npc_list* db_get_enemies_on_map(int map_id)
+{
+    PGconn *conn = db_connect();
+    PGresult *res = NULL;
+
+    char* q = "SELECT id, npc_id, direction, x_coord, y_coord FROM jblux_mapnpcs "
+        "WHERE map_t_id=$1;";
+    int nParams = 1;
+    char* cid = NULL;
+    if(asprintf(&cid, "%d", map_id) < 0)
+    {
+        return NULL;
+    }
+    const char* params[1] = { cid };
+    res = db_exec(conn, q, nParams, params);
+    free(cid);
+
+    int num_npcs = PQntuples(res);
+    struct npc_list *enemies = NULL;
+
+    int i;
+    for(i = 0; i < num_npcs; i++)
+    {
+        int column = 0;
+        int map_id = db_get_int(res, i, column);
+
+        column++;
+        int npc_id = db_get_int(res, i, column);
+        struct npc_data *data = db_get_npc(npc_id);
+        if(data->job == -1)
+        {
+            data->map_id = map_id;
+            column++;
+            data->direction = db_get_str(res, i, column);
+
+            column++;
+            data->coords.x = db_get_int(res, i, column);
+            column++;
+            data->coords.y = db_get_int(res, i, column);
+
+            add_npc(&enemies, data);
+        }
+    }
+
+    PQclear(res);
+    db_disconnect(conn);
+    return enemies;
 }
 
 struct coordinates_t db_get_map_entrance(int map_id, enum Relation r)

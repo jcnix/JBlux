@@ -29,6 +29,7 @@ char* db_get_map_name_for_id(int id);
 int db_get_map_id_for_name(char* name);
 void db_get_items_on_map(struct map_t *map);
 struct npc_list* db_get_npcs_on_map(int map_id, struct player_data *player);
+struct npc_list* db_get_enemies_on_map(int map_id);
 struct coordinates_t db_get_map_entrance(int map_id, enum Relation r);
 
 #endif

@@ -25,7 +25,8 @@ import org.jblux.util.Coordinates;
 
 public class NpcData extends CharacterData {
     public int npc_id;
-    
+    public int map_id;
+
     /* Job will be things like Vendor or Enemy */
     public int job;
     

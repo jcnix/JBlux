@@ -14,11 +14,13 @@ char* npc_list_to_json(struct npc_list *npcs)
 
     /* Field names */
     const char* npc_id_field =          "npc_id";
+    const char* map_id_field =          "map_id";
     const char* job_field =             "job";
     const char* character_name_field =  "character_name";
     const char* sprite_sheet_field =    "sprite_sheet";
     const char* direction_field =       "direction";
     const char* level_field =           "level";
+    const char* hp_field =              "hp";
     const char* race_field =            "race";
     const char* class_field =           "player_class";
     const char* strength_field =        "strength";
@@ -34,6 +36,7 @@ char* npc_list_to_json(struct npc_list *npcs)
         struct npc_data *data = npcs->npc;
         yajl_gen_map_open(gen);
         json_insert_int(gen, npc_id_field, data->npc_id);
+        json_insert_int(gen, map_id_field, data->map_id);
         json_insert_int(gen, job_field, data->job);
         json_insert_str(gen, character_name_field, data->character_name);
         json_insert_str(gen, sprite_sheet_field, data->sprite_sheet);
@@ -41,6 +44,7 @@ char* npc_list_to_json(struct npc_list *npcs)
        
         quest_list_to_json(gen, data->quests);
         json_insert_int(gen, level_field, data->level);
+        json_insert_int(gen, hp_field, data->hp);
         
         yajl_gen_string(gen, (unsigned char*) race_field, strlen(race_field));
         race_to_json(gen, data->race);
@@ -65,6 +69,21 @@ char* npc_list_to_json(struct npc_list *npcs)
     json = strdup(get_json_str(gen));
     yajl_gen_free(gen);
     return json;
+}
+
+void attack_npc(int npc_id, int map_id)
+{
+    struct map_t *map = get_map_for_id(map_id);
+    struct npc_data *npc = get_enemy_on_map(npc_id, map);
+    /* TODO: calculate damage */
+    npc->hp -= 1;
+    printf("hp: %d\n", npc->hp);
+    
+    /* Npc is dead */
+    if(npc->hp <= 0)
+    {
+        printf("npc died\n");
+    }
 }
 
 void add_npc(struct npc_list **npcs, struct npc_data *npc)

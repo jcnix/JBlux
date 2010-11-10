@@ -15,7 +15,7 @@ struct npc_data* db_get_npc(int id)
     PGresult *res = NULL;
 
     char* q = "SELECT name, job, race_id, class_t_id, sprite_sheet, level, "
-        "strength, agility, stamina, intelligence, spirit "
+        "hp, strength, agility, stamina, intelligence, spirit "
         "FROM jblux_npc WHERE id=$1;";
     int nParams = 1;
 
@@ -48,6 +48,9 @@ struct npc_data* db_get_npc(int id)
 
     column++;
     npc->level = db_get_int(res, 0, column);
+    
+    column++;
+    npc->hp = db_get_int(res, 0, column);
     
     column++;
     npc->strength = db_get_int(res, 0, column);

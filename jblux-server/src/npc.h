@@ -11,11 +11,13 @@
 #include <yajl/yajl_gen.h>
 #include "character.h"
 #include "json.h"
+#include "map.h"
 #include "quest.h"
 
 struct npc_data
 {
     int npc_id;
+    int map_id;
     int job;
     char* sprite_sheet;
     char* direction;
@@ -24,6 +26,7 @@ struct npc_data
 
     char* character_name;
     int level;
+    int hp;
     struct race_t race;
     struct class_t player_class;
     int strength;
@@ -40,6 +43,7 @@ struct npc_list
 };
 
 char* npc_list_to_json(struct npc_list *npcs);
+void attack_npc(int id, int map_id);
 void add_quests_to_npcs(struct npc_list **npcs);
 void add_npc(struct npc_list **npcs, struct npc_data *npc);
 void delete_npcs(struct npc_list **npcs);

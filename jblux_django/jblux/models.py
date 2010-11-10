@@ -176,6 +176,7 @@ class Npc(models.Model):
     job = models.IntegerField()
     sprite_sheet = models.CharField(max_length=50,null=True, blank=True)
     level = models.IntegerField(default=1)
+    hp = models.IntegerField(default=1)
     strength = models.IntegerField()
     agility = models.IntegerField()
     stamina = models.IntegerField()

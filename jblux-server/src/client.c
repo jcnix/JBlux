@@ -345,6 +345,11 @@ void parse_command(struct client_t *client, char* command)
             send_player_data_to_self(client, client->data->character_name);
         }
     }
+    else if(strncmp(command, "attack", 6) == 0)
+    {
+        int id = atoi(strtok(NULL, " "));
+        attack_npc(id, client->data->map_id);
+    }
     else if(strncmp(command, "disconnect", 10) == 0)
     {
         client->connected = 0;

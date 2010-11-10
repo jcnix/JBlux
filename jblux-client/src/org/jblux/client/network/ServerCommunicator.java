@@ -28,6 +28,7 @@ import java.net.UnknownHostException;
 import org.jblux.client.JBlux;
 import org.jblux.client.Players;
 import org.jblux.client.Sprite;
+import org.jblux.client.data.NpcData;
 import org.jblux.client.gui.observers.ChatBoxObserver;
 import org.jblux.client.gui.observers.NewPlayerObserver;
 import org.jblux.util.Commands;
@@ -80,8 +81,12 @@ public class ServerCommunicator {
     }
 
     public void goto_map(Relation r, String map_name) {
-        String map = "";
         String command = String.format("%s goto %s %s", Commands.MAP, r, map_name);
+        writeString(command);
+    }
+
+    public void attackNpc(NpcData npc) {
+        String command = String.format("%s %d", Commands.ATTACK, npc.map_id);
         writeString(command);
     }
 
