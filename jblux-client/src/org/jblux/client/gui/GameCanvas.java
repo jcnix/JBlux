@@ -38,6 +38,7 @@ import org.jblux.client.data.PlayerData;
 import org.jblux.client.data.Quest;
 import org.jblux.client.network.NpcDataFactory;
 import org.jblux.util.Coordinates;
+import org.jblux.util.MapGrid;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -271,7 +272,9 @@ public class GameCanvas implements Observer {
     }
 
     public void attackNpc(NpcData npc) {
-        server.attackNpc(npc);
+        if(MapGrid.is_in_range(player.getCoords(), npc.coords, 1)) {
+            server.attackNpc(npc);
+        }
     }
 
     public void talkToNpc(NpcData npc) {

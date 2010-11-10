@@ -20,7 +20,7 @@
 
 package org.jblux.util;
 
-import org.jblux.util.Coordinates;
+import org.jblux.client.data.NpcData;
 
 /**
  * Given a set of Coordinates, find which tile that point is in.
@@ -28,6 +28,8 @@ import org.jblux.util.Coordinates;
  * @author casey
  */
 public class MapGrid {
+    public final static int tile_size = 32;
+
     private MapGrid() {
     }
 
@@ -38,11 +40,25 @@ public class MapGrid {
     public static Coordinates getTile(Coordinates coords) {
         Coordinates tile_coords = new Coordinates();
 
-        int diff_x = coords.x % 32;
-        int diff_y = coords.y % 32;
+        int diff_x = coords.x % tile_size;
+        int diff_y = coords.y % tile_size;
         tile_coords.x = coords.x - diff_x;
         tile_coords.y = coords.y - diff_y;
         
         return tile_coords;
+    }
+
+    public static boolean is_in_range(Coordinates object, Coordinates target, int tiles) {
+        int a = object.x - target.x;
+        int b = object.y - target.y;
+        int c = (int) Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+        
+        int t = c / tile_size;
+        if(t < tiles) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
