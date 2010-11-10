@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-packassge org.jblux.client;
+package org.jblux.client;
 
 import org.jblux.client.gui.GameCanvas;
 import org.jblux.util.Relation;
