@@ -131,12 +131,15 @@ struct npc_list* db_get_npcs_on_map(int map_id, struct player_data *player)
     for(i = 0; i < num_npcs; i++)
     {
         int column = 0;
-        int map_id = db_get_int(res, i, column);
+        int unique_id = db_get_int(res, i, column);
 
         column++;
         int npc_id = db_get_int(res, i, column);
         struct npc_data *data = db_get_npc(npc_id);
+        data->unique_id = unique_id;
         data->map_id = map_id;
+        printf("db_unique: %d\n", data->unique_id);
+        printf("db_map: %d\n", data->map_id);
         data->quests = db_get_quests_for_npc(npc_id, player);
         
         column++;
@@ -179,13 +182,14 @@ struct npc_list* db_get_enemies_on_map(int map_id)
     for(i = 0; i < num_npcs; i++)
     {
         int column = 0;
-        int map_id = db_get_int(res, i, column);
+        int unique_id = db_get_int(res, i, column);
 
         column++;
         int npc_id = db_get_int(res, i, column);
         struct npc_data *data = db_get_npc(npc_id);
         if(data->job == -1)
         {
+            data->unique_id = unique_id;
             data->map_id = map_id;
             column++;
             data->direction = db_get_str(res, i, column);

@@ -16,6 +16,7 @@ _OBJ= 	main.o \
 		character.o \
 	  	quest.o \
 	  	relation.o \
+		world.o \
 	  	db/db.o \
 	  	db/db_user_tbl.o \
 	  	db/db_map_tbl.o \

@@ -50,7 +50,8 @@ struct npc_data* db_get_npc(int id)
     npc->level = db_get_int(res, 0, column);
     
     column++;
-    npc->hp = db_get_int(res, 0, column);
+    npc->max_hp = db_get_int(res, 0, column);
+    npc->hp = npc->max_hp;
     
     column++;
     npc->strength = db_get_int(res, 0, column);

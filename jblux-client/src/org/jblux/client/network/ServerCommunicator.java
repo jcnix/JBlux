@@ -295,6 +295,14 @@ class ServerListener extends Thread {
                 //Don't do anything
             }
         }
+        else if(command.startsWith(Commands.NPC)) {
+            if(c0[1].equals("add")) {
+                notify_observers(command);
+            }
+            else if(c0[1].equals("rm")) {
+                notify_observers(command);
+            }
+        }
         else if(command.startsWith("put")) {
             try {
                 Item item = (Item) Base64.decodeToObject(c0[2]);

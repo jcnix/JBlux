@@ -15,9 +15,10 @@
 #include <unistd.h>
 #include <netinet/in.h>
 #include <pthread.h>
-#include "base64.h"
 #include "db/db_user_tbl.h"
+#include "base64.h"
 #include "json.h"
+#include "map.h"
 #include "player.h"
 #include "relation.h"
 #include "types.h"

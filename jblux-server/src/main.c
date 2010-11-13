@@ -13,7 +13,7 @@
 #include <signal.h>
 #include "client.h"
 #include "map.h"
-#include "types.h"
+#include "world.h"
 
 #define MAXPENDING 20 
 
@@ -83,6 +83,10 @@ int main(int argc, char** argv)
 
     /* Initialize and cache all maps from DB */
     init_maps();
+
+    /* Start the game world */
+    pthread_t world_thread;
+    pthread_create(&world_thread, NULL, init_world, NULL);
 
     while(1)
     {

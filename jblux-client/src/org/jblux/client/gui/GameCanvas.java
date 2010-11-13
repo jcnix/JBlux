@@ -37,6 +37,7 @@ import org.jblux.client.data.NpcData;
 import org.jblux.client.data.PlayerData;
 import org.jblux.client.data.Quest;
 import org.jblux.client.network.NpcDataFactory;
+import org.jblux.util.Commands;
 import org.jblux.util.Coordinates;
 import org.jblux.util.MapGrid;
 import org.newdawn.slick.Color;
@@ -63,6 +64,7 @@ public class GameCanvas implements Observer {
     private boolean update_map;
     private boolean update_info;
     private boolean update_npcs;
+    private boolean add_npc;
     private ResponseWaiter response;
     private String map_name;
     private ArrayList<NpcData> npc_data;
@@ -104,10 +106,14 @@ public class GameCanvas implements Observer {
         npcs = new ArrayList<Npc>();
         for(int i = 0; i < n.size(); i++) {
             NpcData data = n.get(i);
-            Npc npc = new Npc(data, this, player.getData());
-            npc.setCoords(data.coords);
-            npcs.add(npc);
+            addNpc(data);
         }
+    }
+
+    public void addNpc(NpcData data) {
+        Npc npc = new Npc(data, this, player.getData());
+        npc.setCoords(data.coords);
+        npcs.add(npc);
     }
 
     /**
@@ -178,6 +184,9 @@ public class GameCanvas implements Observer {
         if(update_info) {
             update_info = false;
             setNpcs(npc_data);
+        }
+        if(add_npc) {
+            addNpc(npc_data.get(0));
         }
 
         player.update(gc);
@@ -317,9 +326,26 @@ public class GameCanvas implements Observer {
                 map_coords = c;
                 update_map = true;
             }
-            if(sarg.startsWith("info")) {
+            else if(sarg.startsWith("info")) {
                 npc_data = NpcDataFactory.getArrayFromBase64(args[2]);
                 update_info = true;
+            }
+            else if(sarg.startsWith(Commands.NPC)) {
+                if(args[1].equals("add")) {
+                    NpcData n = NpcDataFactory.getDataFromBase64(args[2]);
+                    npc_data.add(n);
+                    add_npc = true;
+                }
+                else if(args[1].equals("rm")) {
+                    System.out.println("rm npc");
+                    int unique_id = Integer.parseInt(args[2]);
+                    for(int i = 0; i < npcs.size(); i++) {
+                        Npc npc = npcs.get(i);
+                        if(npc.getData().unique_id == unique_id) {
+                            npcs.remove(npc);
+                        }
+                    }
+                }
             }
         }
         else if(arg instanceof PlayerData) {

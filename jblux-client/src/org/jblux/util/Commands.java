@@ -33,4 +33,5 @@ public class Commands {
     public static final String PLAYER = "player";
     public static final String QUEST = "quest";
     public static final String ATTACK = "attack";
+    public static final String NPC = "npc";
 }
