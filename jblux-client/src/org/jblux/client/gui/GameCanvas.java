@@ -186,6 +186,7 @@ public class GameCanvas implements Observer {
             setNpcs(npc_data);
         }
         if(add_npc) {
+            add_npc = false;
             addNpc(npc_data.get(0));
         }
 
@@ -337,7 +338,6 @@ public class GameCanvas implements Observer {
                     add_npc = true;
                 }
                 else if(args[1].equals("rm")) {
-                    System.out.println("rm npc");
                     int unique_id = Integer.parseInt(args[2]);
                     for(int i = 0; i < npcs.size(); i++) {
                         Npc npc = npcs.get(i);

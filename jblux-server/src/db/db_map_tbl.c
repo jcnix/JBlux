@@ -138,8 +138,6 @@ struct npc_list* db_get_npcs_on_map(int map_id, struct player_data *player)
         struct npc_data *data = db_get_npc(npc_id);
         data->unique_id = unique_id;
         data->map_id = map_id;
-        printf("db_unique: %d\n", data->unique_id);
-        printf("db_map: %d\n", data->map_id);
         data->quests = db_get_quests_for_npc(npc_id, player);
         
         column++;
