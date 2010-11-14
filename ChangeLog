@@ -1,3 +1,12 @@
+11-14-2010 Update
+*****************
+- Improve line splitting
+- Make sure player gets set as offline when they exit.
+- Improve quest features
+	- Can now finish quests
+	- Players will receive reward for completing quests
+- Basic combat
+
 10-17-2010 Update
 *****************
 - L key shows Player's Quest Log
