@@ -196,6 +196,7 @@ struct npc_list* db_get_enemies_on_map(int map_id)
             data->coords.x = db_get_int(res, i, column);
             column++;
             data->coords.y = db_get_int(res, i, column);
+            data->quests = NULL;
 
             add_npc(&enemies, data);
         }
