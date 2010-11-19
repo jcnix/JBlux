@@ -13,9 +13,11 @@
 #include <unistd.h>
 #include "client.h"
 #include "npc.h"
+#include "player_data.h"
 
 void* init_world();
 void add_dead_npc(struct npc_data *npc);
+void add_aggro_npc(struct npc_data *npc);
 
 #endif
 

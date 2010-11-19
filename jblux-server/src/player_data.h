@@ -18,6 +18,8 @@ struct player_data
     int level;
     int xp;
     int money;
+    int max_hp;
+    int hp;
     struct race_t race;
     struct class_t player_class;
     int strength;

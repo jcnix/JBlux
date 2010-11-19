@@ -102,9 +102,10 @@ struct player_data* db_get_player(char* character_name)
     PGconn *conn = db_connect();
     PGresult *res = NULL;
 
-    char* q = "SELECT user_id, id, name, level, xp, money, strength, agility, stamina,"
-        "intelligence, spirit, current_map_id, race_id, class_t_id, x_coord,"
-        "y_coord, inventory_id FROM jblux_character WHERE name=$1;";
+    char* q = "SELECT user_id, id, name, level, xp, money, max_hp, strength, "
+        "agility, stamina, intelligence, spirit, current_map_id, race_id, "
+        "class_t_id, x_coord, y_coord, inventory_id FROM jblux_character "
+        "WHERE name=$1;";
     int nParams = 1;
     const char* params[1] = { character_name };
     res = db_exec(conn, q, nParams, params);
@@ -128,6 +129,10 @@ struct player_data* db_get_player(char* character_name)
         
         column++;
         data->money = db_get_int(res, 0, column);
+
+        column++;
+        data->max_hp = db_get_int(res, 0, column);
+        data->hp = data->max_hp;
 
         column++;
         data->strength = db_get_int(res, 0, column);

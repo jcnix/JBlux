@@ -7,14 +7,21 @@
 
 static struct npc_list *dead_npcs;
 static pthread_mutex_t dead_npcs_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+static struct npc_list *aggro_npcs;
+static pthread_mutex_t aggro_npcs_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+
 static void respawn_npcs();
+static void npcs_attack_target();
 
 void* init_world()
 {
     while(1)
     {
-        sleep(5);
+        //sleep(5);
         respawn_npcs();
+        npcs_attack_target();
     }
     return NULL;
 }
@@ -26,6 +33,13 @@ void add_dead_npc(struct npc_data *npc)
     pthread_mutex_unlock(&dead_npcs_mutex);
 }
 
+void add_aggro_npc(struct npc_data *npc)
+{
+    pthread_mutex_lock(&aggro_npcs_mutex);
+    add_npc(&aggro_npcs, npc);
+    pthread_mutex_unlock(&aggro_npcs_mutex);
+}
+
 void respawn_npcs()
 {
     struct npc_list *curr = dead_npcs;
@@ -35,6 +49,9 @@ void respawn_npcs()
         struct npc_data *npc = curr->npc;
         printf("npc: %d\n", npc->npc_id);
         npc->hp = npc->max_hp;
+        /* De-aggro the NPC  */
+        npc-> target = NULL;
+
         char* npc_json = npc_to_json(npc);
         char* command = NULL;
         if(!asprintf(&command, "npc add %s", npc_json))
@@ -51,5 +68,28 @@ void respawn_npcs()
     }
     dead_npcs = NULL;
     pthread_mutex_unlock(&dead_npcs_mutex);
+}
+
+void npcs_attack_target()
+{
+    struct npc_list *curr = aggro_npcs;
+
+    while(curr)
+    {
+        struct npc_data *npc = curr->npc;
+        struct player_data *player = npc->target;
+        player->hp -= 1;
+        printf("player %d hp: %d\n", player->character_id, player->hp);
+        
+        char* command = NULL;
+        if(!asprintf(&command, "player %d hp %d", player->character_id,
+                    player->hp))
+        {
+            return;
+        }
+
+        tell_all_players_on_map(0, npc->map_id, command);
+        free(command);
+    }
 }
 

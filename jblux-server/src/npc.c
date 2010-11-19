@@ -89,7 +89,7 @@ char* npc_to_json(struct npc_data *npc)
     return json;
 }
 
-void attack_npc(int npc_id, int map_id)
+void attack_npc(int npc_id, int map_id, struct player_data *player)
 {
     struct map_t *map = get_map_for_id(map_id);
     struct npc_data *npc = get_enemy_on_map(npc_id, map);
@@ -99,6 +99,13 @@ void attack_npc(int npc_id, int map_id)
         return;
     }
     
+    /* Aggro npc */
+    if(npc->target == NULL)
+    {
+        npc->target = player;
+        add_aggro_npc(npc);
+    }
+
     /* TODO: calculate damage */
     npc->hp -= 1;
     printf("hp: %d\n", npc->hp);

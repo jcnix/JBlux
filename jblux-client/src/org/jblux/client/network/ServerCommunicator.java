@@ -234,7 +234,6 @@ class ServerListener extends Thread {
     }
 
     public synchronized void doCommand(String command) {
-        System.out.println(command);
         String[] c0 = command.split("\\s");
 
         if(command.startsWith(Commands.AUTH)) {
