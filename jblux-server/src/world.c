@@ -90,6 +90,11 @@ void npcs_attack_target()
 
         tell_all_players_on_map(0, npc->map_id, command);
         free(command);
+
+        if(player->hp >= 0) {
+            printf("player died\n");
+            player->hp = player->max_hp;
+        }
     }
 }
 

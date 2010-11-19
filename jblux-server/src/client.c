@@ -8,6 +8,9 @@
 static struct client_list *clients; 
 static pthread_mutex_t clients_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+/* Easy way of sending messages */
+static int esend(int socket, char* message);
+
 static void add_client(struct client_list **clients, struct client_t *client);
 static void delete_client_list(struct client_list **clients);
 static void remove_client_from_list(struct client_list **clients, struct client_t *client);
