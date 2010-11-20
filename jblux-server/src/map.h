@@ -9,27 +9,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "map_t.h"
 #include "relation.h"
 #include "types.h"
 #include "db/db_map_tbl.h"
-
-struct map_t
-{
-    int id;
-    char *name;
-    struct item_t *items;
-    struct npc_list *enemies;
-
-    int map_left;
-    int map_right;
-    int map_above;
-    int map_below;
-
-    struct coordinates_t left_ent;
-    struct coordinates_t right_ent;
-    struct coordinates_t top_ent;
-    struct coordinates_t bottom_ent;
-};
 
 struct map_list
 {
