@@ -114,7 +114,7 @@ void attack_npc(int npc_id, int map_id, struct player_data *player)
     if(npc->hp <= 0)
     {
         /* Respawn time is currently 5 seconds */
-        npc->respawn_time = time(NULL) + 5;
+        npc->respawn_time = time(NULL) + NPC_RESPAWN_TIME;
         char* command = NULL;
         if(!asprintf(&command, "npc rm %d", npc->unique_id))
         {

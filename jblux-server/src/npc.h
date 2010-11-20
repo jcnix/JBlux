@@ -18,6 +18,8 @@
 #include "quest.h"
 #include "world.h"
 
+#define NPC_RESPAWN_TIME 5
+
 struct npc_data
 {
     int npc_id;
