@@ -18,7 +18,7 @@ void* init_world()
 {
     while(1)
     {
-        sleep(5);
+        sleep(1);
         respawn_npcs();
         npcs_attack_target();
     }
@@ -41,37 +41,40 @@ void add_aggro_npc(struct npc_data *npc)
 
 void respawn_npcs()
 {
+    time_t currtime = time(NULL);
     struct npc_list *curr = dead_npcs;
-    pthread_mutex_lock(&dead_npcs_mutex);
     while(curr)
     {
         struct npc_data *npc = curr->npc;
-        printf("npc: %d\n", npc->npc_id);
-        npc->hp = npc->max_hp;
-        /* De-aggro the NPC  */
-        if(npc->target)
+        printf("%s", ctime(&currtime));
+        if(currtime >= npc->respawn_time)
         {
-            pthread_mutex_lock(&aggro_npcs_mutex);
-            remove_npc(&aggro_npcs, npc);
-            pthread_mutex_unlock(&aggro_npcs_mutex);
-        }
+            printf("npc: %d\n", npc->npc_id);
+            npc->hp = npc->max_hp;
+            /* De-aggro the NPC  */
+            if(npc->target)
+            {
+                pthread_mutex_lock(&aggro_npcs_mutex);
+                remove_npc(&aggro_npcs, npc);
+                pthread_mutex_unlock(&aggro_npcs_mutex);
+            }
 
-        char* npc_json = npc_to_json(npc);
-        char* command = NULL;
-        if(!asprintf(&command, "npc add %s", npc_json))
-        {
-            continue;
-        }
+            char* npc_json = npc_to_json(npc);
+            char* command = NULL;
+            if(!asprintf(&command, "npc add %s", npc_json))
+            {
+                continue;
+            }
 
-        tell_all_players_on_map(0, npc->map_id, command);
-        struct npc_list *next = curr->next;
-        free(curr);
-        free(npc_json);
-        free(command);
-        curr = next;
+            tell_all_players_on_map(0, npc->map_id, command);
+            pthread_mutex_lock(&dead_npcs_mutex);
+            remove_npc(&dead_npcs, npc);
+            pthread_mutex_unlock(&dead_npcs_mutex);
+            free(npc_json);
+            free(command);
+        }
+        curr = curr->next;
     }
-    dead_npcs = NULL;
-    pthread_mutex_unlock(&dead_npcs_mutex);
 }
 
 void npcs_attack_target()

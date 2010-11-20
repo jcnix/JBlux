@@ -9,6 +9,7 @@
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <yajl/yajl_gen.h>
 #include "client.h"
 #include "character.h"
@@ -40,6 +41,7 @@ struct npc_data
     int intelligence;
     int spirit;
     
+    time_t respawn_time;
     struct player_data *target;
 };
 
