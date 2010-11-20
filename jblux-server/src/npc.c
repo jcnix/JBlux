@@ -113,8 +113,9 @@ void attack_npc(int npc_id, int map_id, struct player_data *player)
     /* Npc is dead */
     if(npc->hp <= 0)
     {
-        /* Respawn time is currently 5 seconds */
         npc->respawn_time = time(NULL) + NPC_RESPAWN_TIME;
+        deaggro_npc(npc);
+
         char* command = NULL;
         if(!asprintf(&command, "npc rm %d", npc->unique_id))
         {
@@ -157,7 +158,7 @@ void delete_npcs(struct npc_list **npcs)
     }
 }
 
-void remove_npc(struct npc_list **npcs, struct npc_data *npc)
+void rm_npc(struct npc_list **npcs, struct npc_data *npc)
 {
     struct npc_list *curr = *npcs;
     struct npc_list *prev = NULL;

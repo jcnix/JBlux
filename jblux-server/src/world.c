@@ -39,6 +39,13 @@ void add_aggro_npc(struct npc_data *npc)
     pthread_mutex_unlock(&aggro_npcs_mutex);
 }
 
+void deaggro_npc(struct npc_data *npc)
+{
+    pthread_mutex_lock(&aggro_npcs_mutex);
+    rm_npc(&aggro_npcs, npc);
+    pthread_mutex_unlock(&aggro_npcs_mutex);
+}
+
 void respawn_npcs()
 {
     time_t currtime = time(NULL);
@@ -52,14 +59,6 @@ void respawn_npcs()
         {
             printf("npc: %d\n", npc->npc_id);
             npc->hp = npc->max_hp;
-            /* De-aggro the NPC  */
-            if(npc->target)
-            {
-                pthread_mutex_lock(&aggro_npcs_mutex);
-                remove_npc(&aggro_npcs, npc);
-                pthread_mutex_unlock(&aggro_npcs_mutex);
-            }
-
             char* npc_json = npc_to_json(npc);
             char* command = NULL;
             if(!asprintf(&command, "npc add %s", npc_json))
@@ -69,7 +68,7 @@ void respawn_npcs()
 
             tell_all_players_on_map(0, npc->map_id, command);
             pthread_mutex_lock(&dead_npcs_mutex);
-            remove_npc(&dead_npcs, npc);
+            rm_npc(&dead_npcs, npc);
             pthread_mutex_unlock(&dead_npcs_mutex);
             free(npc_json);
             free(command);
@@ -102,7 +101,7 @@ void npcs_attack_target()
         if(player->hp <= 0) {
             printf("player died\n");
             pthread_mutex_lock(&aggro_npcs_mutex);
-            remove_npc(&aggro_npcs, npc);
+            rm_npc(&aggro_npcs, npc);
             pthread_mutex_unlock(&aggro_npcs_mutex);
             player->hp = player->max_hp;
         }

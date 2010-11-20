@@ -19,6 +19,7 @@
 void* init_world();
 void add_dead_npc(struct npc_data *npc);
 void add_aggro_npc(struct npc_data *npc);
+void deaggro_npc(struct npc_data *npc);
 
 #endif
 
