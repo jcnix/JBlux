@@ -46,6 +46,7 @@ void respawn_npcs()
     while(curr)
     {
         struct npc_data *npc = curr->npc;
+        struct npc_list *next = curr->next;
         printf("%s", ctime(&currtime));
         if(currtime >= npc->respawn_time)
         {
@@ -73,7 +74,7 @@ void respawn_npcs()
             free(npc_json);
             free(command);
         }
-        curr = curr->next;
+        curr = next;
     }
 }
 

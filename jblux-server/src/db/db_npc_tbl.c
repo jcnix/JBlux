@@ -67,6 +67,7 @@ struct npc_data* db_get_npc(int id)
     
     column++;
     npc->spirit = db_get_int(res, 0, column);
+    npc->target = NULL;
 
     PQclear(res);
     db_disconnect(conn);
