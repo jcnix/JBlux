@@ -155,3 +155,32 @@ void delete_npcs(struct npc_list **npcs)
     }
 }
 
+void remove_npc(struct npc_list **npcs, struct npc_data *npc)
+{
+    struct npc_list *curr = *npcs;
+    struct npc_list *prev = NULL;
+    while(curr)
+    {
+        /* We're only going to determine equality by socket */
+        if(curr->npc->unique_id == npc->unique_id)
+        {
+            if(prev == NULL)
+            {
+                /* We're at the head of the list */
+                *npcs = curr->next;
+            }
+            else
+            {
+                prev->next = curr->next;
+            }
+           
+            struct npc_data *npc = curr->npc;
+            npc->target = NULL;
+            free(curr);
+            return;
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+}
+
