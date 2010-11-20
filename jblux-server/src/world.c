@@ -19,7 +19,7 @@ void* init_world()
 {
     while(1)
     {
-        //sleep(5);
+        sleep(5);
         respawn_npcs();
         npcs_attack_target();
     }
