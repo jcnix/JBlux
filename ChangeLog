@@ -1,3 +1,11 @@
+11-21-2010 Update
+*****************
+- Proper fix to prevent server crash when an Npc respawns.
+- Npcs can attack players
+	- Players don't "die" yet.
+- Npcs will respawn on their own.
+	- Previously, all dead Npcs would respawn at the same time.
+
 11-14-2010 Update
 *****************
 - Improve line splitting
