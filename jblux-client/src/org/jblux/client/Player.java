@@ -291,6 +291,13 @@ public class Player extends Sprite implements Observer {
                 canvas = GameCanvas.getInstance(server);
                 canvas.updateNpcs();
             }
+            else if(args[2].equals("hp")) {
+                int player_id = Integer.parseInt(args[1]);
+                if(player_id == player_data.character_id) {
+                    int hp = Integer.parseInt(args[3]);
+                    player_data.hp = hp;
+                }
+            }
         }
     }
 }
