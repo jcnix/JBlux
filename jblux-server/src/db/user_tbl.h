@@ -12,7 +12,7 @@
 #include <string.h>
 #include <libpq-fe.h>
 #include "db.h"
-#include "db_map_tbl.h"
+#include "map_tbl.h"
 #include "../types.h"
 
 #define USER_TABLE "jblux_user"

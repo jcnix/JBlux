@@ -3,7 +3,7 @@
  * Author: Casey Jones
  */
 
-#include "db_map_tbl.h"
+#include "map_tbl.h"
 
 void db_get_all_maps(struct map_list **maps)
 {

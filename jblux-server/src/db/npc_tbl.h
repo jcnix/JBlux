@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <libpq-fe.h>
 #include "db.h"
-#include "db_user_tbl.h"
+#include "user_tbl.h"
 #include "../player_data.h"
 #include "quest_tbl.h"
 

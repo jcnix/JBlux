@@ -18,9 +18,9 @@ _OBJ= 	main.o \
 	  	relation.o \
 		world.o \
 	  	db/db.o \
-	  	db/db_user_tbl.o \
-	  	db/db_map_tbl.o \
-	  	db/db_npc_tbl.o \
+	  	db/user_tbl.o \
+	  	db/map_tbl.o \
+	  	db/npc_tbl.o \
 		db/quest_tbl.o
 
 OBJ=$(patsubst %, $(ODIR)/%, $(_OBJ))

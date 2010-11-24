@@ -12,7 +12,7 @@
 #include <string.h>
 #include <libpq-fe.h>
 #include "db.h"
-#include "db_npc_tbl.h"
+#include "npc_tbl.h"
 #include "../map.h"
 #include "../npc.h"
 #include "../player_data.h"

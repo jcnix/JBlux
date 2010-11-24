@@ -3,7 +3,7 @@
  * Author: Casey Jones
  */
 
-#include "db_npc_tbl.h"
+#include "npc_tbl.h"
 
 /**
  * The player parameter is only for figuring out which quests the

@@ -13,7 +13,7 @@
 #include "json.h"
 #include "types.h"
 #include "db/quest_tbl.h"
-#include "db/db_user_tbl.h"
+#include "db/user_tbl.h"
 
 #define MAX_QUESTS 25
 

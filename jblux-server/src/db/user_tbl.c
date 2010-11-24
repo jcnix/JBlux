@@ -3,7 +3,7 @@
  * Author: Casey Jones
  */
 
-#include "db_user_tbl.h"
+#include "user_tbl.h"
 
 int db_authenticate(char* username, char* password, char* character_name)
 {

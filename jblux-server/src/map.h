@@ -12,7 +12,7 @@
 #include "map_t.h"
 #include "relation.h"
 #include "types.h"
-#include "db/db_map_tbl.h"
+#include "db/map_tbl.h"
 
 struct map_list
 {
