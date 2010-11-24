@@ -22,6 +22,8 @@ package org.jblux.client.data;
 
 public class CharacterData {
     public String character_name;
+    public int hp;
+    public int max_hp;
     public int level;
     public Race race;
     public PlayerClass player_class;

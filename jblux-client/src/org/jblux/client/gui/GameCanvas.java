@@ -100,6 +100,7 @@ public class GameCanvas implements Observer {
 
     public void setPlayer(Player player) {
         this.player = player;
+        gui.setPlayer(player.getData());
     }
 
     public void setNpcs(ArrayList<NpcData> n) {

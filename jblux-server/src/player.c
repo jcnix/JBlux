@@ -16,6 +16,8 @@ char* player_data_to_json(struct player_data *data)
     const char* user_id_field =         "user_id";
     const char* character_id_field =    "character_id";
     const char* character_name_field =  "character_name";
+    const char* hp_field =              "hp";
+    const char* max_hp_field =          "max_hp";
     const char* level_field =           "level";
     const char* xp_field =              "xp";
     const char* money_field =           "money";
@@ -36,6 +38,8 @@ char* player_data_to_json(struct player_data *data)
     json_insert_int(gen, user_id_field, data->user_id);
     json_insert_int(gen, character_id_field, data->character_id);
     json_insert_str(gen, character_name_field, data->character_name);
+    json_insert_int(gen, hp_field, data->hp);
+    json_insert_int(gen, max_hp_field, data->max_hp);
     json_insert_int(gen, level_field, data->level);
     json_insert_int(gen, xp_field, data->xp);
     json_insert_int(gen, money_field, data->money);

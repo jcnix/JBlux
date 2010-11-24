@@ -23,6 +23,7 @@ package org.jblux.client.gui;
 import org.jblux.client.network.ServerCommunicator;
 import java.awt.Color;
 import java.util.LinkedList;
+import org.jblux.client.data.PlayerData;
 import org.jblux.client.data.Quest;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.UnicodeFont;
@@ -32,6 +33,7 @@ public class GUI {
     private ChatBox cb;
     private ChatInputBox inputBox;
     private BaseDialogBox dialog_box;
+    private CharacterBar charbar;
     private GUIContext gc;
     private ServerCommunicator server;
 
@@ -43,6 +45,11 @@ public class GUI {
         cb = new ChatBox(gc, uf);
         inputBox = new ChatInputBox(gc, uf, s);
         inputBox.setCursorVisible(true);
+        charbar = new CharacterBar();
+    }
+
+    public void setPlayer(PlayerData player) {
+        charbar.setPlayer(player);
     }
 
     public void openNpcDialogbox(LinkedList<Quest> quests) {
@@ -70,5 +77,6 @@ public class GUI {
         if(dialog_box != null) {
             dialog_box.render();
         }
+        charbar.render();
     }
 }
