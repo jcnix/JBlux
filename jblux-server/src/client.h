@@ -20,8 +20,8 @@
 #include "json.h"
 #include "map.h"
 #include "player.h"
-#include "relation.h"
 #include "types.h"
+#include "util/relation.h"
 
 #define MAX_CLIENTS 200 
 #define BUFFSIZE 1024

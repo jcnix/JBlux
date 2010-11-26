@@ -15,13 +15,13 @@ _OBJ= 	main.o \
 		player.o \
 		character.o \
 	  	quest.o \
-	  	relation.o \
 		world.o \
 	  	db/db.o \
 	  	db/user_tbl.o \
 	  	db/map_tbl.o \
 	  	db/npc_tbl.o \
-		db/quest_tbl.o
+		db/quest_tbl.o \
+		util/relation.o
 
 OBJ=$(patsubst %, $(ODIR)/%, $(_OBJ))
 LIBS=-lpthread -lpq -lyajl -lcrypto
@@ -39,6 +39,7 @@ $(ODIR)/%.o: $(SRCDIR)/%.c
 $(ODIR):
 	mkdir -p $(ODIR)
 	mkdir -p $(ODIR)/db
+	mkdir -p $(ODIR)/util
 
 $(BINDIR):
 	mkdir -p $(BINDIR)
