@@ -9,7 +9,6 @@ SRCDIR=src
 _OBJ= 	main.o \
 	  	client.o \
 	  	json.o \
-	  	base64.o \
 	 	map.o \
 	  	npc.o \
 		player.o \
@@ -21,6 +20,7 @@ _OBJ= 	main.o \
 	  	db/map_tbl.o \
 	  	db/npc_tbl.o \
 		db/quest_tbl.o \
+	  	util/base64.o \
 		util/coords.o \
 		util/jmath.o \
 		util/relation.o
