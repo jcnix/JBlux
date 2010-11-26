@@ -26,17 +26,6 @@ void json_insert_int(yajl_gen gen, const char* key, int value)
     yajl_gen_integer(gen, value);
 }
 
-void coordinates_to_json(yajl_gen gen, struct coordinates_t coords)
-{
-    const char* x_field =  "x";
-    const char* y_field =  "y";
-    
-    yajl_gen_map_open(gen);
-    json_insert_int(gen, x_field, coords.x);
-    json_insert_int(gen, y_field, coords.y);
-    yajl_gen_map_close(gen);
-}
-
 void inventory_to_json(yajl_gen gen, struct inventory_t inv)
 {
     yajl_gen_map_open(gen);

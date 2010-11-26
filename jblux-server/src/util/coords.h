@@ -9,7 +9,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <yajl/yajl_gen.h>
 #include "jmath.h"
+#include "json.h"
 
 struct coordinates_t
 {
@@ -18,6 +20,7 @@ struct coordinates_t
 };
 
 double distance(struct coordinates_t a, struct coordinates_t b);
+void coordinates_to_json(yajl_gen gen, struct coordinates_t coords);
 
 #endif
 
