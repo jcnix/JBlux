@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "json.h"
+#include "util/json.h"
 
 struct race_t
 {

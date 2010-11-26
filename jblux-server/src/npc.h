@@ -13,7 +13,7 @@
 #include <yajl/yajl_gen.h>
 #include "client.h"
 #include "character.h"
-#include "json.h"
+#include "util/json.h"
 #include "map.h"
 #include "quest.h"
 #include "world.h"

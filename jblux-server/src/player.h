@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include "player_data.h"
 #include "quest.h"
-#include "json.h"
+#include "util/json.h"
 #include "db/quest_tbl.h"
 #include "db/user_tbl.h"
 

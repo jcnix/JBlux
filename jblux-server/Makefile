@@ -8,7 +8,6 @@ SRCDIR=src
 
 _OBJ= 	main.o \
 	  	client.o \
-	  	json.o \
 	 	map.o \
 	  	npc.o \
 		player.o \
@@ -23,6 +22,7 @@ _OBJ= 	main.o \
 	  	util/base64.o \
 		util/coords.o \
 		util/jmath.o \
+	  	util/json.o \
 		util/relation.o
 
 OBJ=$(patsubst %, $(ODIR)/%, $(_OBJ))

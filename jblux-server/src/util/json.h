@@ -10,8 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <yajl/yajl_gen.h>
-#include "util/coords.h"
-#include "inventory.h"
+#include "coords.h"
+#include "../inventory.h"
 
 char* get_json_str(yajl_gen gen);
 void json_insert_str(yajl_gen gen, const char* key, char* value);

@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdio.h>
 #include <yajl/yajl_gen.h>
-#include "json.h"
+#include "util/json.h"
 
 struct quest
 {
