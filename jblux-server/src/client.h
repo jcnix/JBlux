@@ -19,7 +19,6 @@
 #include "json.h"
 #include "map.h"
 #include "player.h"
-#include "types.h"
 #include "util/base64.h"
 #include "util/relation.h"
 

@@ -11,7 +11,6 @@
 #include "player_data.h"
 #include "quest.h"
 #include "json.h"
-#include "types.h"
 #include "db/quest_tbl.h"
 #include "db/user_tbl.h"
 

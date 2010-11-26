@@ -8,7 +8,8 @@
 
 #include "quest.h"
 #include "character.h"
-#include "types.h"
+#include "inventory.h"
+#include "util/coords.h"
 
 struct player_data
 {

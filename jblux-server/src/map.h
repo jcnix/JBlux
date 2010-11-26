@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "map_t.h"
-#include "types.h"
 #include "db/map_tbl.h"
 #include "util/relation.h"
 

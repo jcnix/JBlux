@@ -16,7 +16,7 @@
 #include "../map.h"
 #include "../npc.h"
 #include "../player_data.h"
-#include "../types.h"
+#include "../util/coords.h"
 
 #define MAP_TABLE "jblux-map"
 

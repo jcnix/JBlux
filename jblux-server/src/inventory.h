@@ -1,10 +1,10 @@
 /*
- * File: types.h
+ * File: inventory.h
  * Author: Casey Jones
  */
 
-#ifndef _TYPES_H
-#define _TYPES_H
+#ifndef _INVENTORY_H
+#define _INVENTORY_H
 
 struct inventory_t
 {
