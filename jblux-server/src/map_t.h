@@ -6,7 +6,7 @@
 #ifndef _MAP_T_H
 #define _MAP_T_H
 
-#include "types.h"
+#include "util/coords.h"
 
 struct map_t
 {

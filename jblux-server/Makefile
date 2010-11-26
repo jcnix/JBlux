@@ -21,10 +21,12 @@ _OBJ= 	main.o \
 	  	db/map_tbl.o \
 	  	db/npc_tbl.o \
 		db/quest_tbl.o \
+		util/coords.o \
+		util/jmath.o \
 		util/relation.o
 
 OBJ=$(patsubst %, $(ODIR)/%, $(_OBJ))
-LIBS=-lpthread -lpq -lyajl -lcrypto
+LIBS=-lm -lpthread -lpq -lyajl -lcrypto
 OUTPUT=bin/jblux-server
 .PHONY: default clean build-clean dist-clean
 

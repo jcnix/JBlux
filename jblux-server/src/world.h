@@ -15,6 +15,7 @@
 #include "client.h"
 #include "npc.h"
 #include "player_data.h"
+#include "util/coords.h"
 
 void* init_world();
 void add_dead_npc(struct npc_data *npc);

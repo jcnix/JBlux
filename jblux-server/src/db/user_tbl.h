@@ -14,6 +14,7 @@
 #include "db.h"
 #include "map_tbl.h"
 #include "../types.h"
+#include "../util/coords.h"
 
 #define USER_TABLE "jblux_user"
 #define CHARACTER_TABLE "jblux_character"

@@ -85,8 +85,13 @@ void npcs_attack_target()
     {
         struct npc_data *npc = curr->npc;
         struct player_data *player = npc->target;
-        player->hp -= 1;
-        printf("player %d hp: %d\n", player->character_id, player->hp);
+        
+        /* Can only attack if within 32 pixels */
+        if(distance(npc->coords, player->coords) < 32)
+        {
+            player->hp -= 1;
+            printf("player %d hp: %d\n", player->character_id, player->hp);
+        }
         
         char* command = NULL;
         if(!asprintf(&command, "player %d hp %d", player->character_id,
