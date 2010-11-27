@@ -12,7 +12,6 @@
 #include <netinet/in.h>
 #include <signal.h>
 #include "client.h"
-#include "map.h"
 #include "world.h"
 
 #define MAXPENDING 20 
@@ -50,10 +49,6 @@ int main(int argc, char** argv)
         return 1;
     }
     db_disconnect(conn);
-
-    /* Incase the server crashed with users online
-     * set all users to offline so they can reconnect */
-    db_set_all_users_offline();
 
     int serversock = 0;
     int clientsock = 0;

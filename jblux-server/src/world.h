@@ -16,6 +16,7 @@
 #include "map_t.h"
 #include "npc.h"
 #include "player_data.h"
+#include "db/user_tbl.h"
 #include "util/coords.h"
 
 void* init_world();

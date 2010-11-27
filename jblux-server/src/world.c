@@ -18,6 +18,10 @@ static void move_enemies();
 
 void* init_world()
 {
+    /* Incase the server crashed with users online
+     * set all users to offline so they can reconnect */
+    db_set_all_users_offline();
+    
     /* Initialize and cache all maps from DB */
     maps = init_maps();
     
