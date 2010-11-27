@@ -46,6 +46,7 @@ int main(int argc, char** argv)
     PGconn* conn = db_connect();
     if(!db_is_connected(conn))
     {
+        fprintf(stderr, "The PostgreSQL server is not running.\n");
         return 1;
     }
     db_disconnect(conn);
