@@ -13,6 +13,7 @@
 #include <time.h>
 #include <unistd.h>
 #include "client.h"
+#include "map_t.h"
 #include "npc.h"
 #include "player_data.h"
 #include "util/coords.h"

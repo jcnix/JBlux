@@ -13,13 +13,7 @@
 #include "db/map_tbl.h"
 #include "util/relation.h"
 
-struct map_list
-{
-    struct map_t *map;
-    struct map_list *next;
-};
-
-void init_maps();
+struct map_list* init_maps();
 struct map_t* get_map_for_id(int id);
 struct map_t* get_map_for_name(char* name);
 struct map_t* get_adjacent_map(struct map_t *map, enum Relation rel);

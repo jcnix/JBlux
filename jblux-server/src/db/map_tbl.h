@@ -20,10 +20,6 @@
 
 #define MAP_TABLE "jblux-map"
 
-/* Forward declaring */
-struct map_list;
-struct map_t;
-
 void db_get_all_maps(struct map_list **maps);
 char* db_get_map_name_for_id(int id);
 int db_get_map_id_for_name(char* name);

@@ -16,6 +16,9 @@ static void npcs_attack_target();
 
 void* init_world()
 {
+    /* Initialize and cache all maps from DB */
+    init_maps();
+    
     while(1)
     {
         sleep(1);

@@ -81,9 +81,6 @@ int main(int argc, char** argv)
     }
     printf("JBlux server 1.0\n");
 
-    /* Initialize and cache all maps from DB */
-    init_maps();
-
     /* Start the game world */
     pthread_t world_thread;
     pthread_create(&world_thread, NULL, init_world, NULL);

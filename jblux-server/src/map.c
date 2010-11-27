@@ -7,9 +7,10 @@
 
 static struct map_list *maps = NULL;
 
-void init_maps()
+struct map_list* init_maps()
 {
     db_get_all_maps(&maps);
+    return maps;
 }
 
 struct map_t* get_map_for_id(int id)

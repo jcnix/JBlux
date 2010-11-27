@@ -26,5 +26,11 @@ struct map_t
     struct coordinates_t bottom_ent;
 };
 
+struct map_list
+{
+    struct map_t *map;
+    struct map_list *next;
+};
+
 #endif
 
