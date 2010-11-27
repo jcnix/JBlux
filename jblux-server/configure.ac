@@ -14,6 +14,22 @@ AM_PROG_CC_C_O
 PKG_CHECK_MODULES(CRYPTO, libcrypto)
 PKG_CHECK_MODULES(SSL, libssl)
 PKG_CHECK_MODULES(ZLIB, zlib)
+AC_CHECK_LIB(m, sqrt, [], [
+        echo "Error!  libm required."
+        exit -1
+        ])
+AC_CHECK_LIB(pthread, pthread_create, [], [
+        echo "Error!  pthread support required."
+        exit -1
+        ])
+AC_CHECK_LIB(yajl, yajl_gen_map_open, [], [
+        echo "Error!  yajl required."
+        exit -1
+        ])
+AC_CHECK_LIB(pq, PQconnectdb, [], [
+        echo "Error!  PostgreSQL with libpq required."
+        exit -1
+        ])
 
 AC_CONFIG_FILES([Makefile bin/Makefile])
 AC_OUTPUT

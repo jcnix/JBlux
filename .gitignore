@@ -1,4 +1,4 @@
-*/bin/
+*/bin/*.o
 */build/
 */dist/
 */lib/
@@ -22,4 +22,8 @@ jblux-server/config.status
 jblux-server/src/config.h
 jblux-server/src/config.h.in~
 jblux-server/src/stamp-h1
+jblux-server/Makefile
+jblux-server/bin/jblux_server
+jblux-server/bin/Makefile
+jblux-server/bin/.deps
 
