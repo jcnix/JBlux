@@ -1,0 +1,20 @@
+AC_INIT(jblux_server, 1.0, jonescaseyb@gmail.com)
+AM_INIT_AUTOMAKE(jblux_server, 1.0)
+AC_CONFIG_HEADERS(src/config.h)
+AC_PROG_INSTALL
+AC_CONFIG_MACRO_DIR([m4])
+AC_PREFIX_DEFAULT(/usr/local)
+
+AC_PROG_CPP
+AC_PROG_CC
+AC_LANG_C
+AC_HEADER_STDC
+AM_PROG_CC_C_O
+
+PKG_CHECK_MODULES(CRYPTO, libcrypto)
+PKG_CHECK_MODULES(SSL, libssl)
+PKG_CHECK_MODULES(ZLIB, zlib)
+
+AC_CONFIG_FILES([Makefile bin/Makefile])
+AC_OUTPUT
+

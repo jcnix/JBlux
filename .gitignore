@@ -2,16 +2,12 @@
 */build/
 */dist/
 */lib/
-*/store/
 *.class
 *.zip
 *.swp
 *deploy.sh
 */jbluxkey
 jbluxkey
-*/lib/jblux-common.jar
-jblux-server/lib
-*jblux-sql.jar
 *.tar.gz
 jblux-client/res
 jblux_django/settings.py
@@ -20,5 +16,10 @@ jblux_django/*.pyc
 jblux_django/static/media/lib
 jblux_django/static/media/img
 jblux_django/static/media/favicon.ico
-
+jblux-server/autom4te.cache/
+jblux-server/config.log
+jblux-server/config.status
+jblux-server/src/config.h
+jblux-server/src/config.h.in~
+jblux-server/src/stamp-h1
 
