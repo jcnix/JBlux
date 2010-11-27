@@ -11,19 +11,22 @@ static pthread_mutex_t dead_npcs_mutex = PTHREAD_MUTEX_INITIALIZER;
 static struct npc_list *aggro_npcs;
 static pthread_mutex_t aggro_npcs_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+static struct map_list *maps;
 static void respawn_npcs();
 static void npcs_attack_target();
+static void move_enemies();
 
 void* init_world()
 {
     /* Initialize and cache all maps from DB */
-    init_maps();
+    maps = init_maps();
     
     while(1)
     {
         sleep(1);
         respawn_npcs();
         npcs_attack_target();
+        move_enemies();
     }
     return NULL;
 }
@@ -114,6 +117,32 @@ void npcs_attack_target()
             player->hp = player->max_hp;
         }
 
+        curr = curr->next;
+    }
+}
+
+void move_enemies()
+{
+    struct map_list *curr = maps;
+    while(curr)
+    {
+        struct map_t *map = curr->map;
+        struct npc_list *npcs = map->enemies;
+        while(npcs)
+        {
+            struct npc_data *npc = npcs->npc;
+            /* Npcs that are chasing a player move
+             * differently than npcs who are just
+             * wandering around */
+            if(npc->target)
+            {
+                /* TODO: Fill this in */
+            }
+            else
+            {
+            }
+            npcs = npcs->next;
+        }
         curr = curr->next;
     }
 }
