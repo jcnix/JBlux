@@ -30,7 +30,10 @@ int main(int argc, char** argv)
     {
         if(strcmp(argv[1], "-d") == 0)
         {
-            daemon(1,1);
+            if(daemon(1,1) != 0)
+            {
+                fprintf(stderr, "Could not start daemon\n");
+            }
         }
     }
     
@@ -59,7 +62,7 @@ int main(int argc, char** argv)
 
     if((serversock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
     {
-        printf("Failed to create socket\n");
+        fprintf(stderr, "Failed to create socket\n");
         return 1;
     }
 
