@@ -23,3 +23,26 @@ jblux_server_SOURCES = \
     ../src/util/json.c \
     ../src/util/relation.c
 
+noinst_HEADERS = \
+    ../src/client.h \
+    ../src/map.h \
+    ../src/map_t.h \
+    ../src/npc.h \
+    ../src/player.h \
+    ../src/player_data.h \
+    ../src/character.h \
+    ../src/item.h \
+	../src/inventory.h \
+	../src/quest.h \
+    ../src/world.h \
+    ../src/db/db.h \
+    ../src/db/user_tbl.h \
+    ../src/db/map_tbl.h \
+    ../src/db/npc_tbl.h \
+    ../src/db/quest_tbl.h \
+    ../src/util/base64.h \
+    ../src/util/coords.h \
+    ../src/util/jmath.h \
+    ../src/util/json.h \
+    ../src/util/relation.h
+

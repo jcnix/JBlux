@@ -15,6 +15,7 @@
 
 @SET_MAKE@
 
+
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -34,7 +35,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 bin_PROGRAMS = jblux_server$(EXEEXT)
 subdir = bin
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -71,6 +73,7 @@ CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(jblux_server_SOURCES)
 DIST_SOURCES = $(jblux_server_SOURCES)
+HEADERS = $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -190,6 +193,29 @@ jblux_server_SOURCES = \
     ../src/util/jmath.c \
     ../src/util/json.c \
     ../src/util/relation.c
+
+noinst_HEADERS = \
+    ../src/client.h \
+    ../src/map.h \
+    ../src/map_t.h \
+    ../src/npc.h \
+    ../src/player.h \
+    ../src/player_data.h \
+    ../src/character.h \
+    ../src/item.h \
+	../src/inventory.h \
+	../src/quest.h \
+    ../src/world.h \
+    ../src/db/db.h \
+    ../src/db/user_tbl.h \
+    ../src/db/map_tbl.h \
+    ../src/db/npc_tbl.h \
+    ../src/db/quest_tbl.h \
+    ../src/util/base64.h \
+    ../src/util/coords.h \
+    ../src/util/jmath.h \
+    ../src/util/json.h \
+    ../src/util/relation.h
 
 all: all-am
 
@@ -641,7 +667,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile $(PROGRAMS) $(HEADERS)
 installdirs:
 	for dir in "$(DESTDIR)$(bindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
