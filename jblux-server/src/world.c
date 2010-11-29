@@ -27,7 +27,8 @@ void* init_world()
     
     while(1)
     {
-        sleep(1);
+        /* sleep for 100,000 microseconds, or 0.1 seconds */
+        usleep(500000);
         respawn_npcs();
         npcs_attack_target();
         move_enemies();
