@@ -135,16 +135,7 @@ void move_enemies()
         while(npcs)
         {
             struct npc_data *npc = npcs->npc;
-            /* Npcs that are chasing a player move
-             * differently than npcs who are just
-             * wandering around */
-            if(npc->target)
-            {
-                /* TODO: Fill this in */
-            }
-            else
-            {
-            }
+            npc_move(npc);
             npcs = npcs->next;
         }
         curr = curr->next;

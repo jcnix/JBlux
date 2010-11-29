@@ -129,6 +129,59 @@ void attack_npc(int npc_id, int map_id, struct player_data *player)
     }
 }
 
+void npc_move(struct npc_data *npc)
+{
+    if(npc->target)
+    {
+        int dx = npc->target->coords.x - npc->coords.x;
+        int dy = npc->target->coords.y - npc->coords.y;
+
+        int move_right = 0;
+        int move_down = 0;
+        if(dx > 0)
+        {
+            move_right = 1;
+        }
+        if(dy > 0)
+        {
+            move_down = 1;
+        }
+        
+        dx = abs(dx);
+        dy = abs(dy);
+        if(dx >= MOVE_STEP)
+        {
+            if(move_right)
+            {
+                npc->coords.x += MOVE_STEP;
+            }
+            else
+            {
+                npc->coords.x -= MOVE_STEP;
+            }
+        }
+        if(dy >= MOVE_STEP)
+        {
+            if(move_down)
+            {
+                npc->coords.y += MOVE_STEP;
+            }
+            else
+            {
+                npc->coords.y -= MOVE_STEP;
+            }
+        }
+        char* command = NULL;
+        if(!asprintf(&command, "npc %d coords %d %d", npc->unique_id,
+                    npc->coords.x, npc->coords.y))
+        {
+            return;
+        }
+        tell_all_players_on_map(0, npc->map_id, command);
+        free(command);
+    }
+}
+
 void add_npc(struct npc_list **npcs, struct npc_data *npc)
 {
     struct npc_list *new = malloc(sizeof(struct npc_list));

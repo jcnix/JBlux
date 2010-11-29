@@ -9,16 +9,18 @@
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <time.h>
 #include <yajl/yajl_gen.h>
 #include "client.h"
 #include "character.h"
-#include "util/json.h"
 #include "map.h"
 #include "quest.h"
 #include "world.h"
+#include "util/json.h"
 
 #define NPC_RESPAWN_TIME 5
+#define MOVE_STEP 7
 
 struct npc_data
 {
@@ -56,7 +58,10 @@ struct npc_list
 char* npc_list_to_json(struct npc_list *npcs);
 char* npc_to_json(struct npc_data *npc);
 void attack_npc(int id, int map_id, struct player_data *player);
+void npc_move(struct npc_data *npc);
 void add_quests_to_npcs(struct npc_list **npcs);
+
+/* struct npc_list functions */
 void add_npc(struct npc_list **npcs, struct npc_data *npc);
 void rm_npc(struct npc_list **npcs, struct npc_data *npc);
 void delete_npcs(struct npc_list **npcs);

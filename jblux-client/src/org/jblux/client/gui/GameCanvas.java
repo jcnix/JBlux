@@ -347,6 +347,16 @@ public class GameCanvas implements Observer {
                         }
                     }
                 }
+                if(args[2].equals("coords")) {
+                    int npc_id = Integer.parseInt(args[1]);
+                    for(Npc npc : npcs) {
+                        NpcData data = npc.getData();
+                        if(data.unique_id == npc_id) {
+                            data.coords.x = Integer.parseInt(args[3]);
+                            data.coords.y = Integer.parseInt(args[4]);
+                        }
+                    }
+                }
             }
         }
         else if(arg instanceof PlayerData) {

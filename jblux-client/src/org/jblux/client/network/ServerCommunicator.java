@@ -295,12 +295,7 @@ class ServerListener extends Thread {
             }
         }
         else if(command.startsWith(Commands.NPC)) {
-            if(c0[1].equals("add")) {
-                notify_observers(command);
-            }
-            else if(c0[1].equals("rm")) {
-                notify_observers(command);
-            }
+            notify_observers(command);
         }
         else if(command.startsWith("put")) {
             try {
