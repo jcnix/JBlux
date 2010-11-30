@@ -1,0 +1,24 @@
+***********************
+* JBlux Map Converter *
+***********************
+
+This Python script is used to convert the black & white
+"walk area" maps into a binary file that the server can
+use when moving around Npcs.
+
+The script uses PIL (Python Imaging Library) to determine
+what color a given pixel is.  White pixels return a 1,
+black pixels return a 0.  Since 1 and 0 are the only colors
+that will be used, the script uses the 1s and 0s as bits in
+a byte.  So I can fit 8 pixels into a byte, which helps
+compress the memory requirements of the server.
+
+Currently, this script only gives with every 4th pixel on
+the x and y.  The only reason for this is to use less
+memory on the server because these files would probably
+be stored in RAM for fast access.  Because of this Npc
+movement will be slightly inaccurate around walls and
+other obstacles.
+If memory usage is low enough, I may bump it up to every
+other pixel or every pixel.
+

@@ -26,4 +26,5 @@ jblux-server/Makefile
 jblux-server/bin/jblux_server
 jblux-server/bin/Makefile
 jblux-server/bin/.deps
+map-converter/output
 
