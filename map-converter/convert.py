@@ -33,7 +33,7 @@ while y < max_y:
             byte_value += p * 2**bit
         bit += 1
         if bit == 8:
-            data = struct.pack('i', byte_value)
+            data = struct.pack('B', byte_value)
             out.write(data)
             bit = 0
             byte_value = 0
