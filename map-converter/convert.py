@@ -17,8 +17,8 @@ out = open("output/" + out_name, "wb")
 max_x = im.size[0]
 max_y = im.size[1]
 
-mx = struct.pack('>i', max_x)
-my = struct.pack('>i', max_y)
+mx = struct.pack('i', max_x)
+my = struct.pack('i', max_y)
 out.write(mx)
 out.write(my)
 
