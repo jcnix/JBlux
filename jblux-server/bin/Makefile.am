@@ -19,6 +19,7 @@ jblux_server_SOURCES = \
 					   ../src/db/quest_tbl.c \
 					   ../src/util/base64.c \
 					   ../src/util/coords.c \
+					   ../src/util/jbm.c \
 					   ../src/util/jmath.c \
 					   ../src/util/json.c \
 					   ../src/util/relation.c
@@ -42,6 +43,7 @@ noinst_HEADERS = \
 				 ../src/db/quest_tbl.h \
 				 ../src/util/base64.h \
 				 ../src/util/coords.h \
+				 ../src/util/jbm.h \
 				 ../src/util/jmath.h \
 				 ../src/util/json.h \
 				 ../src/util/relation.h

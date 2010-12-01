@@ -17,8 +17,12 @@ out = open("output/" + out_name, "wb")
 max_x = im.size[0]
 max_y = im.size[1]
 
+mx = struct.pack('i', max_x)
+my = struct.pack('i', max_y)
 bytes = (max_x * max_y) / (8 * 16)
 bytes = struct.pack('i', bytes)
+out.write(mx)
+out.write(my)
 out.write(bytes)
 
 y = 0
@@ -37,6 +41,9 @@ while y < max_y:
             bit = 0
             byte_value = 0
         x += 4
+    #Write the remaining data before going to the next row
+    data = struct.pack('B', byte_value)
+    out.write(data)
     y += 4
 
 out.close()

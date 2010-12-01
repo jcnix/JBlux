@@ -26,6 +26,8 @@ struct map_t
     struct coordinates_t bottom_ent;
 
     /* Map walk area data */
+    int dim_x;
+    int dim_y;
     int walk_area_size;
     char* walk_area;
 };

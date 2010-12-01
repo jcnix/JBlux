@@ -55,8 +55,9 @@ am_jblux_server_OBJECTS = jblux_server-main.$(OBJEXT) \
 	jblux_server-user_tbl.$(OBJEXT) jblux_server-map_tbl.$(OBJEXT) \
 	jblux_server-npc_tbl.$(OBJEXT) \
 	jblux_server-quest_tbl.$(OBJEXT) jblux_server-base64.$(OBJEXT) \
-	jblux_server-coords.$(OBJEXT) jblux_server-jmath.$(OBJEXT) \
-	jblux_server-json.$(OBJEXT) jblux_server-relation.$(OBJEXT)
+	jblux_server-coords.$(OBJEXT) jblux_server-jbm.$(OBJEXT) \
+	jblux_server-jmath.$(OBJEXT) jblux_server-json.$(OBJEXT) \
+	jblux_server-relation.$(OBJEXT)
 jblux_server_OBJECTS = $(am_jblux_server_OBJECTS)
 am__DEPENDENCIES_1 =
 jblux_server_DEPENDENCIES = $(am__DEPENDENCIES_1) \
@@ -190,6 +191,7 @@ jblux_server_SOURCES = \
 					   ../src/db/quest_tbl.c \
 					   ../src/util/base64.c \
 					   ../src/util/coords.c \
+					   ../src/util/jbm.c \
 					   ../src/util/jmath.c \
 					   ../src/util/json.c \
 					   ../src/util/relation.c
@@ -213,6 +215,7 @@ noinst_HEADERS = \
 				 ../src/db/quest_tbl.h \
 				 ../src/util/base64.h \
 				 ../src/util/coords.h \
+				 ../src/util/jbm.h \
 				 ../src/util/jmath.h \
 				 ../src/util/json.h \
 				 ../src/util/relation.h
@@ -303,6 +306,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jblux_server-client.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jblux_server-coords.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jblux_server-db.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jblux_server-jbm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jblux_server-jmath.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jblux_server-json.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jblux_server-main.Po@am__quote@
@@ -540,6 +544,20 @@ jblux_server-coords.obj: ../src/util/coords.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='../src/util/coords.c' object='jblux_server-coords.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(jblux_server_CFLAGS) $(CFLAGS) -c -o jblux_server-coords.obj `if test -f '../src/util/coords.c'; then $(CYGPATH_W) '../src/util/coords.c'; else $(CYGPATH_W) '$(srcdir)/../src/util/coords.c'; fi`
+
+jblux_server-jbm.o: ../src/util/jbm.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(jblux_server_CFLAGS) $(CFLAGS) -MT jblux_server-jbm.o -MD -MP -MF $(DEPDIR)/jblux_server-jbm.Tpo -c -o jblux_server-jbm.o `test -f '../src/util/jbm.c' || echo '$(srcdir)/'`../src/util/jbm.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/jblux_server-jbm.Tpo $(DEPDIR)/jblux_server-jbm.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='../src/util/jbm.c' object='jblux_server-jbm.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(jblux_server_CFLAGS) $(CFLAGS) -c -o jblux_server-jbm.o `test -f '../src/util/jbm.c' || echo '$(srcdir)/'`../src/util/jbm.c
+
+jblux_server-jbm.obj: ../src/util/jbm.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(jblux_server_CFLAGS) $(CFLAGS) -MT jblux_server-jbm.obj -MD -MP -MF $(DEPDIR)/jblux_server-jbm.Tpo -c -o jblux_server-jbm.obj `if test -f '../src/util/jbm.c'; then $(CYGPATH_W) '../src/util/jbm.c'; else $(CYGPATH_W) '$(srcdir)/../src/util/jbm.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/jblux_server-jbm.Tpo $(DEPDIR)/jblux_server-jbm.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='../src/util/jbm.c' object='jblux_server-jbm.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(jblux_server_CFLAGS) $(CFLAGS) -c -o jblux_server-jbm.obj `if test -f '../src/util/jbm.c'; then $(CYGPATH_W) '../src/util/jbm.c'; else $(CYGPATH_W) '$(srcdir)/../src/util/jbm.c'; fi`
 
 jblux_server-jmath.o: ../src/util/jmath.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(jblux_server_CFLAGS) $(CFLAGS) -MT jblux_server-jmath.o -MD -MP -MF $(DEPDIR)/jblux_server-jmath.Tpo -c -o jblux_server-jmath.o `test -f '../src/util/jmath.c' || echo '$(srcdir)/'`../src/util/jmath.c

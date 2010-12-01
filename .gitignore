@@ -16,6 +16,7 @@ jblux_django/*.pyc
 jblux_django/static/media/lib
 jblux_django/static/media/img
 jblux_django/static/media/favicon.ico
+jblux-server/maps
 jblux-server/autom4te.cache/
 jblux-server/config.log
 jblux-server/config.status
