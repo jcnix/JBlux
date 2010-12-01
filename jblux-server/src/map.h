@@ -13,6 +13,9 @@
 #include "db/map_tbl.h"
 #include "util/relation.h"
 
+/* This is 8 * 16.  8 bits per byte, and we skip 16 pixels */
+#define MAP_COMPRESSION 128
+
 struct map_list* init_maps();
 struct map_t* get_map_for_id(int id);
 struct map_t* get_map_for_name(char* name);
@@ -20,6 +23,7 @@ struct map_t* get_adjacent_map(struct map_t *map, enum Relation rel);
 struct coordinates_t get_map_entrance(struct map_t *map, enum Relation rel);
 struct npc_data* get_enemy_on_map(int npc_id, struct map_t *map);
 
+void read_map_data(struct map_t* map);
 void cleanup_maps();
 void add_map(struct map_list **maps, struct map_t *map);
 void delete_map_list(struct map_list **maps);

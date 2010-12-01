@@ -10,6 +10,15 @@ static struct map_list *maps = NULL;
 struct map_list* init_maps()
 {
     db_get_all_maps(&maps);
+
+    struct map_list *curr = maps;
+    while(curr)
+    {
+        struct map_t *map = curr->map;
+        read_map_data(map);
+        curr = curr->next;
+    }
+    
     return maps;
 }
 
@@ -124,6 +133,36 @@ struct npc_data* get_enemy_on_map(int npc_id, struct map_t *map)
     return npc;
 }
 
+void read_map_data(struct map_t* map)
+{
+    FILE* f;
+    size_t s;
+    /* "maps/" + name + "bw.jmb\0" */
+    int name_size = 5 + strlen(map->name) + 7;
+    char* name = malloc(name_size);
+    sprintf(name, "maps/%sbw.jbm", map->name);
+    f = fopen(name, "rb");
+    printf("%s %d\n", name, f == NULL);
+    free(name);
+    if(!f)
+    {
+        /* So we can free it later without worrying
+         * about if it's NULL or not */
+        map->walk_area = malloc(1);
+        return;
+    }
+
+    /* Read in map dimensions */
+    int size = 0;
+    s = fread(&size, 4, 1, f);
+    map->walk_area_size = size;
+
+    map->walk_area = malloc(map->walk_area_size);
+    s = fread(map->walk_area, 1, map->walk_area_size, f);
+
+    fclose(f);
+}
+
 void cleanup_maps()
 {
     delete_map_list(&maps);
@@ -146,6 +185,7 @@ void delete_map_list(struct map_list **maps)
         struct map_t *map = curr->map;
         next = curr->next;
         free(map->name);
+        free(map->walk_area);
         free(map);
         free(curr);
         curr = next;

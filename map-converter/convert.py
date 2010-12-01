@@ -17,10 +17,9 @@ out = open("output/" + out_name, "wb")
 max_x = im.size[0]
 max_y = im.size[1]
 
-mx = struct.pack('i', max_x)
-my = struct.pack('i', max_y)
-out.write(mx)
-out.write(my)
+bytes = (max_x * max_y) / (8 * 16)
+bytes = struct.pack('i', bytes)
+out.write(bytes)
 
 y = 0
 while y < max_y:

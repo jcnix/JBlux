@@ -24,6 +24,10 @@ struct map_t
     struct coordinates_t right_ent;
     struct coordinates_t top_ent;
     struct coordinates_t bottom_ent;
+
+    /* Map walk area data */
+    int walk_area_size;
+    char* walk_area;
 };
 
 struct map_list
