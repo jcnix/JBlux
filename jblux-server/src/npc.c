@@ -149,28 +149,41 @@ void npc_move(struct npc_data *npc)
         
         dx = abs(dx);
         dy = abs(dy);
+        
+        /* duplicate npc->coords so we can revert to the original */
+        struct coordinates_t c;
+        c.x = npc->coords.x;
+        c.y = npc->coords.y;
+
         if(dx >= MOVE_STEP)
         {
             if(move_right)
             {
-                npc->coords.x += MOVE_STEP;
+                c.x += MOVE_STEP;
             }
             else
             {
-                npc->coords.x -= MOVE_STEP;
+                c.x -= MOVE_STEP;
             }
         }
         if(dy >= MOVE_STEP)
         {
             if(move_down)
             {
-                npc->coords.y += MOVE_STEP;
+                c.y += MOVE_STEP;
             }
             else
             {
-                npc->coords.y -= MOVE_STEP;
+                c.y -= MOVE_STEP;
             }
         }
+
+        struct map_t *map = get_map_for_id(npc->map_id);
+        if(jbm_can_walk(map, c.x, c.y))
+        {
+            npc->coords = c;
+        }
+
         char* command = NULL;
         if(!asprintf(&command, "npc %d coords %d %d", npc->unique_id,
                     npc->coords.x, npc->coords.y))

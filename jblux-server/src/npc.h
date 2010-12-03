@@ -17,6 +17,7 @@
 #include "map.h"
 #include "quest.h"
 #include "world.h"
+#include "util/coords.h"
 #include "util/json.h"
 
 #define NPC_RESPAWN_TIME 5
