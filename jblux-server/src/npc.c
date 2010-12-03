@@ -182,16 +182,15 @@ void npc_move(struct npc_data *npc)
         if(jbm_can_walk(map, c.x, c.y))
         {
             npc->coords = c;
+            char* command = NULL;
+            if(!asprintf(&command, "npc %d coords %d %d", npc->unique_id,
+                        npc->coords.x, npc->coords.y))
+            {
+                return;
+            }
+            tell_all_players_on_map(0, npc->map_id, command);
+            free(command);
         }
-
-        char* command = NULL;
-        if(!asprintf(&command, "npc %d coords %d %d", npc->unique_id,
-                    npc->coords.x, npc->coords.y))
-        {
-            return;
-        }
-        tell_all_players_on_map(0, npc->map_id, command);
-        free(command);
     }
 }
 
