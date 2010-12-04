@@ -54,10 +54,10 @@ am_jblux_server_OBJECTS = jblux_server-main.$(OBJEXT) \
 	jblux_server-world.$(OBJEXT) jblux_server-db.$(OBJEXT) \
 	jblux_server-user_tbl.$(OBJEXT) jblux_server-map_tbl.$(OBJEXT) \
 	jblux_server-npc_tbl.$(OBJEXT) \
-	jblux_server-quest_tbl.$(OBJEXT) jblux_server-base64.$(OBJEXT) \
-	jblux_server-coords.$(OBJEXT) jblux_server-jbm.$(OBJEXT) \
-	jblux_server-jmath.$(OBJEXT) jblux_server-json.$(OBJEXT) \
-	jblux_server-relation.$(OBJEXT)
+	jblux_server-quest_tbl.$(OBJEXT) jblux_server-combat.$(OBJEXT) \
+	jblux_server-base64.$(OBJEXT) jblux_server-coords.$(OBJEXT) \
+	jblux_server-jbm.$(OBJEXT) jblux_server-jmath.$(OBJEXT) \
+	jblux_server-json.$(OBJEXT) jblux_server-relation.$(OBJEXT)
 jblux_server_OBJECTS = $(am_jblux_server_OBJECTS)
 am__DEPENDENCIES_1 =
 jblux_server_DEPENDENCIES = $(am__DEPENDENCIES_1) \
@@ -189,6 +189,7 @@ jblux_server_SOURCES = \
 					   ../src/db/map_tbl.c \
 					   ../src/db/npc_tbl.c \
 					   ../src/db/quest_tbl.c \
+					   ../src/rules/combat.c \
 					   ../src/util/base64.c \
 					   ../src/util/coords.c \
 					   ../src/util/jbm.c \
@@ -213,6 +214,7 @@ noinst_HEADERS = \
 				 ../src/db/map_tbl.h \
 				 ../src/db/npc_tbl.h \
 				 ../src/db/quest_tbl.h \
+				 ../src/rules/combat.h \
 				 ../src/util/base64.h \
 				 ../src/util/coords.h \
 				 ../src/util/jbm.h \
@@ -304,6 +306,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jblux_server-base64.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jblux_server-character.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jblux_server-client.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jblux_server-combat.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jblux_server-coords.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jblux_server-db.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jblux_server-jbm.Po@am__quote@
@@ -516,6 +519,20 @@ jblux_server-quest_tbl.obj: ../src/db/quest_tbl.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='../src/db/quest_tbl.c' object='jblux_server-quest_tbl.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(jblux_server_CFLAGS) $(CFLAGS) -c -o jblux_server-quest_tbl.obj `if test -f '../src/db/quest_tbl.c'; then $(CYGPATH_W) '../src/db/quest_tbl.c'; else $(CYGPATH_W) '$(srcdir)/../src/db/quest_tbl.c'; fi`
+
+jblux_server-combat.o: ../src/rules/combat.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(jblux_server_CFLAGS) $(CFLAGS) -MT jblux_server-combat.o -MD -MP -MF $(DEPDIR)/jblux_server-combat.Tpo -c -o jblux_server-combat.o `test -f '../src/rules/combat.c' || echo '$(srcdir)/'`../src/rules/combat.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/jblux_server-combat.Tpo $(DEPDIR)/jblux_server-combat.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='../src/rules/combat.c' object='jblux_server-combat.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(jblux_server_CFLAGS) $(CFLAGS) -c -o jblux_server-combat.o `test -f '../src/rules/combat.c' || echo '$(srcdir)/'`../src/rules/combat.c
+
+jblux_server-combat.obj: ../src/rules/combat.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(jblux_server_CFLAGS) $(CFLAGS) -MT jblux_server-combat.obj -MD -MP -MF $(DEPDIR)/jblux_server-combat.Tpo -c -o jblux_server-combat.obj `if test -f '../src/rules/combat.c'; then $(CYGPATH_W) '../src/rules/combat.c'; else $(CYGPATH_W) '$(srcdir)/../src/rules/combat.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/jblux_server-combat.Tpo $(DEPDIR)/jblux_server-combat.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='../src/rules/combat.c' object='jblux_server-combat.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(jblux_server_CFLAGS) $(CFLAGS) -c -o jblux_server-combat.obj `if test -f '../src/rules/combat.c'; then $(CYGPATH_W) '../src/rules/combat.c'; else $(CYGPATH_W) '$(srcdir)/../src/rules/combat.c'; fi`
 
 jblux_server-base64.o: ../src/util/base64.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(jblux_server_CFLAGS) $(CFLAGS) -MT jblux_server-base64.o -MD -MP -MF $(DEPDIR)/jblux_server-base64.Tpo -c -o jblux_server-base64.o `test -f '../src/util/base64.c' || echo '$(srcdir)/'`../src/util/base64.c

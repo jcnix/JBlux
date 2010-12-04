@@ -107,7 +107,10 @@ void attack_npc(int npc_id, int map_id, struct player_data *player)
     }
 
     /* TODO: calculate damage */
-    npc->hp -= 1;
+    struct combattant attack = get_player_combattant(player);
+    struct combattant defend = get_npc_combattant(npc);
+    int damage = calc_dmg(attack, defend);
+    npc->hp -= damage;
     printf("hp: %d\n", npc->hp);
     
     /* Npc is dead */

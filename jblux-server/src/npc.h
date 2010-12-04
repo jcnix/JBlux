@@ -17,6 +17,7 @@
 #include "map.h"
 #include "quest.h"
 #include "world.h"
+#include "rules/combat.h"
 #include "util/coords.h"
 #include "util/json.h"
 

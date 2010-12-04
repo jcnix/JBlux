@@ -17,6 +17,7 @@ jblux_server_SOURCES = \
 					   ../src/db/map_tbl.c \
 					   ../src/db/npc_tbl.c \
 					   ../src/db/quest_tbl.c \
+					   ../src/rules/combat.c \
 					   ../src/util/base64.c \
 					   ../src/util/coords.c \
 					   ../src/util/jbm.c \
@@ -41,6 +42,7 @@ noinst_HEADERS = \
 				 ../src/db/map_tbl.h \
 				 ../src/db/npc_tbl.h \
 				 ../src/db/quest_tbl.h \
+				 ../src/rules/combat.h \
 				 ../src/util/base64.h \
 				 ../src/util/coords.h \
 				 ../src/util/jbm.h \
