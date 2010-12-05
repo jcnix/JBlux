@@ -1,3 +1,14 @@
+12-05-2010 Update
+*****************
+- Added a bar to the GUI to display character information like HP
+- Npcs must be in range to damage you
+- After attacking an Npc, they will chase after you
+- Added a basic formula for determining damage
+- Player receives XP for defeating Npcs
+	- Still can't "level up"
+	- I will probably reset the XP sometime, so don't make it
+		a point to get as much as you can.
+
 11-21-2010 Update
 *****************
 - Proper fix to prevent server crash when an Npc respawns.
