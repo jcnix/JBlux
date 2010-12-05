@@ -106,13 +106,13 @@ int player_complete_quest(struct player_data *player, int quest_id)
     return 0;
 }
 
-void give_quest_reward(struct player_data **player, struct quest *quest)
+void give_quest_reward(struct player_data *player, struct quest *quest)
 {
     int xp = quest->reward_xp;
     int money = quest->reward_money;
-    (*player)->xp += xp;
-    (*player)->money += money;
-    db_save_player(*player);
+    player->xp += xp;
+    player->money += money;
+    db_save_player(player);
 }
 
 void give_player_xp(struct player_data *player, int xp)
