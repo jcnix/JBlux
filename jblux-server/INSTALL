@@ -1,1 +1,11 @@
-/usr/share/automake-1.11/INSTALL
+Install JBlux Server
+
+run ./autogen.sh
+Make sure you have autotools installed.  This includes aclocal, autoconf, automake,
+etc.  Then just run make.  To run just execute bin/jblux-server.  Be sure to
+execute it from outside the base directory, so the maps/ folder can be
+accessed by the program.
+
+To compile maps into the format the server uses, run convert.py in the
+map-converter folder, and then drop the files in output/ into maps/
+
