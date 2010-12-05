@@ -25,7 +25,7 @@ void db_set_user_offline(int user_id);
 void db_set_all_users_offline();
 struct player_data* db_get_player(char* character_name);
 void db_set_map_for_player(int char_id, int map_id, struct coordinates_t coords);
-void db_save_quest_reward(struct player_data *player);
+void db_save_player(struct player_data *player);
 int get_map_for_player(char* character);
 struct quest_list* db_get_quests_for_player(int character_id);
 struct race_t get_race(int id);

@@ -111,7 +111,6 @@ void attack_npc(int npc_id, int map_id, struct player_data *player)
     struct combattant defend = get_npc_combattant(npc);
     int damage = calc_dmg(attack, defend);
     npc->hp -= damage;
-    printf("hp: %d\n", npc->hp);
     
     /* Npc is dead */
     if(npc->hp <= 0)
@@ -128,7 +127,8 @@ void attack_npc(int npc_id, int map_id, struct player_data *player)
 
         tell_all_players_on_map(0, npc->map_id, command);
         free(command);
-        printf("npc died\n");
+        int xp = npc->level * NPC_BASE_XP;
+        give_player_xp(player, xp);
     }
 }
 

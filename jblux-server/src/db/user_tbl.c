@@ -210,21 +210,44 @@ void db_set_map_for_player(int char_id, int map_id, struct coordinates_t coords)
     db_disconnect(conn);
 }
 
-void db_save_quest_reward(struct player_data *player)
+void db_save_player(struct player_data *player)
 {
     PGconn *conn = db_connect();
     PGresult *res = NULL;
 
-    char* q = "UPDATE jblux_character SET xp=$1, money=$2 WHERE id=$3;";
-    int nParams = 3;
-    char *cid = NULL;
-    char *cxp = NULL;
-    char *cmoney = NULL;
+    char* q = "UPDATE jblux_character SET level=$1 xp=$2, money=$3, "
+        "strength=$4, agility=$5, stamina=$6, intelligence=$7, spirit=$8, "
+        "max_hp=$9, current_map_id=$10, x_coord=$11, y_coord=$12 "
+        "WHERE id=$13;";
+    int nParams = 13;
+    char* cid = NULL;
+    char* clevel = NULL;
+    char* cxp = NULL;
+    char* cmoney = NULL;
+    char* cstrength = NULL;
+    char* cagility = NULL;
+    char* cstamina = NULL;
+    char* cintelligence = NULL;
+    char* cspirit = NULL;
+    char* cmax_hp = NULL;
+    char* cmap = NULL;
+    char* cx = NULL;
+    char* cy = NULL;
+    char* spirit = NULL;
     if( (asprintf(&cid, "%d", player->character_id) < 0) ||
+        (asprintf(&clevel, "%d", player->level) < 0) ||
         (asprintf(&cxp, "%d", player->xp) < 0) ||
-        (asprintf(&cmoney, "%d", player->money) < 0))
+        (asprintf(&cmoney, "%d", player->money) < 0) ||
+        (asprintf(&cstrength, "%d", player->strength) < 0) ||
+        (asprintf(&cagility, "%d", player->agility) < 0) ||
+        (asprintf(&cstamina, "%d", player->stamina) < 0) ||
+        (asprintf(&cintelligence, "%d", player->intelligence) < 0) ||
+        (asprintf(&cspirit, "%d", player->spirit) < 0) ||
+        (asprintf(&cmax_hp, "%d", player->max_hp) < 0) ||
+        (asprintf(&cmap, "%d", player->map_id) < 0) ||
+        (asprintf(&cx, "%d", player->coords.x) < 0) ||
+        (asprintf(&cy, "%d", player->coords.y) < 0) )
     {
-        /* saving the map location isn't _that_ important */
         db_disconnect(conn);
         return;
     }

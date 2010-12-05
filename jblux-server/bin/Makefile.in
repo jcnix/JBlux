@@ -214,6 +214,7 @@ noinst_HEADERS = \
 				 ../src/db/map_tbl.h \
 				 ../src/db/npc_tbl.h \
 				 ../src/db/quest_tbl.h \
+				 ../src/rules/constants.h \
 				 ../src/rules/combat.h \
 				 ../src/util/base64.h \
 				 ../src/util/coords.h \

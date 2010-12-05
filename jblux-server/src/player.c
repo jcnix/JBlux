@@ -112,6 +112,12 @@ void give_quest_reward(struct player_data **player, struct quest *quest)
     int money = quest->reward_money;
     (*player)->xp += xp;
     (*player)->money += money;
-    db_save_quest_reward(*player);
+    db_save_player(*player);
+}
+
+void give_player_xp(struct player_data *player, int xp)
+{
+    player->xp += xp;
+    db_save_player(player);
 }
 
