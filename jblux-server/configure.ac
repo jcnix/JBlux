@@ -14,7 +14,10 @@ AM_PROG_CC_C_O
 
 PKG_CHECK_MODULES(CRYPTO, libcrypto)
 PKG_CHECK_MODULES(SSL, libssl)
-PKG_CHECK_MODULES(ZLIB, zlib)
+AC_CHECK_LIB(z, deflate, [], [
+        echo "Error!  zlib required."
+        exit -1
+        ])
 AC_CHECK_HEADER(math.h, [], [
         echo "Error!  math.h not found."
         exit -1
