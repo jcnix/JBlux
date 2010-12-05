@@ -132,6 +132,33 @@ void attack_npc(int npc_id, int map_id, struct player_data *player)
     }
 }
 
+void npc_attack(struct npc_data *npc)
+{
+    struct player_data *player = npc->target;
+    
+    /* Can only attack if within 32 pixels */
+    if(distance(npc->coords, player->coords) < 32)
+    {
+        player->hp -= 1;
+        printf("player %d hp: %d\n", player->character_id, player->hp);
+    }
+    
+    char* command = NULL;
+    if(!asprintf(&command, "player %d hp %d", player->character_id,
+                player->hp))
+    {
+        return;
+    }
+    tell_all_players_on_map(0, npc->map_id, command);
+    free(command);
+
+    if(player->hp <= 0) {
+        printf("player died\n");
+        deaggro_npc(npc);
+        player->hp = player->max_hp;
+    }
+}
+
 void npc_move(struct npc_data *npc)
 {
     if(npc->target)

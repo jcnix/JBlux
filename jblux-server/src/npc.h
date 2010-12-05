@@ -59,7 +59,10 @@ struct npc_list
 
 char* npc_list_to_json(struct npc_list *npcs);
 char* npc_to_json(struct npc_data *npc);
+/* Player attacks npc */
 void attack_npc(int id, int map_id, struct player_data *player);
+/* Npc attacks player */
+void npc_attack(struct npc_data *npc);
 void npc_move(struct npc_data *npc);
 void add_quests_to_npcs(struct npc_list **npcs);
 
